@@ -44,9 +44,9 @@ int main(int argc, char* argv[]) {
 		out_file = filesystem::path(p_file).replace_extension(".b81").generic_string();
 
 	ZX81 zx81;
-	zx81.read_p(p_file);
+	zx81.read_p_file(p_file);
 	zx81.decompile();
-	zx81.write_b81(out_file);
+	zx81.write_b81_file(out_file);
 
 	EXIT_STATUS();
 }

@@ -48,4 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\consts.def">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

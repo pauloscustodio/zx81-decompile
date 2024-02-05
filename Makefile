@@ -59,6 +59,9 @@ clean::
 
 test: $(PROJ1)$(EXESUFFIX) $(PROJ2)$(EXESUFFIX)
 	$(MAKE) PROG=test_vars        runtest
+	$(MAKE) PROG=show_float       runtest
+	$(MAKE) PROG=slow             runtest
+	$(MAKE) PROG=fast             runtest
 	$(MAKE) PROG=FortressOfZorlac runtest
 
 runtest:
@@ -69,14 +72,4 @@ runtest:
 	diff $(PROG).p.txt t/$(PROG).p.txt
 
 clean::
-	$(RM) FortressOfZorlac.* test_vars.* t/*.p.txt
-
-#------------------------------------------------------------------------------
-
-all: show_float.p
-
-show_float.p: t/show_float.b81
-	t2p t/show_float.b81
-
-clean::
-	$(RM) show_float.p
+	$(RM) *.p *.p.txt *.b81 t/*.p.txt

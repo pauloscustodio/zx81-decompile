@@ -32,6 +32,9 @@
     <ClCompile Include="..\..\zfloat.cpp" />
     <ClCompile Include="..\..\zx81.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\consts.def" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

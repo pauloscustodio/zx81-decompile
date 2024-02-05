@@ -233,6 +233,20 @@ enum ZX81char {
 	C_COPY = 0xff,
 };
 
+enum ZX81const {
+#define X(name, value)		name = value,
+#include "consts.def"
+};
+
+static inline const int RAM_ADDR = ERR_NO;
+static inline const int RAM_SIZE = 0x4000;
+static inline const int SAVE_ADDR = VERSN;
+static inline const int NumRows = 24;
+static inline const int NumCols = 32;
+static inline const int MaxLineNum = 0x3fff;
+static inline const int FlagSlow = 0x40;
+
+
 struct Token {
 	int		code{ T_none };
 	double	num{ 0.0 };			// for T_number
@@ -251,7 +265,9 @@ struct BasicLine {
 
 struct BasicVar {
 	enum class Type { Number, ArrayNumbers, ForNextLoop, String, ArrayStrings };
-	Type type{ Type::Number};
+	Type type{ Type::Number };
+	int addr{ 0 };
+	int size{ 0 };
 
 	// Number
 	string name;
@@ -276,141 +292,91 @@ struct BasicVar {
 struct ZX81 {
 	ZX81();
 
-	static inline const int ERR_NO = 0x4000;
-	static inline const int FLAGS = 0x4001;
-	static inline const int ERR_SP = 0x4002;
-	static inline const int RAMTOP = 0x4004;
-	static inline const int MODE = 0x4006;
-	static inline const int PPC = 0x4007;
-	static inline const int VERSN = 0x4009;
-	static inline const int E_PPC = 0x400a;
-	static inline const int D_FILE = 0x400c;
-	static inline const int DF_CC = 0x400e;
-	static inline const int VARS = 0x4010;
-	static inline const int DEST = 0x4012;
-	static inline const int E_LINE = 0x4014;
-	static inline const int CH_ADD = 0x4016;
-	static inline const int X_PTR = 0x4018;
-	static inline const int STKBOT = 0x401a;
-	static inline const int STKEND = 0x401c;
-	static inline const int BREG = 0x401e;
-	static inline const int MEM = 0x401f;
-	static inline const int FREE1 = 0x4021;
-	static inline const int DF_SZ = 0x4022;
-	static inline const int S_TOP = 0x4023;
-	static inline const int LAST_K = 0x4025;
-	static inline const int DEBOUNCE = 0x4027;
-	static inline const int MARGIN = 0x4028;
-	static inline const int NXTLIN = 0x4029;
-	static inline const int OLDPPC = 0x402b;
-	static inline const int FLAGX = 0x402d;
-	static inline const int STRLEN = 0x402e;
-	static inline const int T_ADDR = 0x4030;
-	static inline const int SEED = 0x4032;
-	static inline const int FRAMES = 0x4034;
-	static inline const int COORDS_X = 0x4036;
-	static inline const int COORDS_Y = 0x4037;
-	static inline const int PR_CC = 0x4038;
-	static inline const int S_POSN_COL = 0x4039;
-	static inline const int S_POSN_ROW = 0x403a;
-	static inline const int CDFLAG = 0x403b;
-	static inline const int PRBUFF = 0x403c;
-	static inline const int MEMBOT = 0x405d;
-	static inline const int FREE2 = 0x407b;
+	// memory structure
+	array<uint8_t, RAM_SIZE> ram{ 0 };
 
-	static inline const int BaseAddr = VERSN;
-	static inline const int BaseProg = FREE2 + 2;
-	static inline const int NumLines = 24;
-	static inline const int NumCols = 32;
-
-	vector<uint8_t> mem_bytes;
-
-	int sv_versn{ 0 };
-	int sv_e_ppc{ 0 };
-	int sv_d_file{ 0 };
-	int sv_df_cc{ 0 };
-	int sv_vars{ 0 };
-	int sv_dest{ 0 };
-	int sv_e_line{ 0 };
-	int sv_ch_add{ 0 };
-	int sv_x_ptr{ 0 };
-	int sv_stkbot{ 0 };
-	int sv_stkend{ 0 };
-	int sv_breg{ 0 };
-	int sv_mem{ 0 };
-	int sv_free1{ 0 };
-	int sv_df_sz{ 0 };
-	int sv_s_top{ 0 };
-	int sv_last_k{ 0 };
-	int sv_debounce{ 0 };
-	int sv_margin{ 0 };
-	int sv_nxtlin{ 0 };
-	int sv_oldppc{ 0 };
-	int sv_flagx{ 0 };
-	int sv_strlen{ 0 };
-	int sv_t_addr{ 0 };
-	int sv_seed{ 0 };
-	int sv_frames{ 0 };
-	int sv_coords_x{ 0 };
-	int sv_coords_y{ 0 };
-	int sv_pr_cc{ 0 };
-	int sv_s_posn_col{ 0 };
-	int sv_s_posn_row{ 0 };
-	int sv_cdflag{ 0 };
-	array<uint8_t, 33> sv_prbuff{ 0 };
-	array<uint8_t, 30> sv_membot{ 0 };
-	int sv_free2{ 0 };
-
+	// BASIC structure
 	vector<BasicLine> basic_lines;
-	vector<string> d_file;
 	vector<BasicVar> basic_vars;
+	vector<uint8_t> d_file_bytes;
+	vector<uint8_t> e_line_bytes;
 
-	void read_p(const string& p_filename);
-	void write_p(const string& p_filename);
-	void parse_b81(const string& b81_filename);
-	void write_b81(const string& b81_filename);
-
-	void decompile();		// convert bytes to memory structure
-	void compile();			// convert memory structure to bytes
-
-	int peek(int addr);
-	int dpeek(int addr);
-	int dpeek_be(int addr);
+	// manipulate memory
+	int peek(int addr) const;
+	int dpeek(int addr) const;
+	int dpeek_be(int addr) const;
+	double fpeek(int addr) const;
+	string str_peek(int addr, int len) const;
+	string bytes_peek(int addr, int len) const;
 
 	void poke(int addr, int value);
 	void dpoke(int addr, int value);
 	void dpoke_be(int addr, int value);
+	void fpoke(int addr, double value);
+	int str_poke(int addr, const string& str);
+	template<class T>
+	int bytes_poke(int addr, const T& bytes) {
+		int len = static_cast<int>(bytes.size());
+		for (auto& byte : bytes)
+			poke(addr++, byte);
+		return len;
+	}
+
+	int get_line_addr(int line_num);
+
+	// compile/decompile BASIC
+	void compile();
+	void decompile();
+
+	// read/write files
+	void read_p_file(const string& filename);
+	void write_p_file(const string& filename) const;
+
+	void read_b81_file(const string& filename);
+	void write_b81_file(const string& filename) const;
 
 private:
+	void init_ram();
+	void init_video_to_stkend(int addr);
+	void init_e_line_to_stkend(int addr);
+
+	// decompile BASIC
 	int addr{ 0 };
 	int end{ 0 };
-	int input_line_num{ 0 };
-	int auto_increment{ 10 };
-
-	void decompile_sysvars();
+	int error_line_num{ 0 };
+	int autostart{ 0 };
 	void decompile_basic();
-	void decompile_video();
+	void decompile_basic_line(BasicLine& line);
+	bool decompile_rem_code(BasicLine& line);
+	bool decompile_number(BasicLine& line);
+	bool decompile_ident(BasicLine& line);
+	bool decompile_string(BasicLine& line);
+	void decompile_newline(BasicLine& line);
 	void decompile_vars();
-	void decode_basic_line(BasicLine& line);
-	bool decode_rem_code(BasicLine& line);
-	double decode_fp_number(int addr);
-	bool decode_number(BasicLine& line);
-	bool decode_ident(BasicLine& line);
-	bool decode_string(BasicLine& line);
-	void decode_newline(BasicLine& line);
 
-	void parse_line(const char* p);
-	void parse_meta_line(const char* p);
-	void parse_basic_line(const char* p);
-	void parse_basic_var(const char* p);
-
-	void compile_sysvars();
+	// compile BASIC
+	int auto_increment{ 10 };
+	void compute_line_numbers();
 	void compile_basic();
-	void compile_video();
 	void compile_vars();
 
-	void write_basic_lines(ofstream& ofs);
-	void write_basic_vars(ofstream& ofs);
-	void write_sysvars(ofstream& ofs);
-};
+	// write BASIC file
+	void write_sysvars(ofstream& ofs) const;
+	void write_basic_lines(ofstream& ofs) const;
+	void write_video(ofstream& ofs) const;
+	void write_basic_vars(ofstream& ofs) const;
+	void write_basic_system(ofstream& ofs) const;
 
+	// parse BASIC file
+	void skip_spaces(const char*& p);
+	bool match(const char*& p, const string& compare);
+	bool parse_integer(const char*& p, int& value);
+	bool parse_number(const char*& p, double& value, string& value_text);
+	bool parse_string(const char*& p, string& str);
+	bool parse_ident(const char*& p, string& ident);
+	bool parse_end(const char*& p);
+	void parse_line(const char* p);
+	void parse_meta_line(const char* p);
+	void parse_basic_var(const char* p);
+	void parse_basic_line(const char* p);
+};
