@@ -1,0 +1,7 @@
+print "rem line ";@RemLine
+for x=&RemLine+5 to &RemLine+8
+  print peek x
+next x
+@RemLine:
+rem \01\01\00\c9
+print usr(&RemLine+5)

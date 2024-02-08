@@ -15,6 +15,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 //-----------------------------------------------------------------------------
@@ -794,8 +795,26 @@ void ZX81::decompile_vars() {
 //-----------------------------------------------------------------------------
 
 void ZX81::compile() {
+	delete_empty_lines();
 	compute_line_numbers();
-	compile_basic();
+
+	labels.clear();
+	int last_end_addr = 0;
+	int pass = 1;
+	int num_passes_ok = 0;
+	while (true) {
+		compile_basic(pass);
+
+		// next pass
+		if (pass > 1 && addr == last_end_addr) {
+			num_passes_ok++;
+			if (num_passes_ok >= 2)		// must run a second pass after end addr is ok
+				break;
+		}
+		last_end_addr = addr;
+		pass++;
+	}
+	
 	compile_vars();
 }
 
@@ -803,63 +822,99 @@ void ZX81::compute_line_numbers() {
 	int line_num = auto_increment;
 	int last_line = 0;
 	for (auto& line : basic_lines) {
-		if (line.line_num == 0)
+		if (line.line_num == 0) {
 			line.line_num = line_num;
-		else
+			line_num += auto_increment;
+		}
+		else {
 			line_num = line.line_num + auto_increment;
+		}
 
-		if (line.line_num < last_line)
+		if (line.line_num <= last_line)
 			ERROR("line " << line.line_num << " follows line " << last_line);
 		else if (line.line_num > MaxLineNum)
 			ERROR("line " << line.line_num << " above maximum of " << MaxLineNum);
 	}
 }
 
-void ZX81::compile_basic() {
-	string str;
-	const char* p = nullptr;
-	array<uint8_t, 5> fp_bytes{ 0 };
-	vector<uint8_t> str_bytes;
+void ZX81::delete_empty_lines() {
+	for (size_t i = 0; i < basic_lines.size() - 1; i++) {
+		if (basic_lines[i].tokens.size() == 1 && basic_lines[i].tokens[0].code == C_newline) {
+			if (!basic_lines[i].label.empty() && !basic_lines[i + 1].label.empty())
+				ERROR("two labels on same line: " << basic_lines[i].label << " and " << basic_lines[i + 1].label);
+			basic_lines[i + 1].label = basic_lines[i].label;
+			basic_lines[i + 1].line_num = basic_lines[i].line_num;
+			basic_lines.erase(basic_lines.begin() + i);
+			i--;
+		}
+	}
+}
 
+void ZX81::compile_basic(int pass) {
 	addr = PROG;
+
 	for (auto& line : basic_lines) {
+		// define label
+		if (pass == 1 && !line.label.empty()) {
+			auto it = labels.find(line.label);
+			if (it != labels.end())
+				ERROR("label redefinition: " << line.label);
+			labels[line.label] = &line;
+		}
+
 		vector<uint8_t> bytes;
 		for (auto& token : line.tokens) {
 			switch (token.code) {
 			case T_none:
 				break;
 			case T_number:
-				p = token.str.c_str();
-				str_bytes = encode_zx81(p);
-				fp_bytes = float_to_zx81(token.num);
-				bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
-				bytes.push_back(C_number);
-				bytes.insert(bytes.end(), fp_bytes.begin(), fp_bytes.end());
+				compile_number(bytes, token.num);
 				break;
 			case T_string:
-				p = token.str.c_str();
-				str_bytes = encode_zx81(p);
-				bytes.push_back(C_dquote);
-				bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
-				bytes.push_back(C_dquote);
+				compile_string(bytes, token.str);
 				break;
 			case T_ident:
-				p = token.ident.c_str();
-				str_bytes = encode_zx81(p);
-				bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
+				compile_ident(bytes, token.ident);
 				break;
 			case T_rem_code:
 				bytes.insert(bytes.end(), token.bytes.begin(), token.bytes.end());
 				break;
+			case T_line_num_ref:
+				if (pass == 1)
+					compile_number(bytes, 0);
+				else {
+					auto it = labels.find(token.ident);
+					if (it == labels.end())
+						ERROR("label undefined: " << token.ident);
+					else
+						compile_number(bytes, it->second->line_num);
+				}
+				break;
+			case T_line_addr_ref:
+				if (pass == 1)
+					compile_number(bytes, 0);
+				else {
+					auto it = labels.find(token.ident);
+					if (it == labels.end())
+						ERROR("label undefined: " << token.ident);
+					else
+						compile_number(bytes, it->second->addr);
+				}
+				break;
 			default:
+				assert(token.code < 0x100);
 				bytes.push_back(token.code);
 			}
 		}
 
-		// add line number and size
+		// define addr and size
+		line.addr = addr;
+		line.size = static_cast<int>(bytes.size());
+
 		dpoke_be(addr, line.line_num); addr += 2;
-		dpoke(addr, static_cast<int>(bytes.size())); addr += 2;
+		dpoke(addr, line.size); addr += 2;
 		addr += bytes_poke(addr, bytes);
+		assert(addr == line.addr + 4 + line.size);
 	}
 
 	init_video_to_stkend(addr);
@@ -984,6 +1039,33 @@ void ZX81::compile_vars() {
 
 	poke(addr++, 0x80);
 	init_e_line_to_stkend(addr);
+}
+
+void ZX81::compile_number(vector<uint8_t>& bytes, double value) {
+	ostringstream oss;
+
+	oss << value;
+	string value_str = oss.str();
+	const char* p = value_str.c_str();
+	vector<uint8_t> str_bytes = encode_zx81(p);
+	array<uint8_t, 5> fp_bytes = float_to_zx81(value);
+	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
+	bytes.push_back(C_number);
+	bytes.insert(bytes.end(), fp_bytes.begin(), fp_bytes.end());
+}
+
+void ZX81::compile_string(vector<uint8_t>& bytes, const string& str) {
+	const char* p = str.c_str();
+	vector<uint8_t> str_bytes = encode_zx81(p);
+	bytes.push_back(C_dquote);
+	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
+	bytes.push_back(C_dquote);
+}
+
+void ZX81::compile_ident(vector<uint8_t>& bytes, const string& ident) {
+	const char* p = ident.c_str();
+	vector<uint8_t> str_bytes = encode_zx81(p);
+	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
 }
 
 //-----------------------------------------------------------------------------
@@ -1173,6 +1255,48 @@ bool ZX81::parse_ident(const char*& p, string& ident) {
 	return true;
 }
 
+bool ZX81::parse_label(const char*& p, string& ident) {
+	skip_spaces(p);
+	const char* p0 = p;
+	if (!parse_line_num_ref(p, ident)) {
+		p = p0;
+		return false;
+	}
+	skip_spaces(p);
+	if (*p != ':') {
+		p = p0;
+		return false;
+	}
+	p++;
+	return true;
+}
+
+bool ZX81::parse_line_num_ref(const char*& p, string& ident) {
+	skip_spaces(p);
+	const char* p0 = p;
+	if (*p != '@')
+		return false;
+	p++;
+	if (!parse_ident(p, ident)) {
+		p = p0;
+		return false;
+	}
+	return true;
+}
+
+bool ZX81::parse_line_addr_ref(const char*& p, string& ident) {
+	skip_spaces(p);
+	const char* p0 = p;
+	if (*p != '&')
+		return false;
+	p++;
+	if (!parse_ident(p, ident)) {
+		p = p0;
+		return false;
+	}
+	return true;
+}
+
 bool ZX81::parse_end(const char*& p) {
 	skip_spaces(p);
 	if (*p == '\0' || *p == '#')
@@ -1235,7 +1359,22 @@ void ZX81::parse_meta_line(const char* p) {
 void ZX81::parse_basic_line(const char* p) {
 	BasicLine line;
 
-	parse_integer(p, line.line_num);		// if false, line number = 0
+	// get label and/or line number
+	bool got_line_num = false;
+	bool got_label = false;
+	bool found_some = false;
+	do {
+		found_some = false;
+		if (!got_line_num && parse_integer(p, line.line_num)) {
+			got_line_num = true;
+			found_some = true;
+		}
+		if (!got_label && parse_label(p, line.label)) {
+			got_label = true;
+			found_some = true;
+		}
+	} while (found_some);
+			
 	skip_spaces(p);
 	while (*p != '\0' && *p != '#') {
 		Token token;
@@ -1413,6 +1552,10 @@ void ZX81::parse_basic_line(const char* p) {
 			token.code = T_string;
 		else if (parse_ident(p, token.ident))
 			token.code = T_ident;
+		else if (parse_line_addr_ref(p, token.ident))
+			token.code = T_line_addr_ref;
+		else if (parse_line_num_ref(p, token.ident))
+			token.code = T_line_num_ref;
 		else {
 			ERROR("line " << error_line_num << ": cannot parse: " << p);
 			break;

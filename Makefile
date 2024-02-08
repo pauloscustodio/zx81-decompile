@@ -4,8 +4,8 @@
 # License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 #------------------------------------------------------------------------------
 
-PROJ1		= zx81_decompile
-PROJ2		= zx81_compile
+DECOMPILE	= zx81_decompile
+COMPILE		= zx81_compile
 
 ifeq ($(OS),Windows_NT)
   EXESUFFIX 		:= .exe
@@ -22,7 +22,7 @@ LDFLAGS		+=
 C_SRCS		= $(wildcard *.c)
 CXX_SRCS	= $(wildcard *.cpp)
 ALL_OBJS	= $(C_SRCS:.c=.o) $(CXX_SRCS:.cpp=.o)
-COMMON_OBJS	= $(filter-out $(PROJ1).o, $(filter-out $(PROJ2).o, $(ALL_OBJS)))
+COMMON_OBJS	= $(filter-out $(DECOMPILE).o, $(filter-out $(COMPILE).o, $(ALL_OBJS)))
 DEPENDS		= $(C_SRCS:.c=.d) $(CXX_SRCS:.cpp=.d)
 
 #------------------------------------------------------------------------------
@@ -45,8 +45,8 @@ endef
 
 #------------------------------------------------------------------------------
 
-$(eval $(call MAKE_EXE,$(PROJ1),$(PROJ1).o $(COMMON_OBJS)))
-$(eval $(call MAKE_EXE,$(PROJ2),$(PROJ2).o $(COMMON_OBJS)))
+$(eval $(call MAKE_EXE,$(DECOMPILE),$(DECOMPILE).o $(COMMON_OBJS)))
+$(eval $(call MAKE_EXE,$(COMPILE),$(COMPILE).o $(COMMON_OBJS)))
 
 clean::
 	$(RM) $(ALL_OBJS) $(DEPENDS)
@@ -57,17 +57,24 @@ clean::
 
 #------------------------------------------------------------------------------
 
-test: $(PROJ1)$(EXESUFFIX) $(PROJ2)$(EXESUFFIX)
-	$(MAKE) PROG=test_vars        runtest
-	$(MAKE) PROG=show_float       runtest
-	$(MAKE) PROG=slow             runtest
-	$(MAKE) PROG=fast             runtest
-	$(MAKE) PROG=FortressOfZorlac runtest
+test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX)
+	$(MAKE) PROG=test_vars        test_decompile_compile
+	$(MAKE) PROG=show_float       test_decompile_compile
+	$(MAKE) PROG=slow             test_decompile_compile
+	$(MAKE) PROG=fast             test_decompile_compile
+	$(MAKE) PROG=FortressOfZorlac test_decompile_compile
+	$(MAKE) PROG=test_t2p         test_compile
 
-runtest:
-	./zx81_decompile -o $(PROG).b81 t/$(PROG).p
-	./zx81_compile -o $(PROG).p $(PROG).b81
-	hexdump -C $(PROG).p > $(PROG).p.txt
+test_decompile_compile:
+	./$(DECOMPILE)$(EXESUFFIX) -o $(PROG).b81 t/$(PROG).p
+	./$(COMPILE)$(EXESUFFIX)   -o $(PROG).p   $(PROG).b81
+	hexdump -C $(PROG).p   > $(PROG).p.txt
+	hexdump -C t/$(PROG).p > t/$(PROG).p.txt
+	diff $(PROG).p.txt t/$(PROG).p.txt
+
+test_compile:
+	./$(COMPILE)$(EXESUFFIX)   -o $(PROG).p   t/$(PROG).b81
+	hexdump -C $(PROG).p   > $(PROG).p.txt
 	hexdump -C t/$(PROG).p > t/$(PROG).p.txt
 	diff $(PROG).p.txt t/$(PROG).p.txt
 

@@ -9,6 +9,7 @@
 #include <array>
 #include <cstdint>
 #include <string>
+#include <unordered_map>
 #include <vector>
 using namespace std;
 
@@ -18,11 +19,14 @@ string decode_zx81(char c);
 vector<uint8_t> encode_zx81(const char*& p);
 
 enum ZX81char {
-	T_none = -1,
-	T_number = -2,
-	T_string = -3,
-	T_ident = -4,
-	T_rem_code = -5,
+	T_none = 0x100,
+	T_number,
+	T_string,
+	T_ident,
+	T_rem_code,
+	T_line_addr_ref,
+	T_line_num_ref,
+
 	C_space = 0x00,
 	C_gr_wwww = 0x00,
 	C_gr_bwww = 0x01,
@@ -251,7 +255,7 @@ struct Token {
 	int		code{ T_none };
 	double	num{ 0.0 };			// for T_number
 	string  str;				// for T_string
-	string	ident;				// for T_ident
+	string	ident;				// for T_ident, T_line_addr, T_line_num
 	vector<uint8_t> bytes;		// for T_code
 };
 
@@ -356,9 +360,14 @@ private:
 
 	// compile BASIC
 	int auto_increment{ 10 };
+	unordered_map<string, BasicLine*> labels;
+	void delete_empty_lines();
 	void compute_line_numbers();
-	void compile_basic();
+	void compile_basic(int pass);
 	void compile_vars();
+	void compile_number(vector<uint8_t>& bytes, double value);
+	void compile_string(vector<uint8_t>& bytes, const string& str);
+	void compile_ident(vector<uint8_t>& bytes, const string& ident);
 
 	// write BASIC file
 	void write_sysvars(ofstream& ofs) const;
@@ -374,9 +383,12 @@ private:
 	bool parse_number(const char*& p, double& value, string& value_text);
 	bool parse_string(const char*& p, string& str);
 	bool parse_ident(const char*& p, string& ident);
+	bool parse_label(const char*& p, string& ident);
+	bool parse_line_num_ref(const char*& p, string& ident);
+	bool parse_line_addr_ref(const char*& p, string& ident);
 	bool parse_end(const char*& p);
 	void parse_line(const char* p);
 	void parse_meta_line(const char* p);
-	void parse_basic_var(const char* p);
 	void parse_basic_line(const char* p);
+	void parse_basic_var(const char* p);
 };
