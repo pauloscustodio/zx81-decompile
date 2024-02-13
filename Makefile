@@ -68,7 +68,7 @@ test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX)
 	$(MAKE) PROG=fast              test_decompile_compile
 	$(MAKE) PROG=test_keyboard     test_decompile_compile
 	$(MAKE) PROG=FortressOfZorlac  test_decompile_compile
-#	$(MAKE) PROG=GrimmsFairyTrails test_decompile_compile
+	$(MAKE) PROG=GrimmsFairyTrails test_decompile_compile
 	$(MAKE) PROG=test_t2p          test_compile
 
 test_decompile_compile:

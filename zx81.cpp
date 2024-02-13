@@ -680,13 +680,29 @@ void ZX81::decompile_vars() {
 			var.value = fpeek(addr); addr += 5;
 		}
 		else if ((c & 0xe0) == 0xa0) {	// multiple-letter variable
+			var.type = BasicVar::Type::Number;
+
+			// first letter
 			addr++;
 			c &= 0x3f;
 			c |= 0x20;
-
-			var.type = BasicVar::Type::Number;
 			var.name = decode_zx81(c);
-			while (((c = peek(addr)) & 0xe0) != 0x80) {		// not last char
+
+			// second, ... letter
+			while (((c = peek(addr)) & 0xc0) == 0x00) {
+				addr++;
+				c &= 0x3f;
+				c |= 0x20;
+				var.name += decode_zx81(c);
+			}
+
+			// last letter
+			c = peek(addr);
+			if ((c & 0xc0) != 0x80) {
+				ERROR("invalid multi-letter variable" << fmt_hex(c, 2));
+				return;
+			}
+			else {
 				addr++;
 				c &= 0x3f;
 				c |= 0x20;
