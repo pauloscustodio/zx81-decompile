@@ -73,10 +73,10 @@ for (@basic) {
 path($output_b81)->spew(@basic);
 
 # convert to .P
-run("t2p $output_b81");
+(my $output_p = $input_bas) =~ s/\.\w+$/.p/;
+run("t2p -o $output_p $output_b81");
 
 # rename line 1 REM to 0
-(my $output_p = $input_bas) =~ s/\.\w+$/.p/;
 my @bytes = map {ord} split //, path($output_p)->slurp_raw;
 $bytes[0x407d-0x4009] = 0;
 $bytes[0x407e-0x4009] = 0;

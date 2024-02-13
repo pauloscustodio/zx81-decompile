@@ -66,10 +66,10 @@ test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX)
 	$(MAKE) PROG=show_float        test_decompile_compile
 	$(MAKE) PROG=slow              test_decompile_compile
 	$(MAKE) PROG=fast              test_decompile_compile
-	$(MAKE) PROG=test_keyboard     test_decompile_compile
 	$(MAKE) PROG=FortressOfZorlac  test_decompile_compile
 	$(MAKE) PROG=GrimmsFairyTrails test_decompile_compile
 	$(MAKE) PROG=test_t2p          test_compile
+	perl make_p.pl t/test_keyboard.bas
 
 test_decompile_compile:
 	./$(DECOMPILE)$(EXESUFFIX) -o $(PROG).b81 t/$(PROG).p
@@ -86,3 +86,4 @@ test_compile:
 
 clean::
 	$(RM) *.p *.p.txt *.b81 t/*.p.txt
+	$(RM) t/test_keyboard.asm t/test_keyboard.b81 t/test_keyboard.bin t/test_keyboard.map t/test_keyboard.p t/test_keyboard.sym
