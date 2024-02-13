@@ -28,7 +28,7 @@ DEPENDS		= $(C_SRCS:.c=.d) $(CXX_SRCS:.cpp=.d)
 #------------------------------------------------------------------------------
 
 define MAKE_EXE
-all: $(1)$(EXESUFFIX)
+all:: $(1)$(EXESUFFIX)
 
 $(1)$(EXESUFFIX): $(2)
 	$(CXX) $(CXXFLAGS) $(2) $(LDFLAGS) -o $(1)$(EXESUFFIX)
@@ -48,8 +48,12 @@ endef
 $(eval $(call MAKE_EXE,$(DECOMPILE),$(DECOMPILE).o $(COMMON_OBJS)))
 $(eval $(call MAKE_EXE,$(COMPILE),$(COMPILE).o $(COMMON_OBJS)))
 
+all::
+	$(MAKE) -C FortressOfZorlac
+	
 clean::
 	$(RM) $(ALL_OBJS) $(DEPENDS)
+	$(MAKE) -C FortressOfZorlac clean
 
 #------------------------------------------------------------------------------
 
@@ -58,12 +62,14 @@ clean::
 #------------------------------------------------------------------------------
 
 test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX)
-	$(MAKE) PROG=test_vars        test_decompile_compile
-	$(MAKE) PROG=show_float       test_decompile_compile
-	$(MAKE) PROG=slow             test_decompile_compile
-	$(MAKE) PROG=fast             test_decompile_compile
-	$(MAKE) PROG=FortressOfZorlac test_decompile_compile
-	$(MAKE) PROG=test_t2p         test_compile
+	$(MAKE) PROG=test_vars         test_decompile_compile
+	$(MAKE) PROG=show_float        test_decompile_compile
+	$(MAKE) PROG=slow              test_decompile_compile
+	$(MAKE) PROG=fast              test_decompile_compile
+	$(MAKE) PROG=test_keyboard     test_decompile_compile
+	$(MAKE) PROG=FortressOfZorlac  test_decompile_compile
+#	$(MAKE) PROG=GrimmsFairyTrails test_decompile_compile
+	$(MAKE) PROG=test_t2p          test_compile
 
 test_decompile_compile:
 	./$(DECOMPILE)$(EXESUFFIX) -o $(PROG).b81 t/$(PROG).p
