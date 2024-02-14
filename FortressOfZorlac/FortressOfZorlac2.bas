@@ -46,9 +46,6 @@ fortress_cols:
 fortress_blocks:
         defb $29
 
-        ; Start of unknown area $4121 to $412B
-        defb $00, $00, $00, $00, $00, $76, $00, $02, $61, $00, $EA
-        ; End of unknown area $4121 to $412B
 
 ;--------------------------------------------------------------------------------
 ; Draw fortress at fortress_row/fortress_col
@@ -101,12 +98,6 @@ rotate_inner_layer:
 
 L_418A:
         ret
-
-
-        ; Start of unknown area $418B to $4190
-        defb $76, $00, $03, $7D, $00
-        defb $EA
-        ; End of unknown area $418B to $4190
 
 
 rotate_outer_layer:
@@ -180,13 +171,6 @@ rot_blocks_top_row:
         ex de, hl               ; DE=blocks, HL=screen
         ret
 
-
-        ; Start of unknown area $41F2 to $4211
-        defb $3E, $F7, $BC, $28, $0D, $3E, $EF, $BC, $28, $08, $3E, $DF, $BC, $28
-        defb $03, $C3, $F5, $43, $AF, $B9, $CA, $F5, $43, $C3, $EA, $43, $76, $00, $04, $22
-        defb $00, $EA
-        ; End of unknown area $41F2 to $4211
-
 ;--------------------------------------------------------------------------------
 ; Compute screen position of row-col in BC to HL
 ; Preserves all other registers
@@ -224,12 +208,6 @@ SCR_POS_col_found:
         pop af
         pop de
         ret
-
-
-        ; Start of unknown area $4230 to $4237
-        defb $00, $00, $76, $00, $05, $38, $00, $EA
-        ; End of unknown area $4230 to $4237
-
 
 erase_hit_block_from_fortress:
         ld hl, FORTRESS1
@@ -271,23 +249,11 @@ L_425C:
         ld (hl), $00
         ret
 
-
-        ; Start of unknown area $4269 to $4273
-        defb $00, $00, $00, $00, $00, $76, $00
-        defb $06, $82, $00, $EA
-        ; End of unknown area $4269 to $4273
-
-
 alien_col:
         defb $16
 
 alien_row:
         defb $08
-
-        ; Start of unknown area $4276 to $4276
-        defb $00
-        ; End of unknown area $4276 to $4276
-
 
 ALIEN:
         defb $00, $00, $00, $00, $00
@@ -335,13 +301,6 @@ alien_downwards:
         ld a, $01
         jr store_alien_pos
 
-
-        ; Start of unknown area $42CF to $42D0
-        defb $00
-        defb $00
-        ; End of unknown area $42CF to $42D0
-
-
 draw_alien_at_BC:
         ld (alien_col), bc
         call SCR_POS
@@ -364,11 +323,6 @@ alien_each_row:
 
 alien_direction:
         defb $01
-
-        ; Start of unknown area $42F0 to $42F9
-        defb $00, $00, $00, $00, $76, $00, $07, $97, $00, $EA
-        ; End of unknown area $42F0 to $42F9
-
 
 SHIP1:
         defb $81, $80, $80, $80, $82
@@ -454,14 +408,6 @@ draw_ship_row:
         jr draw_ship_row
 
 
-        ; Start of unknown area $438A to $43C1
-        defb $00, $00, $00, $00, $00, $76
-        defb $00, $08, $6C, $00, $EA, $CD, $BB, $02, $ED, $4B, $46, $43, $3E, $FF, $BD, $28
-        defb $54, $3D, $BD, $28, $2B, $3D, $BD, $28, $27, $3D, $3D, $BD, $28, $2D, $3E, $F7
-        defb $BD, $28, $28, $3E, $EF, $BD, $28, $38, $3E, $DF, $BD, $28, $33, $3E, $F7, $94
-        defb $30, $24
-        ; End of unknown area $438A to $43C1
-
 ;--------------------------------------------------------------------------------
 ; Called in response to key, BC has ship coords
 ;--------------------------------------------------------------------------------
@@ -511,22 +457,10 @@ MOVE_SHIP_LEFT:
         dec c                   ; move right
         jr save_ship_pos
 
-
-        ; Start of unknown area $43F0 to $43F4
-        defb $C5, $CD, $31, $44, $C1
-        ; End of unknown area $43F0 to $43F4
-
-
 save_ship_pos:
         ld (ship_col), bc
         call DRAW_SHIP
         ret
-
-
-        ; Start of unknown area $43FD to $4404
-        defb $00, $00, $76
-        defb $00, $09, $23, $00, $EA
-        ; End of unknown area $43FD to $4404
 
 ;--------------------------------------------------------------------------------
 ; Delete ship before moving it
@@ -552,12 +486,6 @@ delete_col:
         jr nz, delete_row
         pop bc                  ; restore coords
         ret
-
-
-        ; Start of unknown area $4421 to $442B
-        defb $00, $00, $00, $00, $00, $76, $00, $0A, $2E, $00, $EA
-        ; End of unknown area $4421 to $442B
-
 
 torpedo_running:
         defb $00
@@ -594,12 +522,6 @@ FIRE_TORPEDO:
         ld a, $01
         ld (torpedo_running), a ; signal torpedo on the way
         ret
-
-
-        ; Start of unknown area $4453 to $445D
-        defb $00, $00, $00, $00, $00, $76, $00, $0B, $68, $00, $EA
-        ; End of unknown area $4453 to $445D
-
 
 WALL_HIT:
         defb $00
@@ -672,23 +594,11 @@ stop_torpedo:
         ld (torpedo_running), a
         ret
 
-
-        ; Start of unknown area $44BB to $44C9
-        defb $00, $00, $00, $00, $00
-        defb $00, $00, $00, $00, $76, $00, $0C, $91, $00, $EA
-        ; End of unknown area $44BB to $44C9
-
-
 BLOCK1:
         defb $00, $80, $80      ; WBB block
 
 save_block1:
         defb $80
-
-        ; Start of unknown area $44CE to $44D0
-        defb $00, $00
-        defb $00
-        ; End of unknown area $44CE to $44D0
 
 ;--------------------------------------------------------------------------------
 ; Draw rotating border and ship
@@ -788,11 +698,6 @@ each_left_bar_block:
         jp DRAW_SHIP_BC
 
 
-        ; Start of unknown area $4559 to $455E
-        defb $76, $00, $0D, $90, $00, $EA
-        ; End of unknown area $4559 to $455E
-
-
 ROTATED_SHIP1:
         defb $00, $81, $84, $07, $00
         defb $81, $86, $07, $82, $81
@@ -848,12 +753,6 @@ add_25:
         jp draw_ship_hl
 
 
-        ; Start of unknown area $45E8 to $45F2
-        defb $00, $00, $00, $00, $00, $76, $00, $0E
-        defb $39, $00, $EA
-        ; End of unknown area $45E8 to $45F2
-
-
 torpedo_path:
         defb $00, $00, $00, $00, $00, $00, $00, $00, $34, $00, $00, $00, $00, $00, $00, $00
         defb $00
@@ -890,10 +789,6 @@ draw_torpedo_path:
         ret
 
 
-        ; Start of unknown area $462A to $462F
-        defb $76, $00, $0F, $2C, $00, $EA
-        ; End of unknown area $462A to $462F
-
 ;--------------------------------------------------------------------------------
 ; Draw the 4 cannons in front of the fortress
 ;--------------------------------------------------------------------------------
@@ -923,11 +818,6 @@ draw_cannon:
         inc b
         inc b
         ret
-
-
-        ; Start of unknown area $4657 to $465F
-        defb $00, $00, $00, $76, $00, $10, $3B, $00, $EA
-        ; End of unknown area $4657 to $465F
 
 
 bomb_col:
@@ -991,11 +881,6 @@ continue_fire_bomb:
         ret
 
 
-        ; Start of unknown area $4699 to $469E
-        defb $76, $00, $11, $38, $00, $EA
-        ; End of unknown area $4699 to $469E
-
-
 SHIP_HIT:
         defb $00
 
@@ -1034,11 +919,6 @@ bomb_hit_ship:
         ld a, $01
         ld (SHIP_HIT), a
         ret
-
-
-        ; Start of unknown area $46D0 to $46DA
-        defb $00, $00, $00, $00, $00, $76, $00, $12, $43, $00, $EA
-        ; End of unknown area $46D0 to $46DA
 
 
 timer_fortress_move:
@@ -1088,12 +968,6 @@ move_next_row:
         cp $00
         jr nz, move_next_row    ; next row
         ret
-
-
-        ; Start of unknown area $471C to $4721
-        defb $76, $00, $13, $6D
-        defb $00, $EA
-        ; End of unknown area $471C to $4721
 
 
 SCORE:
@@ -1184,12 +1058,6 @@ output_digit:
         ret
 
 
-        ; Start of unknown area $4783 to $4792
-        defb $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $76, $00, $14
-        defb $4A, $00, $EA
-        ; End of unknown area $4783 to $4792
-
-
 INCR_SCORE:
         ld a, (ALIEN_HIT)
         cp $01
@@ -1238,12 +1106,6 @@ skip_blanks:
         ret
 
 
-        ; Start of unknown area $47D9 to $47E0
-        defb $00, $00, $76, $00, $15, $1A, $00
-        defb $EA
-        ; End of unknown area $47D9 to $47E0
-
-
 DELETE_TORPEDO:
         ld bc, (torpedo_col)
         call SCR_POS
@@ -1260,10 +1122,6 @@ DELETE_BOMB:
         ld (hl), $00            ; delete bomb
         ret
 
-
-        ; Start of unknown area $47F9 to $47FE
-        defb $76, $00, $16, $42, $00, $EA
-        ; End of unknown area $47F9 to $47FE
 
 ;--------------------------------------------------------------------------------
 ; Init restored fortress
@@ -1305,12 +1163,6 @@ fortress_fill_inner_black:
         ret
 
 
-        ; Start of unknown area $483D to $4844
-        defb $00, $00, $76
-        defb $00, $17, $3F, $00, $EA
-        ; End of unknown area $483D to $4844
-
-
 press_any_key_msg:
         defb $2D, $2E, $39, $00, $26, $33, $3E, $00, $31, $2A, $39, $39, $2A, $37, $00, $3C
         defb $2D, $2A, $33, $00, $37, $2A, $26, $29, $3E
@@ -1327,13 +1179,6 @@ PRESS_ANY_KEY:
         ldir
         ret
 
-
-        ; Start of unknown area $486E to $4870
-        defb $00, $00
-        defb $00
-        ; End of unknown area $486E to $4870
-
-
 DELETE_PRESS_ANY_KEY:
         ld bc, $1703            ; row 23, col 3
         call SCR_POS
@@ -1344,16 +1189,6 @@ put_space:
         inc hl
         djnz put_space
         ret
-
-
-        ; Start of unknown area $487F to $48B5
-        defb $00
-        defb $00, $00, $76, $00, $18, $9B, $00, $EA, $00, $85, $01, $85, $00, $00, $02, $80
-        defb $03, $00, $00, $87, $80, $04, $00, $00, $81, $00, $82, $00, $00, $00, $00, $00
-        defb $00, $87, $07, $80, $84, $04, $00, $84, $03, $07, $00, $00, $02, $80, $01, $00
-        defb $00, $00, $00, $00, $00, $01
-        ; End of unknown area $487F to $48B5
-
 
 FLASH_ALIEN:
         ld bc, (fortress_col)
@@ -1381,19 +1216,6 @@ flash_next_col:
         cp $00
         jr nz, flash_next_line  ; loop for next row
         ret
-
-
-        ; Start of unknown area $48D9 to $494E
-        defb $EB, $21, $9C, $48, $C3, $77, $43
-        defb $3E, $02, $BE, $20, $1F, $3C, $32, $B5, $48, $EB, $23, $36, $05, $23, $36, $02
-        defb $23, $36, $05, $11, $1F, $00, $19, $36, $03, $23, $23, $36, $01, $11, $A3, $00
-        defb $19, $36, $80, $C9, $3E, $01, $32, $B5, $48, $EB, $23, $23, $36, $00, $23, $36
-        defb $85, $11, $21, $00, $19, $36, $03, $11, $A5, $00, $19, $36, $80, $C9, $00, $00
-        defb $00, $76, $00, $19, $24, $00, $EA, $ED, $4B, $1C, $41, $0C, $0C, $0C, $06, $05
-        defb $ED, $43, $46, $43, $CD, $05, $44, $06, $0E, $ED, $43, $46, $43, $CD, $05, $44
-        defb $C9, $00, $00, $00, $00, $00, $00, $00, $00, $76, $00, $1A, $42, $00, $EA
-        ; End of unknown area $48D9 to $494E
-
 
 LEVEL_DELAY:
         defw $0001
@@ -1428,15 +1250,6 @@ game_delay:
         add hl, de
         jr game_delay
 
-
-        ; Start of unknown area $4988 to $49B2
-        defb $00, $00, $00, $00, $00, $00, $00, $76
-        defb $00, $1B, $1A, $00, $EA, $3E, $BF, $BD, $28, $06, $3E, $7F, $BD, $C2, $F0, $43
-        defb $3A, $1C, $41, $C3, $C5, $43, $00, $00, $00, $00, $00, $00, $00, $76, $00, $1C
-        defb $18, $00, $EA
-        ; End of unknown area $4988 to $49B2
-
-
 CLEAR_GAME_AREA:
         ld bc, $0200            ; row 2 column 0
         call SCR_POS            ; HL = screen address
@@ -1454,12 +1267,6 @@ L_49BD:
         cp $00
         jr nz, clear_next_row   ; loop for rows
         ret
-
-
-        ; Start of unknown area $49C9 to $49CE
-        defb $76, $00, $1D, $70, $00, $EA
-        ; End of unknown area $49C9 to $49CE
-
 
 ;--------------------------------------------------------------------------------
 ; Test keyboard and do actions
@@ -1553,8 +1360,8 @@ check_left_right:
 
    30  CLS 
 # init torpedo position
-   34  POKE &intro_torpedo_pos,$FC
-   35  POKE &intro_torpedo_pos+1,$45
+   34  POKE &intro_torpedo_pos,(&torpedo_path+9)-256*INT((&torpedo_path+9)/256)
+   35  POKE &intro_torpedo_pos+1,INT((&torpedo_path+9)/256)
 
    40  PRINT  AT 5,11;"WELCOME TO";
    50  PRINT  AT 7,5;"\.'\''\'. \''\:'\' \ '\':\'' \.'\''\'. \.'\''\'. \: \ .\' ";
