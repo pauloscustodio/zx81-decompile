@@ -7,10 +7,28 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 using namespace std;
 
-extern int error_count;
+class Errors {
+public:
+	void clear();
+	void set_filename(const string& filename);
+	void set_line_num(int line_num);
 
-#define ERROR(x)		do { cerr << "error: " << x << endl; error_count++; } while (false)
-#define FATAL_ERROR(x)	do { ERROR(x); exit(EXIT_FAILURE); } while (false)
-#define EXIT_STATUS()	do { if (error_count) exit(EXIT_FAILURE); else exit(EXIT_SUCCESS); } while (false)
+	const string& get_filename() const { return m_filename; }
+	int get_line_num() const { return m_line_num; }
+	int get_count() const { return m_count; }
+
+	void error(const string& message, const string& arg = "");
+	void fatal_error(const string& message, const string& arg = "");
+	void exit_status() const;
+
+private:
+	int m_count;
+	int m_line_num;
+	string m_filename;
+
+};
+
+extern Errors g_errors;

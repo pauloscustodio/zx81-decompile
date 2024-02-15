@@ -288,8 +288,8 @@ string decode_zx81(char c) {
 	return code;
 }
 
-vector<uint8_t> encode_zx81(const char*& p) {
-	vector<uint8_t> bytes;
+Bytes encode_zx81(const char*& p) {
+	Bytes bytes;
 	while (*p != '\0') {
 		if (p[0] == '\\' && isxdigit(p[1]) && isxdigit(p[2])) {
 			bytes.push_back(strtol(p + 1, NULL, 16) & 0xff);
@@ -313,7 +313,7 @@ vector<uint8_t> encode_zx81(const char*& p) {
 				}
 			}
 			if (!encoded) {
-				ERROR("cannot encode: " << p);
+				g_errors.error("cannot encode", p);
 				break;
 			}
 		}
@@ -321,27 +321,27 @@ vector<uint8_t> encode_zx81(const char*& p) {
 	return bytes;
 }
 
-//-----------------------------------------------------------------------------
-// init memory
-//-----------------------------------------------------------------------------
-
-ZX81::ZX81() {
-	d_file_bytes.clear();
-	d_file_bytes.push_back(C_newline);
-	for (int row = 0; row < NumRows; row++) {
-		for (int col = 0; col < NumCols; col++) {
-			d_file_bytes.push_back(C_space);
-		}
-		d_file_bytes.push_back(C_newline);
-	}
-
-	e_line_bytes.clear();
-
-	init_ram();
+string encode_hex(const Bytes& bytes) {
+	ostringstream oss;
+	for (auto& b : bytes) 
+		oss << "\\" << fmt_hex(b, 2);
+	return oss.str();
 }
 
-void ZX81::init_ram() {
-	init_video_to_stkend(PROG);
+//-----------------------------------------------------------------------------
+// virtual machine
+//-----------------------------------------------------------------------------
+
+ZX81vm::ZX81vm() {
+	int addr = PROG;
+	dpoke(D_FILE, addr);
+	dpoke(NXTLIN, addr);
+	addr = write_empty_d_file(addr);
+	dpoke(VARS, addr);
+	addr = write_empty_vars(addr);
+	dpoke(E_LINE, addr);
+	dpoke(STKBOT, addr);
+	dpoke(STKEND, addr);
 
 	// print position
 	dpoke(DF_CC, dpeek(D_FILE) + 1);
@@ -360,99 +360,157 @@ void ZX81::init_ram() {
 	poke(PRBUFF + 32, C_newline);
 }
 
-void ZX81::init_video_to_stkend(int addr) {
+int ZX81vm::write_empty_d_file(int addr) {
+	Bytes d_file = get_empty_d_file();
+	poke_bytes(addr, d_file);
+	return addr + static_cast<int>(d_file.size());
+}
+
+int ZX81vm::write_empty_vars(int addr) {
+	poke(addr++, 0x80);
+	return addr;
+}
+
+void ZX81vm::init_video_to_stkend(int addr, Bytes& d_file_bytes, Bytes& e_line_bytes) {
 	dpoke(D_FILE, addr);
 	dpoke(NXTLIN, addr);
-	addr += bytes_poke(addr, d_file_bytes);
+	addr += poke_bytes(addr, d_file_bytes);
 
 	// vars
 	dpoke(VARS, addr);
 	poke(addr++, 0x80);
 
-	init_e_line_to_stkend(addr);
+	init_e_line_to_stkend(addr, e_line_bytes);
 }
 
-void ZX81::init_e_line_to_stkend(int addr) {
+void ZX81vm::init_e_line_to_stkend(int addr, Bytes& e_line_bytes) {
 	// edit line
 	dpoke(E_LINE, addr);
-	addr += bytes_poke(addr, e_line_bytes);
+	addr += poke_bytes(addr, e_line_bytes);
 
 	// calculator stack
 	dpoke(STKBOT, addr);
 	dpoke(STKEND, addr);
 }
 
+Bytes ZX81vm::get_empty_d_file() {
+	Bytes out;
+	out.push_back(C_newline);
+	for (int row = 0; row < NumRows; row++) {
+		for (int col = 0; col < NumCols; col++) {
+			out.push_back(C_space);
+		}
+		out.push_back(C_newline);
+	}
+	return out;
+}
+
+Bytes ZX81vm::get_empty_e_line() {
+	Bytes out;
+	out.push_back(0x80);
+	return out;
+}
+
+//-----------------------------------------------------------------------------
+// read/write binary files
+//-----------------------------------------------------------------------------
+
+void ZX81vm::read_p_file(const string& filename) {
+	// open file
+	ifstream ifs(filename, ios::binary);
+	if (!ifs.is_open()) {
+		perror(filename.c_str());
+		g_errors.fatal_error("open file", filename);
+	}
+
+	// get size
+	ifs.seekg(0, ios::end);
+	size_t size = ifs.tellg();
+	ifs.seekg(0, ios::beg);
+
+	// read bytes
+	ifs.read(reinterpret_cast<char*>(&mem[SAVE_ADDR]), size);
+	size_t readed = ifs.gcount();
+	if (readed != size) {
+		perror(filename.c_str());
+		g_errors.fatal_error("read " + to_string(size) + " bytes from file " + filename);
+	}
+}
+
+void ZX81vm::write_p_file(const string& filename) const {
+	// open file
+	ofstream ofs(filename, ios::binary);
+	if (!ofs.is_open()) {
+		perror(filename.c_str());
+		g_errors.fatal_error("open file", filename);
+	}
+
+	size_t size = dpeek(E_LINE) - SAVE_ADDR;
+	ofs.write(reinterpret_cast<const char*>(&mem[SAVE_ADDR]), size);
+	size_t written = ofs.tellp();
+	if (written != size) {
+		perror(filename.c_str());
+		g_errors.fatal_error("write " + to_string(size) + " bytes to file " + filename);
+	}
+}
+
 //-----------------------------------------------------------------------------
 // manipulate memory
 //-----------------------------------------------------------------------------
 
-int ZX81::peek(int addr) const {
-	if (addr >= RAM_ADDR && addr < RAM_ADDR + static_cast<int>(ram.size())) 
-		return ram[addr - RAM_ADDR];
-	else
-		return 0;
+int ZX81vm::peek(int addr) const {
+	return mem[addr & 0xffff];
 }
 
-int ZX81::dpeek(int addr) const {
+int ZX81vm::dpeek(int addr) const {
 	return peek(addr) + (peek(addr + 1) << 8);
 }
 
-int ZX81::dpeek_be(int addr) const {
+int ZX81vm::dpeek_be(int addr) const {
 	return (peek(addr) << 8) + peek(addr + 1);
 }
 
-double ZX81::fpeek(int addr) const {
+double ZX81vm::fpeek(int addr) const {
 	array<uint8_t, 5> bytes{ 0 };
 	for (int i = 0; i < 5; i++)
 		bytes[i] = peek(addr + i);
 	return zx81_to_float(bytes);
 }
 
-string ZX81::str_peek(int addr, int len) const {
-	string out;
-	for (int i = 0; i < len; i++)
-		out += decode_zx81(peek(addr + i));
+Bytes ZX81vm::peek_bytes(int addr, int size) const {
+	Bytes out;
+	out.insert(out.end(), mem.begin() + addr, mem.begin() + addr + size);
 	return out;
 }
 
-string ZX81::bytes_peek(int addr, int len) const {
-	string out;
+string ZX81vm::peek_hex(int addr, int len) const {
+	Bytes out;
 	for (int i = 0; i < len; i++)
-		out += string("\\") + fmt_hex(peek(addr + i), 2);
-	return out;
+		out.push_back(peek(addr + i));
+	return encode_hex(out);
 }
 
-void ZX81::poke(int addr, int value) {
-	if (addr >= RAM_ADDR && addr < RAM_ADDR + static_cast<int>(ram.size()))
-		ram[addr - RAM_ADDR] = value & 0xff;
+void ZX81vm::poke(int addr, int value) {
+	mem[addr & 0xffff] = value & 0xff;
 }
 
-void ZX81::dpoke(int addr, int value) {
+void ZX81vm::dpoke(int addr, int value) {
 	poke(addr, value);
 	poke(addr + 1, value >> 8);
 }
 
-void ZX81::dpoke_be(int addr, int value) {
+void ZX81vm::dpoke_be(int addr, int value) {
 	poke(addr, value >> 8);
 	poke(addr + 1, value);
 }
 
-void ZX81::fpoke(int addr, double value) {
+void ZX81vm::fpoke(int addr, double value) {
 	array<uint8_t, 5> bytes = float_to_zx81(value);
 	for (int i = 0; i < 5; i++)
 		poke(addr + i, bytes[i]);
 }
 
-int ZX81::str_poke(int addr, const string& str) {
-	const char* p = str.c_str();
-	vector<uint8_t> bytes = encode_zx81(p);
-	int len = static_cast<int>(bytes.size());
-	for (int i = 0; i < len; i++)
-		poke(addr + i, bytes[i]);
-	return len;
-}
-
-int ZX81::get_line_addr(int line_num) {
+int ZX81vm::get_line_addr(int line_num) {
 	int addr = PROG;
 	int d_file = dpeek(D_FILE);
 	while (addr < d_file) {
@@ -466,1268 +524,18 @@ int ZX81::get_line_addr(int line_num) {
 }
 
 //-----------------------------------------------------------------------------
-// Decompile BASIC from ram
+// BASIC structure
 //-----------------------------------------------------------------------------
 
-void ZX81::decompile() {
-	decompile_basic();
-	decompile_vars();
+ZX81basic::ZX81basic() {
+	d_file_bytes = ZX81vm::get_empty_d_file();
 }
 
-void ZX81::decompile_basic() {
-	basic_lines.clear();
-	addr = PROG;
-	while (addr < dpeek(D_FILE)) {
-		BasicLine line;
-		line.addr = addr;
-		line.line_num = dpeek_be(addr);
-		line.size = dpeek(addr + 2);
-
-		addr += 4;
-		end = addr + line.size;
-
-		decompile_basic_line(line);
-		basic_lines.push_back(line);
-	}
-}
-
-void ZX81::decompile_basic_line(BasicLine& line) {
-	if (decompile_rem_code(line)) {
-	}
-	else {
-		while (addr < end - 1) {
-			if (decompile_number(line)) {
-			}
-			else if (decompile_ident(line)) {
-			}
-			else if (decompile_string(line)) {
-			}
-			else {
-				Token token;
-				token.code = peek(addr++);
-				line.tokens.push_back(token);
-			}
-		}
-		decompile_newline(line);
-	}
-}
-
-bool ZX81::decompile_rem_code(BasicLine& line) {
-	if (peek(addr) == C_REM) {
-		bool is_code = false;
-		for (int p = addr + 1; p < end - 1; p++) {	// all chars except final newline
-			if ((peek(p) & 0x40) == 0x40) {			// special char
-				is_code = true;
-				break;
-			}
-		}
-		if (is_code) {
-			Token rem;
-			rem.code = C_REM;
-			line.tokens.push_back(rem);
-
-			Token bytes;
-			bytes.code = T_rem_code;
-			for (int p = addr + 1; p < end - 1; p++)
-				bytes.bytes.push_back(peek(p));
-			line.tokens.push_back(bytes);
-
-			addr = end - 1;
-			decompile_newline(line);
-			return true;
-		}
-	}
-	return false;
-}
-
-bool ZX81::decompile_number(BasicLine& line) {
-	Token token;
-	string num;
-
-	// get mantissa
-	int p = addr;
-	int num_dots = 0;
-	int num_digits = 0;
-	while (true) {
-		int c = peek(p);
-		if (c == C_dot) {
-			p++;
-			num_dots++;
-			num.push_back('.');
-			if (num_dots > 1)
-				return false;
-		}
-		else if (c >= C_0 && c <= C_9) {
-			p++;
-			num_digits++;
-			num.push_back(c - C_0 + '0');
-		}
-		else
-			break;
-	}
-	if (num_digits == 0)
-		return false;
-
-	// get exponent
-	int c = peek(p);
-	if (p == C_E) {
-		p++;
-		num.push_back('E');
-		c = peek(p);
-		if (c == C_plus || c == C_minus) {
-			p++;
-			num.push_back(c == C_plus ? '+' : '-');
-		}
-		c = peek(p);
-		if (c < C_0 || c > C_9)
-			return false;
-		while (c >= C_0 && c <= C_9) {
-			p++;
-			num.push_back(c - C_0 + '0');
-			c = peek(p);
-		}
-	}
-
-	double value1 = atof(num.c_str());
-
-	// get number marker
-	c = peek(p);
-	if (c != C_number)
-		return false;
-	p++;
-
-	// get fp value
-	double value2 = fpeek(p); p += 5;
-
-	if (abs(value1 - value2) > 1e-6)
-		ERROR("line " << line.line_num << " number " << value1 << " != " << value2);
-
-	token.code = T_number;
-	token.str = num;
-	token.num = value1;
-	line.tokens.push_back(token);
-	addr = p;
-	return true;
-}
-
-bool ZX81::decompile_ident(BasicLine& line) {
-	Token token;
-	int p = addr;
-	while (true) {
-		int c = peek(p);
-		if (c < C_A || c > C_Z)
-			break;
-		token.ident.push_back(c - C_A + 'A');
-		p++;
-	}
-	if (p == addr)					// no letters found
-		return false;
-	else {
-		token.code = T_ident;
-		line.tokens.push_back(token);
-		addr = p;
-		return true;
-	}
-}
-
-bool ZX81::decompile_string(BasicLine& line) {
-	Token token;
-	int p = addr;
-	if (peek(p) != C_dquote)
-		return false;
-	p++;
-	while (true) {
-		int c = peek(p);
-		if (c == C_newline)
-			return false;
-		if (c == C_dquote)
-			break;
-		token.str += decode_zx81(c);
-		p++;
-	}
-	p++;		// skip end dquote
-
-	token.code = T_string;
-	line.tokens.push_back(token);
-	addr = p;
-	return true;
-}
-
-void ZX81::decompile_newline(BasicLine& line) {
-	Token token;
-	token.code = peek(addr++);
-	if (token.code != C_newline)
-		ERROR("line " << line.line_num << " has no newline");
-
-	line.tokens.push_back(token);
-}
-
-void ZX81::decompile_vars() {
-	addr = dpeek(VARS);
-	int c = 0;
-	while ((c = peek(addr)) != 0x80) {
-		BasicVar var;
-		var.addr = addr;
-		int addr0 = addr;
-
-		if ((c & 0xe0) == 0x60) {		// single letter variable
-			addr++;
-			c &= 0x3f;
-			c |= 0x20;
-
-			var.type = BasicVar::Type::Number;
-			var.name = decode_zx81(c);
-			var.value = fpeek(addr); addr += 5;
-		}
-		else if ((c & 0xe0) == 0xa0) {	// multiple-letter variable
-			var.type = BasicVar::Type::Number;
-
-			// first letter
-			addr++;
-			c &= 0x3f;
-			c |= 0x20;
-			var.name = decode_zx81(c);
-
-			// second, ... letter
-			while (((c = peek(addr)) & 0xc0) == 0x00) {
-				addr++;
-				c &= 0x3f;
-				c |= 0x20;
-				var.name += decode_zx81(c);
-			}
-
-			// last letter
-			c = peek(addr);
-			if ((c & 0xc0) != 0x80) {
-				ERROR("invalid multi-letter variable" << fmt_hex(c, 2));
-				return;
-			}
-			else {
-				addr++;
-				c &= 0x3f;
-				c |= 0x20;
-				var.name += decode_zx81(c);
-			}
-			var.value = fpeek(addr); addr += 5;
-		}
-		else if ((c & 0xe0) == 0x80) {	// array of numbers
-			addr++;
-			c &= 0x3f;
-			c |= 0x20;
-
-			var.type = BasicVar::Type::ArrayNumbers;
-			var.name = decode_zx81(c);
-
-			int size = dpeek(addr); addr += 2;
-			int addr0 = addr;
-
-			int num_dimensions = peek(addr++);
-			int num_elements = 1;
-			for (int i = 0; i < num_dimensions; i++) {
-				int dimension = dpeek(addr); addr += 2;
-				num_elements *= dimension;
-				var.dimensions.push_back(dimension);
-			}
-			for (int i = 0; i < num_elements; i++) {
-				double value = fpeek(addr); addr += 5;
-				var.values.push_back(value);
-			}
-
-			assert(addr0 + size == addr);
-		}
-		else if ((c & 0xe0) == 0xe0) {	// for-next loop
-			addr++;
-			c &= 0x3f;
-			c |= 0x20;
-
-			var.type = BasicVar::Type::ForNextLoop;
-			var.name = decode_zx81(c);
-
-			var.value = fpeek(addr); addr += 5;
-			var.limit = fpeek(addr); addr += 5;
-			var.step = fpeek(addr); addr += 5;
-			var.line_num = dpeek(addr); addr += 2;
-		}
-		else if ((c & 0xe0) == 0x40) {	// string
-			addr++;
-			c &= 0x3f;
-			c |= 0x20;
-
-			var.type = BasicVar::Type::String;
-			var.name = decode_zx81(c);
-
-			int size = dpeek(addr); addr += 2;
-			for (int i = 0; i < size; i++) {
-				c = peek(addr++);
-				var.str += decode_zx81(c);
-			}
-		}
-		else if ((c & 0xe0) == 0xc0) {	// array of strings
-			addr++;
-			c &= 0x3f;
-			c |= 0x20;
-
-			var.type = BasicVar::Type::ArrayStrings;
-			var.name = decode_zx81(c);
-
-			int size = dpeek(addr); addr += 2;
-			int addr0 = addr;
-
-			int num_dimensions = peek(addr++);
-			int num_elements = 1;
-			for (int i = 0; i < num_dimensions; i++) {
-				int dimension = dpeek(addr); addr += 2;
-				num_elements *= dimension;
-				var.dimensions.push_back(dimension);
-			}
-
-			int last_dimension = var.dimensions.back();		// size of each string
-			num_elements /= last_dimension;
-
-			for (int i = 0; i < num_elements; i++) {
-				string str;
-				for (int j = 0; j < last_dimension; j++) {
-					c = peek(addr++);
-					str += decode_zx81(c);
-				}
-				var.strs.push_back(str);
-			}
-
-			assert(addr0 + size == addr);
-		}
-		else {
-			ERROR("invalid variable marker: $" << fmt_hex(c, 2));
-			break;
-		}
-
-		var.size = addr - addr0;
-
-		basic_vars.push_back(var);
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Compile BASIC into ram
-//-----------------------------------------------------------------------------
-
-void ZX81::compile() {
-	delete_empty_lines();
-	compute_line_numbers();
-
-	labels.clear();
-	int last_end_addr = 0;
-	int pass = 1;
-	int num_passes_ok = 0;
-	while (true) {
-		compile_basic(pass);
-
-		// next pass
-		if (pass > 1 && addr == last_end_addr) {
-			num_passes_ok++;
-			if (num_passes_ok >= 2)		// must run a second pass after end addr is ok
-				break;
-		}
-		last_end_addr = addr;
-		pass++;
-	}
-	
-	compile_vars();
-}
-
-void ZX81::compute_line_numbers() {
-	int line_num = auto_increment;
-	int last_line = 0;
-	for (auto& line : basic_lines) {
-		if (line.line_num == 0) {
-			line.line_num = line_num;
-			line_num += auto_increment;
-		}
-		else {
-			line_num = line.line_num + auto_increment;
-		}
-
-		if (line.line_num <= last_line)
-			ERROR("line " << line.line_num << " follows line " << last_line);
-		else if (line.line_num > MaxLineNum)
-			ERROR("line " << line.line_num << " above maximum of " << MaxLineNum);
-	}
-}
-
-void ZX81::delete_empty_lines() {
-	for (size_t i = 0; i < basic_lines.size() - 1; i++) {
-		if (basic_lines[i].tokens.size() == 1 && basic_lines[i].tokens[0].code == C_newline) {
-			if (!basic_lines[i].label.empty() && !basic_lines[i + 1].label.empty())
-				ERROR("two labels on same line: " << basic_lines[i].label << " and " << basic_lines[i + 1].label);
-			basic_lines[i + 1].label = basic_lines[i].label;
-			basic_lines[i + 1].line_num = basic_lines[i].line_num;
-			basic_lines.erase(basic_lines.begin() + i);
-			i--;
-		}
-	}
-}
-
-void ZX81::compile_basic(int pass) {
-	addr = PROG;
-
-	for (auto& line : basic_lines) {
-		// define label
-		if (pass == 1 && !line.label.empty()) {
-			auto it = labels.find(line.label);
-			if (it != labels.end())
-				ERROR("label redefinition: " << line.label);
-			labels[line.label] = &line;
-		}
-
-		vector<uint8_t> bytes;
-		for (auto& token : line.tokens) {
-			switch (token.code) {
-			case T_none:
-				break;
-			case T_number:
-				compile_number(bytes, token.num);
-				break;
-			case T_string:
-				compile_string(bytes, token.str);
-				break;
-			case T_ident:
-				compile_ident(bytes, token.ident);
-				break;
-			case T_rem_code:
-				bytes.insert(bytes.end(), token.bytes.begin(), token.bytes.end());
-				break;
-			case T_line_num_ref:
-				if (pass == 1)
-					compile_number(bytes, 0);
-				else {
-					auto it = labels.find(token.ident);
-					if (it == labels.end())
-						ERROR("label undefined: " << token.ident);
-					else
-						compile_number(bytes, it->second->line_num);
-				}
-				break;
-			case T_line_addr_ref:
-				if (pass == 1)
-					compile_number(bytes, 0);
-				else {
-					auto it = labels.find(token.ident);
-					if (it == labels.end())
-						ERROR("label undefined: " << token.ident);
-					else
-						compile_number(bytes, it->second->addr);
-				}
-				break;
-			default:
-				assert(token.code < 0x100);
-				bytes.push_back(token.code);
-			}
-		}
-
-		// define addr and size
-		line.addr = addr;
-		line.size = static_cast<int>(bytes.size());
-
-		dpoke_be(addr, line.line_num); addr += 2;
-		dpoke(addr, line.size); addr += 2;
-		addr += bytes_poke(addr, bytes);
-		assert(addr == line.addr + 4 + line.size);
-	}
-
-	init_video_to_stkend(addr);
-
-	if (autostart) {
-		int line_addr = get_line_addr(autostart);
-		dpoke(NXTLIN, line_addr);
-	}
-	else
-		dpoke(NXTLIN, dpeek(D_FILE));
-}
-
-void ZX81::compile_vars() {
-	addr = dpeek(VARS);
-
-	vector<uint8_t> str_bytes;
-	array<uint8_t, 5> fp_bytes{ 0 };
-	int last_dimension = 0;
-	int size = 0;
-
-	for (auto& var : basic_vars) {
-		const char* p = var.name.c_str();
-		vector<uint8_t> name_bytes = encode_zx81(p);
-		assert(name_bytes.size() > 0);
-
-		switch (var.type) {
-		case BasicVar::Type::Number:
-			// put name
-			if (var.name.size() == 1) {
-				poke(addr++, (name_bytes[0] & 0x3f) | 0x60);			// 011-letter
-			}
-			else {
-				poke(addr++, (name_bytes[0] & 0x3f) | 0xa0);			// 101-letter
-				for (size_t i = 1; i < name_bytes.size() - 1; i++)
-					poke(addr++, name_bytes[i] & 0x3f);					// 001-letter
-				poke(addr++, (name_bytes.back() & 0x3f) | 0x80);		// 101-letter
-			}
-
-			// put value
-			fp_bytes = float_to_zx81(var.value);
-			addr += bytes_poke(addr, fp_bytes);
-			break;
-
-		case BasicVar::Type::ArrayNumbers:
-			// put name
-			poke(addr++, (name_bytes[0] & 0x1f) | 0x80);				// 100-letter
-
-			// put dimensions
-			size = 1
-				+ 2 * static_cast<int>(var.dimensions.size())
-				+ 5 * static_cast<int>(var.values.size());
-			dpoke(addr, size); addr += 2;
-			poke(addr++, var.dimensions.size() & 0xff);
-
-			for (auto& dimension : var.dimensions) {
-				dpoke(addr, dimension); addr += 2;
-			}
-
-			// put values
-			for (auto& value : var.values) {
-				fp_bytes = float_to_zx81(value);
-				addr += bytes_poke(addr, fp_bytes);
-			}
-			break;
-
-		case BasicVar::Type::ForNextLoop:
-			// put name
-			poke(addr++, (name_bytes[0] & 0x3f) | 0xe0);				// 111-letter
-
-			// put values
-			fp_bytes = float_to_zx81(var.value);
-			addr += bytes_poke(addr, fp_bytes);
-
-			fp_bytes = float_to_zx81(var.limit);
-			addr += bytes_poke(addr, fp_bytes);
-
-			fp_bytes = float_to_zx81(var.step);
-			addr += bytes_poke(addr, fp_bytes);
-
-			dpoke(addr, var.line_num); addr += 2;
-			break;
-
-		case BasicVar::Type::String:
-			// put name
-			poke(addr++, (name_bytes[0] & 0x1f) | 0x40);				// 010-letter
-
-			dpoke(addr, static_cast<int>(var.str.size())); addr += 2;
-
-			p = var.str.c_str();
-			str_bytes = encode_zx81(p);
-			addr += bytes_poke(addr, str_bytes);
-			break;
-
-		case BasicVar::Type::ArrayStrings:
-			// put name
-			poke(addr++, (name_bytes[0] & 0x1f) | 0xc0);				// 110-letter
-
-			// put dimensions
-			last_dimension = var.dimensions.back();
-			size = 1
-				+ 2 * static_cast<int>(var.dimensions.size())
-				+ last_dimension * static_cast<int>(var.strs.size());
-			dpoke(addr, size); addr += 2;
-			poke(addr++, static_cast<int>(var.dimensions.size()));
-
-			for (auto& dimension : var.dimensions) {
-				dpoke(addr, dimension); addr += 2;
-			}
-
-			// put strings
-			for (auto& str : var.strs) {
-				p = str.c_str();
-				str_bytes = encode_zx81(p);
-				addr += bytes_poke(addr, str_bytes);
-			}
-			break;
-
-		default:
-			assert(0);
-		}
-	}
-
-	poke(addr++, 0x80);
-	init_e_line_to_stkend(addr);
-}
-
-void ZX81::compile_number(vector<uint8_t>& bytes, double value) {
-	ostringstream oss;
-
-	oss << value;
-	string value_str = oss.str();
-	const char* p = value_str.c_str();
-	vector<uint8_t> str_bytes = encode_zx81(p);
-	array<uint8_t, 5> fp_bytes = float_to_zx81(value);
-	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
-	bytes.push_back(C_number);
-	bytes.insert(bytes.end(), fp_bytes.begin(), fp_bytes.end());
-}
-
-void ZX81::compile_string(vector<uint8_t>& bytes, const string& str) {
-	const char* p = str.c_str();
-	vector<uint8_t> str_bytes = encode_zx81(p);
-	bytes.push_back(C_dquote);
-	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
-	bytes.push_back(C_dquote);
-}
-
-void ZX81::compile_ident(vector<uint8_t>& bytes, const string& ident) {
-	const char* p = ident.c_str();
-	vector<uint8_t> str_bytes = encode_zx81(p);
-	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
-}
-
-//-----------------------------------------------------------------------------
-// read/write binary files
-//-----------------------------------------------------------------------------
-
-void ZX81::read_p_file(const string& filename) {
-	// open file
-	ifstream ifs(filename, ios::binary);
-	if (!ifs.is_open()) {
-		perror(filename.c_str());
-		FATAL_ERROR("open file " << filename);
-	}
-
-	// get size
-	ifs.seekg(0, ios::end);
-	size_t size = ifs.tellg();
-	ifs.seekg(0, ios::beg);
-
-	// read bytes
-	ifs.read(reinterpret_cast<char*>(&ram[SAVE_ADDR - RAM_ADDR]), size);
-	size_t readed = ifs.gcount();
-	if (readed != size) {
-		perror(filename.c_str());
-		FATAL_ERROR("read " << size << " bytes from file " << filename);
-	}
-}
-
-void ZX81::write_p_file(const string& filename) const {
-	// open file
-	ofstream ofs(filename, ios::binary);
-	if (!ofs.is_open()) {
-		perror(filename.c_str());
-		FATAL_ERROR("open file " << filename);
-	}
-
-	size_t size = dpeek(E_LINE) - SAVE_ADDR;
-	ofs.write(reinterpret_cast<const char*>(&ram[SAVE_ADDR - RAM_ADDR]), size);
-	size_t written = ofs.tellp();
-	if (written != size) {
-		perror(filename.c_str());
-		FATAL_ERROR("write " << size << " bytes to file " << filename);
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Read BASIC file
-//-----------------------------------------------------------------------------
-
-void ZX81::read_b81_file(const string& filename) {
-	ifstream ifs(filename);
-	if (!ifs.is_open()) {
-		perror(filename.c_str());
-		FATAL_ERROR("read file " << filename);
-	}
-
-	string text;
-	error_line_num = 0;
-	while (getline(ifs, text)) {
-		error_line_num++;
-		while (!text.empty() && text.back() == '\\') {
-			text.pop_back();
-			text.push_back(' ');
-			string cont;
-			if (!getline(ifs, cont))
-				break;
-			error_line_num++;
-			text += cont;
-		}
-		parse_line(text.c_str());
-	}
-}
-
-void ZX81::skip_spaces(const char*& p) {
-	while (*p != '\0' && isspace(*p))
-		p++;
-}
-
-bool ZX81::match(const char*& p, const string& compare) {
-	skip_spaces(p);
-	for (size_t i = 0; i < compare.size(); i++) {
-		if (p[i] == '\0')
-			return false;
-		if (toupper(p[i]) != toupper(compare[i]))
-			return false;
-	}
-	p += compare.size();
-	return true;
-}
-
-bool ZX81::parse_integer(const char*& p, int& value) {
-	skip_spaces(p);
-	const char* p0 = p;
-	if (*p == '$') {	// hex
-		if (!isxdigit(p[1]))
-			return false;
-		p++;
-		while (isxdigit(*p))
-			p++;
-		value = static_cast<int>(strtol(p0 + 1, NULL, 16));
-		return true;
-	}
-	else {				// decimal
-		if (!isdigit(*p))
-			return false;
-		while (isdigit(*p))
-			p++;
-		value = atoi(p0);
-		return true;
-	}
-}
-
-bool ZX81::parse_number(const char*& p, double& value, string& value_text) {
-	skip_spaces(p);
-	const char* p0 = p;
-
-	// collect mantissa
-	int num_dots = 0;
-	int num_digits = 0;
-	while (*p != '\0') {
-		if (*p == '.') {
-			p++;
-			num_dots++;
-			if (num_dots > 1) {
-				p = p0;
-				return false;
-			}
-		}
-		else if (isdigit(*p)) {
-			p++;
-			num_digits++;
-		}
-		else
-			break;
-	}
-	if (num_digits == 0) {
-		p = p0;
-		return false;
-	}
-
-	// collect exponent
-	if (toupper(*p) == 'E') {
-		p++;
-		if (*p == '-' || *p == '+')
-			p++;
-		int exp = 0;
-		if (!parse_integer(p, exp)) {
-			p = p0;
-			return false;
-		}
-	}
-
-	value = atof(p0);
-	value_text = string(p0, p);
-	return true;
-}
-
-bool ZX81::parse_string(const char*& p, string& str) {
-	string out;
-	skip_spaces(p);
-	if (*p != '"')
-		return false;
-	p++;
-	while (*p != '\0' && *p != '"') {
-		if (*p == '\\') {
-			out.push_back(*p++);
-			out.push_back(*p++);
-		}
-		else
-			out.push_back(*p++);
-	}
-	if (*p != '"')
-		return false;
-	else {
-		p++;
-		str = out;
-		return true;
-	}
-}
-
-bool ZX81::parse_ident(const char*& p, string& ident) {
-	skip_spaces(p);
-	if (!isalpha(*p))
-		return false;
-	while (isalnum(*p))
-		ident.push_back(*p++);
-	return true;
-}
-
-bool ZX81::parse_label(const char*& p, string& ident) {
-	skip_spaces(p);
-	const char* p0 = p;
-	if (!parse_line_num_ref(p, ident)) {
-		p = p0;
-		return false;
-	}
-	skip_spaces(p);
-	if (*p != ':') {
-		p = p0;
-		return false;
-	}
-	p++;
-	return true;
-}
-
-bool ZX81::parse_line_num_ref(const char*& p, string& ident) {
-	skip_spaces(p);
-	const char* p0 = p;
-	if (*p != '@')
-		return false;
-	p++;
-	if (!parse_ident(p, ident)) {
-		p = p0;
-		return false;
-	}
-	return true;
-}
-
-bool ZX81::parse_line_addr_ref(const char*& p, string& ident) {
-	skip_spaces(p);
-	const char* p0 = p;
-	if (*p != '&')
-		return false;
-	p++;
-	if (!parse_ident(p, ident)) {
-		p = p0;
-		return false;
-	}
-	return true;
-}
-
-bool ZX81::parse_end(const char*& p) {
-	skip_spaces(p);
-	if (*p == '\0' || *p == '#')
-		return true;
-	else
-		return false;
-}
-
-void ZX81::parse_line(const char* p) {
-	skip_spaces(p);
-	if (*p == '\0') {
-	}
-	else if (*p == '#')
-		parse_meta_line(p + 1);
-	else
-		parse_basic_line(p);
-}
-
-void ZX81::parse_meta_line(const char* p) {
-	int n = 0;
-	if (match(p, "VARS")) {
-		parse_basic_var(p);
-	}
-	else if (match(p, "SYSVARS") && match(p, "=")) {
-		vector<uint8_t> bytes = encode_zx81(p);
-		for (size_t i = 0; i < bytes.size() && SAVE_ADDR + static_cast<int>(i) < PROG; i++)
-			poke(SAVE_ADDR + static_cast<int>(i), bytes[i]);
-	}
-	else if (match(p, "D_FILE") && match(p, "=")) {
-		d_file_bytes = encode_zx81(p);
-		int d_file = dpeek(D_FILE);
-		int vars = dpeek(VARS);
-		for (size_t i = 0; i < d_file_bytes.size() && d_file + static_cast<int>(i) < vars; i++)
-			poke(d_file + static_cast<int>(i), d_file_bytes[i]);
-	}
-	else if (match(p, "WORKSPACE") && match(p, "=")) {
-		e_line_bytes = encode_zx81(p);
-		int e_line = dpeek(E_LINE);
-		int stkend = dpeek(STKEND);
-		for (size_t i = 0; i < e_line_bytes.size() && e_line + static_cast<int>(i) < stkend; i++)
-			poke(e_line + static_cast<int>(i), e_line_bytes[i]);
-	}
-	else if (match(p, "AUTOSTART") && match(p, "=") && parse_integer(p, n) && parse_end(p)) {
-		autostart = n;
-	}
-	else if (match(p, "FAST") && match(p, "=") && parse_integer(p, n) && parse_end(p)) {
-		if (n)
-			poke(CDFLAG, peek(CDFLAG) & ~FlagSlow);
-		else
-			poke(CDFLAG, peek(CDFLAG) | FlagSlow);
-	}
-	else if (match(p, "INCREMENT") && match(p, "=") && parse_integer(p, n) && parse_end(p)) {
-		auto_increment = n;
-	}
-	else {
-		// ignore, consider a comment
-	}
-}
-
-void ZX81::parse_basic_line(const char* p) {
-	BasicLine line;
-
-	// get label and/or line number
-	bool got_line_num = false;
-	bool got_label = false;
-	bool found_some = false;
-	do {
-		found_some = false;
-		if (!got_line_num && parse_integer(p, line.line_num)) {
-			got_line_num = true;
-			found_some = true;
-		}
-		if (!got_label && parse_label(p, line.label)) {
-			got_label = true;
-			found_some = true;
-		}
-	} while (found_some);
-			
-	skip_spaces(p);
-	while (*p != '\0' && *p != '#') {
-		Token token;
-		if (match(p, "RND"))
-			token.code = C_RND;
-		else if (match(p, "INKEY$"))
-			token.code = C_INKEY_dollar;
-		else if (match(p, "PI"))
-			token.code = C_PI;
-		else if (match(p, "AT"))
-			token.code = C_AT;
-		else if (match(p, "TAB"))
-			token.code = C_TAB;
-		else if (match(p, "CODE"))
-			token.code = C_CODE;
-		else if (match(p, "VAL"))
-			token.code = C_VAL;
-		else if (match(p, "LEN"))
-			token.code = C_LEN;
-		else if (match(p, "SIN"))
-			token.code = C_SIN;
-		else if (match(p, "COS"))
-			token.code = C_COS;
-		else if (match(p, "TAN"))
-			token.code = C_TAN;
-		else if (match(p, "ASN"))
-			token.code = C_ASN;
-		else if (match(p, "ACS"))
-			token.code = C_ACS;
-		else if (match(p, "ATN"))
-			token.code = C_ATN;
-		else if (match(p, "LN"))
-			token.code = C_LN;
-		else if (match(p, "EXP"))
-			token.code = C_EXP;
-		else if (match(p, "INT"))
-			token.code = C_INT;
-		else if (match(p, "SQR"))
-			token.code = C_SQR;
-		else if (match(p, "SGN"))
-			token.code = C_SGN;
-		else if (match(p, "ABS"))
-			token.code = C_ABS;
-		else if (match(p, "PEEK"))
-			token.code = C_PEEK;
-		else if (match(p, "USR"))
-			token.code = C_USR;
-		else if (match(p, "STR$"))
-			token.code = C_STR_dollar;
-		else if (match(p, "CHR$"))
-			token.code = C_CHR_dollar;
-		else if (match(p, "NOT"))
-			token.code = C_NOT;
-		else if (match(p, "**"))
-			token.code = C_power;
-		else if (match(p, "OR"))
-			token.code = C_OR;
-		else if (match(p, "AND"))
-			token.code = C_AND;
-		else if (match(p, "<="))
-			token.code = C_le;
-		else if (match(p, ">="))
-			token.code = C_ge;
-		else if (match(p, "<>"))
-			token.code = C_ne;
-		else if (match(p, "THEN"))
-			token.code = C_THEN;
-		else if (match(p, "TO"))
-			token.code = C_TO;
-		else if (match(p, "STEP"))
-			token.code = C_STEP;
-		else if (match(p, "LPRINT"))
-			token.code = C_LPRINT;
-		else if (match(p, "LLIST"))
-			token.code = C_LLIST;
-		else if (match(p, "STOP"))
-			token.code = C_STOP;
-		else if (match(p, "SLOW"))
-			token.code = C_SLOW;
-		else if (match(p, "FAST"))
-			token.code = C_FAST;
-		else if (match(p, "NEW"))
-			token.code = C_NEW;
-		else if (match(p, "SCROLL"))
-			token.code = C_SCROLL;
-		else if (match(p, "CONT"))
-			token.code = C_CONT;
-		else if (match(p, "DIM"))
-			token.code = C_DIM;
-		else if (match(p, "REM")) {
-			token.code = C_REM;
-			line.tokens.push_back(token);
-
-			skip_spaces(p);
-			token.code = T_rem_code;
-			token.bytes = encode_zx81(p);
-		}
-		else if (match(p, "FOR"))
-			token.code = C_FOR;
-		else if (match(p, "GOTO"))
-			token.code = C_GOTO;
-		else if (match(p, "GOSUB"))
-			token.code = C_GOSUB;
-		else if (match(p, "INPUT"))
-			token.code = C_INPUT;
-		else if (match(p, "LOAD"))
-			token.code = C_LOAD;
-		else if (match(p, "LIST"))
-			token.code = C_LIST;
-		else if (match(p, "LET"))
-			token.code = C_LET;
-		else if (match(p, "PAUSE"))
-			token.code = C_PAUSE;
-		else if (match(p, "NEXT"))
-			token.code = C_NEXT;
-		else if (match(p, "POKE"))
-			token.code = C_POKE;
-		else if (match(p, "PRINT"))
-			token.code = C_PRINT;
-		else if (match(p, "PLOT"))
-			token.code = C_PLOT;
-		else if (match(p, "RUN"))
-			token.code = C_RUN;
-		else if (match(p, "SAVE"))
-			token.code = C_SAVE;
-		else if (match(p, "RAND"))
-			token.code = C_RAND;
-		else if (match(p, "IF"))
-			token.code = C_IF;
-		else if (match(p, "CLS"))
-			token.code = C_CLS;
-		else if (match(p, "UNPLOT"))
-			token.code = C_UNPLOT;
-		else if (match(p, "CLEAR"))
-			token.code = C_CLEAR;
-		else if (match(p, "RETURN"))
-			token.code = C_RETURN;
-		else if (match(p, "COPY"))
-			token.code = C_COPY;
-		else if (match(p, "\\0c"))
-			token.code = C_pound;
-		else if (match(p, "$"))
-			token.code = C_dollar;
-		else if (match(p, ":"))
-			token.code = C_colon;
-		else if (match(p, "?"))
-			token.code = C_quest;
-		else if (match(p, "("))
-			token.code = C_lparens;
-		else if (match(p, ")"))
-			token.code = C_rparens;
-		else if (match(p, ">"))
-			token.code = C_gt;
-		else if (match(p, "<"))
-			token.code = C_lt;
-		else if (match(p, "="))
-			token.code = C_eq;
-		else if (match(p, "+"))
-			token.code = C_plus;
-		else if (match(p, "-"))
-			token.code = C_minus;
-		else if (match(p, "*"))
-			token.code = C_mult;
-		else if (match(p, "/"))
-			token.code = C_div;
-		else if (match(p, ";"))
-			token.code = C_semicolon;
-		else if (match(p, ","))
-			token.code = C_comma;
-		else if (match(p, "_"))
-			token.code = C_space;
-		else if (parse_number(p, token.num, token.str))
-			token.code = T_number;
-		else if (parse_string(p, token.str))
-			token.code = T_string;
-		else if (parse_ident(p, token.ident))
-			token.code = T_ident;
-		else if (parse_line_addr_ref(p, token.ident))
-			token.code = T_line_addr_ref;
-		else if (parse_line_num_ref(p, token.ident))
-			token.code = T_line_num_ref;
-		else {
-			ERROR("line " << error_line_num << ": cannot parse: " << p);
-			break;
-		}
-
-		line.tokens.push_back(token);
-		skip_spaces(p);
-	}
-
-	Token token;
-	token.code = C_newline;
-	line.tokens.push_back(token);
-
-	basic_lines.push_back(line);
-}
-
-void ZX81::parse_basic_var(const char* p) {
-	BasicVar var;
-	bool is_string = false;
-	bool is_array = false;
-	int num_elements = 0;
-
-	// get name
-	if (!parse_ident(p, var.name))
-		goto error;
-
-	// get string marker
-	if (match(p, "$")) {
-		is_string = true;
-		if (var.name.size() > 1) {
-			ERROR("line " << error_line_num << ": name " << var.name << "too long");
-			return;
-		}
-	}
-
-	// get array marker and dimensions
-	if (match(p, "(")) {
-		is_array = true;
-		if (var.name.size() > 1) {
-			ERROR("line " << error_line_num << ": name " << var.name << "too long");
-			return;
-		}
-
-		num_elements = 1;
-		do {
-			int dimension = 0;
-			if (!parse_integer(p, dimension))
-				goto error;
-			num_elements *= dimension;
-			var.dimensions.push_back(dimension);
-		} while (match(p, ","));
-
-		if (!match(p, ")"))
-			goto error;
-	}
-
-	// get =
-	if (!match(p, "="))
-		goto error;
-
-	// get value
-	if (is_string == false && is_array == false) {
-		string str;
-
-		var.type = BasicVar::Type::Number;
-		if (!parse_number(p, var.value, str))
-			goto error;
-
-		if (match(p, ",")) {
-			var.type = BasicVar::Type::ForNextLoop;
-			if (var.name.size() > 1) {
-				ERROR("line " << error_line_num << ": name " << var.name << "too long");
-				return;
-			}
-
-			if (!parse_number(p, var.limit, str))
-				goto error;
-			if (!match(p, ","))
-				goto error;
-			if (!parse_number(p, var.step, str))
-				goto error;
-			if (!match(p, ","))
-				goto error;
-			if (!parse_integer(p, var.line_num))
-				goto error;
-			if (!parse_end(p))
-				goto error;
-		}
-	}
-	else if (is_string == false && is_array == true) {
-		double value = 0.0;
-		string str;
-
-		var.type = BasicVar::Type::ArrayNumbers;
-
-		for (size_t i = 0; i < static_cast<size_t>(num_elements); i++) {
-			if (i > 0) {
-				if (!match(p, ","))
-					goto error;
-			}
-			if (!parse_number(p, value, str))
-				goto error;
-			var.values.push_back(value);
-		}
-		if (!parse_end(p))
-			goto error;
-	}
-	else if (is_string == true && is_array == false) {
-		var.type = BasicVar::Type::String;
-
-		if (!parse_string(p, var.str))
-			goto error;
-		if (!parse_end(p))
-			goto error;
-	}
-	else if (is_string == true && is_array == true) {
-		string str;
-
-		var.type = BasicVar::Type::ArrayStrings;
-
-		int last_dimension = var.dimensions.back();
-		num_elements /= last_dimension;
-
-		for (size_t i = 0; i < static_cast<size_t>(num_elements); i++) {
-			if (i > 0) {
-				if (!match(p, ","))
-					goto error;
-			}
-			if (!parse_string(p, str))
-				goto error;
-			if (str.size() != static_cast<size_t>(last_dimension)) {
-				ERROR("line " << error_line_num << ": string length should be " << last_dimension);
-				return;
-			}
-			var.strs.push_back(str);
-		}
-		if (!parse_end(p))
-			goto error;
-	}
-
-	basic_vars.push_back(var);
-	return;
-
-error:
-	ERROR("line " << error_line_num << ": cannot parse: " << p);
-}
-
-//-----------------------------------------------------------------------------
-// write BASIC files
-//-----------------------------------------------------------------------------
-
-void ZX81::write_b81_file(const string& filename) const {
+void ZX81basic::write_b81_file(const string& filename) const {
 	ofstream ofs(filename);
 	if (!ofs.is_open()) {
 		perror(filename.c_str());
-		FATAL_ERROR("write file " << filename);
+		g_errors.fatal_error("write file", filename);
 	}
 
 	if ((optflags & FLAG_DEBUG) == FLAG_DEBUG)
@@ -1739,56 +547,66 @@ void ZX81::write_b81_file(const string& filename) const {
 	write_basic_system(ofs);
 }
 
-void ZX81::write_sysvars(ofstream& ofs) const {
-	ofs << "# [VERSN     =  " << peek(VERSN) << "]" << endl;
-	ofs << "# [E_PPC     =  " << dpeek(E_PPC) << "]" << endl;
-	ofs << "# [D_FILE    = $" << fmt_hex(dpeek(D_FILE), 4) << "]" << endl;
-	ofs << "# [DF_CC     = $" << fmt_hex(dpeek(DF_CC), 4) << "]" << endl;
-	ofs << "# [VARS      = $" << fmt_hex(dpeek(VARS), 4) << "]" << endl;
-	ofs << "# [DEST      = $" << fmt_hex(dpeek(DEST), 4) << "]" << endl;
-	ofs << "# [E_LINE    = $" << fmt_hex(dpeek(E_LINE), 4) << "]" << endl;
-	ofs << "# [CH_ADD    = $" << fmt_hex(dpeek(CH_ADD), 4) << "]" << endl;
-	ofs << "# [X_PTR     = $" << fmt_hex(dpeek(X_PTR), 4) << "]" << endl;
-	ofs << "# [STKBOT    = $" << fmt_hex(dpeek(STKBOT), 4) << "]" << endl;
-	ofs << "# [STKEND    = $" << fmt_hex(dpeek(STKEND), 4) << "]" << endl;
-	ofs << "# [BREG      =  " << peek(BREG) << "]" << endl;
-	ofs << "# [MEM       = $" << fmt_hex(dpeek(MEM), 4) << "]" << endl;
-	ofs << "# [FREE1     =  " << peek(FREE1) << "]" << endl;
-	ofs << "# [DF_SZ     =  " << peek(DF_SZ) << "]" << endl;
-	ofs << "# [S_TOP     =  " << dpeek(S_TOP) << "]" << endl;
-	ofs << "# [LAST_K    = $" << fmt_hex(dpeek(LAST_K), 4) << "]" << endl;
-	ofs << "# [DEBOUNCE  =$" << fmt_hex(peek(DEBOUNCE), 2) << "]" << endl;
-	ofs << "# [MARGIN    =  " << peek(MARGIN) << "]" << endl;
-	ofs << "# [NXTLIN    = $" << fmt_hex(dpeek(NXTLIN), 4) << "]" << endl;
-	ofs << "# [OLDPPC    =  " << dpeek(OLDPPC) << "]" << endl;
-	ofs << "# [FLAGX     = $" << fmt_hex(peek(FLAGX), 2) << "]" << endl;
-	ofs << "# [STRLEN    =  " << dpeek(STRLEN) << "]" << endl;
-	ofs << "# [T_ADDR    = $" << fmt_hex(dpeek(T_ADDR), 4) << "]" << endl;
-	ofs << "# [SEED      = $" << fmt_hex(dpeek(SEED), 4) << "]" << endl;
-	ofs << "# [FRAMES    = $" << fmt_hex(dpeek(FRAMES), 4) << "]" << endl;
-	ofs << "# [COORDS_X  =  " << peek(COORDS_X) << "]" << endl;
-	ofs << "# [COORDS_Y  =  " << peek(COORDS_Y) << "]" << endl;
-	ofs << "# [PR_CC     = $" << fmt_hex(peek(PR_CC), 2) << "]" << endl;
-	ofs << "# [S_POSN_COL=  " << peek(S_POSN_COL) << "]" << endl;
-	ofs << "# [S_POSN_ROW=  " << peek(S_POSN_ROW) << "]" << endl;
-	ofs << "# [CDFLAG    = $" << fmt_hex(peek(CDFLAG), 2) << "]" << endl;
+int ZX81basic::peek_sysvars(int addr) const {
+	size_t idx = addr - VERSN;
+	assert(idx < sysvars.size());
+	return sysvars[idx];
+}
+
+int ZX81basic::dpeek_sysvars(int addr) const {
+	return peek_sysvars(addr) + (peek_sysvars(addr + 1) << 8);
+}
+
+void ZX81basic::write_sysvars(ofstream& ofs) const {
+	ofs << "# [VERSN     =  " << peek_sysvars(VERSN) << "]" << endl;
+	ofs << "# [E_PPC     =  " << dpeek_sysvars(E_PPC) << "]" << endl;
+	ofs << "# [D_FILE    = $" << fmt_hex(dpeek_sysvars(D_FILE), 4) << "]" << endl;
+	ofs << "# [DF_CC     = $" << fmt_hex(dpeek_sysvars(DF_CC), 4) << "]" << endl;
+	ofs << "# [VARS      = $" << fmt_hex(dpeek_sysvars(VARS), 4) << "]" << endl;
+	ofs << "# [DEST      = $" << fmt_hex(dpeek_sysvars(DEST), 4) << "]" << endl;
+	ofs << "# [E_LINE    = $" << fmt_hex(dpeek_sysvars(E_LINE), 4) << "]" << endl;
+	ofs << "# [CH_ADD    = $" << fmt_hex(dpeek_sysvars(CH_ADD), 4) << "]" << endl;
+	ofs << "# [X_PTR     = $" << fmt_hex(dpeek_sysvars(X_PTR), 4) << "]" << endl;
+	ofs << "# [STKBOT    = $" << fmt_hex(dpeek_sysvars(STKBOT), 4) << "]" << endl;
+	ofs << "# [STKEND    = $" << fmt_hex(dpeek_sysvars(STKEND), 4) << "]" << endl;
+	ofs << "# [BREG      =  " << peek_sysvars(BREG) << "]" << endl;
+	ofs << "# [MEM       = $" << fmt_hex(dpeek_sysvars(MEM), 4) << "]" << endl;
+	ofs << "# [FREE1     =  " << peek_sysvars(FREE1) << "]" << endl;
+	ofs << "# [DF_SZ     =  " << peek_sysvars(DF_SZ) << "]" << endl;
+	ofs << "# [S_TOP     =  " << dpeek_sysvars(S_TOP) << "]" << endl;
+	ofs << "# [LAST_K    = $" << fmt_hex(dpeek_sysvars(LAST_K), 4) << "]" << endl;
+	ofs << "# [DEBOUNCE  =$" << fmt_hex(peek_sysvars(DEBOUNCE), 2) << "]" << endl;
+	ofs << "# [MARGIN    =  " << peek_sysvars(MARGIN) << "]" << endl;
+	ofs << "# [NXTLIN    = $" << fmt_hex(dpeek_sysvars(NXTLIN), 4) << "]" << endl;
+	ofs << "# [OLDPPC    =  " << dpeek_sysvars(OLDPPC) << "]" << endl;
+	ofs << "# [FLAGX     = $" << fmt_hex(peek_sysvars(FLAGX), 2) << "]" << endl;
+	ofs << "# [STRLEN    =  " << dpeek_sysvars(STRLEN) << "]" << endl;
+	ofs << "# [T_ADDR    = $" << fmt_hex(dpeek_sysvars(T_ADDR), 4) << "]" << endl;
+	ofs << "# [SEED      = $" << fmt_hex(dpeek_sysvars(SEED), 4) << "]" << endl;
+	ofs << "# [FRAMES    = $" << fmt_hex(dpeek_sysvars(FRAMES), 4) << "]" << endl;
+	ofs << "# [COORDS_X  =  " << peek_sysvars(COORDS_X) << "]" << endl;
+	ofs << "# [COORDS_Y  =  " << peek_sysvars(COORDS_Y) << "]" << endl;
+	ofs << "# [PR_CC     = $" << fmt_hex(peek_sysvars(PR_CC), 2) << "]" << endl;
+	ofs << "# [S_POSN_COL=  " << peek_sysvars(S_POSN_COL) << "]" << endl;
+	ofs << "# [S_POSN_ROW=  " << peek_sysvars(S_POSN_ROW) << "]" << endl;
+	ofs << "# [CDFLAG    = $" << fmt_hex(peek_sysvars(CDFLAG), 2) << "]" << endl;
 
 	ofs << "# [PRBUFF=";
 	for (int i = 0; i < 33; i++)
-		ofs << "\\" << fmt_hex(peek(PRBUFF + i), 2);
+		ofs << "\\" << fmt_hex(peek_sysvars(PRBUFF + i), 2);
 	ofs << "]" << endl;
 
 	ofs << "# [MEMBOT=";
 	for (int i = 0; i < 30; i++)
-		ofs << "\\" << fmt_hex(peek(MEMBOT + i), 2);
+		ofs << "\\" << fmt_hex(peek_sysvars(MEMBOT + i), 2);
 	ofs << "]" << endl;
 
-	ofs << "# [FREE2     = $" << fmt_hex(dpeek(FREE2), 4) << "]" << endl;
+	ofs << "# [FREE2     = $" << fmt_hex(dpeek_sysvars(FREE2), 4) << "]" << endl;
 	ofs << endl;
 }
 
-void ZX81::write_basic_lines(ofstream& ofs) const {
-	for (auto& line : basic_lines) {
+void ZX81basic::write_basic_lines(ofstream& ofs) const {
+	for (auto& line : lines) {
 		if ((optflags & FLAG_DEBUG) == FLAG_DEBUG)
 			ofs << "# [$" << fmt_hex(line.addr, 4) << "]" << endl;
 
@@ -1826,18 +644,29 @@ void ZX81::write_basic_lines(ofstream& ofs) const {
 		}
 	}
 
-	if (!basic_lines.empty())
+	if (!lines.empty())
 		ofs << endl;
 }
 
-void ZX81::write_video(ofstream& ofs) const {
-	int addr = dpeek(D_FILE);
-	int vars = dpeek(VARS);
-	while (addr < vars) {
-		ofs << "# [$" << fmt_hex(addr, 4) << "] = \"";
+void ZX81basic::write_video(ofstream& ofs) const {
+	int addr;
+	if (lines.empty())
+		addr = PROG;
+	else
+		addr = lines.back().addr + 4 + lines.back().size;
+
+	size_t p = 0;
+	while (p < d_file_bytes.size()) {
+		ofs << "# [$" << fmt_hex(addr,4)<<"] = \"";
 		int c;
 		do {
-			c = peek(addr++);
+			if (p < d_file_bytes.size()) {
+				c = d_file_bytes[p];
+				p++;
+				addr++;
+			}
+			else
+				c = C_newline;
 			ofs << decode_zx81(c);
 		} while (c != C_newline);
 		ofs << "\"" << endl;
@@ -1846,13 +675,13 @@ void ZX81::write_video(ofstream& ofs) const {
 	ofs << endl;
 }
 
-void ZX81::write_basic_vars(ofstream& ofs) const {
+void ZX81basic::write_basic_vars(ofstream& ofs) const {
 	int num_elements = 0;
 	int last_dimension = 0;
 
-	int addr = dpeek(VARS);
-	for (auto& var : basic_vars) {
-		assert(addr == var.addr);
+	int addr = 0;
+	for (auto& var : vars) {
+		addr = var.addr;
 
 		if ((optflags & FLAG_DEBUG) == FLAG_DEBUG)
 			ofs << "# [$" << fmt_hex(addr, 4) << "]" << endl;
@@ -1919,28 +748,1278 @@ void ZX81::write_basic_vars(ofstream& ofs) const {
 	}
 
 	if ((optflags & FLAG_DEBUG) == FLAG_DEBUG)
-		ofs << "# [$" << fmt_hex(addr, 4) << "] = $" << fmt_hex(peek(addr), 2) << endl;
-	
-	if ((optflags & FLAG_DEBUG) == FLAG_DEBUG || !basic_vars.empty())
+		ofs << "# [$" << fmt_hex(addr, 4) << "] = $80" << endl;
+
+	if ((optflags & FLAG_DEBUG) == FLAG_DEBUG || !vars.empty())
 		ofs << endl;
 }
 
-void ZX81::write_basic_system(ofstream& ofs) const {
-	ofs << "#SYSVARS=" << bytes_peek(SAVE_ADDR, PROG - SAVE_ADDR) << endl;
-	ofs << "#D_FILE=" << bytes_peek(dpeek(D_FILE), dpeek(VARS) - dpeek(D_FILE)) << endl;
-	ofs << "#WORKSPACE=" << bytes_peek(dpeek(E_LINE), dpeek(STKEND) - dpeek(E_LINE)) << endl;
+void ZX81basic::write_basic_system(ofstream& ofs) const {
+	ofs << "#SYSVARS=" << encode_hex(sysvars) << endl;
+	ofs << "#D_FILE=" << encode_hex(d_file_bytes) << endl;
+	ofs << "#WORKSPACE=" << encode_hex(e_line_bytes) << endl;
 	ofs << endl;
 
 	// autostart
-	int nxtlin = dpeek(NXTLIN);
-	int autostart = 0;
-	if (nxtlin >= dpeek(D_FILE))
-		autostart = 0;
-	else
-		autostart = dpeek_be(nxtlin);
 	ofs << "#AUTOSTART=" << autostart << endl;
 
 	// fast mode
-	int fast = (peek(CDFLAG) & 0x40) == 0 ? 1 : 0;
 	ofs << "#FAST=" << fast << endl;
+}
+
+//-----------------------------------------------------------------------------
+// BASIC parser
+//-----------------------------------------------------------------------------
+
+ZX81parser::ZX81parser(const string& b81_filename, ZX81basic& result)
+	: m_filename(b81_filename), m_ifs(b81_filename), m_basic(result) {
+
+	if (!m_ifs.is_open()) {
+		perror(b81_filename.c_str());
+		g_errors.fatal_error("read file", b81_filename);
+	}
+}
+
+void ZX81parser::parse() {
+	g_errors.set_filename(m_filename);
+
+	string text;
+	while (getline(m_ifs, text)) {
+		g_errors.set_line_num(g_errors.get_line_num() + 1);
+		while (!text.empty() && text.back() == '\\') {
+			text.pop_back();
+			text.push_back(' ');
+			string cont;
+			if (!getline(m_ifs, cont))
+				break;
+			g_errors.set_line_num(g_errors.get_line_num() + 1);
+			text += cont;
+		}
+		p = text.c_str();
+		parse_line();
+	}
+
+	g_errors.clear();
+}
+
+void ZX81parser::skip_spaces() {
+	while (*p != '\0' && isspace(*p))
+		p++;
+}
+
+bool ZX81parser::match(const string& compare) {
+	skip_spaces();
+	for (size_t i = 0; i < compare.size(); i++) {
+		if (p[i] == '\0')
+			return false;
+		if (toupper(p[i]) != toupper(compare[i]))
+			return false;
+	}
+	p += compare.size();
+	return true;
+}
+
+bool ZX81parser::parse_integer(int& value) {
+	skip_spaces();
+	const char* p0 = p;
+	if (*p == '$') {	// hex
+		if (!isxdigit(p[1]))
+			return false;
+		p++;
+		while (isxdigit(*p))
+			p++;
+		value = static_cast<int>(strtol(p0 + 1, NULL, 16));
+		return true;
+	}
+	else {				// decimal
+		if (!isdigit(*p))
+			return false;
+		while (isdigit(*p))
+			p++;
+		value = atoi(p0);
+		return true;
+	}
+}
+
+bool ZX81parser::parse_number(double& value, string& value_text) {
+	skip_spaces();
+	const char* p0 = p;
+
+	// collect mantissa
+	int num_dots = 0;
+	int num_digits = 0;
+	while (*p != '\0') {
+		if (*p == '.') {
+			p++;
+			num_dots++;
+			if (num_dots > 1) {
+				p = p0;
+				return false;
+			}
+		}
+		else if (isdigit(*p)) {
+			p++;
+			num_digits++;
+		}
+		else
+			break;
+	}
+	if (num_digits == 0) {
+		p = p0;
+		return false;
+	}
+
+	// collect exponent
+	if (toupper(*p) == 'E') {
+		p++;
+		if (*p == '-' || *p == '+')
+			p++;
+		int exp = 0;
+		if (!parse_integer(exp)) {
+			p = p0;
+			return false;
+		}
+	}
+
+	value = atof(p0);
+	value_text = string(p0, p);
+	return true;
+}
+
+bool ZX81parser::parse_string(string& str) {
+	string out;
+	skip_spaces();
+	const char* p0 = p;
+
+	if (*p != '"')
+		return false;
+	p++;
+	while (*p != '\0' && *p != '"') {
+		if (*p == '\\') {
+			out.push_back(*p++);
+			out.push_back(*p++);
+		}
+		else
+			out.push_back(*p++);
+	}
+	if (*p != '"') {
+		p = p0;
+		return false;
+	}
+	else {
+		p++;
+		str = out;
+		return true;
+	}
+}
+
+bool ZX81parser::parse_ident(string& ident) {
+	skip_spaces();
+	if (!isalpha(*p))
+		return false;
+	while (isalnum(*p))
+		ident.push_back(*p++);
+	return true;
+}
+
+bool ZX81parser::parse_label(string& ident) {
+	skip_spaces();
+	const char* p0 = p;
+	if (!parse_line_num_ref(ident)) {
+		p = p0;
+		return false;
+	}
+	skip_spaces();
+	if (*p != ':') {
+		p = p0;
+		return false;
+	}
+	p++;
+	return true;
+}
+
+bool ZX81parser::parse_line_num_ref(string& ident) {
+	skip_spaces();
+	const char* p0 = p;
+	if (*p != '@')
+		return false;
+	p++;
+	if (!parse_ident(ident)) {
+		p = p0;
+		return false;
+	}
+	return true;
+}
+
+bool ZX81parser::parse_line_addr_ref(string& ident) {
+	skip_spaces();
+	const char* p0 = p;
+	if (*p != '&')
+		return false;
+	p++;
+	if (!parse_ident(ident)) {
+		p = p0;
+		return false;
+	}
+	return true;
+}
+
+bool ZX81parser::parse_end() {
+	skip_spaces();
+	if (*p == '\0' || *p == '#')
+		return true;
+	else
+		return false;
+}
+
+void ZX81parser::parse_line() {
+	skip_spaces();
+	if (*p == '\0') {
+	}
+	else if (*p == '#') {
+		p++;
+		parse_meta_line();
+	}
+	else
+		parse_basic_line();
+}
+
+void ZX81parser::parse_meta_line() {
+	int n = 0;
+	if (match("VARS")) {
+		parse_basic_var();
+	}
+	else if (match("SYSVARS") && match("=")) {
+		m_basic.sysvars = encode_zx81(p);
+	}
+	else if (match("D_FILE") && match("=")) {
+		m_basic.d_file_bytes = encode_zx81(p);
+	}
+	else if (match("WORKSPACE") && match("=")) {
+		m_basic.e_line_bytes = encode_zx81(p);
+	}
+	else if (match("AUTOSTART") && match("=") && parse_integer(n) && parse_end()) {
+		m_basic.autostart = n;
+	}
+	else if (match("FAST") && match("=") && parse_integer(n) && parse_end()) {
+		m_basic.fast = n ? true : false;
+	}
+	else if (match("INCREMENT") && match("=") && parse_integer(n) && parse_end()) {
+		m_basic.auto_increment = n;
+	}
+	else {
+		// ignore, consider a comment
+	}
+}
+
+void ZX81parser::parse_basic_line() {
+	BasicLine line;
+
+	// get label and/or line number
+	bool got_line_num = false;
+	bool got_label = false;
+	bool found_some = false;
+	do {
+		found_some = false;
+		if (!got_line_num && parse_integer(line.line_num)) {
+			got_line_num = true;
+			found_some = true;
+		}
+		if (!got_label && parse_label(line.label)) {
+			got_label = true;
+			found_some = true;
+		}
+	} while (found_some);
+
+	skip_spaces();
+	while (*p != '\0' && *p != '#') {
+		Token token;
+		if (match("RND"))
+			token.code = C_RND;
+		else if (match("INKEY$"))
+			token.code = C_INKEY_dollar;
+		else if (match("PI"))
+			token.code = C_PI;
+		else if (match("AT"))
+			token.code = C_AT;
+		else if (match("TAB"))
+			token.code = C_TAB;
+		else if (match("CODE"))
+			token.code = C_CODE;
+		else if (match("VAL"))
+			token.code = C_VAL;
+		else if (match("LEN"))
+			token.code = C_LEN;
+		else if (match("SIN"))
+			token.code = C_SIN;
+		else if (match("COS"))
+			token.code = C_COS;
+		else if (match("TAN"))
+			token.code = C_TAN;
+		else if (match("ASN"))
+			token.code = C_ASN;
+		else if (match("ACS"))
+			token.code = C_ACS;
+		else if (match("ATN"))
+			token.code = C_ATN;
+		else if (match("LN"))
+			token.code = C_LN;
+		else if (match("EXP"))
+			token.code = C_EXP;
+		else if (match("INT"))
+			token.code = C_INT;
+		else if (match("SQR"))
+			token.code = C_SQR;
+		else if (match("SGN"))
+			token.code = C_SGN;
+		else if (match("ABS"))
+			token.code = C_ABS;
+		else if (match("PEEK"))
+			token.code = C_PEEK;
+		else if (match("USR"))
+			token.code = C_USR;
+		else if (match("STR$"))
+			token.code = C_STR_dollar;
+		else if (match("CHR$"))
+			token.code = C_CHR_dollar;
+		else if (match("NOT"))
+			token.code = C_NOT;
+		else if (match("**"))
+			token.code = C_power;
+		else if (match("OR"))
+			token.code = C_OR;
+		else if (match("AND"))
+			token.code = C_AND;
+		else if (match("<="))
+			token.code = C_le;
+		else if (match(">="))
+			token.code = C_ge;
+		else if (match("<>"))
+			token.code = C_ne;
+		else if (match("THEN"))
+			token.code = C_THEN;
+		else if (match("TO"))
+			token.code = C_TO;
+		else if (match("STEP"))
+			token.code = C_STEP;
+		else if (match("LPRINT"))
+			token.code = C_LPRINT;
+		else if (match("LLIST"))
+			token.code = C_LLIST;
+		else if (match("STOP"))
+			token.code = C_STOP;
+		else if (match("SLOW"))
+			token.code = C_SLOW;
+		else if (match("FAST"))
+			token.code = C_FAST;
+		else if (match("NEW"))
+			token.code = C_NEW;
+		else if (match("SCROLL"))
+			token.code = C_SCROLL;
+		else if (match("CONT"))
+			token.code = C_CONT;
+		else if (match("DIM"))
+			token.code = C_DIM;
+		else if (match("REM")) {
+			token.code = C_REM;
+			line.tokens.push_back(token);
+
+			skip_spaces();
+			token.code = T_rem_code;
+			token.bytes = encode_zx81(p);
+		}
+		else if (match("FOR"))
+			token.code = C_FOR;
+		else if (match("GOTO"))
+			token.code = C_GOTO;
+		else if (match("GOSUB"))
+			token.code = C_GOSUB;
+		else if (match("INPUT"))
+			token.code = C_INPUT;
+		else if (match("LOAD"))
+			token.code = C_LOAD;
+		else if (match("LIST"))
+			token.code = C_LIST;
+		else if (match("LET"))
+			token.code = C_LET;
+		else if (match("PAUSE"))
+			token.code = C_PAUSE;
+		else if (match("NEXT"))
+			token.code = C_NEXT;
+		else if (match("POKE"))
+			token.code = C_POKE;
+		else if (match("PRINT"))
+			token.code = C_PRINT;
+		else if (match("PLOT"))
+			token.code = C_PLOT;
+		else if (match("RUN"))
+			token.code = C_RUN;
+		else if (match("SAVE"))
+			token.code = C_SAVE;
+		else if (match("RAND"))
+			token.code = C_RAND;
+		else if (match("IF"))
+			token.code = C_IF;
+		else if (match("CLS"))
+			token.code = C_CLS;
+		else if (match("UNPLOT"))
+			token.code = C_UNPLOT;
+		else if (match("CLEAR"))
+			token.code = C_CLEAR;
+		else if (match("RETURN"))
+			token.code = C_RETURN;
+		else if (match("COPY"))
+			token.code = C_COPY;
+		else if (match("\\0c"))
+			token.code = C_pound;
+		else if (match("$"))
+			token.code = C_dollar;
+		else if (match(":"))
+			token.code = C_colon;
+		else if (match("?"))
+			token.code = C_quest;
+		else if (match("("))
+			token.code = C_lparens;
+		else if (match(")"))
+			token.code = C_rparens;
+		else if (match(">"))
+			token.code = C_gt;
+		else if (match("<"))
+			token.code = C_lt;
+		else if (match("="))
+			token.code = C_eq;
+		else if (match("+"))
+			token.code = C_plus;
+		else if (match("-"))
+			token.code = C_minus;
+		else if (match("*"))
+			token.code = C_mult;
+		else if (match("/"))
+			token.code = C_div;
+		else if (match(";"))
+			token.code = C_semicolon;
+		else if (match(","))
+			token.code = C_comma;
+		else if (match("_"))
+			token.code = C_space;
+		else if (parse_number(token.num, token.str))
+			token.code = T_number;
+		else if (parse_string(token.str))
+			token.code = T_string;
+		else if (parse_ident(token.ident))
+			token.code = T_ident;
+		else if (parse_line_addr_ref(token.ident))
+			token.code = T_line_addr_ref;
+		else if (parse_line_num_ref(token.ident))
+			token.code = T_line_num_ref;
+		else {
+			g_errors.error("cannot parse", p);
+			break;
+		}
+
+		line.tokens.push_back(token);
+		skip_spaces();
+	}
+
+	Token token;
+	token.code = C_newline;
+	line.tokens.push_back(token);
+
+	m_basic.lines.push_back(line);
+}
+
+void ZX81parser::parse_basic_var() {
+	BasicVar var;
+	bool is_string = false;
+	bool is_array = false;
+	int num_elements = 0;
+
+	// get name
+	if (!parse_ident(var.name))
+		goto error;
+
+	// get string marker
+	if (match("$")) {
+		is_string = true;
+		if (var.name.size() > 1) {
+			g_errors.error("name too long", var.name);
+			return;
+		}
+	}
+
+	// get array marker and dimensions
+	if (match("(")) {
+		is_array = true;
+		if (var.name.size() > 1) {
+			g_errors.error("name too long", var.name);
+			return;
+		}
+
+		num_elements = 1;
+		do {
+			int dimension = 0;
+			if (!parse_integer(dimension))
+				goto error;
+			num_elements *= dimension;
+			var.dimensions.push_back(dimension);
+		} while (match(","));
+
+		if (!match(")"))
+			goto error;
+	}
+
+	// get =
+	if (!match("="))
+		goto error;
+
+	// get value
+	if (is_string == false && is_array == false) {
+		string str;
+
+		var.type = BasicVar::Type::Number;
+		if (!parse_number(var.value, str))
+			goto error;
+
+		if (match(",")) {
+			var.type = BasicVar::Type::ForNextLoop;
+			if (var.name.size() > 1) {
+				g_errors.error("name too long", var.name);
+				return;
+			}
+
+			if (!parse_number(var.limit, str))
+				goto error;
+			if (!match(","))
+				goto error;
+			if (!parse_number(var.step, str))
+				goto error;
+			if (!match(","))
+				goto error;
+			if (!parse_integer(var.line_num))
+				goto error;
+			if (!parse_end())
+				goto error;
+		}
+	}
+	else if (is_string == false && is_array == true) {
+		double value = 0.0;
+		string str;
+
+		var.type = BasicVar::Type::ArrayNumbers;
+
+		for (size_t i = 0; i < static_cast<size_t>(num_elements); i++) {
+			if (i > 0) {
+				if (!match(","))
+					goto error;
+			}
+			if (!parse_number(value, str))
+				goto error;
+			var.values.push_back(value);
+		}
+		if (!parse_end())
+			goto error;
+	}
+	else if (is_string == true && is_array == false) {
+		var.type = BasicVar::Type::String;
+
+		if (!parse_string(var.str))
+			goto error;
+		if (!parse_end())
+			goto error;
+	}
+	else if (is_string == true && is_array == true) {
+		string str;
+
+		var.type = BasicVar::Type::ArrayStrings;
+
+		int last_dimension = var.dimensions.back();
+		num_elements /= last_dimension;
+
+		for (size_t i = 0; i < static_cast<size_t>(num_elements); i++) {
+			if (i > 0) {
+				if (!match(","))
+					goto error;
+			}
+			if (!parse_string(str))
+				goto error;
+			if (str.size() != static_cast<size_t>(last_dimension)) {
+				g_errors.error("string length should be " + to_string(last_dimension));
+				return;
+			}
+			var.strs.push_back(str);
+		}
+		if (!parse_end())
+			goto error;
+	}
+
+	m_basic.vars.push_back(var);
+	return;
+
+error:
+	g_errors.error("cannot parse", p);
+}
+
+//-----------------------------------------------------------------------------
+// BASIC compiler
+//-----------------------------------------------------------------------------
+
+ZX81compiler::ZX81compiler(ZX81basic& basic, ZX81vm& result)
+	: m_basic(basic), m_vm(result) {
+}
+
+void ZX81compiler::compile() {
+	delete_empty_lines();
+	compute_line_numbers();
+
+	// init system vars 
+	m_vm.poke_bytes(SAVE_ADDR, m_basic.sysvars);
+
+	m_basic.labels.clear();
+	int last_end_addr = 0;
+	pass = 1;
+	int num_passes_ok = 0;
+	while (true) {
+		compile_basic();
+
+		// next pass
+		if (pass > 1 && addr == last_end_addr) {
+			num_passes_ok++;
+			if (num_passes_ok >= 2)		// must run a second pass after end addr is ok
+				break;
+		}
+		last_end_addr = addr;
+		pass++;
+	}
+
+	compile_vars();
+}
+
+void ZX81compiler::compute_line_numbers() {
+	int line_num = m_basic.auto_increment;
+	int last_line = 0;
+	for (auto& line : m_basic.lines) {
+		if (line.line_num == 0) {
+			line.line_num = line_num;
+			line_num += m_basic.auto_increment;
+		}
+		else {
+			line_num = line.line_num + m_basic.auto_increment;
+		}
+
+		if (line.line_num <= last_line)
+			g_errors.error("line " + to_string(line.line_num) + " follows line " + to_string(last_line));
+		else if (line.line_num > MaxLineNum)
+			g_errors.error("line " + to_string(line.line_num) + " above maximum of " + to_string(MaxLineNum));
+	}
+}
+
+void ZX81compiler::delete_empty_lines() {
+	if (!m_basic.lines.empty()) {
+		for (size_t i = 0; i < m_basic.lines.size() - 1; i++) {
+			if (m_basic.lines[i].tokens.size() == 1 && m_basic.lines[i].tokens[0].code == C_newline) {
+				if (!m_basic.lines[i].label.empty() && !m_basic.lines[i + 1].label.empty())
+					g_errors.error("two labels on same line: " + m_basic.lines[i].label + " and " + m_basic.lines[i + 1].label);
+				m_basic.lines[i + 1].label = m_basic.lines[i].label;
+				m_basic.lines[i + 1].line_num = m_basic.lines[i].line_num;
+				m_basic.lines.erase(m_basic.lines.begin() + i);
+				i--;
+			}
+		}
+	}
+}
+
+void ZX81compiler::compile_basic() {
+	addr = PROG;
+
+	for (auto& line : m_basic.lines) {
+		// define label
+		if (pass == 1 && !line.label.empty()) {
+			auto it = m_basic.labels.find(line.label);
+			if (it != m_basic.labels.end())
+				g_errors.error("label redefinition", line.label);
+			m_basic.labels[line.label] = &line;
+		}
+
+		Bytes bytes;
+		for (auto& token : line.tokens) {
+			switch (token.code) {
+			case T_none:
+				break;
+			case T_number:
+				compile_number(bytes, token.num);
+				break;
+			case T_string:
+				compile_string(bytes, token.str);
+				break;
+			case T_ident:
+				compile_ident(bytes, token.ident);
+				break;
+			case T_rem_code:
+				bytes.insert(bytes.end(), token.bytes.begin(), token.bytes.end());
+				break;
+			case T_line_num_ref:
+				if (pass == 1)
+					compile_number(bytes, 0);
+				else {
+					auto it = m_basic.labels.find(token.ident);
+					if (it == m_basic.labels.end())
+						g_errors.error("label undefined", token.ident);
+					else
+						compile_number(bytes, it->second->line_num);
+				}
+				break;
+			case T_line_addr_ref:
+				if (pass == 1)
+					compile_number(bytes, 0);
+				else {
+					auto it = m_basic.labels.find(token.ident);
+					if (it == m_basic.labels.end())
+						g_errors.error("label undefined", token.ident);
+					else
+						compile_number(bytes, it->second->addr);
+				}
+				break;
+			default:
+				assert(token.code < 0x100);
+				bytes.push_back(token.code);
+			}
+		}
+
+		// define addr and size
+		line.addr = addr;
+		line.size = static_cast<int>(bytes.size());
+
+		m_vm.dpoke_be(addr, line.line_num); addr += 2;
+		m_vm.dpoke(addr, line.size); addr += 2;
+		addr += m_vm.poke_bytes(addr, bytes);
+		assert(addr == line.addr + 4 + line.size);
+	}
+
+	m_vm.init_video_to_stkend(addr, m_basic.d_file_bytes, m_basic.e_line_bytes);
+
+	if (m_basic.autostart) {
+		int line_addr = m_vm.get_line_addr(m_basic.autostart);
+		m_vm.dpoke(NXTLIN, line_addr);
+	}
+	else
+		m_vm.dpoke(NXTLIN, m_vm.dpeek(D_FILE));
+}
+
+void ZX81compiler::compile_vars() {
+	addr = m_vm.dpeek(VARS);
+
+	Bytes str_bytes;
+	array<uint8_t, 5> fp_bytes{ 0 };
+	int last_dimension = 0;
+	int size = 0;
+
+	for (auto& var : m_basic.vars) {
+		const char* p = var.name.c_str();
+		Bytes name_bytes = encode_zx81(p);
+		assert(name_bytes.size() > 0);
+
+		switch (var.type) {
+		case BasicVar::Type::Number:
+			// put name
+			if (var.name.size() == 1) {
+				m_vm.poke(addr++, (name_bytes[0] & 0x3f) | 0x60);			// 011-letter
+			}
+			else {
+				m_vm.poke(addr++, (name_bytes[0] & 0x3f) | 0xa0);			// 101-letter
+				for (size_t i = 1; i < name_bytes.size() - 1; i++)
+					m_vm.poke(addr++, name_bytes[i] & 0x3f);				// 001-letter
+				m_vm.poke(addr++, (name_bytes.back() & 0x3f) | 0x80);		// 101-letter
+			}
+
+			// put value
+			fp_bytes = float_to_zx81(var.value);
+			addr += m_vm.poke_bytes(addr, fp_bytes);
+			break;
+
+		case BasicVar::Type::ArrayNumbers:
+			// put name
+			m_vm.poke(addr++, (name_bytes[0] & 0x1f) | 0x80);				// 100-letter
+
+			// put dimensions
+			size = 1
+				+ 2 * static_cast<int>(var.dimensions.size())
+				+ 5 * static_cast<int>(var.values.size());
+			m_vm.dpoke(addr, size); addr += 2;
+			m_vm.poke(addr++, var.dimensions.size() & 0xff);
+
+			for (auto& dimension : var.dimensions) {
+				m_vm.dpoke(addr, dimension); addr += 2;
+			}
+
+			// put values
+			for (auto& value : var.values) {
+				fp_bytes = float_to_zx81(value);
+				addr += m_vm.poke_bytes(addr, fp_bytes);
+			}
+			break;
+
+		case BasicVar::Type::ForNextLoop:
+			// put name
+			m_vm.poke(addr++, (name_bytes[0] & 0x3f) | 0xe0);				// 111-letter
+
+			// put values
+			fp_bytes = float_to_zx81(var.value);
+			addr += m_vm.poke_bytes(addr, fp_bytes);
+
+			fp_bytes = float_to_zx81(var.limit);
+			addr += m_vm.poke_bytes(addr, fp_bytes);
+
+			fp_bytes = float_to_zx81(var.step);
+			addr += m_vm.poke_bytes(addr, fp_bytes);
+
+			m_vm.dpoke(addr, var.line_num); addr += 2;
+			break;
+
+		case BasicVar::Type::String:
+			// put name
+			m_vm.poke(addr++, (name_bytes[0] & 0x1f) | 0x40);				// 010-letter
+
+			m_vm.dpoke(addr, static_cast<int>(var.str.size())); addr += 2;
+
+			p = var.str.c_str();
+			str_bytes = encode_zx81(p);
+			addr += m_vm.poke_bytes(addr, str_bytes);
+			break;
+
+		case BasicVar::Type::ArrayStrings:
+			// put name
+			m_vm.poke(addr++, (name_bytes[0] & 0x1f) | 0xc0);				// 110-letter
+
+			// put dimensions
+			last_dimension = var.dimensions.back();
+			size = 1
+				+ 2 * static_cast<int>(var.dimensions.size())
+				+ last_dimension * static_cast<int>(var.strs.size());
+			m_vm.dpoke(addr, size); addr += 2;
+			m_vm.poke(addr++, static_cast<int>(var.dimensions.size()));
+
+			for (auto& dimension : var.dimensions) {
+				m_vm.dpoke(addr, dimension); addr += 2;
+			}
+
+			// put strings
+			for (auto& str : var.strs) {
+				p = str.c_str();
+				str_bytes = encode_zx81(p);
+				addr += m_vm.poke_bytes(addr, str_bytes);
+			}
+			break;
+
+		default:
+			assert(0);
+		}
+	}
+
+	m_vm.poke(addr++, 0x80);
+	m_vm.init_e_line_to_stkend(addr, m_basic.e_line_bytes);
+}
+
+void ZX81compiler::compile_number(Bytes& bytes, double value) {
+	ostringstream oss;
+
+	oss << value;
+	string value_str = oss.str();
+	const char* p = value_str.c_str();
+	Bytes str_bytes = encode_zx81(p);
+	array<uint8_t, 5> fp_bytes = float_to_zx81(value);
+	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
+	bytes.push_back(C_number);
+	bytes.insert(bytes.end(), fp_bytes.begin(), fp_bytes.end());
+}
+
+void ZX81compiler::compile_string(Bytes& bytes, const string& str) {
+	const char* p = str.c_str();
+	Bytes str_bytes = encode_zx81(p);
+	bytes.push_back(C_dquote);
+	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
+	bytes.push_back(C_dquote);
+}
+
+void ZX81compiler::compile_ident(Bytes& bytes, const string& ident) {
+	const char* p = ident.c_str();
+	Bytes str_bytes = encode_zx81(p);
+	bytes.insert(bytes.end(), str_bytes.begin(), str_bytes.end());
+}
+
+//-----------------------------------------------------------------------------
+// BASIC decompiler
+//-----------------------------------------------------------------------------
+
+ZX81decompiler::ZX81decompiler(ZX81vm& vm, ZX81basic& result)
+	: m_vm(vm), m_basic(result) {
+}
+
+void ZX81decompiler::decompile() {
+	decompile_sysvars();
+	decompile_d_file();
+	decompile_e_line();
+	decompile_basic();
+	decompile_vars();
+}
+
+void ZX81decompiler::decompile_sysvars() {
+	m_basic.sysvars = m_vm.peek_bytes(VERSN, PROG - VERSN);
+
+	// autostart
+	int d_file = m_vm.dpeek(D_FILE);
+	int nxtlin = m_vm.dpeek(NXTLIN);
+	if (nxtlin >= d_file)
+		m_basic.autostart = 0;
+	else
+		m_basic.autostart = m_vm.dpeek_be(nxtlin);
+
+	// fast
+	if ((m_vm.peek(CDFLAG) & FlagSlow) == FlagSlow)
+		m_basic.fast = false;
+	else
+		m_basic.fast = true;
+}
+
+void ZX81decompiler::decompile_d_file() {
+	int d_file = m_vm.dpeek(D_FILE);
+	int vars = m_vm.dpeek(VARS);
+	m_basic.d_file_bytes = m_vm.peek_bytes(d_file, vars - d_file);
+}
+
+void ZX81decompiler::decompile_e_line() {
+	int e_line= m_vm.dpeek(E_LINE);
+	int stkbot = m_vm.dpeek(STKBOT);
+	m_basic.e_line_bytes = m_vm.peek_bytes(e_line, stkbot - e_line);
+}
+
+void ZX81decompiler::decompile_basic() {
+	m_basic.lines.clear();
+	addr = PROG;
+	while (addr < m_vm.dpeek(D_FILE)) {
+		BasicLine line;
+		line.addr = addr;
+		line.line_num = m_vm.dpeek_be(addr);
+		line.size = m_vm.dpeek(addr + 2);
+
+		addr += 4;
+		end = addr + line.size;
+
+		decompile_basic_line(line);
+		m_basic.lines.push_back(line);
+	}
+}
+
+void ZX81decompiler::decompile_basic_line(BasicLine& line) {
+	if (decompile_rem_code(line)) {
+	}
+	else {
+		while (addr < end - 1) {
+			if (decompile_number(line)) {
+			}
+			else if (decompile_ident(line)) {
+			}
+			else if (decompile_string(line)) {
+			}
+			else {
+				Token token;
+				token.code = m_vm.peek(addr++);
+				line.tokens.push_back(token);
+			}
+		}
+		decompile_newline(line);
+	}
+}
+
+bool ZX81decompiler::decompile_rem_code(BasicLine& line) {
+	if (m_vm.peek(addr) == C_REM) {
+		bool is_code = false;
+		for (int p = addr + 1; p < end - 1; p++) {	// all chars except final newline
+			if ((m_vm.peek(p) & 0x40) == 0x40) {			// special char
+				is_code = true;
+				break;
+			}
+		}
+		if (is_code) {
+			Token rem;
+			rem.code = C_REM;
+			line.tokens.push_back(rem);
+
+			Token bytes;
+			bytes.code = T_rem_code;
+			for (int p = addr + 1; p < end - 1; p++)
+				bytes.bytes.push_back(m_vm.peek(p));
+			line.tokens.push_back(bytes);
+
+			addr = end - 1;
+			decompile_newline(line);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ZX81decompiler::decompile_number(BasicLine& line) {
+	Token token;
+	string num;
+
+	// get mantissa
+	int p = addr;
+	int num_dots = 0;
+	int num_digits = 0;
+	while (true) {
+		int c = m_vm.peek(p);
+		if (c == C_dot) {
+			p++;
+			num_dots++;
+			num.push_back('.');
+			if (num_dots > 1)
+				return false;
+		}
+		else if (c >= C_0 && c <= C_9) {
+			p++;
+			num_digits++;
+			num.push_back(c - C_0 + '0');
+		}
+		else
+			break;
+	}
+	if (num_digits == 0)
+		return false;
+
+	// get exponent
+	int c = m_vm.peek(p);
+	if (p == C_E) {
+		p++;
+		num.push_back('E');
+		c = m_vm.peek(p);
+		if (c == C_plus || c == C_minus) {
+			p++;
+			num.push_back(c == C_plus ? '+' : '-');
+		}
+		c = m_vm.peek(p);
+		if (c < C_0 || c > C_9)
+			return false;
+		while (c >= C_0 && c <= C_9) {
+			p++;
+			num.push_back(c - C_0 + '0');
+			c = m_vm.peek(p);
+		}
+	}
+
+	double value1 = atof(num.c_str());
+
+	// get number marker
+	c = m_vm.peek(p);
+	if (c != C_number)
+		return false;
+	p++;
+
+	// get fp value
+	double value2 = m_vm.fpeek(p); p += 5;
+
+	if (abs(value1 - value2) > 1e-6)
+		g_errors.error("number " + to_string(value1) + " != " + to_string(value2));
+
+	token.code = T_number;
+	token.str = num;
+	token.num = value1;
+	line.tokens.push_back(token);
+	addr = p;
+	return true;
+}
+
+bool ZX81decompiler::decompile_ident(BasicLine& line) {
+	Token token;
+	int p = addr;
+	while (true) {
+		int c = m_vm.peek(p);
+		if (c < C_A || c > C_Z)
+			break;
+		token.ident.push_back(c - C_A + 'A');
+		p++;
+	}
+	if (p == addr)					// no letters found
+		return false;
+	else {
+		token.code = T_ident;
+		line.tokens.push_back(token);
+		addr = p;
+		return true;
+	}
+}
+
+bool ZX81decompiler::decompile_string(BasicLine& line) {
+	Token token;
+	int p = addr;
+	if (m_vm.peek(p) != C_dquote)
+		return false;
+	p++;
+	while (true) {
+		int c = m_vm.peek(p);
+		if (c == C_newline)
+			return false;
+		if (c == C_dquote)
+			break;
+		token.str += decode_zx81(c);
+		p++;
+	}
+	p++;		// skip end dquote
+
+	token.code = T_string;
+	line.tokens.push_back(token);
+	addr = p;
+	return true;
+}
+
+void ZX81decompiler::decompile_newline(BasicLine& line) {
+	Token token;
+	token.code = m_vm.peek(addr++);
+	if (token.code != C_newline)
+		g_errors.error("missing newline");
+
+	line.tokens.push_back(token);
+}
+
+void ZX81decompiler::decompile_vars() {
+	addr = m_vm.dpeek(VARS);
+	int c = 0;
+	while ((c = m_vm.peek(addr)) != 0x80) {
+		BasicVar var;
+		var.addr = addr;
+		int addr0 = addr;
+
+		if ((c & 0xe0) == 0x60) {		// single letter variable
+			addr++;
+			c &= 0x3f;
+			c |= 0x20;
+
+			var.type = BasicVar::Type::Number;
+			var.name = decode_zx81(c);
+			var.value = m_vm.fpeek(addr); addr += 5;
+		}
+		else if ((c & 0xe0) == 0xa0) {	// multiple-letter variable
+			var.type = BasicVar::Type::Number;
+
+			// first letter
+			addr++;
+			c &= 0x3f;
+			c |= 0x20;
+			var.name = decode_zx81(c);
+
+			// second, ... letter
+			while (((c = m_vm.peek(addr)) & 0xc0) == 0x00) {
+				addr++;
+				c &= 0x3f;
+				c |= 0x20;
+				var.name += decode_zx81(c);
+			}
+
+			// last letter
+			c = m_vm.peek(addr);
+			if ((c & 0xc0) != 0x80) {
+				g_errors.error("invalid multi-letter variable", fmt_hex(c, 2));
+				return;
+			}
+			else {
+				addr++;
+				c &= 0x3f;
+				c |= 0x20;
+				var.name += decode_zx81(c);
+			}
+			var.value = m_vm.fpeek(addr); addr += 5;
+		}
+		else if ((c & 0xe0) == 0x80) {	// array of numbers
+			addr++;
+			c &= 0x3f;
+			c |= 0x20;
+
+			var.type = BasicVar::Type::ArrayNumbers;
+			var.name = decode_zx81(c);
+
+			int size = m_vm.dpeek(addr); addr += 2;
+			int addr0 = addr;
+
+			int num_dimensions = m_vm.peek(addr++);
+			int num_elements = 1;
+			for (int i = 0; i < num_dimensions; i++) {
+				int dimension = m_vm.dpeek(addr); addr += 2;
+				num_elements *= dimension;
+				var.dimensions.push_back(dimension);
+			}
+			for (int i = 0; i < num_elements; i++) {
+				double value = m_vm.fpeek(addr); addr += 5;
+				var.values.push_back(value);
+			}
+
+			assert(addr0 + size == addr);
+		}
+		else if ((c & 0xe0) == 0xe0) {	// for-next loop
+			addr++;
+			c &= 0x3f;
+			c |= 0x20;
+
+			var.type = BasicVar::Type::ForNextLoop;
+			var.name = decode_zx81(c);
+
+			var.value = m_vm.fpeek(addr); addr += 5;
+			var.limit = m_vm.fpeek(addr); addr += 5;
+			var.step = m_vm.fpeek(addr); addr += 5;
+			var.line_num = m_vm.dpeek(addr); addr += 2;
+		}
+		else if ((c & 0xe0) == 0x40) {	// string
+			addr++;
+			c &= 0x3f;
+			c |= 0x20;
+
+			var.type = BasicVar::Type::String;
+			var.name = decode_zx81(c);
+
+			int size = m_vm.dpeek(addr); addr += 2;
+			for (int i = 0; i < size; i++) {
+				c = m_vm.peek(addr++);
+				var.str += decode_zx81(c);
+			}
+		}
+		else if ((c & 0xe0) == 0xc0) {	// array of strings
+			addr++;
+			c &= 0x3f;
+			c |= 0x20;
+
+			var.type = BasicVar::Type::ArrayStrings;
+			var.name = decode_zx81(c);
+
+			int size = m_vm.dpeek(addr); addr += 2;
+			int addr0 = addr;
+
+			int num_dimensions = m_vm.peek(addr++);
+			int num_elements = 1;
+			for (int i = 0; i < num_dimensions; i++) {
+				int dimension = m_vm.dpeek(addr); addr += 2;
+				num_elements *= dimension;
+				var.dimensions.push_back(dimension);
+			}
+
+			int last_dimension = var.dimensions.back();		// size of each string
+			num_elements /= last_dimension;
+
+			for (int i = 0; i < num_elements; i++) {
+				string str;
+				for (int j = 0; j < last_dimension; j++) {
+					c = m_vm.peek(addr++);
+					str += decode_zx81(c);
+				}
+				var.strs.push_back(str);
+			}
+
+			assert(addr0 + size == addr);
+		}
+		else {
+			g_errors.error("invalid variable marker", string("$") + fmt_hex(c, 2));
+			break;
+		}
+
+		var.size = addr - addr0;
+
+		m_basic.vars.push_back(var);
+	}
 }

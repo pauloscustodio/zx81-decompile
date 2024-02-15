@@ -43,10 +43,18 @@ int main(int argc, char* argv[]) {
 	if (out_file.empty())
 		out_file = filesystem::path(p_file).replace_extension(".b81").generic_string();
 
-	ZX81 zx81;
-	zx81.read_p_file(p_file);
-	zx81.decompile();
-	zx81.write_b81_file(out_file);
+	ZX81vm vm;
+	vm.read_p_file(p_file);
+	if (g_errors.get_count())
+		g_errors.exit_status();
 
-	EXIT_STATUS();
+	ZX81basic basic;
+	ZX81decompiler decompiler(vm, basic);
+	decompiler.decompile();
+	if (g_errors.get_count())
+		g_errors.exit_status();
+
+	basic.write_b81_file(out_file);
+
+	g_errors.exit_status();
 }

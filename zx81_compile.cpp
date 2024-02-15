@@ -35,15 +35,25 @@ int main(int argc, char* argv[]) {
 
 	if (argc != optind + 1)
 		exit_usage();
+	else {
+		string b81_file = argv[optind];
+		if (out_file.empty())
+			out_file = filesystem::path(b81_file).replace_extension(".p").generic_string();
 
-	string b81_file = argv[optind];
-	if (out_file.empty())
-		out_file = filesystem::path(b81_file).replace_extension(".p").generic_string();
+		ZX81basic basic;
+		ZX81parser parser(b81_file, basic);
+		parser.parse();
+		if (g_errors.get_count())
+			g_errors.exit_status();
 
-	ZX81 zx81;
-	zx81.read_b81_file(b81_file);
-	zx81.compile();
-	zx81.write_p_file(out_file);
+		ZX81vm vm;
+		ZX81compiler compiler(basic, vm);
+		compiler.compile();
+		if (g_errors.get_count())
+			g_errors.exit_status();
 
-	EXIT_STATUS();
+		vm.write_p_file(out_file);
+	}
+
+	g_errors.exit_status();
 }

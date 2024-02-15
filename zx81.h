@@ -8,6 +8,8 @@
 
 #include <array>
 #include <cstdint>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -15,8 +17,11 @@ using namespace std;
 
 #define NUM_ELEMS(a)	(sizeof(a) / sizeof(a[0]))
 
+typedef vector<uint8_t> Bytes;
+
 string decode_zx81(char c);
-vector<uint8_t> encode_zx81(const char*& p);
+Bytes encode_zx81(const char*& p);
+string encode_hex(const Bytes& bytes);
 
 enum ZX81char {
 	T_none = 0x100,
@@ -243,20 +248,18 @@ enum ZX81const {
 };
 
 static inline const int RAM_ADDR = ERR_NO;
-static inline const int RAM_SIZE = 0x4000;
 static inline const int SAVE_ADDR = VERSN;
 static inline const int NumRows = 24;
 static inline const int NumCols = 32;
 static inline const int MaxLineNum = 0x3fff;
 static inline const int FlagSlow = 0x40;
 
-
 struct Token {
 	int		code{ T_none };
 	double	num{ 0.0 };			// for T_number
 	string  str;				// for T_string
 	string	ident;				// for T_ident, T_line_addr, T_line_num
-	vector<uint8_t> bytes;		// for T_code
+	Bytes bytes;				// for T_code
 };
 
 struct BasicLine {
@@ -265,6 +268,7 @@ struct BasicLine {
 	int size{ 0 };
 	string label;
 	vector<Token> tokens;
+	vector<string> asm_lines;	// asm lines after a REM
 };
 
 struct BasicVar {
@@ -293,33 +297,30 @@ struct BasicVar {
 	vector<string> strs;
 };
 
-struct ZX81 {
-	ZX81();
+class ZX81vm {
+public:
+	ZX81vm();
 
-	// memory structure
-	array<uint8_t, RAM_SIZE> ram{ 0 };
+	// read/write .p file
+	void read_p_file(const string& filename);
+	void write_p_file(const string& filename) const;
 
-	// BASIC structure
-	vector<BasicLine> basic_lines;
-	vector<BasicVar> basic_vars;
-	vector<uint8_t> d_file_bytes;
-	vector<uint8_t> e_line_bytes;
-
-	// manipulate memory
+	// read memory
 	int peek(int addr) const;
 	int dpeek(int addr) const;
 	int dpeek_be(int addr) const;
 	double fpeek(int addr) const;
-	string str_peek(int addr, int len) const;
-	string bytes_peek(int addr, int len) const;
+	Bytes peek_bytes(int addr, int size) const;
+	string peek_hex(int addr, int len) const;
 
+	// write memory
 	void poke(int addr, int value);
 	void dpoke(int addr, int value);
 	void dpoke_be(int addr, int value);
 	void fpoke(int addr, double value);
-	int str_poke(int addr, const string& str);
+	
 	template<class T>
-	int bytes_poke(int addr, const T& bytes) {
+	int poke_bytes(int addr, const T& bytes) {
 		int len = static_cast<int>(bytes.size());
 		for (auto& byte : bytes)
 			poke(addr++, byte);
@@ -327,28 +328,105 @@ struct ZX81 {
 	}
 
 	int get_line_addr(int line_num);
+	void init_video_to_stkend(int addr, Bytes& d_file_bytes, Bytes& e_line_bytes);
+	void init_e_line_to_stkend(int addr, Bytes& e_line_bytes);
 
-	// compile/decompile BASIC
-	void compile();
-	void decompile();
+	static Bytes get_empty_d_file();
+	static Bytes get_empty_e_line();
 
-	// read/write files
-	void read_p_file(const string& filename);
-	void write_p_file(const string& filename) const;
+private:
+	static inline const int MEM_SIZE = 0x10000;
+	array<uint8_t, MEM_SIZE> mem{ 0 };
 
-	void read_b81_file(const string& filename);
+	int write_empty_d_file(int addr);
+	int write_empty_vars(int addr);
+};
+
+struct ZX81basic {
+	vector<BasicLine> lines;
+	vector<BasicVar> vars;
+	unordered_map<string, BasicLine*> labels;
+	Bytes sysvars;
+	Bytes d_file_bytes;
+	Bytes e_line_bytes;
+	int autostart{ 0 };
+	int auto_increment{ 10 };
+	bool fast{ false };
+
+	ZX81basic();
 	void write_b81_file(const string& filename) const;
 
 private:
-	void init_ram();
-	void init_video_to_stkend(int addr);
-	void init_e_line_to_stkend(int addr);
+	int peek_sysvars(int addr) const;
+	int dpeek_sysvars(int addr) const;
+	void write_sysvars(ofstream& ofs) const;
+	void write_basic_lines(ofstream& ofs) const;
+	void write_video(ofstream& ofs) const;
+	void write_basic_vars(ofstream& ofs) const;
+	void write_basic_system(ofstream& ofs) const;
+};
 
-	// decompile BASIC
+class ZX81parser {
+public:
+	ZX81parser(const string& b81_filename, ZX81basic& result);
+	void parse();
+
+private:
+	string m_filename;
+	ifstream m_ifs;
+	ZX81basic& m_basic;
+	const char* p{ nullptr };
+
+	void skip_spaces();
+	bool match(const string& compare);
+	bool parse_integer(int& value);
+	bool parse_number(double& value, string& value_text);
+	bool parse_string(string& str);
+	bool parse_ident(string& ident);
+	bool parse_label(string& ident);
+	bool parse_line_num_ref(string& ident);
+	bool parse_line_addr_ref(string& ident);
+	bool parse_end();
+	void parse_line();
+	void parse_meta_line();
+	void parse_basic_line();
+	void parse_basic_var();
+};
+
+class ZX81compiler {
+public:
+	ZX81compiler(ZX81basic& basic, ZX81vm& result);
+	void compile();
+
+private:
+	ZX81basic& m_basic;
+	ZX81vm& m_vm;
+	int addr{ 0 };
+	int pass{ 0 };
+
+	void compute_line_numbers();
+	void delete_empty_lines();
+	void compile_basic();
+	void compile_vars();
+	void compile_number(Bytes& bytes, double value);
+	void compile_string(Bytes& bytes, const string& str);
+	void compile_ident(Bytes& bytes, const string& ident);
+};
+
+class ZX81decompiler {
+public:
+	ZX81decompiler(ZX81vm& vm, ZX81basic& result);
+	void decompile();
+
+private:
+	ZX81vm& m_vm;
+	ZX81basic& m_basic;
 	int addr{ 0 };
 	int end{ 0 };
-	int error_line_num{ 0 };
-	int autostart{ 0 };
+
+	void decompile_sysvars();
+	void decompile_d_file();
+	void decompile_e_line();
 	void decompile_basic();
 	void decompile_basic_line(BasicLine& line);
 	bool decompile_rem_code(BasicLine& line);
@@ -357,38 +435,4 @@ private:
 	bool decompile_string(BasicLine& line);
 	void decompile_newline(BasicLine& line);
 	void decompile_vars();
-
-	// compile BASIC
-	int auto_increment{ 10 };
-	unordered_map<string, BasicLine*> labels;
-	void delete_empty_lines();
-	void compute_line_numbers();
-	void compile_basic(int pass);
-	void compile_vars();
-	void compile_number(vector<uint8_t>& bytes, double value);
-	void compile_string(vector<uint8_t>& bytes, const string& str);
-	void compile_ident(vector<uint8_t>& bytes, const string& ident);
-
-	// write BASIC file
-	void write_sysvars(ofstream& ofs) const;
-	void write_basic_lines(ofstream& ofs) const;
-	void write_video(ofstream& ofs) const;
-	void write_basic_vars(ofstream& ofs) const;
-	void write_basic_system(ofstream& ofs) const;
-
-	// parse BASIC file
-	void skip_spaces(const char*& p);
-	bool match(const char*& p, const string& compare);
-	bool parse_integer(const char*& p, int& value);
-	bool parse_number(const char*& p, double& value, string& value_text);
-	bool parse_string(const char*& p, string& str);
-	bool parse_ident(const char*& p, string& ident);
-	bool parse_label(const char*& p, string& ident);
-	bool parse_line_num_ref(const char*& p, string& ident);
-	bool parse_line_addr_ref(const char*& p, string& ident);
-	bool parse_end(const char*& p);
-	void parse_line(const char* p);
-	void parse_meta_line(const char* p);
-	void parse_basic_line(const char* p);
-	void parse_basic_var(const char* p);
 };

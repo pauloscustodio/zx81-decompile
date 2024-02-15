@@ -13,10 +13,11 @@ else
   EXESUFFIX 		?=
 endif
 
+COMMON_FLAGS=  -ggdb -MMD -Wall -Wextra -Werror -pedantic-errors -DWANT_GUI
 CC 			?= gcc
-CFLAGS		+= -std=gnu11 -ggdb -MMD -Wall -Wextra -Werror -pedantic-errors
+CFLAGS		+= -std=gnu11 $(COMMON_FLAGS)
 CXX			?= g++
-CXX_FLAGS	+= -std=gnu++17 -ggdb -MMD -Wall -Wextra -Werror -pedantic-errors 
+CXX_FLAGS	+= -std=gnu++17 $(COMMON_FLAGS)
 LDFLAGS		+=
 
 C_SRCS		= $(wildcard *.c)
@@ -70,10 +71,11 @@ test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX)
 	$(MAKE) PROG=GrimmsFairyTrails test_decompile_compile
 	$(MAKE) PROG=test_t2p          test_compile
 	perl make_p.pl t/test_keyboard.bas
+	./$(COMPILE)$(EXESUFFIX) t/empty.b81
 
 test_decompile_compile:
-	./$(DECOMPILE)$(EXESUFFIX) -o $(PROG).b81 t/$(PROG).p
-	./$(COMPILE)$(EXESUFFIX)   -o $(PROG).p   $(PROG).b81
+	./$(DECOMPILE)$(EXESUFFIX) -o t/$(PROG).b81 t/$(PROG).p
+	./$(COMPILE)$(EXESUFFIX)   -o $(PROG).p     t/$(PROG).b81
 	hexdump -C $(PROG).p   > $(PROG).p.txt
 	hexdump -C t/$(PROG).p > t/$(PROG).p.txt
 	diff $(PROG).p.txt t/$(PROG).p.txt
@@ -85,5 +87,5 @@ test_compile:
 	diff $(PROG).p.txt t/$(PROG).p.txt
 
 clean::
-	$(RM) *.p *.p.txt *.b81 t/*.p.txt
+	$(RM) *.p *.p.txt t/*.p.txt
 	$(RM) t/test_keyboard.asm t/test_keyboard.b81 t/test_keyboard.bin t/test_keyboard.map t/test_keyboard.p t/test_keyboard.sym
