@@ -51,10 +51,12 @@ $(eval $(call MAKE_EXE,$(COMPILE),$(COMPILE).o $(COMMON_OBJS)))
 
 all::
 	$(MAKE) -C FortressOfZorlac
+	$(MAKE) -C GrimmsFairyTrails
 	
 clean::
 	$(RM) $(ALL_OBJS) $(DEPENDS)
 	$(MAKE) -C FortressOfZorlac clean
+	$(MAKE) -C GrimmsFairyTrails clean
 
 #------------------------------------------------------------------------------
 
@@ -87,5 +89,5 @@ test_compile:
 	diff $(PROG).p.txt t/$(PROG).p.txt
 
 clean::
-	$(RM) *.p *.p.txt t/*.p.txt
+	$(RM) *.p *.p.txt *.b81 *.bak t/*.p.txt t/*.bak
 	$(RM) t/test_keyboard.asm t/test_keyboard.b81 t/test_keyboard.bin t/test_keyboard.map t/test_keyboard.p t/test_keyboard.sym

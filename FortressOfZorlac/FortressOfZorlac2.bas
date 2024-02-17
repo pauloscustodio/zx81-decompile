@@ -1276,6 +1276,10 @@ TEST_KEYBOARD:
         ld hl,(LAST_K) 			; keyboard scan, H=column, L=half-row
         ld bc, (ship_col)
 
+		ld a, (CHEAT)
+		and a
+		call nz, FIRE_TORPEDO
+		
         ld de, $FFFF
         and a
         sbc hl, de
@@ -1348,13 +1352,6 @@ check_left_right:
         bit 1, h                ; check move ship right
         jp z, MOVE_SHIP_RIGHT
         ret
-
-
-        ; Start of unknown area $4A37 to $4A3D
-        defb $00, $00, $00, $00, $00, $00, $76
-        ; End of unknown area $4A37 to $4A3D
-
-
 
 #ENDASM
 
