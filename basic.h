@@ -6,31 +6,23 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <fstream>
-#include <iostream>
+#include "consts.h"
 #include <string>
 #include <unordered_map>
-#include <vector>
 using namespace std;
-
-#define NUM_ELEMS(a)	(sizeof(a) / sizeof(a[0]))
-
-typedef vector<uint8_t> Bytes;
-
-string decode_zx81(char c);
-Bytes encode_zx81(const char*& p);
-string encode_hex(const Bytes& bytes);
 
 enum ZX81char {
 	T_none = 0x100,
-	T_number,
+	T_integer,
+	T_float,
 	T_string,
 	T_ident,
 	T_rem_code,
 	T_line_addr_ref,
 	T_line_num_ref,
+	T_const_expr,
+	T_unary_minus,
+	T_ASMPC,
 
 	C_space = 0x00,
 	C_gr_wwww = 0x00,
@@ -242,33 +234,91 @@ enum ZX81char {
 	C_COPY = 0xff,
 };
 
-enum ZX81const {
-#define X(name, value)		name = value,
-#include "consts.def"
+struct Token {
+	ZX81char code{ T_none };
+	int		ivalue{ 0 };		// for T_integer
+	double	fvalue{ 0.0 };		// for T_float
+	string  svalue;				// for T_string
+	string	ident;				// for T_ident, T_line_addr, T_line_num
+	Bytes	bytes;				// for T_rem_code
+	vector<Token> rpn;			// Expr for T_const_expr
 };
 
-static inline const int RAM_ADDR = ERR_NO;
-static inline const int SAVE_ADDR = VERSN;
-static inline const int NumRows = 24;
-static inline const int NumCols = 32;
-static inline const int MaxLineNum = 0x3fff;
-static inline const int FlagSlow = 0x40;
+typedef vector<Token> Expr;
 
-struct Token {
-	int		code{ T_none };
-	double	num{ 0.0 };			// for T_number
-	string  str;				// for T_string
-	string	ident;				// for T_ident, T_line_addr, T_line_num
-	Bytes bytes;				// for T_code
+struct Symbol {
+	enum class Type { Const, Addr };
+	Type type{ Type::Const };
+	string name;
+	int value;
+
+	Symbol(Type type_ = Type::Const, const string& name_ = "", int value_ = 0);
+};
+
+class Symtab {
+public:
+	Symtab();
+	virtual ~Symtab();
+	Symtab(const Symtab& other) = delete;
+	Symtab& operator=(const Symtab& other) = delete;
+
+	void init();
+
+	void add(Symbol::Type type, const string& name, int value);
+	void update(Symbol::Type type, const string& name, int value);
+
+	Symbol* get(const string& name);	// nullptr if not found
+	Symbol* find(int value);			// last defined symbol with this value
+
+	auto begin() { return symbols.begin(); }
+	auto end() { return symbols.end(); }
+	auto cbegin() const { return symbols.cbegin(); }
+	auto cend() const { return symbols.cend(); }
+	auto size() const { return symbols.size(); }
+
+private:
+	unordered_map<string, Symbol*> symbols;
+};
+
+struct Patch {
+	enum class Type { Byte, Word, SByte, JrOffset };
+	Type type{ Type::Byte };
+	int offset{ 0 };
+	Expr rpn;
+
+	Patch(Type type_ = Type::Byte) : type(type_) {}
+};
+
+struct AsmLine {
+	string source_filename;
+	int source_line_num;
+	string label;
+	Expr equ_rpn;			// if equ
+	Bytes bytes;
+	vector<Patch> patches;
+
+	AsmLine();
 };
 
 struct BasicLine {
-	int addr{ 0 };
-	int line_num{ 0 };
-	int size{ 0 };
+	string source_filename;
+	int source_line_num;
 	string label;
+	int line_num{ -1 };
 	vector<Token> tokens;
-	vector<string> asm_lines;	// asm lines after a REM
+
+	BasicLine();
+};
+
+struct SourceLine {
+	enum class Type { Basic, Asm };
+	Type type{ Type::Basic };
+
+	int addr{ 0 };
+	BasicLine basic_line;
+	AsmLine asm_line;
+
+	SourceLine(Type type_ = Type::Basic) : type(type_) {}
 };
 
 struct BasicVar {
@@ -297,142 +347,30 @@ struct BasicVar {
 	vector<string> strs;
 };
 
-class ZX81vm {
-public:
-	ZX81vm();
+struct Basic {
+	Basic();
+	void clear();
 
-	// read/write .p file
-	void read_p_file(const string& filename);
-	void write_p_file(const string& filename) const;
-
-	// read memory
-	int peek(int addr) const;
-	int dpeek(int addr) const;
-	int dpeek_be(int addr) const;
-	double fpeek(int addr) const;
-	Bytes peek_bytes(int addr, int size) const;
-	string peek_hex(int addr, int len) const;
-
-	// write memory
-	void poke(int addr, int value);
-	void dpoke(int addr, int value);
-	void dpoke_be(int addr, int value);
-	void fpoke(int addr, double value);
-	
-	template<class T>
-	int poke_bytes(int addr, const T& bytes) {
-		int len = static_cast<int>(bytes.size());
-		for (auto& byte : bytes)
-			poke(addr++, byte);
-		return len;
-	}
-
-	int get_line_addr(int line_num);
-	void init_video_to_stkend(int addr, Bytes& d_file_bytes, Bytes& e_line_bytes);
-	void init_e_line_to_stkend(int addr, Bytes& e_line_bytes);
-
-	static Bytes get_empty_d_file();
-	static Bytes get_empty_e_line();
-
-private:
-	static inline const int MEM_SIZE = 0x10000;
-	array<uint8_t, MEM_SIZE> mem{ 0 };
-
-	int write_empty_d_file(int addr);
-	int write_empty_vars(int addr);
-};
-
-struct ZX81basic {
-	vector<BasicLine> lines;
-	vector<BasicVar> vars;
-	unordered_map<string, BasicLine*> labels;
-	Bytes sysvars;
+	vector<SourceLine> source_lines;
+	vector<BasicVar> basic_vars;
+	Symtab symtab;
 	Bytes d_file_bytes;
 	Bytes e_line_bytes;
-	int autostart{ 0 };
-	int auto_increment{ 10 };
-	bool fast{ false };
+	int autostart;
+	int auto_increment;
+	bool fast;
 
-	ZX81basic();
-	void write_b81_file(const string& filename) const;
+	int eval_const_expr(const Expr& rpn);
+	bool eval_expr(const Expr& rpn, int asmpc, int& value, bool do_error = true);
+	void parse_b81_file(const string& filename);
+	void write_b81_file(const string& filename);
 
 private:
-	int peek_sysvars(int addr) const;
-	int dpeek_sysvars(int addr) const;
 	void write_sysvars(ofstream& ofs) const;
 	void write_basic_lines(ofstream& ofs) const;
 	void write_video(ofstream& ofs) const;
 	void write_basic_vars(ofstream& ofs) const;
 	void write_basic_system(ofstream& ofs) const;
-};
-
-class ZX81parser {
-public:
-	ZX81parser(const string& b81_filename, ZX81basic& result);
-	void parse();
-
-private:
-	string m_filename;
-	ifstream m_ifs;
-	ZX81basic& m_basic;
-	const char* p{ nullptr };
-
-	void skip_spaces();
-	bool match(const string& compare);
-	bool parse_integer(int& value);
-	bool parse_number(double& value, string& value_text);
-	bool parse_string(string& str);
-	bool parse_ident(string& ident);
-	bool parse_label(string& ident);
-	bool parse_line_num_ref(string& ident);
-	bool parse_line_addr_ref(string& ident);
-	bool parse_end();
-	void parse_line();
-	void parse_meta_line();
-	void parse_basic_line();
-	void parse_basic_var();
-};
-
-class ZX81compiler {
-public:
-	ZX81compiler(ZX81basic& basic, ZX81vm& result);
-	void compile();
-
-private:
-	ZX81basic& m_basic;
-	ZX81vm& m_vm;
-	int addr{ 0 };
-	int pass{ 0 };
-
-	void compute_line_numbers();
-	void delete_empty_lines();
-	void compile_basic();
-	void compile_vars();
-	void compile_number(Bytes& bytes, double value);
-	void compile_string(Bytes& bytes, const string& str);
-	void compile_ident(Bytes& bytes, const string& ident);
-};
-
-class ZX81decompiler {
-public:
-	ZX81decompiler(ZX81vm& vm, ZX81basic& result);
-	void decompile();
-
-private:
-	ZX81vm& m_vm;
-	ZX81basic& m_basic;
-	int addr{ 0 };
-	int end{ 0 };
-
-	void decompile_sysvars();
-	void decompile_d_file();
-	void decompile_e_line();
-	void decompile_basic();
-	void decompile_basic_line(BasicLine& line);
-	bool decompile_rem_code(BasicLine& line);
-	bool decompile_number(BasicLine& line);
-	bool decompile_ident(BasicLine& line);
-	bool decompile_string(BasicLine& line);
-	void decompile_newline(BasicLine& line);
-	void decompile_vars();
+	void write_mem_info(ofstream& ofs, int start_addr, int len) const;
+	void write_basic_memory_map(ofstream& ofs) const;
 };

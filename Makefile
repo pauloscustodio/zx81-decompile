@@ -13,7 +13,7 @@ else
   EXESUFFIX 		?=
 endif
 
-COMMON_FLAGS=  -ggdb -MMD -Wall -Wextra -Werror -pedantic-errors -DWANT_GUI
+COMMON_FLAGS=  -ggdb -MMD -Wall -Wextra -Werror -pedantic-errors
 CC 			?= gcc
 CFLAGS		+= -std=gnu11 $(COMMON_FLAGS)
 CXX			?= g++
@@ -64,29 +64,10 @@ clean::
 
 #------------------------------------------------------------------------------
 
-test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX)
-	$(MAKE) PROG=test_vars         test_decompile_compile
-	$(MAKE) PROG=show_float        test_decompile_compile
-	$(MAKE) PROG=slow              test_decompile_compile
-	$(MAKE) PROG=fast              test_decompile_compile
-	$(MAKE) PROG=FortressOfZorlac  test_decompile_compile
-	$(MAKE) PROG=GrimmsFairyTrails test_decompile_compile
-	$(MAKE) PROG=test_t2p          test_compile
+test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX) 
+	perl -S prove t/*.t
+	./$(COMPILE)$(EXESUFFIX) -o test_t2p.p t/test_t2p.b81
 	perl make_p.pl t/test_keyboard.bas
-	./$(COMPILE)$(EXESUFFIX) t/empty.b81
-
-test_decompile_compile:
-	./$(DECOMPILE)$(EXESUFFIX) -o t/$(PROG).b81 t/$(PROG).p
-	./$(COMPILE)$(EXESUFFIX)   -o $(PROG).p     t/$(PROG).b81
-	hexdump -C $(PROG).p   > $(PROG).p.txt
-	hexdump -C t/$(PROG).p > t/$(PROG).p.txt
-	diff $(PROG).p.txt t/$(PROG).p.txt
-
-test_compile:
-	./$(COMPILE)$(EXESUFFIX)   -o $(PROG).p   t/$(PROG).b81
-	hexdump -C $(PROG).p   > $(PROG).p.txt
-	hexdump -C t/$(PROG).p > t/$(PROG).p.txt
-	diff $(PROG).p.txt t/$(PROG).p.txt
 
 clean::
 	$(RM) *.p *.p.txt *.b81 *.bak t/*.p.txt t/*.bak

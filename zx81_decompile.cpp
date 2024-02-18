@@ -4,9 +4,10 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
+#include "decompiler.h"
 #include "errors.h"
 #include "getopt.h"
-#include "zx81.h"
+#include "memory.h"
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -43,18 +44,16 @@ int main(int argc, char* argv[]) {
 	if (out_file.empty())
 		out_file = filesystem::path(p_file).replace_extension(".b81").generic_string();
 
-	ZX81vm vm;
-	vm.read_p_file(p_file);
-	if (g_errors.get_count())
-		g_errors.exit_status();
+	read_p_file(p_file);
+	if (err_get_count())
+		exit_status();
 
-	ZX81basic basic;
-	ZX81decompiler decompiler(vm, basic);
-	decompiler.decompile();
-	if (g_errors.get_count())
-		g_errors.exit_status();
+	Basic basic;
+	decompile(basic);
+	if (err_get_count())
+		exit_status();
 
 	basic.write_b81_file(out_file);
 
-	g_errors.exit_status();
+	exit_status();
 }

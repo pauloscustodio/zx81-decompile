@@ -8,6 +8,7 @@
 #define X(name, value)
 #endif
 
+// system variables
 X(ERR_NO, 0x4000)
 X(FLAGS, 0x4001)
 X(ERR_SP, 0x4002)
@@ -50,5 +51,8 @@ X(PRBUFF, 0x403c)
 X(MEMBOT, 0x405d)
 X(FREE2, 0x407b)
 X(PROG, 0x407d)
+
+// ROM routines
+X(KEYBOARD, 0x02bb)
 
 #undef X

@@ -7,9 +7,10 @@
 #pragma once
 
 #include <string>
+#include "consts.h"
 using namespace std;
 
-string fmt_hex(int value, int digits = 2);
-string fmt_line_number(int value, int digits = 5);
-string str_chomp(string str);
-string str_replace_all(string str, const string& from, const string& to);
+string decode_zx81(char c);
+Bytes encode_zx81(const string& str);
+Bytes encode_zx81(const char*& p);
+string encode_hex(const Bytes& bytes);

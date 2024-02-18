@@ -4,9 +4,12 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
+#include "basic.h"
+#include "compiler.h"
 #include "errors.h"
 #include "getopt.h"
-#include "zx81.h"
+#include "memory.h"
+#include "parser.h"
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -35,25 +38,21 @@ int main(int argc, char* argv[]) {
 
 	if (argc != optind + 1)
 		exit_usage();
-	else {
-		string b81_file = argv[optind];
-		if (out_file.empty())
-			out_file = filesystem::path(b81_file).replace_extension(".p").generic_string();
 
-		ZX81basic basic;
-		ZX81parser parser(b81_file, basic);
-		parser.parse();
-		if (g_errors.get_count())
-			g_errors.exit_status();
+	string b81_file = argv[optind];
+	if (out_file.empty())
+		out_file = filesystem::path(b81_file).replace_extension(".p").generic_string();
 
-		ZX81vm vm;
-		ZX81compiler compiler(basic, vm);
-		compiler.compile();
-		if (g_errors.get_count())
-			g_errors.exit_status();
+	Basic basic;
+	basic.parse_b81_file(b81_file);
+	if (err_get_count())
+		exit_status();
 
-		vm.write_p_file(out_file);
-	}
+	compile(basic);
+	if (err_get_count())
+		exit_status();
 
-	g_errors.exit_status();
+	write_p_file(out_file);
+
+	exit_status();
 }

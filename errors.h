@@ -31,4 +31,12 @@ private:
 
 };
 
-extern Errors g_errors;
+void err_clear();
+void err_set_filename(const string& filename);
+void err_set_line_num(int line_num);
+string err_get_filename();
+int err_get_line_num();
+int err_get_count();
+void error(const string& message, const string& arg = "");
+void fatal_error(const string& message, const string& arg = "");
+void exit_status();

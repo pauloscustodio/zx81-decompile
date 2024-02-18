@@ -19,18 +19,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\assembler.h" />
+    <ClInclude Include="..\..\basic.h" />
+    <ClInclude Include="..\..\compiler.h" />
+    <ClInclude Include="..\..\consts.h" />
+    <ClInclude Include="..\..\decompiler.h" />
+    <ClInclude Include="..\..\disasm.h" />
+    <ClInclude Include="..\..\encode.h" />
     <ClInclude Include="..\..\errors.h" />
     <ClInclude Include="..\..\getopt.h" />
+    <ClInclude Include="..\..\memory.h" />
+    <ClInclude Include="..\..\parser.h" />
+    <ClInclude Include="..\..\scan.h" />
     <ClInclude Include="..\..\utils.h" />
     <ClInclude Include="..\..\zfloat.h" />
-    <ClInclude Include="..\..\zx81.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\assembler.cpp" />
+    <ClCompile Include="..\..\basic.cpp" />
+    <ClCompile Include="..\..\compiler.cpp" />
+    <ClCompile Include="..\..\decompiler.cpp" />
+    <ClCompile Include="..\..\encode.cpp" />
     <ClCompile Include="..\..\errors.cpp" />
     <ClCompile Include="..\..\getopt.c" />
+    <ClCompile Include="..\..\memory.cpp" />
+    <ClCompile Include="..\..\parser.cpp" />
+    <ClCompile Include="..\..\scan.cpp" />
     <ClCompile Include="..\..\utils.cpp" />
     <ClCompile Include="..\..\zfloat.cpp" />
-    <ClCompile Include="..\..\zx81.cpp" />
+    <ClCompile Include="..\..\disasm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\consts.def" />
