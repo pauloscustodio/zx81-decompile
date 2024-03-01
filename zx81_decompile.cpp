@@ -20,12 +20,16 @@ static void exit_usage() {
 
 int main(int argc, char* argv[]) {
 	string out_file;
+	string ctl_file;
 
 	while (true) {
-		int c = getopt(argc, argv, const_cast<char*>("do:"));
+		int c = getopt(argc, argv, const_cast<char*>("do:c:"));
 		if (c == -1)
 			break;
 		switch (c) {
+		case 'c':
+			ctl_file = optarg;
+			break;
 		case 'o':
 			out_file = optarg;
 			break;
@@ -49,7 +53,10 @@ int main(int argc, char* argv[]) {
 		exit_status();
 
 	Basic basic;
-	decompile(basic);
+	if (ctl_file.empty())
+		decompile(basic);
+	else
+		decompile(basic, ctl_file);
 	if (err_get_count())
 		exit_status();
 

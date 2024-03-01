@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\assembler.h" />
     <ClInclude Include="..\..\basic.h" />
     <ClInclude Include="..\..\compiler.h" />
     <ClInclude Include="..\..\consts.h" />
@@ -35,7 +34,6 @@
     <ClInclude Include="..\..\zfloat.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\assembler.cpp" />
     <ClCompile Include="..\..\basic.cpp" />
     <ClCompile Include="..\..\compiler.cpp" />
     <ClCompile Include="..\..\decompiler.cpp" />

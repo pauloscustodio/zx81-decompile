@@ -7,6 +7,7 @@
 #include "disasm.h"
 #include "encode.h"
 #include "errors.h"
+#include "getopt.h"
 #include "memory.h"
 #include "utils.h"
 #include <array>
@@ -120,12 +121,13 @@ string Opcode::to_string() {
 	}
 
 	// comment
-	oss << setw(0) << "; ";
+	oss << setw(0);
 	string comment = g_disasm_code.get_comment(addr);
-	if (comment.empty())
-		oss << "[$" << fmt_hex(addr, 4) << "]";
-	else
-		oss << comment;
+	if (!comment.empty())
+		oss << "; " << comment;
+	else if ((optflags & FLAG_DEBUG) == FLAG_DEBUG)
+		oss << "; [$" << fmt_hex(addr, 4) << "]";
+		
 	oss << endl;
 
 	return oss.str();
@@ -333,8 +335,8 @@ void DisasmCode::set_defb(int addr, int count) {
 		for (int p = addr; p < addr + 1 * count; p++)
 			opc->values.push_back(peek(p));
 		for (int p = addr + 1; p < addr + 1 * count; p++) {
-			opc = get(addr);
-			*opc = Opcode(Opcode::Type::DefbData, addr & 0xffff, 1);
+			opc = get(p);
+			*opc = Opcode(Opcode::Type::DefbData, p & 0xffff, 1);
 		}
 	}
 }
@@ -346,8 +348,8 @@ void DisasmCode::set_defw(int addr, int count) {
 		for (int p = addr; p < addr + 2 * count; p += 2)
 			opc->values.push_back(dpeek(p));
 		for (int p = addr + 1; p < addr + 2 * count; p++) {
-			opc = get(addr);
-			*opc = Opcode(Opcode::Type::DefwData, addr & 0xffff, 1);
+			opc = get(p);
+			*opc = Opcode(Opcode::Type::DefwData, p & 0xffff, 1);
 		}
 	}
 }
@@ -359,8 +361,8 @@ void DisasmCode::set_defm(int addr, int len) {
 		for (int p = addr; p < addr + len; p++)
 			opc->str += decode_zx81(peek(p));
 		for (int p = addr + 1; p < addr + len; p++) {
-			opc = get(addr);
-			*opc = Opcode(Opcode::Type::DefmData, addr & 0xffff, 1);
+			opc = get(p);
+			*opc = Opcode(Opcode::Type::DefmData, p & 0xffff, 1);
 		}
 	}
 }
@@ -401,7 +403,7 @@ void DisasmCode::add_header(int addr, const string& line) {
 	if (header == nullptr)
 		header = headers[addr] = new string(line);
 	else
-		*header += string("\n") + line;
+		*header += line;
 }
 
 void DisasmCode::set_comment(int addr, const string& text) {

@@ -10,15 +10,9 @@
 #include <string>
 using namespace std;
 
-struct Parser {
-	void parse_b81_file(Basic& basic, const string& filename);
-
-private:
-	Basic* basic{ nullptr };
-	bool in_asm{ false };
+struct Scanner {
 	const char* p{ nullptr };
 
-	// scanner
 	void skip_spaces();
 	bool at_end(char comment_char = '\0');
 	bool parse_integer(int& value);
@@ -27,6 +21,14 @@ private:
 	bool parse_ident(string& ident);
 	bool match(const string& compare);
 	int match_one_of(int not_found_result, vector<pair<string, int>> compare_list);
+};
+
+struct Parser : public Scanner {
+	void parse_b81_file(Basic& basic, const string& filename);
+
+private:
+	Basic* basic{ nullptr };
+	bool in_asm{ false };
 
 	// basic parser
 	bool parse_ref(const string& prefix, string& ident);

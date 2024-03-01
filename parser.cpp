@@ -15,51 +15,12 @@ using namespace std;
 
 static Parser g_parser;
 
-void Parser::parse_b81_file(Basic& basic_, const string& filename) {
-	basic = &basic_;
-	basic->clear();
-	in_asm = false;
-
-	ifstream ifs(filename);
-	if (!ifs.is_open()) {
-		perror(filename.c_str());
-		fatal_error("read file", filename);
-	}
-
-	err_set_filename(filename);
-
-	string text;
-	int line_num = 0;
-	while (getline(ifs, text)) {
-		line_num++;
-		err_set_line_num(line_num);
-
-		while (!text.empty() && text.back() == '\\') {
-			text.pop_back();
-			text.push_back(' ');
-			string cont;
-			if (!getline(ifs, cont))
-				break;
-
-			line_num++;
-			err_set_line_num(line_num);
-			text += cont;
-		}
-
-		p = text.c_str();
-		parse_line();
-	}
-
-	err_clear();
-	basic = nullptr;
-}
-
-void Parser::skip_spaces() {
+void Scanner::skip_spaces() {
 	while (*p != '\0' && isspace(*p))
 		p++;
 }
 
-bool Parser::at_end(char comment_char) {
+bool Scanner::at_end(char comment_char) {
 	skip_spaces();
 	if (*p == '\0' || *p == comment_char)
 		return true;
@@ -67,7 +28,7 @@ bool Parser::at_end(char comment_char) {
 		return false;
 }
 
-bool Parser::parse_integer(int& value) {
+bool Scanner::parse_integer(int& value) {
 	skip_spaces();
 	const char* p0 = p;
 
@@ -108,7 +69,7 @@ bool Parser::parse_integer(int& value) {
 	return false;
 }
 
-bool Parser::parse_number(double& value, string& value_text) {
+bool Scanner::parse_number(double& value, string& value_text) {
 	skip_spaces();
 	const char* p0 = p;
 
@@ -153,7 +114,7 @@ bool Parser::parse_number(double& value, string& value_text) {
 	return true;
 }
 
-bool Parser::parse_string(string& str) {
+bool Scanner::parse_string(string& str) {
 	string out;
 	skip_spaces();
 	const char* p0 = p;
@@ -180,7 +141,7 @@ bool Parser::parse_string(string& str) {
 	}
 }
 
-bool Parser::parse_ident(string& ident) {
+bool Scanner::parse_ident(string& ident) {
 	skip_spaces();
 	if (!isalpha(*p) && *p != '_')
 		return false;
@@ -189,7 +150,7 @@ bool Parser::parse_ident(string& ident) {
 	return true;
 }
 
-bool Parser::match(const string& compare) {
+bool Scanner::match(const string& compare) {
 	skip_spaces();
 	for (size_t i = 0; i < compare.size(); i++) {
 		if (p[i] == '\0')
@@ -201,13 +162,52 @@ bool Parser::match(const string& compare) {
 	return true;
 }
 
-int Parser::match_one_of(int not_found_result, vector<pair<string, int>> compare_list) {
+int Scanner::match_one_of(int not_found_result, vector<pair<string, int>> compare_list) {
 	skip_spaces();
 	for (auto& compare : compare_list) {
 		if (match(compare.first))
 			return compare.second;
 	}
 	return not_found_result;
+}
+
+void Parser::parse_b81_file(Basic& basic_, const string& filename) {
+	basic = &basic_;
+	basic->clear();
+	in_asm = false;
+
+	ifstream ifs(filename);
+	if (!ifs.is_open()) {
+		perror(filename.c_str());
+		fatal_error("read file", filename);
+	}
+
+	err_set_filename(filename);
+
+	string text;
+	int line_num = 0;
+	while (getline(ifs, text)) {
+		line_num++;
+		err_set_line_num(line_num);
+
+		while (!text.empty() && text.back() == '\\') {
+			text.pop_back();
+			text.push_back(' ');
+			string cont;
+			if (!getline(ifs, cont))
+				break;
+
+			line_num++;
+			err_set_line_num(line_num);
+			text += cont;
+		}
+
+		p = text.c_str();
+		parse_line();
+	}
+
+	err_clear();
+	basic = nullptr;
 }
 
 bool Parser::parse_ref(const string& prefix, string& ident) {

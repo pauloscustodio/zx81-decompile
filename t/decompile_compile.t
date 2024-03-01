@@ -14,7 +14,8 @@ my @progs = qw(
 );
 
 for my $prog (@progs) {
-	run_ok("zx81_decompile -o t/$prog.b81 t/$prog.p");
+	my $ctl_opt = (-f "t/$prog.ctl") ? "-c t/$prog.ctl" : "";
+	run_ok("zx81_decompile -o t/$prog.b81 $ctl_opt t/$prog.p");
 	run_ok("dos2unix -q t/$prog.b81");
 	run_ok("zx81_compile -o $prog.p t/$prog.b81");
 	eq_or_dump_diff(
