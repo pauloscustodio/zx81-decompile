@@ -2,7 +2,7 @@
 ; CPU::Z80::Disassembler control file
 ;------------------------------------------------------------------------------
 
-4009 :F ../t/GrimmsFairyTrails.p
+4009 :F ../../t/GrimmsFairyTrails.p
 400C := D_FILE
 400E := DF_CC
 

@@ -6,15 +6,15 @@
 
 all: GrimmsFairyTrails.p GrimmsFairyTrails2.p
 
-GrimmsFairyTrails.p : GrimmsFairyTrails.bas ../make_p.pl \
-					../t/GrimmsFairyTrails.p GrimmsFairyTrails.ctl disassemble.pl \
+GrimmsFairyTrails.p : GrimmsFairyTrails.bas ../../make_p.pl \
+					../../t/GrimmsFairyTrails.p GrimmsFairyTrails.ctl disassemble.pl \
 					merge_asm.pl Makefile
 	perl disassemble.pl
 	perl merge_asm.pl GrimmsFairyTrails.bas GrimmsFairyTrails.asm
-	perl ../make_p.pl GrimmsFairyTrails.bas
+	perl ../../make_p.pl GrimmsFairyTrails.bas
 
-GrimmsFairyTrails2.p : GrimmsFairyTrails2.bas ../make_p.pl Makefile
-	perl ../make_p.pl GrimmsFairyTrails2.bas
+GrimmsFairyTrails2.p : GrimmsFairyTrails2.bas ../../make_p.pl Makefile
+	perl ../../make_p.pl GrimmsFairyTrails2.bas
 
 clean:
 	$(RM) GrimmsFairyTrails.b81 GrimmsFairyTrails.asm GrimmsFairyTrails.map GrimmsFairyTrails.bin GrimmsFairyTrails.sym

@@ -50,13 +50,13 @@ $(eval $(call MAKE_EXE,$(DECOMPILE),$(DECOMPILE).o $(COMMON_OBJS)))
 $(eval $(call MAKE_EXE,$(COMPILE),$(COMPILE).o $(COMMON_OBJS)))
 
 all::
-	$(MAKE) -C FortressOfZorlac
-	$(MAKE) -C GrimmsFairyTrails
+	$(MAKE) -C tapes/FortressOfZorlac
+	$(MAKE) -C tapes/GrimmsFairyTrails
 	
 clean::
 	$(RM) $(ALL_OBJS) $(DEPENDS)
-	$(MAKE) -C FortressOfZorlac clean
-	$(MAKE) -C GrimmsFairyTrails clean
+	$(MAKE) -C tapes/FortressOfZorlac clean
+	$(MAKE) -C tapes/GrimmsFairyTrails clean
 
 #------------------------------------------------------------------------------
 

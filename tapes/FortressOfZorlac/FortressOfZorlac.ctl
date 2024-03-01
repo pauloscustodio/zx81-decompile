@@ -2,7 +2,7 @@
 ; CPU::Z80::Disassembler control file
 ;------------------------------------------------------------------------------
 
-4009 :F ../t/FortressOfZorlac.p
+4009 :F ../../t/FortressOfZorlac.p
 
 ; ROM routines
 02BB := KEYBOARD
