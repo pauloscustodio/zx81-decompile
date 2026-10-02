@@ -1,0 +1,845 @@
+z80ops.asm:
+     1                          org $4009
+     2  0000  00000009460a4622  defb $00, $00, $00, $09, $46, $0a, $46, $22, $49, $00, $00, $23, $49, $00, $00, $00, $00, $23, $49, $23, $49, $00, $5d, $40, $00, $02, $00, $00, $ff, $ff, $ff, $37, $09, $46, $00, $00, $00, $00, $00, $00, $00, $00, $00, $ff, $ff, $00, $00, $40, $21, $19, $40, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $76, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+              4900002349000000  
+              0023492349005d40  
+              00020000ffffff37  
+              0946000000000000  
+              000000ffff000040  
+              2119400000000000  
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              0000007600000000  
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              00000000          
+     3  0074  00008805ea        defb $00, $00, $88, $05, $ea
+     4                          
+     5                          IND:	EQU	5
+     6                          M:	EQU	10H
+     7                          N:	EQU	20H
+     8                          DIS:	EQU	30H
+     9                          
+    10                          Z80OPS::
+    11  0079  8e                	ADC	A,(HL)
+    12  007a  dd8e05            	ADC	A,(IX+IND)
+    13  007d  fd8e05            	ADC	A,(IY+IND)
+    14  0080  8f                	ADC	A,A
+    15  0081  88                	ADC	A,B
+    16  0082  89                	ADC	A,C
+    17  0083  8a                	ADC	A,D
+    18  0084  8b                	ADC	A,E
+    19  0085  8c                	ADC	A,H
+    20  0086  8d                	ADC	A,L
+    21  0087  ce20              	ADC	A,N
+    22  0089  ed4a              	ADC	HL,BC
+    23  008b  ed5a              	ADC	HL,DE
+    24  008d  ed6a              	ADC	HL,HL
+    25  008f  ed7a              	ADC	HL,SP
+    26  0091  86                	ADD	A,(HL)
+    27  0092  dd8605            	ADD	A,(IX+IND)
+    28  0095  fd8605            	ADD	A,(IY+IND)
+    29  0098  87                	ADD	A,A
+    30  0099  80                	ADD	A,B
+    31  009a  81                	ADD	A,C
+    32  009b  82                	ADD	A,D
+    33  009c  83                	ADD	A,E
+    34  009d  84                	ADD	A,H
+    35  009e  85                	ADD	A,L
+    36  009f  c620              	ADD	A,N
+    37  00a1  09                	ADD	HL,BC
+    38  00a2  19                	ADD	HL,DE
+    39  00a3  29                	ADD	HL,HL
+    40  00a4  39                	ADD	HL,SP
+    41  00a5  dd09              	ADD	IX,BC
+    42  00a7  dd19              	ADD	IX,DE
+    43  00a9  dd29              	ADD	IX,IX
+    44  00ab  dd39              	ADD	IX,SP
+    45  00ad  fd09              	ADD	IY,BC
+    46  00af  fd19              	ADD	IY,DE
+    47  00b1  fd29              	ADD	IY,IY
+    48  00b3  fd39              	ADD	IY,SP
+    49  00b5  a6                	AND	(HL)
+    50  00b6  dda605            	AND	(IX+IND)
+    51  00b9  fda605            	AND	(IY+IND)
+    52  00bc  a7                	AND	A
+    53  00bd  a0                	AND	B
+    54  00be  a1                	AND	C
+    55  00bf  a2                	AND	D
+    56  00c0  a3                	AND	E
+    57  00c1  a4                	AND	H
+    58  00c2  a5                	AND	L
+    59  00c3  e620              	AND	N
+    60  00c5  cb46              	BIT	0,(HL)
+    61  00c7  ddcb0546          	BIT	0,(IX+IND)
+    62  00cb  fdcb0546          	BIT	0,(IY+IND)
+    63  00cf  cb47              	BIT	0,A
+    64  00d1  cb40              	BIT	0,B
+    65  00d3  cb41              	BIT	0,C
+    66  00d5  cb42              	BIT	0,D
+    67  00d7  cb43              	BIT	0,E
+    68  00d9  cb44              	BIT	0,H
+    69  00db  cb45              	BIT	0,L
+    70  00dd  cb4e              	BIT	1,(HL)
+    71  00df  ddcb054e          	BIT	1,(IX+IND)
+    72  00e3  fdcb054e          	BIT	1,(IY+IND)
+    73  00e7  cb4f              	BIT	1,A
+    74  00e9  cb48              	BIT	1,B
+    75  00eb  cb49              	BIT	1,C
+    76  00ed  cb4a              	BIT	1,D
+    77  00ef  cb4b              	BIT	1,E
+    78  00f1  cb4c              	BIT	1,H
+    79  00f3  cb4d              	BIT	1,L
+    80  00f5  cb56              	BIT	2,(HL)
+    81  00f7  ddcb0556          	BIT	2,(IX+IND)
+    82  00fb  fdcb0556          	BIT	2,(IY+IND)
+    83  00ff  cb57              	BIT	2,A
+    84  0101  cb50              	BIT	2,B
+    85  0103  cb51              	BIT	2,C
+    86  0105  cb52              	BIT	2,D
+    87  0107  cb53              	BIT	2,E
+    88  0109  cb54              	BIT	2,H
+    89  010b  cb55              	BIT	2,L
+    90  010d  cb5e              	BIT	3,(HL)
+    91  010f  ddcb055e          	BIT	3,(IX+IND)
+    92  0113  fdcb055e          	BIT	3,(IY+IND)
+    93  0117  cb5f              	BIT	3,A
+    94  0119  cb58              	BIT	3,B
+    95  011b  cb59              	BIT	3,C
+    96  011d  cb5a              	BIT	3,D
+    97  011f  cb5b              	BIT	3,E
+    98  0121  cb5c              	BIT	3,H
+    99  0123  cb5d              	BIT	3,L
+   100  0125  cb66              	BIT	4,(HL)
+   101  0127  ddcb0566          	BIT	4,(IX+IND)
+   102  012b  fdcb0566          	BIT	4,(IY+IND)
+   103  012f  cb67              	BIT	4,A
+   104  0131  cb60              	BIT	4,B
+   105  0133  cb61              	BIT	4,C
+   106  0135  cb62              	BIT	4,D
+   107  0137  cb63              	BIT	4,E
+   108  0139  cb64              	BIT	4,H
+   109  013b  cb65              	BIT	4,L
+   110  013d  cb6e              	BIT	5,(HL)
+   111  013f  ddcb056e          	BIT	5,(IX+IND)
+   112  0143  fdcb056e          	BIT	5,(IY+IND)
+   113  0147  cb6f              	BIT	5,A
+   114  0149  cb68              	BIT	5,B
+   115  014b  cb69              	BIT	5,C
+   116  014d  cb6a              	BIT	5,D
+   117  014f  cb6b              	BIT	5,E
+   118  0151  cb6c              	BIT	5,H
+   119  0153  cb6d              	BIT	5,L
+   120  0155  cb76              	BIT	6,(HL)
+   121  0157  ddcb0576          	BIT	6,(IX+IND)
+   122  015b  fdcb0576          	BIT	6,(IY+IND)
+   123  015f  cb77              	BIT	6,A
+   124  0161  cb70              	BIT	6,B
+   125  0163  cb71              	BIT	6,C
+   126  0165  cb72              	BIT	6,D
+   127  0167  cb73              	BIT	6,E
+   128  0169  cb74              	BIT	6,H
+   129  016b  cb75              	BIT	6,L
+   130  016d  cb7e              	BIT	7,(HL)
+   131  016f  ddcb057e          	BIT	7,(IX+IND)
+   132  0173  fdcb057e          	BIT	7,(IY+IND)
+   133  0177  cb7f              	BIT	7,A
+   134  0179  cb78              	BIT	7,B
+   135  017b  cb79              	BIT	7,C
+   136  017d  cb7a              	BIT	7,D
+   137  017f  cb7b              	BIT	7,E
+   138  0181  cb7c              	BIT	7,H
+   139  0183  cb7d              	BIT	7,L
+   140  0185  dcfd05            	CALL	C,NN
+   141  0188  fcfd05            	CALL	M,NN
+   142  018b  d4fd05            	CALL	NC,NN
+   143  018e  cdfd05            	CALL	NN
+   144  0191  c4fd05            	CALL	NZ,NN
+   145  0194  f4fd05            	CALL	P,NN
+   146  0197  ecfd05            	CALL	PE,NN
+   147  019a  e4fd05            	CALL	PO,NN
+   148  019d  ccfd05            	CALL	Z,NN
+   149  01a0  3f                	CCF
+   150  01a1  be                	CP	(HL)
+   151  01a2  ddbe05            	CP	(IX+IND)
+   152  01a5  fdbe05            	CP	(IY+IND)
+   153  01a8  bf                	CP	A
+   154  01a9  b8                	CP	B
+   155  01aa  b9                	CP	C
+   156  01ab  ba                	CP	D
+   157  01ac  bb                	CP	E
+   158  01ad  bc                	CP	H
+   159  01ae  bd                	CP	L
+   160  01af  fe20              	CP	N
+   161  01b1  eda9              	CPD
+   162  01b3  edb9              	CPDR
+   163  01b5  eda1              	CPI
+   164  01b7  edb1              	CPIR
+   165  01b9  2f                	CPL
+   166  01ba  27                	DAA
+   167  01bb  35                	DEC	(HL)
+   168  01bc  dd3505            	DEC	(IX+IND)
+   169  01bf  fd3505            	DEC	(IY+IND)
+   170  01c2  3d                	DEC	A
+   171  01c3  05                	DEC	B
+   172  01c4  0b                	DEC	BC
+   173  01c5  0d                	DEC	C
+   174  01c6  15                	DEC	D
+   175  01c7  1b                	DEC	DE
+   176  01c8  1d                	DEC	E
+   177  01c9  25                	DEC	H
+   178  01ca  2b                	DEC	HL
+   179  01cb  dd2b              	DEC	IX
+   180  01cd  fd2b              	DEC	IY
+   181  01cf  2d                	DEC	L
+   182  01d0  3b                	DEC	SP
+   183  01d1  f3                	DI
+   184  01d2  102e              	DJNZ	$+DIS
+   185  01d4  fb                	EI
+   186  01d5  e3                	EX	(SP),HL
+   187  01d6  dde3              	EX	(SP),IX
+   188  01d8  fde3              	EX	(SP),IY
+   189  01da  08                	EX	AF,AF'
+   190  01db  eb                	EX	DE,HL
+   191  01dc  d9                	EXX
+   192  01dd  76                	HALT
+   193  01de  ed46              	IM	0
+   194  01e0  ed56              	IM	1
+   195  01e2  ed5e              	IM	2
+   196  01e4  ed78              	IN	A,(C)
+   197  01e6  db20              	IN	A,(N)
+   198  01e8  ed40              	IN	B,(C)
+   199  01ea  ed48              	IN	C,(C)
+   200  01ec  ed50              	IN	D,(C)
+   201  01ee  ed58              	IN	E,(C)
+   202  01f0  ed60              	IN	H,(C)
+   203  01f2  ed68              	IN	L,(C)
+   204  01f4  34                	INC	(HL)
+   205  01f5  dd3405            	INC	(IX+IND)
+   206  01f8  fd3405            	INC	(IY+IND)
+   207  01fb  3c                	INC	A
+   208  01fc  04                	INC	B
+   209  01fd  03                	INC	BC
+   210  01fe  0c                	INC	C
+   211  01ff  14                	INC	D
+   212  0200  13                	INC	DE
+   213  0201  1c                	INC	E
+   214  0202  24                	INC	H
+   215  0203  23                	INC	HL
+   216  0204  dd23              	INC	IX
+   217  0206  fd23              	INC	IY
+   218  0208  2c                	INC	L
+   219  0209  33                	INC	SP
+   220  020a  edaa              	IND
+   221  020c  edba              	INDR
+   222  020e  eda2              	INI
+   223  0210  edb2              	INIR
+   224  0212  e9                	JP	(HL)
+   225  0213  dde9              	JP	(IX)
+   226  0215  fde9              	JP	(IY)
+   227  0217  dafd05            	JP	C,NN
+   228  021a  fafd05            	JP	M,NN
+   229  021d  d2fd05            	JP	NC,NN
+   230  0220  c3fd05            	JP	NN
+   231  0223  c2fd05            	JP	NZ,NN
+   232  0226  f2fd05            	JP	P,NN
+   233  0229  eafd05            	JP	PE,NN
+   234  022c  e2fd05            	JP	PO,NN
+   235  022f  cafd05            	JP	Z,NN
+   236  0232  382e              	JR	C,$+DIS
+   237  0234  182e              	JR	$+DIS
+   238  0236  302e              	JR	NC,$+DIS
+   239  0238  202e              	JR	NZ,$+DIS
+   240  023a  282e              	JR	Z,$+DIS
+   241  023c  02                	LD	(BC),A
+   242  023d  12                	LD	(DE),A
+   243  023e  77                	LD	(HL),A
+   244  023f  70                	LD	(HL),B
+   245  0240  71                	LD	(HL),C
+   246  0241  72                	LD	(HL),D
+   247  0242  73                	LD	(HL),E
+   248  0243  74                	LD	(HL),H
+   249  0244  75                	LD	(HL),L
+   250  0245  3620              	LD	(HL),N
+   251  0247  dd7705            	LD	(IX+IND),A
+   252  024a  dd7005            	LD	(IX+IND),B
+   253  024d  dd7105            	LD	(IX+IND),C
+   254  0250  dd7205            	LD	(IX+IND),D
+   255  0253  dd7305            	LD	(IX+IND),E
+   256  0256  dd7405            	LD	(IX+IND),H
+   257  0259  dd7505            	LD	(IX+IND),L
+   258  025c  dd360520          	LD	(IX+IND),N
+   259  0260  fd7705            	LD	(IY+IND),A
+   260  0263  fd7005            	LD	(IY+IND),B
+   261  0266  fd7105            	LD	(IY+IND),C
+   262  0269  fd7205            	LD	(IY+IND),D
+   263  026c  fd7305            	LD	(IY+IND),E
+   264  026f  fd7405            	LD	(IY+IND),H
+   265  0272  fd7505            	LD	(IY+IND),L
+   266  0275  fd360520          	LD	(IY+IND),N
+   267  0279  32fd05            	LD	(NN),A
+   268  027c  ed43fd05          	LD	(NN),BC
+   269  0280  ed53fd05          	LD	(NN),DE
+   270  0284  22fd05            	LD	(NN),HL
+   271  0287  dd22fd05          	LD	(NN),IX
+   272  028b  fd22fd05          	LD	(NN),IY
+   273  028f  ed73fd05          	LD	(NN),SP
+   274  0293  0a                	LD	A,(BC)
+   275  0294  1a                	LD	A,(DE)
+   276  0295  7e                	LD	A,(HL)
+   277  0296  dd7e05            	LD	A,(IX+IND)
+   278  0299  fd7e05            	LD	A,(IY+IND)
+   279  029c  3afd05            	LD	A,(NN)
+   280  029f  7f                	LD	A,A
+   281  02a0  78                	LD	A,B
+   282  02a1  79                	LD	A,C
+   283  02a2  7a                	LD	A,D
+   284  02a3  7b                	LD	A,E
+   285  02a4  7c                	LD	A,H
+   286  02a5  ed57              	LD	A,I
+   287  02a7  7d                	LD	A,L
+   288  02a8  3e20              	LD	A,N
+   289  02aa  46                	LD	B,(HL)
+   290  02ab  dd4605            	LD	B,(IX+IND)
+   291  02ae  fd4605            	LD	B,(IY+IND)
+   292  02b1  47                	LD	B,A
+   293  02b2  40                	LD	B,B
+   294  02b3  41                	LD	B,C
+   295  02b4  42                	LD	B,D
+   296  02b5  43                	LD	B,E
+   297  02b6  44                	LD	B,H
+   298  02b7  45                	LD	B,L
+   299  02b8  0620              	LD	B,N
+   300  02ba  ed4bfd05          	LD	BC,(NN)
+   301  02be  01fd05            	LD	BC,NN
+   302  02c1  4e                	LD	C,(HL)
+   303  02c2  dd4e05            	LD	C,(IX+IND)
+   304  02c5  fd4e05            	LD	C,(IY+IND)
+   305  02c8  4f                	LD	C,A
+   306  02c9  48                	LD	C,B
+   307  02ca  49                	LD	C,C
+   308  02cb  4a                	LD	C,D
+   309  02cc  4b                	LD	C,E
+   310  02cd  4c                	LD	C,H
+   311  02ce  4d                	LD	C,L
+   312  02cf  0e20              	LD	C,N
+   313  02d1  56                	LD	D,(HL)
+   314  02d2  dd5605            	LD	D,(IX+IND)
+   315  02d5  fd5605            	LD	D,(IY+IND)
+   316  02d8  57                	LD	D,A
+   317  02d9  50                	LD	D,B
+   318  02da  51                	LD	D,C
+   319  02db  52                	LD	D,D
+   320  02dc  53                	LD	D,E
+   321  02dd  54                	LD	D,H
+   322  02de  55                	LD	D,L
+   323  02df  1620              	LD	D,N
+   324  02e1  ed5bfd05          	LD	DE,(NN)
+   325  02e5  11fd05            	LD	DE,NN
+   326  02e8  5e                	LD	E,(HL)
+   327  02e9  dd5e05            	LD	E,(IX+IND)
+   328  02ec  fd5e05            	LD	E,(IY+IND)
+   329  02ef  5f                	LD	E,A
+   330  02f0  58                	LD	E,B
+   331  02f1  59                	LD	E,C
+   332  02f2  5a                	LD	E,D
+   333  02f3  5b                	LD	E,E
+   334  02f4  5c                	LD	E,H
+   335  02f5  5d                	LD	E,L
+   336  02f6  1e20              	LD	E,N
+   337  02f8  66                	LD	H,(HL)
+   338  02f9  dd6605            	LD	H,(IX+IND)
+   339  02fc  fd6605            	LD	H,(IY+IND)
+   340  02ff  67                	LD	H,A
+   341  0300  60                	LD	H,B
+   342  0301  61                	LD	H,C
+   343  0302  62                	LD	H,D
+   344  0303  63                	LD	H,E
+   345  0304  64                	LD	H,H
+   346  0305  65                	LD	H,L
+   347  0306  2620              	LD	H,N
+   348  0308  2afd05            	LD	HL,(NN)
+   349  030b  21fd05            	LD	HL,NN
+   350  030e  ed47              	LD	I,A
+   351  0310  dd2afd05          	LD	IX,(NN)
+   352  0314  dd21fd05          	LD	IX,NN
+   353  0318  fd2afd05          	LD	IY,(NN)
+   354  031c  fd21fd05          	LD	IY,NN
+   355  0320  6e                	LD	L,(HL)
+   356  0321  dd6e05            	LD	L,(IX+IND)
+   357  0324  fd6e05            	LD	L,(IY+IND)
+   358  0327  6f                	LD	L,A
+   359  0328  68                	LD	L,B
+   360  0329  69                	LD	L,C
+   361  032a  6a                	LD	L,D
+   362  032b  6b                	LD	L,E
+   363  032c  6c                	LD	L,H
+   364  032d  6d                	LD	L,L
+   365  032e  2e20              	LD	L,N
+   366  0330  ed7bfd05          	LD	SP,(NN)
+   367  0334  f9                	LD	SP,HL
+   368  0335  ddf9              	LD	SP,IX
+   369  0337  fdf9              	LD	SP,IY
+   370  0339  31fd05            	LD	SP,NN
+   371  033c  eda8              	LDD
+   372  033e  edb8              	LDDR
+   373  0340  eda0              	LDI
+   374  0342  edb0              	LDIR
+   375  0344  ed44              	NEG
+   376  0346  00                	NOP
+   377  0347  b6                	OR	(HL)
+   378  0348  ddb605            	OR	(IX+IND)
+   379  034b  fdb605            	OR	(IY+IND)
+   380  034e  b7                	OR	A
+   381  034f  b0                	OR	B
+   382  0350  b1                	OR	C
+   383  0351  b2                	OR	D
+   384  0352  b3                	OR	E
+   385  0353  b4                	OR	H
+   386  0354  b5                	OR	L
+   387  0355  f620              	OR	N
+   388  0357  edbb              	OTDR
+   389  0359  edb3              	OTIR
+   390  035b  ed79              	OUT	(C),A
+   391  035d  ed41              	OUT	(C),B
+   392  035f  ed49              	OUT	(C),C
+   393  0361  ed51              	OUT	(C),D
+   394  0363  ed59              	OUT	(C),E
+   395  0365  ed61              	OUT	(C),H
+   396  0367  ed69              	OUT	(C),L
+   397  0369  d320              	OUT	(N),A
+   398  036b  edab              	OUTD
+   399  036d  eda3              	OUTI
+   400  036f  f1                	POP	AF
+   401  0370  c1                	POP	BC
+   402  0371  d1                	POP	DE
+   403  0372  e1                	POP	HL
+   404  0373  dde1              	POP	IX
+   405  0375  fde1              	POP	IY
+   406  0377  f5                	PUSH	AF
+   407  0378  c5                	PUSH	BC
+   408  0379  d5                	PUSH	DE
+   409  037a  e5                	PUSH	HL
+   410  037b  dde5              	PUSH	IX
+   411  037d  fde5              	PUSH	IY
+   412  037f  cb86              	RES	0,(HL)
+   413  0381  ddcb0586          	RES	0,(IX+IND)
+   414  0385  fdcb0586          	RES	0,(IY+IND)
+   415  0389  cb87              	RES	0,A
+   416  038b  cb80              	RES	0,B
+   417  038d  cb81              	RES	0,C
+   418  038f  cb82              	RES	0,D
+   419  0391  cb83              	RES	0,E
+   420  0393  cb84              	RES	0,H
+   421  0395  cb85              	RES	0,L
+   422  0397  cb8e              	RES	1,(HL)
+   423  0399  ddcb058e          	RES	1,(IX+IND)
+   424  039d  fdcb058e          	RES	1,(IY+IND)
+   425  03a1  cb8f              	RES	1,A
+   426  03a3  cb88              	RES	1,B
+   427  03a5  cb89              	RES	1,C
+   428  03a7  cb8a              	RES	1,D
+   429  03a9  cb8b              	RES	1,E
+   430  03ab  cb8c              	RES	1,H
+   431  03ad  cb8d              	RES	1,L
+   432  03af  cb96              	RES	2,(HL)
+   433  03b1  ddcb0596          	RES	2,(IX+IND)
+   434  03b5  fdcb0596          	RES	2,(IY+IND)
+   435  03b9  cb97              	RES	2,A
+   436  03bb  cb90              	RES	2,B
+   437  03bd  cb91              	RES	2,C
+   438  03bf  cb92              	RES	2,D
+   439  03c1  cb93              	RES	2,E
+   440  03c3  cb94              	RES	2,H
+   441  03c5  cb95              	RES	2,L
+   442  03c7  cb9e              	RES	3,(HL)
+   443  03c9  ddcb059e          	RES	3,(IX+IND)
+   444  03cd  fdcb059e          	RES	3,(IY+IND)
+   445  03d1  cb9f              	RES	3,A
+   446  03d3  cb98              	RES	3,B
+   447  03d5  cb99              	RES	3,C
+   448  03d7  cb9a              	RES	3,D
+   449  03d9  cb9b              	RES	3,E
+   450  03db  cb9c              	RES	3,H
+   451  03dd  cb9d              	RES	3,L
+   452  03df  cba6              	RES	4,(HL)
+   453  03e1  ddcb05a6          	RES	4,(IX+IND)
+   454  03e5  fdcb05a6          	RES	4,(IY+IND)
+   455  03e9  cba7              	RES	4,A
+   456  03eb  cba0              	RES	4,B
+   457  03ed  cba1              	RES	4,C
+   458  03ef  cba2              	RES	4,D
+   459  03f1  cba3              	RES	4,E
+   460  03f3  cba4              	RES	4,H
+   461  03f5  cba5              	RES	4,L
+   462  03f7  cbae              	RES	5,(HL)
+   463  03f9  ddcb05ae          	RES	5,(IX+IND)
+   464  03fd  fdcb05ae          	RES	5,(IY+IND)
+   465  0401  cbaf              	RES	5,A
+   466  0403  cba8              	RES	5,B
+   467  0405  cba9              	RES	5,C
+   468  0407  cbaa              	RES	5,D
+   469  0409  cbab              	RES	5,E
+   470  040b  cbac              	RES	5,H
+   471  040d  cbad              	RES	5,L
+   472  040f  cbb6              	RES	6,(HL)
+   473  0411  ddcb05b6          	RES	6,(IX+IND)
+   474  0415  fdcb05b6          	RES	6,(IY+IND)
+   475  0419  cbb7              	RES	6,A
+   476  041b  cbb0              	RES	6,B
+   477  041d  cbb1              	RES	6,C
+   478  041f  cbb2              	RES	6,D
+   479  0421  cbb3              	RES	6,E
+   480  0423  cbb4              	RES	6,H
+   481  0425  cbb5              	RES	6,L
+   482  0427  cbbe              	RES	7,(HL)
+   483  0429  ddcb05be          	RES	7,(IX+IND)
+   484  042d  fdcb05be          	RES	7,(IY+IND)
+   485  0431  cbbf              	RES	7,A
+   486  0433  cbb8              	RES	7,B
+   487  0435  cbb9              	RES	7,C
+   488  0437  cbba              	RES	7,D
+   489  0439  cbbb              	RES	7,E
+   490  043b  cbbc              	RES	7,H
+   491  043d  cbbd              	RES	7,L
+   492  043f  c9                	RET
+   493  0440  d8                	RET	C
+   494  0441  f8                	RET	M
+   495  0442  d0                	RET	NC
+   496  0443  c0                	RET	NZ
+   497  0444  f0                	RET	P
+   498  0445  e8                	RET	PE
+   499  0446  e0                	RET	PO
+   500  0447  c8                	RET	Z
+   501  0448  ed4d              	RETI
+   502  044a  ed45              	RETN
+   503  044c  cb16              	RL	(HL)
+   504  044e  ddcb0516          	RL	(IX+IND)
+   505  0452  fdcb0516          	RL	(IY+IND)
+   506  0456  cb17              	RL	A
+   507  0458  cb10              	RL	B
+   508  045a  cb11              	RL	C
+   509  045c  cb12              	RL	D
+   510  045e  cb13              	RL	E
+   511  0460  cb14              	RL	H
+   512  0462  cb15              	RL	L
+   513  0464  17                	RLA
+   514  0465  cb06              	RLC	(HL)
+   515  0467  ddcb0506          	RLC	(IX+IND)
+   516  046b  fdcb0506          	RLC	(IY+IND)
+   517  046f  cb07              	RLC	A
+   518  0471  cb00              	RLC	B
+   519  0473  cb01              	RLC	C
+   520  0475  cb02              	RLC	D
+   521  0477  cb03              	RLC	E
+   522  0479  cb04              	RLC	H
+   523  047b  cb05              	RLC	L
+   524  047d  07                	RLCA
+   525  047e  ed6f              	RLD
+   526  0480  cb1e              	RR	(HL)
+   527  0482  ddcb051e          	RR	(IX+IND)
+   528  0486  fdcb051e          	RR	(IY+IND)
+   529  048a  cb1f              	RR	A
+   530  048c  cb18              	RR	B
+   531  048e  cb19              	RR	C
+   532  0490  cb1a              	RR	D
+   533  0492  cb1b              	RR	E
+   534  0494  cb1c              	RR	H
+   535  0496  cb1d              	RR	L
+   536  0498  1f                	RRA
+   537  0499  cb0e              	RRC	(HL)
+   538  049b  ddcb050e          	RRC	(IX+IND)
+   539  049f  fdcb050e          	RRC	(IY+IND)
+   540  04a3  cb0f              	RRC	A
+   541  04a5  cb08              	RRC	B
+   542  04a7  cb09              	RRC	C
+   543  04a9  cb0a              	RRC	D
+   544  04ab  cb0b              	RRC	E
+   545  04ad  cb0c              	RRC	H
+   546  04af  cb0d              	RRC	L
+   547  04b1  0f                	RRCA
+   548  04b2  ed67              	RRD
+   549  04b4  c7                	RST	0
+   550  04b5  d7                	RST	10H
+   551  04b6  df                	RST	18H
+   552  04b7  e7                	RST	20H
+   553  04b8  ef                	RST	28H
+   554  04b9  f7                	RST	30H
+   555  04ba  ff                	RST	38H
+   556  04bb  cf                	RST	8
+   557  04bc  9e                	SBC	A,(HL)
+   558  04bd  dd9e05            	SBC	A,(IX+IND)
+   559  04c0  fd9e05            	SBC	A,(IY+IND)
+   560  04c3  9f                	SBC	A,A
+   561  04c4  98                	SBC	A,B
+   562  04c5  99                	SBC	A,C
+   563  04c6  9a                	SBC	A,D
+   564  04c7  9b                	SBC	A,E
+   565  04c8  9c                	SBC	A,H
+   566  04c9  9d                	SBC	A,L
+   567  04ca  de20              	SBC	A,N
+   568  04cc  ed42              	SBC	HL,BC
+   569  04ce  ed52              	SBC	HL,DE
+   570  04d0  ed62              	SBC	HL,HL
+   571  04d2  ed72              	SBC	HL,SP
+   572  04d4  37                	SCF
+   573  04d5  cbc6              	SET	0,(HL)
+   574  04d7  ddcb05c6          	SET	0,(IX+IND)
+   575  04db  fdcb05c6          	SET	0,(IY+IND)
+   576  04df  cbc7              	SET	0,A
+   577  04e1  cbc0              	SET	0,B
+   578  04e3  cbc1              	SET	0,C
+   579  04e5  cbc2              	SET	0,D
+   580  04e7  cbc3              	SET	0,E
+   581  04e9  cbc4              	SET	0,H
+   582  04eb  cbc5              	SET	0,L
+   583  04ed  cbce              	SET	1,(HL)
+   584  04ef  ddcb05ce          	SET	1,(IX+IND)
+   585  04f3  fdcb05ce          	SET	1,(IY+IND)
+   586  04f7  cbcf              	SET	1,A
+   587  04f9  cbc8              	SET	1,B
+   588  04fb  cbc9              	SET	1,C
+   589  04fd  cbca              	SET	1,D
+   590  04ff  cbcb              	SET	1,E
+   591  0501  cbcc              	SET	1,H
+   592  0503  cbcd              	SET	1,L
+   593  0505  cbd6              	SET	2,(HL)
+   594  0507  ddcb05d6          	SET	2,(IX+IND)
+   595  050b  fdcb05d6          	SET	2,(IY+IND)
+   596  050f  cbd7              	SET	2,A
+   597  0511  cbd0              	SET	2,B
+   598  0513  cbd1              	SET	2,C
+   599  0515  cbd2              	SET	2,D
+   600  0517  cbd3              	SET	2,E
+   601  0519  cbd4              	SET	2,H
+   602  051b  cbd5              	SET	2,L
+   603  051d  cbde              	SET	3,(HL)
+   604  051f  ddcb05de          	SET	3,(IX+IND)
+   605  0523  fdcb05de          	SET	3,(IY+IND)
+   606  0527  cbdf              	SET	3,A
+   607  0529  cbd8              	SET	3,B
+   608  052b  cbd9              	SET	3,C
+   609  052d  cbda              	SET	3,D
+   610  052f  cbdb              	SET	3,E
+   611  0531  cbdc              	SET	3,H
+   612  0533  cbdd              	SET	3,L
+   613  0535  cbe6              	SET	4,(HL)
+   614  0537  ddcb05e6          	SET	4,(IX+IND)
+   615  053b  fdcb05e6          	SET	4,(IY+IND)
+   616  053f  cbe7              	SET	4,A
+   617  0541  cbe0              	SET	4,B
+   618  0543  cbe1              	SET	4,C
+   619  0545  cbe2              	SET	4,D
+   620  0547  cbe3              	SET	4,E
+   621  0549  cbe4              	SET	4,H
+   622  054b  cbe5              	SET	4,L
+   623  054d  cbee              	SET	5,(HL)
+   624  054f  ddcb05ee          	SET	5,(IX+IND)
+   625  0553  fdcb05ee          	SET	5,(IY+IND)
+   626  0557  cbef              	SET	5,A
+   627  0559  cbe8              	SET	5,B
+   628  055b  cbe9              	SET	5,C
+   629  055d  cbea              	SET	5,D
+   630  055f  cbeb              	SET	5,E
+   631  0561  cbec              	SET	5,H
+   632  0563  cbed              	SET	5,L
+   633  0565  cbf6              	SET	6,(HL)
+   634  0567  ddcb05f6          	SET	6,(IX+IND)
+   635  056b  fdcb05f6          	SET	6,(IY+IND)
+   636  056f  cbf7              	SET	6,A
+   637  0571  cbf0              	SET	6,B
+   638  0573  cbf1              	SET	6,C
+   639  0575  cbf2              	SET	6,D
+   640  0577  cbf3              	SET	6,E
+   641  0579  cbf4              	SET	6,H
+   642  057b  cbf5              	SET	6,L
+   643  057d  cbfe              	SET	7,(HL)
+   644  057f  ddcb05fe          	SET	7,(IX+IND)
+   645  0583  fdcb05fe          	SET	7,(IY+IND)
+   646  0587  cbff              	SET	7,A
+   647  0589  cbf8              	SET	7,B
+   648  058b  cbf9              	SET	7,C
+   649  058d  cbfa              	SET	7,D
+   650  058f  cbfb              	SET	7,E
+   651  0591  cbfc              	SET	7,H
+   652  0593  cbfd              	SET	7,L
+   653  0595  cb26              	SLA	(HL)
+   654  0597  ddcb0526          	SLA	(IX+IND)
+   655  059b  fdcb0526          	SLA	(IY+IND)
+   656  059f  cb27              	SLA	A
+   657  05a1  cb20              	SLA	B
+   658  05a3  cb21              	SLA	C
+   659  05a5  cb22              	SLA	D
+   660  05a7  cb23              	SLA	E
+   661  05a9  cb24              	SLA	H
+   662  05ab  cb25              	SLA	L
+   663  05ad  cb2e              	SRA	(HL)
+   664  05af  ddcb052e          	SRA	(IX+IND)
+   665  05b3  fdcb052e          	SRA	(IY+IND)
+   666  05b7  cb2f              	SRA	A
+   667  05b9  cb28              	SRA	B
+   668  05bb  cb29              	SRA	C
+   669  05bd  cb2a              	SRA	D
+   670  05bf  cb2b              	SRA	E
+   671  05c1  cb2c              	SRA	H
+   672  05c3  cb2d              	SRA	L
+   673  05c5  cb3e              	SRL	(HL)
+   674  05c7  ddcb053e          	SRL	(IX+IND)
+   675  05cb  fdcb053e          	SRL	(IY+IND)
+   676  05cf  cb3f              	SRL	A
+   677  05d1  cb38              	SRL	B
+   678  05d3  cb39              	SRL	C
+   679  05d5  cb3a              	SRL	D
+   680  05d7  cb3b              	SRL	E
+   681  05d9  cb3c              	SRL	H
+   682  05db  cb3d              	SRL	L
+   683  05dd  96                	SUB	(HL)
+   684  05de  dd9605            	SUB	(IX+IND)
+   685  05e1  fd9605            	SUB	(IY+IND)
+   686  05e4  97                	SUB	A
+   687  05e5  90                	SUB	B
+   688  05e6  91                	SUB	C
+   689  05e7  92                	SUB	D
+   690  05e8  93                	SUB	E
+   691  05e9  94                	SUB	H
+   692  05ea  95                	SUB	L
+   693  05eb  d620              	SUB	N
+   694  05ed  ae                	XOR	(HL)
+   695  05ee  ddae05            	XOR	(IX+IND)
+   696  05f1  fdae05            	XOR	(IY+IND)
+   697  05f4  af                	XOR	A
+   698  05f5  a8                	XOR	B
+   699  05f6  a9                	XOR	C
+   700  05f7  aa                	XOR	D
+   701  05f8  ab                	XOR	E
+   702  05f9  ac                	XOR	H
+   703  05fa  ad                	XOR	L
+   704  05fb  ee20              	XOR	N
+   705                          
+   706  05fd  0000              NN::	DEFS	2
+   707  05ff  76                defb $76
+   708  0600  76                defb $76
+   709  0601  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   710  0622  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   711  0643  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   712  0664  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   713  0685  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   714  06a6  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   715  06c7  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   716  06e8  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   717  0709  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   718  072a  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   719  074b  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   720  076c  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   721  078d  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   722  07ae  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   723  07cf  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   724  07f0  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   725  0811  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   726  0832  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   727  0853  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   728  0874  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   729  0895  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   730  08b6  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   731  08d7  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   732  08f8  0000000000000000  defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76
+              0000000000000000  
+              0000000000000000  
+              0000000000000000  
+              76                
+   733  0919  80                defb $80
+   734                          

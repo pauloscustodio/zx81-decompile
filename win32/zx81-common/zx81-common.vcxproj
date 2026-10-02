@@ -19,36 +19,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\basic.h" />
-    <ClInclude Include="..\..\compiler.h" />
-    <ClInclude Include="..\..\consts.h" />
-    <ClInclude Include="..\..\decompiler.h" />
-    <ClInclude Include="..\..\disasm.h" />
-    <ClInclude Include="..\..\encode.h" />
-    <ClInclude Include="..\..\errors.h" />
-    <ClInclude Include="..\..\getopt.h" />
-    <ClInclude Include="..\..\memory.h" />
-    <ClInclude Include="..\..\parser.h" />
-    <ClInclude Include="..\..\scan.h" />
-    <ClInclude Include="..\..\utils.h" />
-    <ClInclude Include="..\..\zfloat.h" />
+    <ClInclude Include="..\..\common\basic.h" />
+    <ClInclude Include="..\..\common\consts.h" />
+    <ClInclude Include="..\..\common\errors.h" />
+    <ClInclude Include="..\..\common\getopt.h" />
+    <ClInclude Include="..\..\common\labels.h" />
+    <ClInclude Include="..\..\common\memory.h" />
+    <ClInclude Include="..\..\common\release_assert.h" />
+    <ClInclude Include="..\..\common\scan.h" />
+    <ClInclude Include="..\..\common\utils.h" />
+    <ClInclude Include="..\..\common\zx81float.h" />
+    <ClInclude Include="..\..\common\zx81encode.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\basic.cpp" />
-    <ClCompile Include="..\..\compiler.cpp" />
-    <ClCompile Include="..\..\decompiler.cpp" />
-    <ClCompile Include="..\..\encode.cpp" />
-    <ClCompile Include="..\..\errors.cpp" />
-    <ClCompile Include="..\..\getopt.c" />
-    <ClCompile Include="..\..\memory.cpp" />
-    <ClCompile Include="..\..\parser.cpp" />
-    <ClCompile Include="..\..\scan.cpp" />
-    <ClCompile Include="..\..\utils.cpp" />
-    <ClCompile Include="..\..\zfloat.cpp" />
-    <ClCompile Include="..\..\disasm.cpp" />
+    <ClCompile Include="..\..\common\basic.cpp" />
+    <ClCompile Include="..\..\common\errors.cpp" />
+    <ClCompile Include="..\..\common\getopt.cpp" />
+    <ClCompile Include="..\..\common\labels.cpp" />
+    <ClCompile Include="..\..\common\memory.cpp" />
+    <ClCompile Include="..\..\common\scan.cpp" />
+    <ClCompile Include="..\..\common\utils.cpp" />
+    <ClCompile Include="..\..\common\zx81float.cpp" />
+    <ClCompile Include="..\..\common\zx81encode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\consts.def" />
+    <None Include="..\..\common\consts.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -61,26 +56,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

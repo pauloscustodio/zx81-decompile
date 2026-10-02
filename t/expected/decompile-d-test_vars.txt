@@ -1,0 +1,132 @@
+# [0x44A7]
+#VARS A = 1
+# [0x44AD]
+#VARS ABC = 2
+# [0x44B5]
+#VARS A$ = "HELLO"
+# [0x44BD]
+#VARS M(2,2) = 2,3,3,4
+# [0x44D9]
+#VARS I = 3,2,1,111
+# [0x44EB]
+#VARS J = 3,2,1,121
+# [0x44FD]
+#VARS M$(2,2,4) = "1234","1234","1234","1234"
+# [0x4517] = $0x80
+
+# [0x407D]
+     10 LET A=1
+# [0x408C]
+     20 LET ABC=2
+# [0x409D]
+     30 LET A$="HELLO"
+# [0x40AD]
+     40 DIM M(2,2)
+# [0x40C5]
+     50 FOR I=1 TO 2
+# [0x40DC]
+     60 FOR J=1 TO 2
+# [0x40F3]
+     70 LET M(I,J)=I+J
+# [0x4103]
+     80 NEXT J
+# [0x410A]
+     90 NEXT I
+# [0x4111]
+    100 DIM M$(2,2,4)
+# [0x4132]
+    110 FOR I=1 TO 2
+# [0x4149]
+    120 FOR J=1 TO 2
+# [0x4160]
+    130 LET M$(I,J)="1234"
+# [0x4174]
+    140 NEXT J
+# [0x417B]
+    150 NEXT I
+# [0x4182]
+    160 SAVE"VAR%S"
+
+#SYSVARS =      0x00,0x0A,0x00,0x8E,0x41,0x8F,0x41,0xA7,0x44,0xD9,0x44,0x18, \
+                0x45,0x8D,0x41,0x80,0xC0,0x18,0x45,0x18,0x45,0x0E,0x5D,0x40, \
+                0x00,0x02,0x00,0x00,0xFF,0xFF,0xFF,0x37,0x8E,0x41,0x00,0x00, \
+                0x00,0x6E,0xDC,0x8D,0x0C,0x00,0x00,0xEF,0xF9,0x00,0x00,0xBC, \
+                0x21,0x18,0x40,0x00,0x00,0x09,0x40,0x00,0x00,0x21,0x23,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76, \
+                0x81,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#AUTOSTART =    0
+#AUTOSTART_LINE = 0
+#FAST =         0
+#WORKSPACE =    
+
+# [VERSN    = 0 ]
+# [E_PPC    = 10 ]
+# [D_FILE   = 0x418E ]
+# [DF_CC    = 0x418F ]
+# [VARS     = 0x44A7 ]
+# [DEST     = 0x44D9 ]
+# [E_LINE   = 0x4518 ]
+# [CH_ADD   = 0x418D ]
+# [X_PTR    = 0xC080 ]
+# [STKBOT   = 0x4518 ]
+# [STKEND   = 0x4518 ]
+# [BREG     = 14 ]
+# [MEM      = 0x405D ]
+# [FREE1    = 0x00 ]
+# [DF_SZ    = 2 ]
+# [S_TOP    = 0 ]
+# [LAST_K   = 0xFFFF ]
+# [DEBOUNCE = 0xFF ]
+# [MARGIN   = 55 ]
+# [NXTLIN   = 0x418E ]
+# [OLDPPC   = 0 ]
+# [FLAGX    = 0x00 ]
+# [STRLEN   = 56430 ]
+# [T_ADDR   = 0x0C8D ]
+# [SEED     = 0x0000 ]
+# [FRAMES   = 0xF9EF ]
+# [COORDX   = 0 ]
+# [COORDY   = 0 ]
+# [PR_CC    = 0xBC ]
+# [S_POSNC  = 33 ]
+# [S_POSNR  = 24 ]
+# [CDFLAG   = 0x40 ]
+# [PRBUFF   = "\ \ \\,,\\40\ \ \5\7\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \\76" ]
+# [MEM0     = 1 ]
+# [MEM1     = 0 ]
+# [MEM2     = 0 ]
+# [MEM3     = 0 ]
+# [MEM4     = 0 ]
+# [MEM5     = 0 ]
+# [FREE2    = 0x0000 ]
+
+#DFILE =        "","","","","","","","","","","","","","","","","","","","","", \
+                "","",""
+#DFILE_COLLAPSED = 0
+
+
+# [0x4000]          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# [0x4040] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxbbb
+# [0x4080] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x40C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4100] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4140] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4180] bbbbbbbbbbbbbbdddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x41C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4200] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4240] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4280] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x42C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4300] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4340] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4380] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x43C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4400] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4440] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4480] dddddddddddddddddddddddddddddddddddddddvvvvvvvvvvvvvvvvvvvvvvvvv
+# [0x44C0] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# [0x4500] vvvvvvvvvvvvvvvvvvvvvvvv                                        
+

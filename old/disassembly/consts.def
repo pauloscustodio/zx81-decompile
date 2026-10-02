@@ -1,0 +1,54 @@
+//-----------------------------------------------------------------------------
+// zx-81 decompile
+// Copyright (C) Paulo Custodio, 2023-2024
+// License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
+//-----------------------------------------------------------------------------
+
+#ifndef X
+#define X(name, value)
+#endif
+
+X(ERR_NO, 0x4000)
+X(FLAGS, 0x4001)
+X(ERR_SP, 0x4002)
+X(RAMTOP, 0x4004)
+X(MODE, 0x4006)
+X(PPC, 0x4007)
+X(VERSN, 0x4009)
+X(E_PPC, 0x400a)
+X(D_FILE, 0x400c)
+X(DF_CC, 0x400e)
+X(VARS, 0x4010)
+X(DEST, 0x4012)
+X(E_LINE, 0x4014)
+X(CH_ADD, 0x4016)
+X(X_PTR, 0x4018)
+X(STKBOT, 0x401a)
+X(STKEND, 0x401c)
+X(BREG, 0x401e)
+X(MEM, 0x401f)
+X(FREE1, 0x4021)
+X(DF_SZ, 0x4022)
+X(S_TOP, 0x4023)
+X(LAST_K, 0x4025)
+X(DEBOUNCE, 0x4027)
+X(MARGIN, 0x4028)
+X(NXTLIN, 0x4029)
+X(OLDPPC, 0x402b)
+X(FLAGX, 0x402d)
+X(STRLEN, 0x402e)
+X(T_ADDR, 0x4030)
+X(SEED, 0x4032)
+X(FRAMES, 0x4034)
+X(COORDS_X, 0x4036)
+X(COORDS_Y, 0x4037)
+X(PR_CC, 0x4038)
+X(S_POSN_COL, 0x4039)
+X(S_POSN_ROW, 0x403a)
+X(CDFLAG, 0x403b)
+X(PRBUFF, 0x403c)
+X(MEMBOT, 0x405d)
+X(FREE2, 0x407b)
+X(PROG, 0x407d)
+
+#undef X

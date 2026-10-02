@@ -15,87 +15,72 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\getopt.h">
+    <ClInclude Include="..\..\common\getopt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\zfloat.h">
+    <ClInclude Include="..\..\common\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\errors.h">
+    <ClInclude Include="..\..\common\errors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\utils.h">
+    <ClInclude Include="..\..\common\consts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\consts.h">
+    <ClInclude Include="..\..\common\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\memory.h">
+    <ClInclude Include="..\..\common\zx81float.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\encode.h">
+    <ClInclude Include="..\..\common\basic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\disasm.h">
+    <ClInclude Include="..\..\common\zx81encode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\scan.h">
+    <ClInclude Include="..\..\common\scan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\parser.h">
+    <ClInclude Include="..\..\common\release_assert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\basic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\compiler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\decompiler.h">
+    <ClInclude Include="..\..\common\labels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\getopt.c">
+    <ClCompile Include="..\..\common\getopt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\zfloat.cpp">
+    <ClCompile Include="..\..\common\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\errors.cpp">
+    <ClCompile Include="..\..\common\errors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\utils.cpp">
+    <ClCompile Include="..\..\common\memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\disasm.cpp">
+    <ClCompile Include="..\..\common\zx81float.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\memory.cpp">
+    <ClCompile Include="..\..\common\basic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\encode.cpp">
+    <ClCompile Include="..\..\common\zx81encode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\scan.cpp">
+    <ClCompile Include="..\..\common\scan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\basic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\compiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\decompiler.cpp">
+    <ClCompile Include="..\..\common\labels.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\consts.def">
-      <Filter>Header Files</Filter>
+    <None Include="..\..\common\consts.def">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>

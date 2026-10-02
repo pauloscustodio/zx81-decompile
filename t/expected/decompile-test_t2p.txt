@@ -1,0 +1,103 @@
+     10 PRINT"REM LINE ";50
+     20 FOR X=16597+5 TO 16597+8
+     30 PRINT PEEK X
+     40 NEXT X
+     50 REM
+#ASM
+ERR_NO          equ     0x4000
+FLAGS           equ     0x4001
+ERR_SP          equ     0x4002
+RAMTOP          equ     0x4004
+MODE            equ     0x4006
+PPC             equ     0x4007
+VERSN           equ     0x4009
+E_PPC           equ     0x400A
+D_FILE          equ     0x400C
+DF_CC           equ     0x400E
+VARS            equ     0x4010
+DEST            equ     0x4012
+E_LINE          equ     0x4014
+CH_ADD          equ     0x4016
+X_PTR           equ     0x4018
+STKBOT          equ     0x401A
+STKEND          equ     0x401C
+BREG            equ     0x401E
+MEM             equ     0x401F
+FREE1           equ     0x4021
+DF_SZ           equ     0x4022
+S_TOP           equ     0x4023
+LAST_K          equ     0x4025
+DEBOUNCE        equ     0x4027
+MARGIN          equ     0x4028
+NXTLIN          equ     0x4029
+OLDPPC          equ     0x402B
+FLAGX           equ     0x402D
+STRLEN          equ     0x402E
+T_ADDR          equ     0x4030
+SEED            equ     0x4032
+FRAMES          equ     0x4034
+COORDS          equ     0x4036
+COORDX          equ     0x4036
+COORDY          equ     0x4037
+PR_CC           equ     0x4038
+S_POSN          equ     0x4039
+S_POSNC         equ     0x4039
+S_POSNR         equ     0x403A
+CDFLAG          equ     0x403B
+PRBUFF          equ     0x403C
+MEMBOT          equ     0x405D
+MEM0            equ     0x405D
+MEM1            equ     0x4062
+MEM2            equ     0x4067
+MEM3            equ     0x406C
+MEM4            equ     0x4071
+MEM5            equ     0x4076
+FREE2           equ     0x407B
+PROG            equ     0x407D
+KEYBOARD        equ     0x02BB
+
+        defb    0x01            
+        defb    0x01            
+        defb    0x00            
+        defb    0xC9            
+#ENDASM
+     60 PRINT USR(16597+5)
+
+#SYSVARS =      0x00,0x00,0x00,0xFB,0x40,0x7E,0x40,0x14,0x44,0x00,0x00,0x15, \
+                0x44,0x00,0x00,0x00,0x00,0x15,0x44,0x15,0x44,0x00,0x5D,0x40, \
+                0x00,0x02,0x00,0x00,0xFF,0xFF,0xFF,0x37,0xFB,0x40,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFF,0xFF,0x00,0x00,0x40, \
+                0x21,0x19,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#AUTOSTART =    0
+#AUTOSTART_LINE = 0
+#FAST =         0
+#WORKSPACE =    
+
+#DFILE =        "","","","","","","","","","","","","","","","","","","","","", \
+                "","",""
+#DFILE_COLLAPSED = 0
+
+
+# [0x4000]          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# [0x4040] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxbbb
+# [0x4080] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x40C0] bbbbbbbbbbbbbbbbbbbbbbbbb-----bbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddd
+# [0x4100] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4140] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4180] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x41C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4200] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4240] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4280] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x42C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4300] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4340] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4380] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x43C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4400] ddddddddddddddddddddv                                           
+

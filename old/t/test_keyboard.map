@@ -1,0 +1,10 @@
+D_FILE                          = $400C ; const, local, , test_keyboard, , t/test_keyboard.asm:2
+KEYBOARD                        = $02BB ; const, local, , test_keyboard, , t/test_keyboard.asm:1
+SHOW_KEYS                       = $4082 ; addr, local, , test_keyboard, , t/test_keyboard.asm:4
+__head                          = $4082 ; const, public, def, , ,
+__size                          = $0027 ; const, public, def, , ,
+__tail                          = $40A9 ; const, public, def, , ,
+h_digits                        = $408C ; addr, local, , test_keyboard, , t/test_keyboard.asm:11
+l_digits                        = $4098 ; addr, local, , test_keyboard, , t/test_keyboard.asm:21
+not_zero                        = $40A6 ; addr, local, , test_keyboard, , t/test_keyboard.asm:32
+print_digit                     = $40A1 ; addr, local, , test_keyboard, , t/test_keyboard.asm:28

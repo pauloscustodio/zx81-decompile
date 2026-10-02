@@ -1,0 +1,14 @@
+' Disassembly data for FortressOfZorlac
+basic_label		   30 START_WELCOME	 
+basic_comment	   40 Show welcome screen
+basic_comment	   40
+
+basic_label		  140 WAIT_KEY_YN_1 	 
+basic_label		  190 START_GAME		 
+basic_label		  720 WAIT_KEY_YN_2 	 
+basic_label		 1000 INSTRUCTIONS	 
+basic_label		 1070 WAIT_ANY_KEY_1	 
+basic_label		 1130 WAIT_ANY_KEY_2	 
+basic_label		 2000 SELECT_LEVEL	 
+basic_label		 2080 WAIT_KEY_15 	 
+basic_label		 3080 SAVE_RUN	 	 

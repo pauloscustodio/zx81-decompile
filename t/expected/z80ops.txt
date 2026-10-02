@@ -1,0 +1,816 @@
+      0 REM
+#ASM
+ERR_NO          equ     0x4000
+FLAGS           equ     0x4001
+ERR_SP          equ     0x4002
+RAMTOP          equ     0x4004
+MODE            equ     0x4006
+PPC             equ     0x4007
+VERSN           equ     0x4009
+E_PPC           equ     0x400A
+D_FILE          equ     0x400C
+DF_CC           equ     0x400E
+VARS            equ     0x4010
+DEST            equ     0x4012
+E_LINE          equ     0x4014
+CH_ADD          equ     0x4016
+X_PTR           equ     0x4018
+STKBOT          equ     0x401A
+STKEND          equ     0x401C
+BREG            equ     0x401E
+MEM             equ     0x401F
+FREE1           equ     0x4021
+DF_SZ           equ     0x4022
+S_TOP           equ     0x4023
+LAST_K          equ     0x4025
+DEBOUNCE        equ     0x4027
+MARGIN          equ     0x4028
+NXTLIN          equ     0x4029
+OLDPPC          equ     0x402B
+FLAGX           equ     0x402D
+STRLEN          equ     0x402E
+T_ADDR          equ     0x4030
+SEED            equ     0x4032
+FRAMES          equ     0x4034
+COORDS          equ     0x4036
+COORDX          equ     0x4036
+COORDY          equ     0x4037
+PR_CC           equ     0x4038
+S_POSN          equ     0x4039
+S_POSNC         equ     0x4039
+S_POSNR         equ     0x403A
+CDFLAG          equ     0x403B
+PRBUFF          equ     0x403C
+MEMBOT          equ     0x405D
+MEM0            equ     0x405D
+MEM1            equ     0x4062
+MEM2            equ     0x4067
+MEM3            equ     0x406C
+MEM4            equ     0x4071
+MEM5            equ     0x4076
+FREE2           equ     0x407B
+PROG            equ     0x407D
+KEYBOARD        equ     0x02BB
+
+z80ops:
+        adc     a, (hl)         
+        adc     a, (ix+5)       
+        adc     a, (iy+5)       
+        adc     a, a            
+        adc     a, b            
+        adc     a, c            
+        adc     a, d            
+        adc     a, e            
+        adc     a, h            
+        adc     a, l            
+        adc     a, 0x20         
+        adc     hl, bc          
+        adc     hl, de          
+        adc     hl, hl          
+        adc     hl, sp          
+        add     a, (hl)         
+        add     a, (ix+5)       
+        add     a, (iy+5)       
+        add     a, a            
+        add     a, b            
+        add     a, c            
+        add     a, d            
+        add     a, e            
+        add     a, h            
+        add     a, l            
+        add     a, 0x20         
+        add     hl, bc          
+        add     hl, de          
+        add     hl, hl          
+        add     hl, sp          
+        add     ix, bc          
+        add     ix, de          
+        add     ix, ix          
+        add     ix, sp          
+        add     iy, bc          
+        add     iy, de          
+        add     iy, iy          
+        add     iy, sp          
+        and     (hl)            
+        and     (ix+5)          
+        and     (iy+5)          
+        and     a               
+        and     b               
+        and     c               
+        and     d               
+        and     e               
+        and     h               
+        and     l               
+        and     0x20            
+        bit     0, (hl)         
+        bit     0, (ix+5)       
+        bit     0, (iy+5)       
+        bit     0, a            
+        bit     0, b            
+        bit     0, c            
+        bit     0, d            
+        bit     0, e            
+        bit     0, h            
+        bit     0, l            
+        bit     1, (hl)         
+        bit     1, (ix+5)       
+        bit     1, (iy+5)       
+        bit     1, a            
+        bit     1, b            
+        bit     1, c            
+        bit     1, d            
+        bit     1, e            
+        bit     1, h            
+        bit     1, l            
+        bit     2, (hl)         
+        bit     2, (ix+5)       
+        bit     2, (iy+5)       
+        bit     2, a            
+        bit     2, b            
+        bit     2, c            
+        bit     2, d            
+        bit     2, e            
+        bit     2, h            
+        bit     2, l            
+        bit     3, (hl)         
+        bit     3, (ix+5)       
+        bit     3, (iy+5)       
+        bit     3, a            
+        bit     3, b            
+        bit     3, c            
+        bit     3, d            
+        bit     3, e            
+        bit     3, h            
+        bit     3, l            
+        bit     4, (hl)         
+        bit     4, (ix+5)       
+        bit     4, (iy+5)       
+        bit     4, a            
+        bit     4, b            
+        bit     4, c            
+        bit     4, d            
+        bit     4, e            
+        bit     4, h            
+        bit     4, l            
+        bit     5, (hl)         
+        bit     5, (ix+5)       
+        bit     5, (iy+5)       
+        bit     5, a            
+        bit     5, b            
+        bit     5, c            
+        bit     5, d            
+        bit     5, e            
+        bit     5, h            
+        bit     5, l            
+        bit     6, (hl)         
+        bit     6, (ix+5)       
+        bit     6, (iy+5)       
+        bit     6, a            
+        bit     6, b            
+        bit     6, c            
+        bit     6, d            
+        bit     6, e            
+        bit     6, h            
+        bit     6, l            
+        bit     7, (hl)         
+        bit     7, (ix+5)       
+        bit     7, (iy+5)       
+        bit     7, a            
+        bit     7, b            
+        bit     7, c            
+        bit     7, d            
+        bit     7, e            
+        bit     7, h            
+        bit     7, l            
+        call    c, L4606        
+        call    m, L4606        
+        call    nc, L4606       
+        call    L4606           
+        call    nz, L4606       
+        call    p, L4606        
+        call    pe, L4606       
+        call    po, L4606       
+        call    z, L4606        
+        ccf                     
+        cp      (hl)            
+        cp      (ix+5)          
+        cp      (iy+5)          
+        cp      a               
+        cp      b               
+        cp      c               
+        cp      d               
+        cp      e               
+        cp      h               
+        cp      l               
+        cp      0x20            
+        cpd                     
+        cpdr                    
+        cpi                     
+        cpir                    
+        cpl                     
+        daa                     
+        dec     (hl)            
+        dec     (ix+5)          
+        dec     (iy+5)          
+        dec     a               
+        dec     b               
+        dec     bc              
+        dec     c               
+        dec     d               
+        dec     de              
+        dec     e               
+        dec     h               
+        dec     hl              
+        dec     ix              
+        dec     iy              
+        dec     l               
+        dec     sp              
+        di                      
+        djnz    L420B           
+        ei                      
+        ex      (sp), hl        
+        ex      (sp), ix        
+        ex      (sp), iy        
+        ex      af, af'         
+        ex      de, hl          
+        exx                     
+        halt                    
+        im      0               
+        im      1               
+        im      2               
+        in      a, (c)          
+        in      a, (0x20)       
+        in      b, (c)          
+        in      c, (c)          
+        in      d, (c)          
+        in      e, (c)          
+        in      h, (c)          
+        in      l, (c)          
+        inc     (hl)            
+        inc     (ix+5)          
+        inc     (iy+5)          
+        inc     a               
+        inc     b               
+        inc     bc              
+        inc     c               
+        inc     d               
+        inc     de              
+        inc     e               
+L420B:
+        inc     h               
+        inc     hl              
+        inc     ix              
+        inc     iy              
+        inc     l               
+        inc     sp              
+        ind                     
+        indr                    
+        ini                     
+        inir                    
+        jp      (hl)            
+        jp      (ix)            
+        jp      (iy)            
+        jp      c, L4606        
+        jp      m, L4606        
+        jp      nc, L4606       
+        jp      L4606           
+        jp      nz, L4606       
+        jp      p, L4606        
+        jp      pe, L4606       
+        jp      po, L4606       
+        jp      z, L4606        
+        jr      L426B           
+        jr      c, L426D        
+        jr      nc, L426F       
+        jr      nz, L4271       
+        jr      z, L4273        
+        ld      (bc), a         
+        ld      (de), a         
+        ld      (hl), a         
+        ld      (hl), b         
+        ld      (hl), c         
+        ld      (hl), d         
+        ld      (hl), e         
+        ld      (hl), h         
+        ld      (hl), l         
+        ld      (hl), 0x20      
+        ld      (ix+5), a       
+        ld      (ix+5), b       
+        ld      (ix+5), c       
+        ld      (ix+5), d       
+        ld      (ix+5), e       
+        ld      (ix+5), h       
+        ld      (ix+5), l       
+        ld      (ix+5), 0x20    
+        ld      (iy+5), a       
+        ld      (iy+5), b       
+L426F:
+        ld      (iy+5), c       
+        ld      (iy+5), d       
+        ld      (iy+5), e       
+        ld      (iy+5), h       
+        ld      (iy+5), l       
+        ld      (iy+5), 0x20    
+        ld      (L4606), a      
+        ld      (L4606), bc     
+        ld      (L4606), de     
+        ld      (L4606), hl     
+        ld      (L4606), ix     
+        ld      (L4606), iy     
+        ld      (L4606), sp     
+        ld      a, (bc)         
+        ld      a, (de)         
+        ld      a, (hl)         
+        ld      a, (ix+5)       
+        ld      a, (iy+5)       
+        ld      a, (L4606)      
+        ld      a, a            
+        ld      a, b            
+        ld      a, c            
+        ld      a, d            
+        ld      a, e            
+        ld      a, h            
+        ld      a, i            
+        ld      a, l            
+        ld      a, 0x20         
+        ld      b, (hl)         
+        ld      b, (ix+5)       
+        ld      b, (iy+5)       
+        ld      b, a            
+        ld      b, b            
+        ld      b, c            
+        ld      b, d            
+        ld      b, e            
+        ld      b, h            
+        ld      b, l            
+        ld      b, 0x20         
+        ld      bc, (L4606)     
+        ld      bc, L4606       
+        ld      c, (hl)         
+        ld      c, (ix+5)       
+        ld      c, (iy+5)       
+        ld      c, a            
+        ld      c, b            
+        ld      c, c            
+        ld      c, d            
+        ld      c, e            
+        ld      c, h            
+        ld      c, l            
+        ld      c, 0x20         
+        ld      d, (hl)         
+        ld      d, (ix+5)       
+        ld      d, (iy+5)       
+        ld      d, a            
+        ld      d, b            
+        ld      d, c            
+        ld      d, d            
+        ld      d, e            
+        ld      d, h            
+        ld      d, l            
+        ld      d, 0x20         
+        ld      de, (L4606)     
+        ld      de, L4606       
+        ld      e, (hl)         
+        ld      e, (ix+5)       
+        ld      e, (iy+5)       
+        ld      e, a            
+        ld      e, b            
+        ld      e, c            
+        ld      e, d            
+        ld      e, e            
+        ld      e, h            
+        ld      e, l            
+        ld      e, 0x20         
+        ld      h, (hl)         
+        ld      h, (ix+5)       
+        ld      h, (iy+5)       
+        ld      h, a            
+        ld      h, b            
+        ld      h, c            
+        ld      h, d            
+        ld      h, e            
+        ld      h, h            
+        ld      h, l            
+        ld      h, 0x20         
+        ld      hl, (L4606)     
+        ld      hl, L4606       
+        ld      i, a            
+        ld      ix, (L4606)     
+        ld      ix, L4606       
+        ld      iy, (L4606)     
+        ld      iy, L4606       
+        ld      l, (hl)         
+        ld      l, (ix+5)       
+        ld      l, (iy+5)       
+        ld      l, a            
+        ld      l, b            
+        ld      l, c            
+        ld      l, d            
+        ld      l, e            
+        ld      l, h            
+        ld      l, l            
+        ld      l, 0x20         
+        ld      sp, (L4606)     
+        ld      sp, hl          
+        ld      sp, ix          
+        ld      sp, iy          
+        ld      sp, L4606       
+        ldd                     
+        lddr                    
+        ldi                     
+        ldir                    
+        neg                     
+        nop                     
+        or      (hl)            
+        or      (ix+5)          
+        or      (iy+5)          
+        or      a               
+        or      b               
+        or      c               
+        or      d               
+        or      e               
+        or      h               
+        or      l               
+        or      0x20            
+        otdr                    
+        otir                    
+        out     (c), a          
+        out     (c), b          
+        out     (c), c          
+        out     (c), d          
+        out     (c), e          
+        out     (c), h          
+        out     (c), l          
+        out     (0x20), a       
+        outd                    
+        outi                    
+        pop     af              
+        pop     bc              
+        pop     de              
+        pop     hl              
+        pop     ix              
+        pop     iy              
+        push    af              
+        push    bc              
+        push    de              
+        push    hl              
+        push    ix              
+        push    iy              
+        res     0, (hl)         
+        res     0, (ix+5)       
+        res     0, (iy+5)       
+        res     0, a            
+        res     0, b            
+        res     0, c            
+        res     0, d            
+        res     0, e            
+        res     0, h            
+        res     0, l            
+        res     1, (hl)         
+        res     1, (ix+5)       
+        res     1, (iy+5)       
+        res     1, a            
+        res     1, b            
+        res     1, c            
+        res     1, d            
+        res     1, e            
+        res     1, h            
+        res     1, l            
+        res     2, (hl)         
+        res     2, (ix+5)       
+        res     2, (iy+5)       
+        res     2, a            
+        res     2, b            
+        res     2, c            
+        res     2, d            
+        res     2, e            
+        res     2, h            
+        res     2, l            
+        res     3, (hl)         
+        res     3, (ix+5)       
+        res     3, (iy+5)       
+        res     3, a            
+        res     3, b            
+        res     3, c            
+        res     3, d            
+        res     3, e            
+        res     3, h            
+        res     3, l            
+        res     4, (hl)         
+        res     4, (ix+5)       
+        res     4, (iy+5)       
+        res     4, a            
+        res     4, b            
+        res     4, c            
+        res     4, d            
+        res     4, e            
+        res     4, h            
+        res     4, l            
+        res     5, (hl)         
+        res     5, (ix+5)       
+        res     5, (iy+5)       
+        res     5, a            
+        res     5, b            
+        res     5, c            
+        res     5, d            
+        res     5, e            
+        res     5, h            
+        res     5, l            
+        res     6, (hl)         
+        res     6, (ix+5)       
+        res     6, (iy+5)       
+        res     6, a            
+        res     6, b            
+        res     6, c            
+        res     6, d            
+        res     6, e            
+        res     6, h            
+        res     6, l            
+        res     7, (hl)         
+        res     7, (ix+5)       
+        res     7, (iy+5)       
+        res     7, a            
+        res     7, b            
+        res     7, c            
+        res     7, d            
+        res     7, e            
+        res     7, h            
+        res     7, l            
+        ret                     
+        ret     c               
+        ret     m               
+        ret     nc              
+        ret     nz              
+        ret     p               
+        ret     pe              
+        ret     po              
+        ret     z               
+        reti                    
+        retn                    
+        rl      (hl)            
+        rl      (ix+5)          
+        rl      (iy+5)          
+        rl      a               
+        rl      b               
+        rl      c               
+        rl      d               
+        rl      e               
+        rl      h               
+        rl      l               
+        rla                     
+        rlc     (hl)            
+        rlc     (ix+5)          
+        rlc     (iy+5)          
+        rlc     a               
+        rlc     b               
+        rlc     c               
+        rlc     d               
+        rlc     e               
+        rlc     h               
+        rlc     l               
+        rlca                    
+        rld                     
+        rr      (hl)            
+        rr      (ix+5)          
+        rr      (iy+5)          
+        rr      a               
+        rr      b               
+        rr      c               
+        rr      d               
+        rr      e               
+        rr      h               
+        rr      l               
+        rra                     
+        rrc     (hl)            
+        rrc     (ix+5)          
+        rrc     (iy+5)          
+        rrc     a               
+        rrc     b               
+        rrc     c               
+        rrc     d               
+        rrc     e               
+        rrc     h               
+        rrc     l               
+        rrca                    
+        rrd                     
+        rst     00h             
+        rst     08h             
+        rst     10h             
+        rst     18h             
+        rst     20h             
+        rst     28h             
+        rst     30h             
+        rst     38h             
+        sbc     a, (hl)         
+        sbc     a, (ix+5)       
+        sbc     a, (iy+5)       
+        sbc     a, a            
+        sbc     a, b            
+        sbc     a, c            
+        sbc     a, d            
+        sbc     a, e            
+        sbc     a, h            
+        sbc     a, l            
+        sbc     a, 0x20         
+        sbc     hl, bc          
+        sbc     hl, de          
+        sbc     hl, hl          
+        sbc     hl, sp          
+        scf                     
+        set     0, (hl)         
+        set     0, (ix+5)       
+        set     0, (iy+5)       
+        set     0, a            
+        set     0, b            
+        set     0, c            
+        set     0, d            
+        set     0, e            
+        set     0, h            
+        set     0, l            
+        set     1, (hl)         
+        set     1, (ix+5)       
+        set     1, (iy+5)       
+        set     1, a            
+        set     1, b            
+        set     1, c            
+        set     1, d            
+        set     1, e            
+        set     1, h            
+        set     1, l            
+        set     2, (hl)         
+        set     2, (ix+5)       
+        set     2, (iy+5)       
+        set     2, a            
+        set     2, b            
+        set     2, c            
+        set     2, d            
+        set     2, e            
+        set     2, h            
+        set     2, l            
+        set     3, (hl)         
+        set     3, (ix+5)       
+        set     3, (iy+5)       
+        set     3, a            
+        set     3, b            
+        set     3, c            
+        set     3, d            
+        set     3, e            
+        set     3, h            
+        set     3, l            
+        set     4, (hl)         
+        set     4, (ix+5)       
+        set     4, (iy+5)       
+        set     4, a            
+        set     4, b            
+        set     4, c            
+        set     4, d            
+        set     4, e            
+        set     4, h            
+        set     4, l            
+        set     5, (hl)         
+        set     5, (ix+5)       
+        set     5, (iy+5)       
+        set     5, a            
+        set     5, b            
+        set     5, c            
+        set     5, d            
+        set     5, e            
+        set     5, h            
+        set     5, l            
+        set     6, (hl)         
+        set     6, (ix+5)       
+        set     6, (iy+5)       
+        set     6, a            
+        set     6, b            
+        set     6, c            
+        set     6, d            
+        set     6, e            
+        set     6, h            
+        set     6, l            
+        set     7, (hl)         
+        set     7, (ix+5)       
+        set     7, (iy+5)       
+        set     7, a            
+        set     7, b            
+        set     7, c            
+        set     7, d            
+        set     7, e            
+        set     7, h            
+        set     7, l            
+        sla     (hl)            
+        sla     (ix+5)          
+        sla     (iy+5)          
+        sla     a               
+        sla     b               
+        sla     c               
+        sla     d               
+        sla     e               
+        sla     h               
+        sla     l               
+        sra     (hl)            
+        sra     (ix+5)          
+        sra     (iy+5)          
+        sra     a               
+        sra     b               
+        sra     c               
+        sra     d               
+        sra     e               
+        sra     h               
+        sra     l               
+        srl     (hl)            
+        srl     (ix+5)          
+        srl     (iy+5)          
+        srl     a               
+        srl     b               
+        srl     c               
+        srl     d               
+        srl     e               
+        srl     h               
+        srl     l               
+        sub     (hl)            
+        sub     (ix+5)          
+        sub     (iy+5)          
+        sub     a               
+        sub     b               
+        sub     c               
+        sub     d               
+        sub     e               
+        sub     h               
+        sub     l               
+        sub     0x20            
+        xor     (hl)            
+        xor     (ix+5)          
+        xor     (iy+5)          
+        xor     a               
+        xor     b               
+        xor     c               
+        xor     d               
+        xor     e               
+        xor     h               
+        xor     l               
+        xor     0x20            
+L4606:
+        nop                     
+        nop                     
+        ret                     
+#ENDASM
+     10 RAND USR &z80ops
+
+#SYSVARS =      0x00,0x01,0x00,0x1C,0x46,0x1D,0x46,0x35,0x49,0x00,0x00,0x36, \
+                0x49,0x3A,0x49,0x00,0x00,0x3B,0x49,0x3B,0x49,0x00,0x5D,0x40, \
+                0x00,0x02,0x00,0x00,0xFF,0xFF,0x0F,0x37,0x1C,0x46,0x00,0x00, \
+                0x00,0x00,0x00,0x6B,0x0C,0x00,0x00,0x7D,0xFD,0x00,0x00,0xBC, \
+                0x21,0x18,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#AUTOSTART =    0
+#AUTOSTART_LINE = 0
+#FAST =         0
+#WORKSPACE =    
+
+#DFILE =        "","","","","","","","","","","","","","","","","","","","","", \
+                "","",""
+#DFILE_COLLAPSED = 0
+
+
+# [0x4000]          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# [0x4040] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxbbb
+# [0x4080] b-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x40C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4100] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4180] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x41C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4200] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4280] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x42C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4300] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4340] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4380] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x43C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4400] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4440] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x44C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4500] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4540] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4580] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x45C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4600] CCCCCCCCCbbbbbbbbbbbbbbbbbbbdddddddddddddddddddddddddddddddddddd
+# [0x4640] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4680] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x46C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4700] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4740] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4780] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x47C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4800] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4840] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4880] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x48C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x4900] dddddddddddddddddddddddddddddddddddddddddddddddddddddv          
+

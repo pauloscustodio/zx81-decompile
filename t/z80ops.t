@@ -1,40 +1,39 @@
-#!/usr/bin/env perl
-
 BEGIN { use lib 't'; require 'testlib.pl'; }
 
-use Modern::Perl;
+# build z80ops.p, needs z88dk
+if ( !-f "t/input/z80ops.p" ) {
 
-# assemble z80ops from z80pack with zx81_compile
-my @z80ops = path("t/z80ops.asm")->lines;
+    # build .bas with z80pack z80ops.asm
+    my @basic = "#ASM\n";
+    push @basic, grep { !/TITLE/ } path("t/input/z80ops.asm")->lines;
+    push @basic, "\tRET\n", "#ENDASM\n", "10 RAND USR &Z80OPS\n";
+    path("$test.bas")->spew_raw(@basic);
 
-path("z80ops.b81")->spew(<<END, grep {!/^\s*TITLE/} @z80ops);
-#ASM
+    # build .p
+    run_ok("perl make_p.pl -l $test.bas");
+    copy( "$test.p", "t/input/z80ops.p" );
+}
+
+# build control file to restart disassembly after all control flow ends
+path("$test.ctl")->spew_raw(<<END);
+asm 0x4082 C z80ops
+asm 0x421C C
+asm 0x421E C
+asm 0x4220 C
+asm 0x4223 C
+asm 0x422C C
+asm 0x423D C
+asm 0x4449 C
+asm 0x4453 C
+asm 0x4455 C
 END
 
-run_ok("zx81_compile z80ops.b81"); # builds z80ops.p
+# decompile .p
+run_ok(
+    "build/Debug/zx81_decompile -o $test.2.bas -c $test.ctl t/input/z80ops.p");
 
-# assemble z80ops with z88dk-z80asm
-my @z80asm = (
-	'org $4009'."\n",
-	'defb $00, $00, $00, $09, $46, $0a, $46, $22, $49, $00, $00, $23, $49, $00, $00, $00, $00, $23, $49, $23, $49, $00, $5d, $40, $00, $02, $00, $00, $ff, $ff, $ff, $37, $09, $46, $00, $00, $00, $00, $00, $00, $00, $00, $00, $ff, $ff, $00, $00, $40, $21, $19, $40, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $76, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00'."\n",
-	'defb $00, $00, $88, $05, $ea'."\n",
-	(map {s/^(\w+)/$1:/; $_} grep {!/^\s*TITLE/} @z80ops),
-	'defb $76'."\n",
-	'defb $76'."\n");
-for (1..24) {
-	push @z80asm, 'defb 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76'."\n";
-}
-push @z80asm, 'defb $80'."\n";
+# check disassembly
+check_text_file( "$test.2.bas", "t/expected/z80ops.txt" );
 
-path("z80ops.asm")->spew(@z80asm);
-run_ok("z88dk-z80asm -b -l z80ops.asm");
-
-eq_or_dump_diff(
-    path("z80ops.p")->slurp_raw,
-    path("z80ops.bin")->slurp_raw,
-	{ address => 0x4009 },
-    "compare z80ops.p z80ops.bin",
-);
-
-unlink_testfiles(<z80ops.*>);
+unlink_testfiles;
 done_testing;
