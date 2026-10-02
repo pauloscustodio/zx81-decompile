@@ -1,0 +1,15 @@
+---
+generation: 1
+last_run_time: 1790671184.75506
+tests:
+  t/round_trip.t:
+    elapsed: 3.65262603759766
+    gen: 1
+    last_fail_time: 1790671184.75176
+    last_result: 2
+    last_run_time: 1790671184.75176
+    last_todo: 0
+    seq: 1
+    total_failures: 1
+version: 1
+...

@@ -1,0 +1,2110 @@
+#VARS L = 0
+#VARS V = 5
+#VARS F = 250
+#VARS N = 33,32,1,431
+#VARS A = 18358
+#VARS W = 34
+#VARS S = 0
+#VARS R = 200
+
+      1 REM
+#ASM
+ERR_NO          equ     0x4000
+FLAGS           equ     0x4001
+ERR_SP          equ     0x4002
+RAMTOP          equ     0x4004
+MODE            equ     0x4006
+PPC             equ     0x4007
+VERSN           equ     0x4009
+E_PPC           equ     0x400A
+D_FILE          equ     0x400C
+DF_CC           equ     0x400E
+VARS            equ     0x4010
+DEST            equ     0x4012
+E_LINE          equ     0x4014
+CH_ADD          equ     0x4016
+X_PTR           equ     0x4018
+STKBOT          equ     0x401A
+STKEND          equ     0x401C
+BREG            equ     0x401E
+MEM             equ     0x401F
+FREE1           equ     0x4021
+DF_SZ           equ     0x4022
+S_TOP           equ     0x4023
+LAST_K          equ     0x4025
+DEBOUNCE        equ     0x4027
+MARGIN          equ     0x4028
+NXTLIN          equ     0x4029
+OLDPPC          equ     0x402B
+FLAGX           equ     0x402D
+STRLEN          equ     0x402E
+T_ADDR          equ     0x4030
+SEED            equ     0x4032
+FRAMES          equ     0x4034
+COORDS          equ     0x4036
+COORDX          equ     0x4036
+COORDY          equ     0x4037
+PR_CC           equ     0x4038
+S_POSN          equ     0x4039
+S_POSNC         equ     0x4039
+S_POSNR         equ     0x403A
+CDFLAG          equ     0x403B
+PRBUFF          equ     0x403C
+MEMBOT          equ     0x405D
+MEM0            equ     0x405D
+MEM1            equ     0x4062
+MEM2            equ     0x4067
+MEM3            equ     0x406C
+MEM4            equ     0x4071
+MEM5            equ     0x4076
+FREE2           equ     0x407B
+PROG            equ     0x407D
+KEYBOARD        equ     0x02BB
+
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0xEE            
+        defb    0x40            
+        defb    0x17            
+        defb    0x41            
+        defb    0x13            
+        defb    0x02            
+        defb    0x10            
+        defb    0x05            
+        defb    0x29            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+      2 REM
+#ASM
+L412C:
+        ld      hl, 0x40BB      
+        ld      (0x411A), hl    
+        ld      hl, 0x4082      
+        ld      (0x4118), hl    
+        ld      a, 0x14         
+        ld      (0x411E), a     
+        ld      a, 0x09         
+        ld      (0x411F), a     
+        ld      a, 0x39         
+        ld      (0x4120), a     
+        call    L4191           
+        call    L415B           
+        call    L415B           
+        dec     b               
+        dec     b               
+        dec     c               
+        dec     c               
+        ld      (0x411C), bc    
+        jp      L418A           
+L415B:
+        inc     b               
+        inc     c               
+        ld      (0x411C), bc    
+        ld      (0x4118), de    
+        ld      a, (0x4120)     
+        sub     0x08            
+        ld      (0x4120), a     
+        ld      h, 0x00         
+        ld      l, a            
+        add     hl, de          
+        ld      (0x411A), hl    
+        ld      a, (0x411E)     
+        sub     0x02            
+        ld      (0x411E), a     
+        ld      a, (0x411F)     
+        sub     0x02            
+        ld      (0x411F), a     
+        nop                     
+        nop                     
+        nop                     
+        call    L4191           
+L418A:
+        ret                     
+#ENDASM
+      3 REM
+#ASM
+L4191:
+        ld      de, (0x411A)    
+        ld      a, (de)         
+        ld      hl, (0x411A)    
+        dec     hl              
+        ld      b, 0x00         
+        push    af              
+        ld      a, (0x4120)     
+        ld      c, a            
+        pop     af              
+        lddr                    
+        ld      hl, (0x4118)    
+        ld      (hl), a         
+        push    hl              
+        ld      bc, (0x411C)    
+        call    L4212           
+        ex      de, hl          
+        pop     hl              
+        push    bc              
+        ld      a, (0x411E)     
+        ld      bc, 0x0020      
+L41B9:
+        ldi                     
+        inc     bc              
+        dec     a               
+        cp      0x00            
+        jr      z, L41C6        
+        ex      de, hl          
+        add     hl, bc          
+        ex      de, hl          
+        jr      L41B9           
+L41C6:
+        ld      bc, (0x411F)    
+        ld      b, 0x00         
+        ldir                    
+        ld      a, (0x411E)     
+        ld      bc, 0x0022      
+L41D4:
+        ldi                     
+        inc     bc              
+        dec     a               
+        cp      0x00            
+        jr      z, L41E3        
+        ex      de, hl          
+        and     a               
+        sbc     hl, bc          
+        ex      de, hl          
+        jr      L41D4           
+L41E3:
+        ld      a, (0x411F)     
+L41E6:
+        dec     de              
+        dec     de              
+        ldi                     
+        dec     a               
+        cp      0x00            
+        jr      nz, L41E6       
+        pop     bc              
+        ex      de, hl          
+        ret                     
+        defb    0x3E            
+        defb    0xF7            
+        defb    0xBC            
+        defb    0x28            
+        defb    0x0D            
+        defb    0x3E            
+        defb    0xEF            
+        defb    0xBC            
+        defb    0x28            
+        defb    0x08            
+        defb    0x3E            
+        defb    0xDF            
+        defb    0xBC            
+        defb    0x28            
+        defb    0x03            
+        defb    0xC3            
+        defb    0xF5            
+        defb    0x43            
+        defb    0xAF            
+        defb    0xB9            
+        defb    0xCA            
+        defb    0xF5            
+        defb    0x43            
+        defb    0xC3            
+        defb    0xEA            
+        defb    0x43            
+#ENDASM
+      4 REM
+#ASM
+L4212:
+        push    de              
+        push    af              
+        ld      hl, (D_FILE)    
+        inc     hl              
+        xor     a               
+        ld      de, 0x0021      
+L421C:
+        cp      b               
+        jr      z, L4223        
+        add     hl, de          
+        inc     a               
+        jr      L421C           
+L4223:
+        ld      a, c            
+        ld      e, 0x00         
+L4226:
+        cp      e               
+        jr      z, L422D        
+        inc     e               
+        inc     hl              
+        jr      L4226           
+L422D:
+        pop     af              
+        pop     de              
+        ret                     
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+      5 REM
+#ASM
+L4238:
+        ld      hl, 0x4082      
+        ld      de, (0x411C)    
+        push    de              
+        ld      a, b            
+        sub     d               
+        ld      d, 0x00         
+        ld      e, a            
+        add     hl, de          
+        pop     de              
+        ld      a, c            
+        sub     e               
+        cp      0x01            
+        jr      z, L4252        
+        jr      nc, L425C       
+        ld      (hl), 0x00      
+        ret                     
+L4252:
+        ld      d, 0x00         
+        ld      a, 0x39         
+        nop                     
+        ld      e, a            
+        add     hl, de          
+        ld      (hl), 0x00      
+        ret                     
+L425C:
+        ld      d, 0x00         
+        ld      a, 0x39         
+        nop                     
+        add     a, a            
+        sub     0x08            
+        ld      e, a            
+        add     hl, de          
+        ld      (hl), 0x00      
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+      6 REM
+#ASM
+        defb    0x16            
+        defb    0x08            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x04            
+        defb    0x00            
+        defb    0x84            
+        defb    0x03            
+        defb    0x07            
+        defb    0x00            
+        defb    0x00            
+        defb    0x02            
+        defb    0x80            
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x80            
+        defb    0x04            
+        defb    0x00            
+        defb    0x00            
+        defb    0x81            
+        defb    0x00            
+        defb    0x82            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L429F:
+        ld      hl, (0x411C)    
+        ld      a, l            
+        add     a, 0x03         
+        ld      (0x4274), a     
+        ld      bc, (0x4274)    
+        push    bc              
+        ld      a, (0x42EF)     
+        cp      0x00            
+        jr      z, L42C2        
+        dec     b               
+        call    L42D1           
+        pop     bc              
+        ld      a, b            
+        cp      0x06            
+        ret     nz              
+        xor     a               
+L42BE:
+        ld      (0x42EF), a     
+        ret                     
+L42C2:
+        inc     b               
+        call    L42D1           
+        pop     bc              
+        ld      a, b            
+        cp      0x0A            
+        ret     nz              
+        ld      a, 0x01         
+        jr      L42BE           
+        defb    0x00            
+        defb    0x00            
+L42D1:
+        ld      (0x4274), bc    
+        call    L4212           
+        ex      de, hl          
+        ld      hl, 0x4277      
+        ld      a, 0x08         
+L42DE:
+        ld      bc, 0x0005      
+        ldir                    
+        dec     a               
+        cp      0x00            
+        ret     z               
+        ex      de, hl          
+        ld      bc, 0x001C      
+        add     hl, bc          
+        ex      de, hl          
+        jr      L42DE           
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+      7 REM
+#ASM
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x81            
+        defb    0x83            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x07            
+        defb    0x07            
+        defb    0x84            
+        defb    0x03            
+        defb    0x80            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x82            
+        defb    0x81            
+        defb    0x83            
+        defb    0x82            
+        defb    0x81            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x07            
+        defb    0x84            
+        defb    0x03            
+        defb    0x07            
+        defb    0x84            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x80            
+        defb    0x83            
+        defb    0x82            
+        defb    0x81            
+        defb    0x81            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x03            
+        defb    0x07            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x03            
+        defb    0x00            
+        defb    0x09            
+L4348:
+        ld      bc, (0x4346)    
+L434C:
+        call    L4212           
+        ex      de, hl          
+        ld      hl, 0x4345      
+        ld      a, 0x01         
+        cp      (hl)            
+        jr      nz, L4361       
+        inc     a               
+        ld      (0x4345), a     
+        ld      hl, 0x42FA      
+        jr      L4377           
+L4361:
+        ld      a, 0x02         
+        cp      (hl)            
+        jr      nz, L436F       
+        inc     a               
+        ld      (0x4345), a     
+        ld      hl, 0x4313      
+        jr      L4377           
+L436F:
+        ld      a, 0x01         
+        ld      (0x4345), a     
+        ld      hl, 0x432C      
+L4377:
+        ld      a, 0x05         
+L4379:
+        ld      bc, 0x0005      
+        ldir                    
+        dec     a               
+        cp      0x00            
+        ret     z               
+        ex      de, hl          
+        ld      bc, 0x001C      
+        add     hl, bc          
+        ex      de, hl          
+        jr      L4379           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+      8 REM
+#ASM
+        defb    0xCD            
+        defb    0xBB            
+        defb    0x02            
+        defb    0xED            
+        defb    0x4B            
+        defb    0x46            
+        defb    0x43            
+        defb    0x3E            
+        defb    0xFF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x54            
+        defb    0x3D            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x2B            
+        defb    0x3D            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x27            
+        defb    0x3D            
+        defb    0x3D            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x2D            
+        defb    0x3E            
+        defb    0xF7            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x28            
+        defb    0x3E            
+        defb    0xEF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x38            
+        defb    0x3E            
+        defb    0xDF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x33            
+        defb    0x3E            
+        defb    0xF7            
+        defb    0x94            
+        defb    0x30            
+        defb    0x24            
+L43C2:
+        ld      a, (0x411C)     
+        sub     0x08            
+        cp      c               
+        jr      z, L43F5        
+        call    L4405           
+        inc     c               
+        jr      L43F5           
+L43D0:
+        ld      a, 0x10         
+        cp      b               
+        jr      z, L43F5        
+        call    L4405           
+        inc     b               
+        jr      L43F5           
+L43DB:
+        ld      a, 0x03         
+        cp      b               
+        jr      z, L43F5        
+        call    L4405           
+        dec     b               
+        jr      L43F5           
+L43E6:
+        xor     a               
+        cp      c               
+        jr      z, L43F5        
+        call    L4405           
+        dec     c               
+        jr      L43F5           
+        defb    0xC5            
+        defb    0xCD            
+        defb    0x31            
+        defb    0x44            
+        defb    0xC1            
+L43F5:
+        ld      (0x4346), bc    
+        call    L4348           
+        ret                     
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+      9 REM
+#ASM
+L4405:
+        push    bc              
+        ld      bc, (0x4346)    
+        call    L4212           
+        ld      a, 0x05         
+        ld      de, 0x001C      
+L4412:
+        ld      b, 0x05         
+L4414:
+        ld      (hl), 0x00      
+        inc     hl              
+        djnz    L4414           
+        add     hl, de          
+        dec     a               
+        cp      0x00            
+        jr      nz, L4412       
+        pop     bc              
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     10 REM
+#ASM
+        defb    0x00            
+        defb    0x11            
+        defb    0x12            
+        defb    0x0A            
+        defb    0x12            
+L4431:
+        ld      a, (0x442C)     
+        cp      0x01            
+        ret     z               
+        ld      hl, (0x4346)    
+        inc     h               
+        inc     h               
+        inc     l               
+        inc     l               
+        inc     l               
+        inc     l               
+        ld      (0x442D), hl    
+        ld      (0x442F), hl    
+        ld      b, h            
+        ld      c, l            
+        call    L4212           
+        ld      (hl), 0x34      
+        ld      a, 0x01         
+        ld      (0x442C), a     
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     11 REM
+#ASM
+        defb    0x00            
+        defb    0x00            
+L4460:
+        xor     a               
+        ld      (0x445E), a     
+        ld      (0x445F), a     
+        ld      a, (0x442C)     
+        cp      0x00            
+        ret     z               
+        ld      bc, (0x442D)    
+        call    L4212           
+        ld      a, 0x34         
+        cp      (hl)            
+        jr      nz, L447B       
+        ld      (hl), 0x00      
+L447B:
+        ld      de, (0x411C)    
+        ld      a, e            
+        dec     a               
+        sub     c               
+        jr      z, L448F        
+        jr      c, L448F        
+        inc     hl              
+L4487:
+        ld      (hl), 0x34      
+        inc     c               
+        ld      (0x442D), bc    
+        ret                     
+L448F:
+        inc     hl              
+        ld      a, e            
+        add     a, 0x04         
+        sub     c               
+        jr      z, L44B6        
+        xor     a               
+        cp      (hl)            
+        jr      z, L4487        
+        ld      a, 0x80         
+        cp      (hl)            
+        jr      z, L44AB        
+        ld      a, 0x08         
+        cp      (hl)            
+        jr      z, L44AB        
+        ld      a, 0x01         
+        ld      (0x445F), a     
+        jr      L44B6           
+L44AB:
+        inc     c               
+        ld      (hl), 0x00      
+        call    L4238           
+        ld      a, 0x01         
+        ld      (0x445E), a     
+L44B6:
+        xor     a               
+        ld      (0x442C), a     
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     12 REM
+#ASM
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L44D1:
+        ld      bc, 0x0301      
+        call    L4212           
+        ex      de, hl          
+        ld      b, 0x0B         
+L44DA:
+        ld      hl, 0x44CA      
+        ldi                     
+        ldi                     
+        ldi                     
+        djnz    L44DA           
+        ld      a, 0x05         
+L44E7:
+        ld      b, 0x03         
+        ld      hl, 0x44CA      
+L44EC:
+        push    bc              
+        ld      bc, 0x0020      
+        ex      de, hl          
+        add     hl, bc          
+        pop     bc              
+        ex      de, hl          
+        ldi                     
+        djnz    L44EC           
+        dec     a               
+        cp      0x00            
+        jr      nz, L44E7       
+        ld      bc, 0x0020      
+        ex      de, hl          
+        add     hl, bc          
+        ex      de, hl          
+        ld      b, 0x0A         
+L4505:
+        ld      hl, 0x44CA      
+        ld      a, (hl)         
+        ld      (de), a         
+        inc     hl              
+        dec     de              
+        ld      a, (hl)         
+        ld      (de), a         
+        inc     hl              
+        dec     de              
+        ld      a, (hl)         
+        ld      (de), a         
+        nop                     
+        dec     de              
+        djnz    L4505           
+        ld      bc, 0x0020      
+        ex      de, hl          
+        and     a               
+        sbc     hl, bc          
+        ex      de, hl          
+        ld      a, 0x05         
+L4520:
+        ld      b, 0x03         
+        ld      hl, 0x44CA      
+L4525:
+        push    af              
+        ld      a, (hl)         
+        ld      (de), a         
+        pop     af              
+        push    bc              
+        ld      bc, 0x0021      
+        ex      de, hl          
+        and     a               
+        sbc     hl, bc          
+        pop     bc              
+        ex      de, hl          
+        inc     hl              
+        djnz    L4525           
+        dec     a               
+        cp      0x00            
+        jr      nz, L4520       
+        ld      a, (0x44CA)     
+        ld      (0x44CD), a     
+        ld      a, (0x44CB)     
+        ld      (0x44CA), a     
+        ld      a, (0x44CC)     
+        ld      (0x44CB), a     
+        ld      a, (0x44CD)     
+        ld      (0x44CC), a     
+        ld      bc, 0x0B0D      
+        jp      L434C           
+#ENDASM
+     13 REM
+#ASM
+        defb    0x00            
+        defb    0x81            
+        defb    0x84            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x86            
+        defb    0x07            
+        defb    0x82            
+        defb    0x81            
+        defb    0x82            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x84            
+        defb    0x07            
+        defb    0x84            
+        defb    0x81            
+        defb    0x86            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x82            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x80            
+        defb    0x00            
+        defb    0x07            
+        defb    0x82            
+        defb    0x80            
+        defb    0x81            
+        defb    0x80            
+        defb    0x07            
+        defb    0x80            
+        defb    0x80            
+        defb    0x81            
+        defb    0x00            
+        defb    0x07            
+        defb    0x80            
+        defb    0x80            
+        defb    0x81            
+        defb    0x80            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x81            
+        defb    0x00            
+        defb    0x80            
+        defb    0x07            
+        defb    0x00            
+        defb    0x84            
+        defb    0x07            
+        defb    0x82            
+        defb    0x00            
+        defb    0x82            
+        defb    0x81            
+        defb    0x84            
+        defb    0x06            
+        defb    0x82            
+        defb    0x07            
+        defb    0x82            
+        defb    0x00            
+        defb    0x84            
+        defb    0x81            
+        defb    0x84            
+        defb    0x06            
+        defb    0x82            
+        defb    0x07            
+        defb    0x84            
+        defb    0x00            
+        defb    0x84            
+        defb    0x81            
+        defb    0x82            
+        defb    0x00            
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x04            
+L45C4:
+        ld      de, 0x0019      
+        ld      a, (0x45C3)     
+        inc     a               
+        cp      0x05            
+        jr      nz, L45D1       
+        ld      a, 0x01         
+L45D1:
+        ld      (0x45C3), a     
+        ld      hl, 0x4546      
+        ld      b, a            
+L45D8:
+        add     hl, de          
+        djnz    L45D8           
+        push    hl              
+        ld      bc, (0x4346)    
+        call    L4212           
+        ex      de, hl          
+        pop     hl              
+        jp      L4377           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     14 REM
+#ASM
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x34            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0xFA            
+        defb    0x45            
+L4606:
+        ld      hl, (0x4604)    
+        dec     hl              
+        ld      bc, 0x45F3      
+        and     a               
+        sbc     hl, bc          
+        jr      nc, L4617       
+        ld      hl, 0x45FB      
+        jr      L4618           
+L4617:
+        add     hl, bc          
+L4618:
+        push    hl              
+        ld      (0x4604), hl    
+        ld      bc, 0x0D12      
+        call    L4212           
+        pop     de              
+        ex      de, hl          
+        ld      bc, 0x0008      
+        ldir                    
+        ret                     
+#ENDASM
+     15 REM
+#ASM
+L4630:
+        ld      a, (0x411C)     
+        sub     0x02            
+        ld      c, a            
+        ld      b, 0x05         
+        call    L4647           
+        nop                     
+        call    L4647           
+        call    L4647           
+        nop                     
+        call    L4647           
+        ret                     
+L4647:
+        call    L4212           
+        ld      (hl), 0x81      
+        ld      de, 0x0021      
+        add     hl, de          
+        ld      (hl), 0x02      
+        inc     b               
+        inc     b               
+        inc     b               
+        inc     b               
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     16 REM
+#ASM
+        defb    0x00            
+        defb    0x11            
+        defb    0x00            
+L4663:
+        ld      a, (0x4662)     
+        cp      0x01            
+        ret     z               
+        ld      a, (0x411C)     
+        sub     0x03            
+        ld      l, a            
+        ld      a, (0x4347)     
+        ld      h, a            
+        ld      a, 0x05         
+        sub     h               
+        jr      c, L467C        
+        ld      h, 0x05         
+        jr      L4690           
+L467C:
+        ld      a, 0x09         
+        sub     h               
+        jr      c, L4685        
+        ld      h, 0x09         
+        jr      L4690           
+L4685:
+        ld      a, 0x0D         
+        sub     h               
+        jr      c, L468E        
+        ld      h, 0x0D         
+        jr      L4690           
+L468E:
+        ld      h, 0x11         
+L4690:
+        ld      (0x4660), hl    
+        ld      a, 0x01         
+        ld      (0x4662), a     
+        ret                     
+#ENDASM
+     17 REM
+#ASM
+        defb    0x00            
+L46A0:
+        xor     a               
+        ld      (0x469F), a     
+        ld      bc, (0x4660)    
+        call    L4212           
+        ld      (hl), 0x00      
+        xor     a               
+        cp      c               
+        jr      nz, L46B5       
+        ld      (0x4662), a     
+        ret                     
+L46B5:
+        dec     c               
+        dec     hl              
+        cp      (hl)            
+        jr      z, L46BF        
+        ld      a, 0x34         
+        cp      (hl)            
+        jr      nz, L46C6       
+L46BF:
+        ld      (hl), 0x04      
+        ld      (0x4660), bc    
+        ret                     
+L46C6:
+        inc     (hl)            
+        ld      (L46C6), a      
+        ld      a, 0x01         
+        ld      (0x469F), a     
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     18 REM
+#ASM
+        defb    0x61            
+        defb    0x00            
+L46DD:
+        ld      hl, (0x46DB)    
+        inc     hl              
+        ld      de, 0x00C8      
+        and     a               
+        sbc     hl, de          
+        jr      z, L46EE        
+        add     hl, de          
+        ld      (0x46DB), hl    
+        ret                     
+L46EE:
+        ld      hl, 0x0000      
+        ld      (0x46DB), hl    
+        call    L47E1           
+        ld      bc, (0x411C)    
+        dec     c               
+        ld      (0x411C), bc    
+        dec     c               
+        dec     c               
+        call    L4212           
+        ld      a, 0x14         
+L4707:
+        ld      bc, 0x000D      
+        ld      d, h            
+        ld      e, l            
+        inc     hl              
+        ldir                    
+        dec     hl              
+        ld      (hl), 0x00      
+        ld      bc, 0x0014      
+        add     hl, bc          
+        dec     a               
+        cp      0x00            
+        jr      nz, L4707       
+        ret                     
+#ENDASM
+     19 REM
+#ASM
+        defb    0x38            
+        defb    0x04            
+        defb    0x00            
+        defb    0x1D            
+        defb    0x1C            
+        defb    0x24            
+        defb    0x1C            
+        defb    0x10            
+        defb    0x27            
+        defb    0xE8            
+        defb    0x03            
+        defb    0x64            
+        defb    0x00            
+        defb    0x0A            
+        defb    0x00            
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x01            
+L4736:
+        xor     a               
+        ld      (0x4735), a     
+        ld      hl, (0x4722)    
+        ld      (0x4733), hl    
+        ld      bc, 0x4724      
+        ld      hl, 0x4729      
+        push    hl              
+L4747:
+        xor     a               
+        pop     hl              
+        ld      e, (hl)         
+        inc     hl              
+        ld      d, (hl)         
+        dec     hl              
+        push    hl              
+L474E:
+        ld      hl, (0x4733)    
+        and     a               
+        sbc     hl, de          
+        ld      (0x4733), hl    
+        jr      c, L475C        
+        inc     a               
+        jr      L474E           
+L475C:
+        add     hl, de          
+        cp      0x00            
+        jr      nz, L476A       
+        ld      a, (0x4735)     
+        cp      0x00            
+        ld      a, 0x00         
+        jr      z, L4773        
+L476A:
+        add     a, 0x1C         
+        push    af              
+        ld      a, 0x01         
+        ld      (0x4735), a     
+        pop     af              
+L4773:
+        ld      (0x4733), hl    
+        ld      (bc), a         
+        inc     bc              
+        pop     hl              
+        inc     hl              
+        inc     hl              
+        push    hl              
+        ld      a, e            
+        cp      0x01            
+        jr      nz, L4747       
+        pop     hl              
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     20 REM
+#ASM
+L4793:
+        ld      a, (0x445F)     
+        cp      0x01            
+        ret     z               
+        ld      a, (0x445E)     
+        cp      0x00            
+        ret     z               
+        xor     a               
+        ld      (0x445E), a     
+        ld      de, 0x0003      
+        ld      hl, (0x442F)    
+        ld      h, 0x00         
+        and     a               
+        sbc     hl, de          
+        ex      de, hl          
+        ld      hl, (0x4722)    
+        add     hl, de          
+        add     hl, de          
+        add     hl, de          
+        add     hl, de          
+        add     hl, de          
+        ld      (0x4722), hl    
+        call    L4736           
+        ld      hl, (D_FILE)    
+        ld      de, 0x0012      
+        add     hl, de          
+        ex      de, hl          
+        ld      hl, 0x4724      
+        ld      b, 0x05         
+L47CA:
+        ld      a, (hl)         
+        cp      0x00            
+        jr      z, L47D5        
+        ldi                     
+        inc     bc              
+        djnz    L47CA           
+        ret                     
+L47D5:
+        inc     hl              
+        djnz    L47CA           
+        ret                     
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     21 REM
+#ASM
+L47E1:
+        ld      bc, (0x442D)    
+        call    L4212           
+        ld      a, 0x34         
+        cp      (hl)            
+        ret     nz              
+        ld      (hl), 0x00      
+        ret                     
+L47EF:
+        ldi                     
+        ld      h, b            
+        ld      b, (hl)         
+        call    L4212           
+        ld      (hl), 0x00      
+        ret                     
+#ENDASM
+     22 REM
+#ASM
+L47FF:
+        ld      b, 0x3A         
+        ld      hl, 0x4082      
+L4804:
+        ld      (hl), 0x80      
+        inc     hl              
+        djnz    L4804           
+        ld      b, 0x32         
+L480B:
+        ld      (hl), 0x08      
+        inc     hl              
+        djnz    L480B           
+        ld      b, 0x2A         
+L4812:
+        ld      (hl), 0x80      
+        inc     hl              
+        djnz    L4812           
+        ld      hl, 0x0215      
+        ld      (0x411C), hl    
+        ld      hl, 0x0000      
+        ld      (0x46DB), hl    
+        ld      (0x445E), hl    
+        ld      hl, 0x0900      
+        ld      (0x4346), hl    
+        ld      hl, 0x0100      
+        ld      (0x4660), hl    
+        xor     a               
+        ld      (0x442C), a     
+        ld      (0x4662), a     
+        ld      (0x469F), a     
+        ret                     
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     23 REM
+#ASM
+        defb    0x2D            
+        defb    0x2E            
+        defb    0x39            
+        defb    0x00            
+        defb    0x26            
+        defb    0x33            
+        defb    0x3E            
+        defb    0x00            
+        defb    0x31            
+        defb    0x2A            
+        defb    0x39            
+        defb    0x39            
+        defb    0x2A            
+        defb    0x37            
+        defb    0x00            
+        defb    0x3C            
+        defb    0x2D            
+        defb    0x2A            
+        defb    0x33            
+        defb    0x00            
+        defb    0x37            
+        defb    0x2A            
+        defb    0x26            
+        defb    0x29            
+        defb    0x3E            
+L485E:
+        ld      bc, 0x1703      
+        call    L4212           
+        ex      de, hl          
+        ld      hl, 0x4845      
+        ld      bc, 0x0019      
+        ldir                    
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L4871:
+        ld      bc, 0x1703      
+        call    L4212           
+        ld      b, 0x19         
+L4879:
+        ld      (hl), 0x00      
+        inc     hl              
+        djnz    L4879           
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     24 REM
+#ASM
+        defb    0x00            
+        defb    0x85            
+        defb    0x01            
+        defb    0x85            
+        defb    0x00            
+        defb    0x00            
+        defb    0x02            
+        defb    0x80            
+        defb    0x03            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x80            
+        defb    0x04            
+        defb    0x00            
+        defb    0x00            
+        defb    0x81            
+        defb    0x00            
+        defb    0x82            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x04            
+        defb    0x00            
+        defb    0x84            
+        defb    0x03            
+        defb    0x07            
+        defb    0x00            
+        defb    0x00            
+        defb    0x02            
+        defb    0x80            
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x01            
+L48B6:
+        ld      bc, (0x411C)    
+        inc     c               
+        inc     c               
+        inc     c               
+        ld      b, 0x05         
+        call    L4212           
+        ld      de, 0x001C      
+        ld      a, 0x0E         
+L48C7:
+        push    af              
+        ld      b, 0x05         
+L48CA:
+        ld      a, (hl)         
+        xor     0x80            
+        ld      (hl), a         
+        inc     hl              
+        djnz    L48CA           
+        add     hl, de          
+        pop     af              
+        dec     a               
+        cp      0x00            
+        jr      nz, L48C7       
+        ret                     
+        defb    0xEB            
+        defb    0x21            
+        defb    0x9C            
+        defb    0x48            
+        defb    0xC3            
+        defb    0x77            
+        defb    0x43            
+        defb    0x3E            
+        defb    0x02            
+        defb    0xBE            
+        defb    0x20            
+        defb    0x1F            
+        defb    0x3C            
+        defb    0x32            
+        defb    0xB5            
+        defb    0x48            
+        defb    0xEB            
+        defb    0x23            
+        defb    0x36            
+        defb    0x05            
+        defb    0x23            
+        defb    0x36            
+        defb    0x02            
+        defb    0x23            
+        defb    0x36            
+        defb    0x05            
+        defb    0x11            
+        defb    0x1F            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x03            
+        defb    0x23            
+        defb    0x23            
+        defb    0x36            
+        defb    0x01            
+        defb    0x11            
+        defb    0xA3            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x80            
+        defb    0xC9            
+        defb    0x3E            
+        defb    0x01            
+        defb    0x32            
+        defb    0xB5            
+        defb    0x48            
+        defb    0xEB            
+        defb    0x23            
+        defb    0x23            
+        defb    0x36            
+        defb    0x00            
+        defb    0x23            
+        defb    0x36            
+        defb    0x85            
+        defb    0x11            
+        defb    0x21            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x03            
+        defb    0x11            
+        defb    0xA5            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x80            
+        defb    0xC9            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     25 REM
+#ASM
+        defb    0xED            
+        defb    0x4B            
+        defb    0x1C            
+        defb    0x41            
+        defb    0x0C            
+        defb    0x0C            
+        defb    0x0C            
+        defb    0x06            
+        defb    0x05            
+        defb    0xED            
+        defb    0x43            
+        defb    0x46            
+        defb    0x43            
+        defb    0xCD            
+        defb    0x05            
+        defb    0x44            
+        defb    0x06            
+        defb    0x0E            
+        defb    0xED            
+        defb    0x43            
+        defb    0x46            
+        defb    0x43            
+        defb    0xCD            
+        defb    0x05            
+        defb    0x44            
+        defb    0xC9            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     26 REM
+#ASM
+        defb    0x01            
+        defb    0x00            
+L4951:
+        call    L46DD           
+        call    L49D1           
+        call    L429F           
+        call    L412C           
+        call    L4460           
+        call    L4793           
+        ld      a, (0x445F)     
+        cp      0x01            
+        ret     z               
+        call    L4630           
+        call    L46A0           
+        ld      a, (0x469F)     
+        cp      0x01            
+        ret     z               
+        call    L4663           
+        ld      hl, (0x494F)    
+        ld      de, 0x0000      
+L497E:
+        inc     de              
+        and     a               
+        sbc     hl, de          
+        jp      z, L4951        
+        add     hl, de          
+        jr      L497E           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     27 REM
+#ASM
+        defb    0x3E            
+        defb    0xBF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x06            
+        defb    0x3E            
+        defb    0x7F            
+        defb    0xBD            
+        defb    0xC2            
+        defb    0xF0            
+        defb    0x43            
+        defb    0x3A            
+        defb    0x1C            
+        defb    0x41            
+        defb    0xC3            
+        defb    0xC5            
+        defb    0x43            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+     28 REM
+#ASM
+L49B3:
+        ld      bc, 0x0200      
+        call    L4212           
+        ld      a, 0x14         
+L49BB:
+        ld      b, 0x20         
+L49BD:
+        ld      (hl), 0x00      
+        inc     hl              
+        djnz    L49BD           
+        inc     hl              
+        dec     a               
+        cp      0x00            
+        jr      nz, L49BB       
+        ret                     
+#ENDASM
+     29 REM
+#ASM
+        defb    0xDF            
+        defb    0xFB            
+L49D1:
+        call    KEYBOARD        
+        ld      bc, (0x4346)    
+        ld      (0x49CF), hl    
+        ld      de, 0xFFFF      
+        and     a               
+        sbc     hl, de          
+        ret     z               
+        ld      hl, (0x49CF)    
+        bit     4, l            
+        call    z, L4431        
+        ld      hl, (0x49CF)    
+        ld      bc, (0x4346)    
+        bit     5, l            
+        call    z, L4431        
+        ld      hl, (0x49CF)    
+        ld      bc, (0x4346)    
+        bit     3, l            
+        jp      z, L43DB        
+        bit     2, l            
+        jp      z, L43DB        
+        bit     0, l            
+        jp      z, L43D0        
+        bit     1, l            
+        jp      z, L43D0        
+        bit     6, l            
+        jr      z, L4A18        
+        bit     7, l            
+        ret     nz              
+L4A18:
+        nop                     
+        nop                     
+        nop                     
+        nop                     
+        nop                     
+        bit     5, h            
+        jp      z, L43E6        
+        bit     4, h            
+        jp      z, L43E6        
+        bit     3, h            
+        jp      z, L43E6        
+        bit     2, h            
+        jp      z, L43C2        
+        bit     1, h            
+        jp      z, L43C2        
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+#ENDASM
+@LINE_0030:
+     30 CLS
+     34 POKE 17924,252
+     35 POKE 17925,69
+     40 PRINT AT 5,11;"WELCOME TO";
+     50 PRINT AT 7,5;"\.'\''\'. \''\:'\' \ '\':\'' \.'\''\'. \.'\''\'. \: \ .\' ";
+     60 PRINT AT 8,5;"\:.\..\.:  \:   \ :  \:.\..\.: \:    \:'\'.";
+     70 PRINT AT 9,5;"\:  \ :  \:   \ :  \:  \ : \'.\..\.' \:  \'.";\00
+     80 PRINT AT 17,3;"COPR., PAUL CARLSON, 1982";
+     90 PRINT AT 21,0;"DO YOU WANT INSTRUCTIONS? (Y/N)";
+    100 POKE 17158,128
+    110 POKE 17183,128
+    120 POKE 17208,128
+@LINE_0140:
+    140 LET L=USR &L44D1
+    150 LET L=USR &L4606
+    155 IF INKEY$=""THEN GOTO @LINE_0140
+    160 IF INKEY$="N"THEN GOTO @LINE_0190
+    170 IF INKEY$<>"Y"THEN GOTO @LINE_0140
+    180 GOSUB @LINE_1000
+@LINE_0190:
+    190 GOSUB @LINE_2000
+    195 LET W=28
+    200 LET S=0
+    202 LET R=200
+    205 POKE 18146,R
+    210 POKE 18210,0
+    220 POKE 18211,0
+    230 LET L=USR &L47FF
+    250 PRINT AT 0,10;"SCORE: 0"
+@LINE_0260:
+    260 LET W=W+1
+    270 IF W=34 THEN GOTO @LINE_0640
+    280 POKE 17158,W
+    290 POKE 17183,W
+    300 POKE 17208,W
+@LINE_0310:
+    310 LET L=USR &L4630
+    320 LET L=USR &L485E
+@LINE_0340:
+    340 LET L=USR &L412C
+    350 LET L=USR &L429F
+    360 LET L=USR &L4348
+    370 IF INKEY$=""THEN GOTO @LINE_0340
+    380 LET L=USR &L4871
+    390 LET L=USR &L4951
+    400 LET L=USR &L47E1
+    410 LET L=USR &L47EF
+    420 IF PEEK 17503=1 THEN GOTO @LINE_0520
+    430 FOR N=1 TO 32
+    440 LET L=USR &L45C4
+    450 LET L=L+N
+    460 NEXT N
+    470 LET L=USR &L4405
+    475 POKE 18016,0
+    480 POKE 17452,0
+    485 POKE 18018,0
+    490 POKE 17222,0
+    500 POKE 17223,9
+    505 POKE 18079,0
+    510 GOTO @LINE_0260
+@LINE_0520:
+    520 FOR N=1 TO 50
+    540 LET L=USR &L48B6
+    545 LET L=L+0
+    547 LET L=L+0
+    550 NEXT N
+    560 LET S=PEEK 18210+256*PEEK 18211
+    570 LET S=S+F*((PEEK 17455)-3)
+    575 PRINT AT 0,17;S
+    580 POKE 18211,INT(S/256)
+    590 POKE 18210,(S-256*PEEK 18211)
+    592 IF R>20 THEN LET R=R-20
+    595 POKE 18146,R
+    600 LET L=USR &L49B3
+    620 LET L=USR &L47FF
+    630 GOTO @LINE_0310
+@LINE_0640:
+    640 LET L=USR &L49B3
+    650 PRINT AT 0,4;"FINAL";
+    660 PRINT AT 10,13;"\:'\''\''\''\''\':"
+    670 PRINT AT 11,13;"\: GAME\ :"
+    680 PRINT AT 12,13;"\: OVER\ :"
+    690 PRINT AT 13,13;"\:.\..\..\..\..\.:"
+    700 PRINT AT 16,6;"PLAY AGAIN? (Y OR N)"
+@LINE_0720:
+    720 IF INKEY$="N"THEN STOP
+    730 IF INKEY$="Y"THEN GOTO @LINE_0190
+    740 GOTO @LINE_0720
+@LINE_1000:
+   1000 CLS
+   1010 PRINT AT 0,10;"YOUR GOAL:"
+   1020 PRINT AT 2,0;"TO SCORE AS MANY POINTS AS YOU   CAN BY DESTROYING THE ALIEN AND BLOCKS OF HIS FORTRESS."
+   1030 PRINT AT 6,0;"YOU HAVE FIVE SHIPS TO DESTROY   THE ALIEN AS MANY TIMES AS YOU  CAN.  WARNING - THE ALIEN GUNS  ARE INDESTRUCTIBLE."
+   1040 PRINT AT 11,0;"POINTS ARE AWARDED BASED ON      SKILL LEVEL AND THE DISTANCE    YOUR SHIP IS FROM THE LEFT EDGE OF THE SCREEN WHEN IT FIRES."
+   1050 PRINT AT 16,0;"DESTROYING THE ALIEN IS WORTH    FIFTY TIMES THE POINTS AWARDED  FOR DESTROYING A BLOCK OF HIS   FORTRESS."
+   1060 PRINT AT 21,1;"HIT ANY LETTER TO CONTINUE..."
+@LINE_1070:
+   1070 IF INKEY$=""THEN GOTO @LINE_1070
+   1080 CLS
+   1090 PRINT AT 0,3;"YOUR SHIPS CONTROL PANEL:"
+   1100 PRINT AT 3,2;"\:'\''\''\''\''\''\''\''\''\''\''\':    \:'\''\''\''\''\''\''\''\''\''\''\':    \: 1 2 3 4 5 \ :    \: 6 7 8 9 0 \ :    \:  Q W E R T\ :    \:  Y U I O P\ :    \:.\..\..\..\..\..\..\..\..\..\..\.:    \:.\..\..\..\..\..\..\..\..\..\..\.:    MOVE SHIP UP    FIRE TORPEDO"\00
+   1110 PRINT AT 11,0;"\:'\''\''\''\''\''\''\''\''\''\':  \:'\''\''\''\''\''\''\': \:'\''\''\''\''\''\''\''\''\':\: A S D F G\ :  \:  H J K\ : \:  L ENTER\ :\:  Z X C V \ :  \: B N M \ : \: . SPACE \ :\:.\..\..\..\..\..\..\..\..\..\.:  \:.\..\..\..\..\..\..\.: \:.\..\..\..\..\..\..\..\..\.: MOVE SHIP     MOVE      MOVE      DOWN        SHIP      SHIP                  LEFT      RIGHT"
+   1120 PRINT AT 21,1;"HIT ANY LETTER TO CONTINUE..."
+@LINE_1130:
+   1130 IF INKEY$=""THEN GOTO @LINE_1130
+   1140 RETURN
+@LINE_2000:
+   2000 CLS
+   2010 PRINT AT 2,1;"SKILL LEVELS:"
+   2020 PRINT AT 4,15;"1 = SLOW"
+   2030 PRINT AT 6,15;"2 = AVERAGE"
+   2040 PRINT AT 8,15;"3 = FAST"
+   2050 PRINT AT 10,15;"4 = VERY FAST"
+   2060 PRINT AT 12,15;"5 = SUICIDAL"
+   2070 PRINT AT 16,6;"PRESS SKILL LEVEL..."
+@LINE_2080:
+   2080 IF INKEY$=""THEN GOTO @LINE_2080
+   2090 LET V=CODE INKEY$-28
+   2100 IF V<1 OR V>5 THEN GOTO @LINE_2080
+   2105 CLS
+   2110 POKE 18767,1
+   2120 POKE 18768,5-V
+   2130 LET F=50*V
+   2150 FOR N=1 TO 5
+   2160 LET A=18353+N
+   2170 POKE A,0
+   2180 IF N<=V THEN POKE A,25
+   2190 NEXT N
+   2200 RETURN
+   3000 SAVE"ATTAC%K"
+   3100 GOTO @LINE_0030
+
+#SYSVARS =      0x00,0xB8,0x0B,0xE1,0x58,0xE2,0x58,0xFA,0x5B,0xFA,0x5B,0x37, \
+                0x5C,0xD2,0x58,0x00,0xC0,0x37,0x5C,0x37,0x5C,0x0B,0x5D,0x40, \
+                0x00,0x02,0x39,0x08,0xFF,0xFF,0xFF,0x1F,0xD3,0x58,0xB8,0x0B, \
+                0x00,0x71,0xE2,0x8D,0x0C,0x00,0x00,0x17,0x9F,0x00,0x00,0xBC, \
+                0x21,0x18,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00, \
+                0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76, \
+                0x00,0x00,0x00,0x00,0x00,0x82,0x40,0x00,0x00,0x00,0x80,0x80, \
+                0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x85,0x92,0x92,0x93, \
+                0x90,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#AUTOSTART =    1
+#AUTOSTART_LINE = 3100
+#FAST =         0
+#WORKSPACE =    
+
+#DFILE =        "","","","","","","","","","","","","","","","","","","","","", \
+                "","",""
+#DFILE_COLLAPSED = 0
+
+
+# [0x4000]          xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# [0x4040] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxbbb
+# [0x4080] b---------------------------------------------------------------
+# [0x40C0] ----------------------------------------------------------------
+# [0x4100] --------------------------------------bbbbb-CCCCCCCCCCCCCCCCCCCC
+# [0x4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4180] CCCCCCCCCCCbbbbb-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x41C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------------
+# [0x4200] ------------bbbbb-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--bbbbb-CCCCCCCC
+# [0x4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbb-------------
+# [0x4280] -------------------------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x42C0] CCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbb-------
+# [0x4300] ----------------------------------------------------------------
+# [0x4340] --------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4380] CCCCCCCCCC-----bbbbb--------------------------------------------
+# [0x43C0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCC--b
+# [0x4400] bbbb-CCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbb------CCCCCCCCCCCCCCC
+# [0x4440] CCCCCCCCCCCCCCCCCCC-----bbbbb---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----
+# [0x44C0] ----bbbbb--------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4500] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4540] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbb----------------------------------
+# [0x4580] ----------------------------------------------------------------
+# [0x45C0] ----CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbb--------------
+# [0x4600] ------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbb-CCCCCCCCCCCCCCCC
+# [0x4640] CCCCCCCCCCCCCCCCCCCCCCC---bbbbb----CCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4680] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x46C0] CCCCCCCCCCCCCCCC-----bbbbb---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbb---------------------CCCCCCCCCC
+# [0x4740] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4780] CCC----------bbbbb-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x47C0] CCCCCCCCCCCCCCCCCCCCCCCCC--bbbbb-CCCCCCCCCCCCCCCCCCCCCCCCbbbbb-C
+# [0x4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--b
+# [0x4840] bbbb--------------------------CCCCCCCCCCCCCCCC---CCCCCCCCCCCCCC-
+# [0x4880] --bbbbb-----------------------------------------------CCCCCCCCCC
+# [0x48C0] CCCCCCCCCCCCCCCCCCCCCCCCC---------------------------------------
+# [0x4900] ---------------------------------bbbbb--------------------------
+# [0x4940] ---------bbbbb---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4980] CCCCCCCC-------bbbbb-------------------------bbbbb-CCCCCCCCCCCCC
+# [0x49C0] CCCCCCCCCbbbbb---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4A00] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC------bbb
+# [0x4A40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4A80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4AC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4B00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4B40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4B80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4BC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4C00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4C40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4C80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4CC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4D00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4D40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4D80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4DC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4E00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4E40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4E80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4EC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4F00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4F40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4F80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x4FC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5000] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5040] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5080] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x50C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5100] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5140] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5180] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x51C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5200] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5240] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5280] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x52C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5300] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5340] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5380] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x53C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5400] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5440] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5480] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x54C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5500] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5540] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5580] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x55C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5600] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5640] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5680] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x56C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5700] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5740] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5780] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x57C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5800] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5840] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x5880] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+# [0x58C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbddddddddddddddddddddddddddddddd
+# [0x5900] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5940] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5980] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x59C0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5A00] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5A40] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5A80] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5AC0] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5B00] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5B40] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5B80] dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+# [0x5BC0] ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddvvvvvv
+# [0x5C00] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv         
+

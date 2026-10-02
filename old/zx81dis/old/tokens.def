@@ -1,0 +1,21 @@
+//-----------------------------------------------------------------------------
+// zx81dis
+// Copyright (C) Paulo Custodio, 2023-2026
+// License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
+//-----------------------------------------------------------------------------
+
+X("Identifier", Identifier)
+X("Float", Float)
+X("Integer", Integer)
+X("StringLiteral", StringLiteral)
+X("CharConstant", CharConstant)
+X("LabelRefLine", LabelRefLine)
+X("LabelRefAddr", LabelRefAddr)
+X("Punctuation", Punctuation)
+X("#", Hash)
+X("(", LParen)
+X(")", RParen)
+X(",", Comma)
+X(":", Colon)
+X("=", Equal)
+X("@", At)

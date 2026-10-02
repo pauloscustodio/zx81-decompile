@@ -1,0 +1,6 @@
+win32/.vs
+win32/**/x64
+*.vcxproj.user
+*.d
+*.o
+*.exe
