@@ -1,0 +1,36 @@
+name: build-on-windows-cygwin
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash.exe --login --norc -eo pipefail -o igncr '{0}'
+    env:
+      SHELLOPTS: igncr
+      CHERE_INVOKING: 1
+      CYGWIN_NOWINPATH: 1
+    steps:
+    - name: Configure git
+      run: |
+        git config --global core.autocrlf input
+      shell: cmd
+    - name: Checkout from git
+      uses: actions/checkout@v5
+      with: 
+        submodules: 'true'
+    - name: Build
+      run: |
+        make
+    - name: Run tests
+      run: |
+        make test

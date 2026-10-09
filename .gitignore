@@ -8,5 +8,4 @@ win32/**/x64
 *.bak
 *.orig
 .prove
-.github/
 .vs/

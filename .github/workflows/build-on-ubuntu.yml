@@ -1,0 +1,25 @@
+name: build-on-ubuntu
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout from git
+      uses: actions/checkout@v5
+      with: 
+        submodules: 'true'
+    - name: Build
+      run: |
+        make
+    - name: Run tests
+      run: |
+        make test
