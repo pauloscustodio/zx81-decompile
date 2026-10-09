@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        shell: bash.exe --login --norc -eo pipefail -o igncr '{0}'
+        shell: bash
     env:
       SHELLOPTS: igncr
       CHERE_INVOKING: 1
@@ -23,14 +23,14 @@ jobs:
     - name: Configure git
       run: |
         git config --global core.autocrlf input
-      shell: cmd
     - name: Checkout from git
       uses: actions/checkout@v5
       with: 
         submodules: 'true'
     - name: Install perl prerequisites
       run: |
-        cpan Modern::Perl Path::Tiny Test::HexDifferences
+        cpan App::cpanminus
+        cpanm Modern::Perl Path::Tiny Test::HexDifferences
     - name: Build
       run: |
         make
