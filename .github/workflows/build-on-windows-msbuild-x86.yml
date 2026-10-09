@@ -30,12 +30,13 @@ jobs:
         msbuild-architecture: x86
     - name: Build for Debug
       run: |
-        msbuild win32\zx81-decompile.sln -t:rebuild -property:Platform=Win32 -property:Configuration=Debug
+        msbuild win32\zx81-decompile.sln -t:rebuild -property:Platform=x86 -property:Configuration=Debug
     - name: Build for Release
       run: |
-        msbuild win32\zx81-decompile.sln -t:rebuild -property:Platform=Win32 -property:Configuration=Release
+        msbuild win32\zx81-decompile.sln -t:rebuild -property:Platform=x86 -property:Configuration=Release
     - name: Run tests
       run: |
         mkdir build\Debug
-        copy win32\Debug\*.exe build\Debug\
+        copy win32\Debug\zx81-compile.exe build\Debug\zx81_compile.exe
+        copy win32\Debug\zx81-decompile.exe build\Debug\zx81_decompile.exe
         perl -S prove t\*.t
