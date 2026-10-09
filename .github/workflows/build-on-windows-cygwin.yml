@@ -30,7 +30,7 @@ jobs:
         submodules: 'true'
     - name: Install perl prerequisites
       run: |
-      	cpan App::cpanminus
+        cpan App::cpanminus
         cpanm Modern::Perl
     - name: Build
       run: |
