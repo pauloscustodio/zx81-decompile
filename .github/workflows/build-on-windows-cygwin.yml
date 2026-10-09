@@ -15,10 +15,6 @@ jobs:
     defaults:
       run:
         shell: cmd
-    env:
-      SHELLOPTS: igncr
-      CHERE_INVOKING: 1
-      CYGWIN_NOWINPATH: 1
     steps:
     - name: Configure git
       run: |
@@ -28,6 +24,8 @@ jobs:
       with: 
         submodules: 'true'
     - name: Install perl prerequisites
+      env:
+        PATH: C:\Strawberry\perl\bin;C:\Strawberry\c\bin;${{ env.PATH }}
       run: |
         cpan App::cpanminus
         cpanm Modern::Perl Path::Tiny Test::HexDifferences
@@ -35,5 +33,7 @@ jobs:
       run: |
         make
     - name: Run tests
+      env:
+        PATH: C:\Strawberry\perl\bin;C:\Strawberry\c\bin;${{ env.PATH }}
       run: |
         make test
