@@ -16,6 +16,10 @@ jobs:
       run:
         shell: cmd
     steps:
+    - name: Install perl prerequisites
+      run: |
+        perl -S cpan App::cpanminus
+        perl -S cpanm Modern::Perl
     - name: Checkout from git
       uses: actions/checkout@v5
       with: 
