@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        shell: bash
+        shell: cmd
     env:
       SHELLOPTS: igncr
       CHERE_INVOKING: 1
