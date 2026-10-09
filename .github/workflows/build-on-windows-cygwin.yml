@@ -31,7 +31,7 @@ jobs:
     - name: Install perl prerequisites
       run: |
         cpan App::cpanminus
-        cpanm Modern::Perl
+        cpanm Modern::Perl Test::HexDifferences
     - name: Build
       run: |
         make

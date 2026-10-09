@@ -25,7 +25,7 @@ jobs:
         sudo apt install -y build-essential cpanminus libmodern-perl-perl liblocal-lib-perl
     - name: Install perl prerequisites
       run: |
-        cpanm --local-lib=~/perl5 Modern::Perl
+        cpanm --local-lib=~/perl5 Modern::Perl Test::HexDifferences
     - name: Build
       run: |
         make

@@ -21,7 +21,7 @@ jobs:
         brew install cpanminus perl
     - name: Install perl prerequisites
       run: |
-        cpanm Modern::Perl
+        cpanm Modern::Perl Test::HexDifferences
     - name: Build
       run: |
         make
