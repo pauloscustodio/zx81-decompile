@@ -30,8 +30,7 @@ jobs:
         submodules: 'true'
     - name: Install perl prerequisites
       run: |
-        cpan CPAN::Author App::cpanminus
-        cpanm Modern::Perl Test::HexDifferences
+        cpan Modern::Perl Path::Tiny Test::HexDifferences
     - name: Build
       run: |
         make

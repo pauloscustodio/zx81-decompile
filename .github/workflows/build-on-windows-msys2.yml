@@ -32,8 +32,6 @@ jobs:
       with:
         msystem: MINGW64
         update: true
-        # The image already ships MSYS2; a fresh install just puts a second
-        # copy on disk and costs the time to download it.
         release: false
         install: >
             base-devel
@@ -44,7 +42,7 @@ jobs:
     - name: Install CPAN modules
       run: |
         perl -S cpan App::cpanminus
-        perl -S cpanm Modern::Perl Test::HexDifferences
+        perl -S cpanm Modern::Perl Path::Tiny Test::HexDifferences
     - name: Build
       run: |
         make

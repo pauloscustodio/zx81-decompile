@@ -19,7 +19,7 @@ jobs:
     - name: Install perl prerequisites
       run: |
         perl -S cpan App::cpanminus
-        perl -S cpanm Modern::Perl Test::HexDifferences
+        perl -S cpanm Modern::Perl Path::Tiny Test::HexDifferences
     - name: Checkout from git
       uses: actions/checkout@v5
       with: 
