@@ -12,3 +12,4 @@
 [X] follow USR code
 [X] add control file
 [ ] add data labels and patch PEEK and POKE
+[ ] add disassembly test of all Z80 opcodes

@@ -42,7 +42,8 @@ jobs:
     - name: Install CPAN modules
       run: |
         perl -S cpan App::cpanminus
-        perl -S cpanm Modern::Perl Path::Tiny Test::HexDifferences
+        perl -S cpanm -f Path::Tiny
+        perl -S cpanm Modern::Perl Test::HexDifferences
     - name: Build
       run: |
         make
