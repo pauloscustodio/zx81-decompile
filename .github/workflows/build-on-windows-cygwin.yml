@@ -29,8 +29,8 @@ jobs:
         echo C:\Strawberry\c\bin >> %GITHUB_PATH%
     - name: Install perl prerequisites
       run: |
-        cpan App::cpanminus
-        cpanm Modern::Perl Path::Tiny Test::HexDifferences
+        C:\Strawberry\perl\bin\perl.exe -S cpan App::cpanminus
+        C:\Strawberry\perl\bin\perl.exe -S cpanm Modern::Perl Path::Tiny Test::HexDifferences
     - name: Build
       run: |
         make
