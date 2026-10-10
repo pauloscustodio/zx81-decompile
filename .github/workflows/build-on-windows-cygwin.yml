@@ -36,4 +36,5 @@ jobs:
         make
     - name: Run tests
       run: |
-        make test
+        C:\Strawberry\perl\bin\perl.exe -S prove t\*.t
+
