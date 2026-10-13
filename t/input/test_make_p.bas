@@ -1,6 +1,6 @@
 #AUTOSTART=1
 #ASM
-start:
+show_addr:
 	ret
 #ENDASM
-10 PRINT USR &start
+PRINT USR &show_addr
