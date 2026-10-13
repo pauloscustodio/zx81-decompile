@@ -11,8 +11,8 @@
 #include "getopt.h"
 #include "memory.h"
 #include "parser.h"
+#include "release_assert.h"
 #include "utils.h"
-#include <cassert>
 #include <fstream>
 #include <iostream>
 using namespace std;
@@ -151,11 +151,11 @@ int Basic::eval_const_expr(const Expr& rpn) {
 			stack.back() /= value; 
 			break;
 		default: 
-			assert(0);
+			release_assert(0);
 		}
 	}
 
-	assert(stack.size() == 1);
+	release_assert(stack.size() == 1);
 	return stack.back();
 }
 
@@ -218,11 +218,11 @@ bool Basic::eval_expr(const Expr& rpn, int asmpc, int& value, bool do_error) {
 			stack.back() /= value;
 			break;
 		default:
-			assert(0);
+			release_assert(0);
 		}
 	}
 
-	assert(stack.size() == 1);
+	release_assert(stack.size() == 1);
 	value = stack.back();
 	return result;
 }
@@ -335,7 +335,7 @@ void Basic::write_basic_lines(ofstream& ofs) const {
 					ofs << endl;
 					break;
 				default:
-					assert(token.code < 0x100);
+					release_assert(token.code < 0x100);
 					ofs << decode_zx81(token.code);
 				}
 			}
@@ -435,7 +435,7 @@ void Basic::write_basic_vars(ofstream& ofs) const {
 			ofs << endl;
 			break;
 		default:
-			assert(0);
+			release_assert(0);
 		}
 		addr += var.size;
 	}
@@ -488,7 +488,7 @@ void Basic::write_basic_memory_map(ofstream& ofs) const {
 				case Opcode::Type::Defm: ofs << "T"; break;
 				case Opcode::Type::DefmData: ofs << "T"; break;
 				default:
-					assert(0);
+					release_assert(0);
 				}
 			}
 			else if (p < vars)

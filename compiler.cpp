@@ -8,8 +8,8 @@
 #include "encode.h"
 #include "errors.h"
 #include "memory.h"
+#include "release_assert.h"
 #include "zfloat.h"
-#include <cassert>
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -88,7 +88,7 @@ void Compiler::compile_prog() {
 			last_basic = false;
 			break;
 		default:
-			assert(0);
+			release_assert(0);
 		}
 	}
 	if (line_addr > 0 && !last_basic) {
@@ -159,7 +159,7 @@ void Compiler::compile_basic(BasicLine& basic_line) {
 			compile_expr(token.rpn);
 			break;
 		default:
-			assert(token.code < 0x100);
+			release_assert(token.code < 0x100);
 			poke(addr++, token.code);
 		}
 	}
@@ -237,7 +237,7 @@ void Compiler::compile_vars() {
 
 	for (auto& var : basic->basic_vars) {
 		Bytes name_bytes = encode_zx81(var.name);
-		assert(name_bytes.size() > 0);
+		release_assert(name_bytes.size() > 0);
 
 		switch (var.type) {
 		case BasicVar::Type::Number:
@@ -330,7 +330,7 @@ void Compiler::compile_vars() {
 			break;
 
 		default:
-			assert(0);
+			release_assert(0);
 		}
 	}
 
@@ -377,7 +377,7 @@ void Compiler::assemble(AsmLine& asm_line) {
 					poke(asmpc + patch.offset, value);
 					break;
 				default:
-					assert(0);
+					release_assert(0);
 				}
 			}
 

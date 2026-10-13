@@ -11,7 +11,7 @@ path("z80ops.b81")->spew(<<END, grep {!/^\s*TITLE/} @z80ops);
 #ASM
 END
 
-run_ok("zx81_compile z80ops.b81"); # builds z80ops.p
+run_ok("build/Debug/zx81_compile z80ops.b81"); # builds z80ops.p
 
 # assemble z80ops with z88dk-z80asm
 my @z80asm = (
