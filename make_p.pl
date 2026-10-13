@@ -11,10 +11,10 @@ use Modern::Perl;
 use Path::Tiny;
 use Getopt::Std;
 
-getopts("do:", \my %opts);
+getopts( "do:", \my %opts );
 @ARGV == 1 or die "Usage: $0 [-d] [-o file.p] file.bas\n";
 my $input_bas = shift;
-my $output_p = $opts{'o'} ? $opts{'o'} : $input_bas =~ s/\.\w+$/.p/r;
+my $output_p  = $opts{'o'} ? $opts{'o'} : $input_bas =~ s/\.\w+$/.p/r;
 
 # read code
 my @asm = (" ORG 16514");
@@ -38,11 +38,11 @@ while (<$fh>) {
 }
 
 # assemble
-my $program = CPU::Z80::Assembler::Program->new();
+my $program      = CPU::Z80::Assembler::Program->new();
 my $token_stream = z80lexer(@asm);
 $program->parse($token_stream);
-my $bin = $program->bytes();
-my %symbols = %{$program->symbols};
+my $bin     = $program->bytes();
+my %symbols = %{ $program->symbols };
 
 # insert binary output as REM in basic
 my $rem = "1 REM ";
@@ -60,7 +60,7 @@ for (@basic) {
 }
 
 # output basic
-my $output_b81 = path($input_bas)->basename(".bas").".b81";
+my $output_b81 = path($input_bas)->basename(".bas") . ".b81";
 path($output_b81)->spew_raw(@basic);
 
 # convert to .p
