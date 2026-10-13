@@ -10,7 +10,7 @@
 #include "getopt.h"
 #include "memory.h"
 #include "parser.h"
-#include <filesystem>
+#include "utils.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
 	string b81_file = argv[optind];
 	if (out_file.empty())
-		out_file = filesystem::path(b81_file).replace_extension(".p").generic_string();
+		out_file = replace_extension(b81_file, ".p");
 
 	Basic basic;
 	basic.parse_b81_file(b81_file);

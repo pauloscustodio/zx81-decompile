@@ -8,7 +8,7 @@
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
-#include <filesystem>
+#include "utils.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 
 	string p_file = argv[optind];
 	if (out_file.empty())
-		out_file = filesystem::path(p_file).replace_extension(".b81").generic_string();
+		out_file = replace_extension(p_file, ".b81");
 
 	read_p_file(p_file);
 	if (err_get_count())
