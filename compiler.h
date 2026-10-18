@@ -19,7 +19,6 @@ private:
 	int line_addr{ 0 };
 	int asmpc{ 0 };
 	int addr{ 0 };
-	int end{ 0 };
 	int pass{ 0 };
 
 	void compute_line_numbers();
