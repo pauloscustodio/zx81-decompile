@@ -58,7 +58,7 @@ clean::
 #------------------------------------------------------------------------------
 
 test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX) 
-#	perl -S prove t/*.t
+	perl -S prove t/*.t
 #	./$(COMPILE)$(EXESUFFIX) -o test_t2p.p t/test_t2p.b81
 #	perl make_p.pl t/test_keyboard.bas
 
