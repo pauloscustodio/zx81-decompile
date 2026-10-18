@@ -8,3 +8,4 @@ win32/**/x64
 .tidy-stamp
 *.orig
 *.bak
+old/
