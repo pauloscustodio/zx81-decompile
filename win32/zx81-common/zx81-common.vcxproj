@@ -39,7 +39,7 @@
     <ClCompile Include="..\..\decompiler.cpp" />
     <ClCompile Include="..\..\encode.cpp" />
     <ClCompile Include="..\..\errors.cpp" />
-    <ClCompile Include="..\..\getopt.c" />
+    <ClCompile Include="..\..\getopt.cpp" />
     <ClCompile Include="..\..\memory.cpp" />
     <ClCompile Include="..\..\parser.cpp" />
     <ClCompile Include="..\..\scan.cpp" />

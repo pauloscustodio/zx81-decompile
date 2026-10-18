@@ -8,23 +8,19 @@ DECOMPILE	= zx81_decompile
 COMPILE		= zx81_compile
 
 ifeq ($(OS),Windows_NT)
-  EXESUFFIX 		:= .exe
+  EXESUFFIX	:= .exe
 else
-  EXESUFFIX 		?=
+  EXESUFFIX	?=
 endif
 
-COMMON_FLAGS=  -ggdb -MMD -Wall -Wextra -Werror -pedantic-errors
-CC 			?= gcc
-CFLAGS		+= -std=gnu11 $(COMMON_FLAGS)
 CXX			?= g++
-CXX_FLAGS	+= -std=gnu++17 $(COMMON_FLAGS)
+CXX_FLAGS	+= -std=gnu++17 -ggdb -MMD -Wall -Wextra -Werror -pedantic-errors
 LDFLAGS		+=
 
-C_SRCS		= $(wildcard *.c)
 CXX_SRCS	= $(wildcard *.cpp)
-ALL_OBJS	= $(C_SRCS:.c=.o) $(CXX_SRCS:.cpp=.o)
+ALL_OBJS	= $(CXX_SRCS:.cpp=.o)
 COMMON_OBJS	= $(filter-out $(DECOMPILE).o, $(filter-out $(COMPILE).o, $(ALL_OBJS)))
-DEPENDS		= $(C_SRCS:.c=.d) $(CXX_SRCS:.cpp=.d)
+DEPENDS		= $(CXX_SRCS:.cpp=.d)
 
 #------------------------------------------------------------------------------
 
@@ -38,9 +34,6 @@ clean::
 	$(RM) $(1) $(1)$(EXESUFFIX) $(2)
 endef
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
 %.o: %.cpp
 	$(CXX) $(CXX_FLAGS) -c -o $@ $<
 
@@ -50,13 +43,13 @@ $(eval $(call MAKE_EXE,$(DECOMPILE),$(DECOMPILE).o $(COMMON_OBJS)))
 $(eval $(call MAKE_EXE,$(COMPILE),$(COMPILE).o $(COMMON_OBJS)))
 
 all::
-	$(MAKE) -C tapes/FortressOfZorlac
-	$(MAKE) -C tapes/GrimmsFairyTrails
+#	$(MAKE) -C tapes/FortressOfZorlac
+#	$(MAKE) -C tapes/GrimmsFairyTrails
 	
 clean::
 	$(RM) $(ALL_OBJS) $(DEPENDS)
-	$(MAKE) -C tapes/FortressOfZorlac clean
-	$(MAKE) -C tapes/GrimmsFairyTrails clean
+#	$(MAKE) -C tapes/FortressOfZorlac clean
+#	$(MAKE) -C tapes/GrimmsFairyTrails clean
 
 #------------------------------------------------------------------------------
 
