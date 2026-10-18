@@ -1,0 +1,47 @@
+name: build-on-windows-cygwin
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd
+    steps:
+    - name: Configure git
+      run: |
+        git config --global core.autocrlf input
+    - name: Checkout from git
+      uses: actions/checkout@v5
+      with: 
+        submodules: 'true'
+    - name: Setup Cygwin
+      uses: cygwin/cygwin-install-action@v6
+      with:
+        platform: x64
+        packages: >
+          dos2unix
+
+    - name: Add Strawberry Perl to PATH
+      run: |
+        echo C:\Strawberry\perl\bin >> %GITHUB_PATH%
+        echo C:\Strawberry\c\bin >> %GITHUB_PATH%
+    - name: Install perl prerequisites
+      run: |
+        C:\Strawberry\perl\bin\perl.exe -S cpan App::cpanminus
+        C:\Strawberry\perl\bin\perl.exe -S cpanm Modern::Perl Path::Tiny Test::HexDifferences ZX81::Tape
+    - name: Build
+      run: |
+        make
+    - name: Run tests
+      run: |
+        C:\Strawberry\perl\bin\perl.exe -S prove t\*.t
+

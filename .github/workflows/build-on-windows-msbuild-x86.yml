@@ -1,0 +1,42 @@
+name: build-on-windows-msbuild-x86
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd
+    steps:
+    - name: Install perl prerequisites
+      run: |
+        perl -S cpan App::cpanminus
+        perl -S cpanm Modern::Perl Path::Tiny Test::HexDifferences ZX81::Tape
+    - name: Checkout from git
+      uses: actions/checkout@v5
+      with: 
+        submodules: 'true'
+    - name: Find MSBuild
+      uses: microsoft/setup-msbuild@v3
+      with:
+        msbuild-architecture: x86
+    - name: Build for Debug
+      run: |
+        msbuild win32\zx81-decompile.sln -t:rebuild -property:Platform=x86 -property:Configuration=Debug
+    - name: Build for Release
+      run: |
+        msbuild win32\zx81-decompile.sln -t:rebuild -property:Platform=x86 -property:Configuration=Release
+    - name: Run tests
+      run: |
+        mkdir build\Debug
+        copy win32\Debug\zx81-compile.exe build\Debug\zx81_compile.exe
+        copy win32\Debug\zx81-decompile.exe build\Debug\zx81_decompile.exe
+        perl -S prove t\*.t

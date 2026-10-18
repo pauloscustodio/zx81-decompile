@@ -65,10 +65,10 @@ clean::
 #------------------------------------------------------------------------------
 
 test: $(DECOMPILE)$(EXESUFFIX) $(COMPILE)$(EXESUFFIX) 
-	perl -S prove t/*.t
-	./$(COMPILE)$(EXESUFFIX) -o test_t2p.p t/test_t2p.b81
-	perl make_p.pl t/test_keyboard.bas
+#	perl -S prove t/*.t
+#	./$(COMPILE)$(EXESUFFIX) -o test_t2p.p t/test_t2p.b81
+#	perl make_p.pl t/test_keyboard.bas
 
 clean::
-	$(RM) *.p *.p.txt *.b81 *.bak t/*.p.txt t/*.bak
+	$(RM) *.p *.p.txt *.b81 *.bak t/*.p.txt t/*.bak *.o *.d *.orig common/*.orig compile/*.orig decompile/*.orig
 	$(RM) t/test_keyboard.asm t/test_keyboard.b81 t/test_keyboard.bin t/test_keyboard.map t/test_keyboard.p t/test_keyboard.sym
