@@ -9,8 +9,8 @@
 #include "encode.h"
 #include "errors.h"
 #include "memory.h"
+#include "release_assert.h"
 #include "utils.h"
-#include <cassert>
 #include <fstream>
 #include <iostream>
 using namespace std;
@@ -326,7 +326,7 @@ void Decompiler::decompile_vars() {
 				var.values.push_back(value);
 			}
 
-			assert(addr0 + size == addr);
+			release_assert(addr0 + size == addr);
 		}
 		else if ((c & 0xe0) == 0xe0) {	// for-next loop
 			addr++;
@@ -386,7 +386,7 @@ void Decompiler::decompile_vars() {
 				var.strs.push_back(str);
 			}
 
-			assert(addr0 + size == addr);
+			release_assert(addr0 + size == addr);
 		}
 		else {
 			error("invalid variable marker", string("$") + fmt_hex(c, 2));
@@ -424,7 +424,7 @@ void Decompiler::disassemble() {
 		case MemElement::Type::Comment:
 			break;
 		default:
-			assert(0);
+			release_assert(0);
 		}
 
 		if (!elem.label.empty())

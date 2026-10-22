@@ -9,9 +9,9 @@
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
+#include "release_assert.h"
 #include "utils.h"
 #include <array>
-#include <cassert>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -117,7 +117,7 @@ string Opcode::to_string() {
 		oss << decode_defm();
 		break;
 	default:
-		assert(0);
+		release_assert(0);
 	}
 
 	// comment
@@ -861,7 +861,7 @@ Opcode Disasm::disasm(int addr_) {
 			case 0xf8: case 0xf9: case 0xfa: case 0xfb: case 0xfc: case 0xfd: case 0xfe: case 0xff:
 				break;
 			default:
-				assert(0);
+				release_assert(0);
 			}
 			break;
 		case 0xf3:
@@ -876,7 +876,7 @@ Opcode Disasm::disasm(int addr_) {
 		case 0xfd:
 			x = 2; done = false; break;
 		default:
-			assert(0);
+			release_assert(0);
 		}
 	}
 

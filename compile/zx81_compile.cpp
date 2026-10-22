@@ -9,11 +9,10 @@
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
-#include "parser.h"
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
-using namespace std;
 
 static void exit_usage() {
 	cerr << "Usage: zx81_compile [-o file.p] file.b81" << endl;
@@ -21,7 +20,7 @@ static void exit_usage() {
 }
 
 int main(int argc, char* argv[]) {
-	string out_file;
+	std::string out_file;
 
 	while (true) {
 		int c = getopt(argc, argv, const_cast<char*>("o:"));
@@ -39,9 +38,9 @@ int main(int argc, char* argv[]) {
 	if (argc != optind + 1)
 		exit_usage();
 
-	string b81_file = argv[optind];
+	std::string b81_file = argv[optind];
 	if (out_file.empty())
-		out_file = filesystem::path(b81_file).replace_extension(".p").generic_string();
+		out_file = std::filesystem::path(b81_file).replace_extension(".p").generic_string();
 
 	Basic basic;
 	basic.parse_b81_file(b81_file);

@@ -8,10 +8,10 @@
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
-using namespace std;
 
 static void exit_usage() {
 	cerr << "Usage: zx81_decompile [-o file.b81] [-d] file.p" << endl;
@@ -19,8 +19,8 @@ static void exit_usage() {
 }
 
 int main(int argc, char* argv[]) {
-	string out_file;
-	string ctl_file;
+	std::string out_file;
+	std::string ctl_file;
 
 	while (true) {
 		int c = getopt(argc, argv, const_cast<char*>("do:c:"));
@@ -44,9 +44,9 @@ int main(int argc, char* argv[]) {
 	if (argc != optind + 1)
 		exit_usage();
 
-	string p_file = argv[optind];
+	std::string p_file = argv[optind];
 	if (out_file.empty())
-		out_file = filesystem::path(p_file).replace_extension(".b81").generic_string();
+		out_file = std::filesystem::path(p_file).replace_extension(".b81").generic_string();
 
 	read_p_file(p_file);
 	if (err_get_count())

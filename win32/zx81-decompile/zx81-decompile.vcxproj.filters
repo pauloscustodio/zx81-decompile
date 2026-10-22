@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\zx81_decompile.cpp">
+    <ClCompile Include="..\..\decompile\zx81_decompile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
