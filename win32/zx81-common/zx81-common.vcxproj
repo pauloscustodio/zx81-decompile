@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\basic.h" />
+    <ClInclude Include="..\..\common\getopt.h" />
     <ClInclude Include="..\..\common\release_assert.h" />
     <ClInclude Include="..\..\compiler.h" />
     <ClInclude Include="..\..\consts.h" />
@@ -27,7 +28,6 @@
     <ClInclude Include="..\..\disasm.h" />
     <ClInclude Include="..\..\encode.h" />
     <ClInclude Include="..\..\errors.h" />
-    <ClInclude Include="..\..\getopt.h" />
     <ClInclude Include="..\..\memory.h" />
     <ClInclude Include="..\..\parser.h" />
     <ClInclude Include="..\..\scan.h" />
@@ -36,11 +36,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\basic.cpp" />
+    <ClCompile Include="..\..\common\getopt.cpp" />
     <ClCompile Include="..\..\compiler.cpp" />
     <ClCompile Include="..\..\decompiler.cpp" />
     <ClCompile Include="..\..\encode.cpp" />
     <ClCompile Include="..\..\errors.cpp" />
-    <ClCompile Include="..\..\getopt.cpp" />
     <ClCompile Include="..\..\memory.cpp" />
     <ClCompile Include="..\..\parser.cpp" />
     <ClCompile Include="..\..\scan.cpp" />
