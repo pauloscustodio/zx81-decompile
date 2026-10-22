@@ -96,6 +96,10 @@ $(DEBUG_DIR)/compile $(DEBUG_DIR)/decompile $(DEBUG_DIR)/common $(RELEASE_DIR)/c
 #------------------------------------------------------------------------------
 test:: $(COMPILE_DEBUG_EXE) $(COMPILE_RELEASE_EXE) \
 	  $(DECOMPILE_DEBUG_EXE) $(DECOMPILE_RELEASE_EXE)
+	perl -S zx81_list_p -o t/expected/FortressOfZorlac.bas tapes/FortressOfZorlac.p
+	dos2unix -q t/expected/FortressOfZorlac.bas
+	perl -S zx81_list_p -o t/expected/GrimmsFairyTrails.bas tapes/GrimmsFairyTrails.p
+	dos2unix -q t/expected/GrimmsFairyTrails.bas
 	perl -S prove -j9 --state=slow,save t/*.t
 
 #------------------------------------------------------------------------------
