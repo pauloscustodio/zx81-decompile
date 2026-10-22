@@ -40,7 +40,7 @@ sub check_text_file {
     my $diff = diff( \$exp_text, \$got_text, { STYLE => 'Unified' } );
     if ( $diff ne "" ) {
         diag $diff;
-        if ( $ENV{DEBUG} ) {
+        if ( $ENV{DEVELOPER} ) {
             system( "start \"\" WinMergeU.exe " . "$exp_file $got_file" );
         }
     }
@@ -57,6 +57,40 @@ sub run_ok {
     $cmd = normalize_command($cmd);
     ok 1,                 "Running: $cmd";
     ok 0 == system($cmd), $cmd;
+
+    ( Test::More->builder->is_passing ) or die;
+}
+
+#------------------------------------------------------------------------------
+sub run_nok {
+    my ($cmd) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    $cmd = normalize_command($cmd);
+    ok 1,                 "Running: $cmd";
+    ok 0 != system($cmd), $cmd;
+
+    ( Test::More->builder->is_passing ) or die;
+}
+
+#------------------------------------------------------------------------------
+sub capture_ok {
+    my ( $cmd, $exp_out ) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    run_ok( $cmd . " > ${test}.stdout" );
+    check_text_file( "${test}.stdout", $exp_out );
+
+    ( Test::More->builder->is_passing ) or die;
+}
+
+#------------------------------------------------------------------------------
+sub capture_nok {
+    my ( $cmd, $exp_err ) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+    run_nok( $cmd . " 2> ${test}.stderr" );
+    check_text_file( "${test}.stderr", $exp_err );
 
     ( Test::More->builder->is_passing ) or die;
 }

@@ -1,0 +1,1 @@
+Usage: zx81_compile [-o file.p] file.bas

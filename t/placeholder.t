@@ -6,4 +6,5 @@ use Modern::Perl;
 
 ok 1;
 
+unlink_testfiles;
 done_testing;

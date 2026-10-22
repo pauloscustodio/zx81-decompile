@@ -9,13 +9,13 @@
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
+#include "utils.h"
 #include <cstdlib>
-#include <filesystem>
 #include <iostream>
 #include <string>
 
 static void exit_usage() {
-    cerr << "Usage: zx81_compile [-o file.p] file.b81" << endl;
+    std::cerr << "Usage: zx81_compile [-o file.p] file.bas" << std::endl;
     exit(EXIT_FAILURE);
 }
 
@@ -42,8 +42,7 @@ int main(int argc, char* argv[]) {
 
     std::string b81_file = argv[optind];
     if (out_file.empty()) {
-        out_file = std::filesystem::path(
-                       b81_file).replace_extension(".p").generic_string();
+        out_file = replace_extension(b81_file, ".p");
     }
 
     Basic basic;

@@ -8,13 +8,13 @@
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
+#include "utils.h"
 #include <cstdlib>
-#include <filesystem>
 #include <iostream>
 #include <string>
 
 static void exit_usage() {
-    cerr << "Usage: zx81_decompile [-o file.b81] [-d] file.p" << endl;
+    std::cerr << "Usage: zx81_decompile [-o file.bas] [-d] file.p" << std::endl;
     exit(EXIT_FAILURE);
 }
 
@@ -48,8 +48,7 @@ int main(int argc, char* argv[]) {
 
     std::string p_file = argv[optind];
     if (out_file.empty()) {
-        out_file = std::filesystem::path(
-                       p_file).replace_extension(".b81").generic_string();
+        out_file = replace_extension(p_file, ".bas");
     }
 
     read_p_file(p_file);
