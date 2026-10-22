@@ -12,22 +12,28 @@ using namespace std;
 
 class Errors {
 public:
-	void clear();
-	void set_filename(const string& filename);
-	void set_line_num(int line_num);
+    void clear();
+    void set_filename(const string& filename);
+    void set_line_num(int line_num);
 
-	const string& get_filename() const { return m_filename; }
-	int get_line_num() const { return m_line_num; }
-	int get_count() const { return m_count; }
+    const string& get_filename() const {
+        return m_filename;
+    }
+    int get_line_num() const {
+        return m_line_num;
+    }
+    int get_count() const {
+        return m_count;
+    }
 
-	void error(const string& message, const string& arg = "");
-	void fatal_error(const string& message, const string& arg = "");
-	void exit_status() const;
+    void error(const string& message, const string& arg = "");
+    void fatal_error(const string& message, const string& arg = "");
+    void exit_status() const;
 
 private:
-	int m_count;
-	int m_line_num;
-	string m_filename;
+    int m_count;
+    int m_line_num;
+    string m_filename;
 
 };
 

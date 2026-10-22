@@ -12,28 +12,29 @@
 using namespace std;
 
 string fmt_hex(int value, int digits) {
-	ostringstream oss;
-	oss << setw(digits) << setfill('0') << hex << value;
-	return oss.str();
+    ostringstream oss;
+    oss << setw(digits) << setfill('0') << hex << value;
+    return oss.str();
 }
 
 string fmt_line_number(int value, int digits) {
-	ostringstream oss;
-	oss << setw(digits) << setfill(' ') << value;
-	return oss.str();
+    ostringstream oss;
+    oss << setw(digits) << setfill(' ') << value;
+    return oss.str();
 }
 
 string str_chomp(string str) {
-	while (!str.empty() && isspace(str.back()))
-		str.pop_back();
-	return str;
+    while (!str.empty() && isspace(str.back())) {
+        str.pop_back();
+    }
+    return str;
 }
 
 string str_replace_all(string str, const string& from, const string& to) {
-	string::size_type n = 0;
-	while ((n = str.find(from, n)) != string::npos) {
-		str.replace(n, from.size(), to);
-		n += to.size();
-	}
-	return str;
+    string::size_type n = 0;
+    while ((n = str.find(from, n)) != string::npos) {
+        str.replace(n, from.size(), to);
+        n += to.size();
+    }
+    return str;
 }
