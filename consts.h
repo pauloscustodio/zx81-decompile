@@ -9,13 +9,12 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-using namespace std;
 
 #define NUM_ELEMS(a)	(sizeof(a) / sizeof(a[0]))
 #define INT(x)			static_cast<int>(x)
 
 typedef uint8_t Byte;
-typedef vector<uint8_t> Bytes;
+typedef std::vector<uint8_t> Bytes;
 
 enum ZX81const {
 #define X(name, value)		name = value,

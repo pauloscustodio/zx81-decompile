@@ -14,7 +14,6 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
-using namespace std;
 
 static Memory g_mem;
 
@@ -113,31 +112,31 @@ void Memory::init_e_line_to_stkend(int addr, const Bytes& e_line_bytes) {
 // read/write binary files
 //-----------------------------------------------------------------------------
 
-void Memory::read_p_file(const string& filename) {
+void Memory::read_p_file(const std::string& filename) {
     // open file
-    ifstream ifs(filename, ios::binary);
+    std::ifstream ifs(filename, std::ios::binary);
     if (!ifs.is_open()) {
         perror(filename.c_str());
         fatal_error("open file", filename);
     }
 
     // get size
-    ifs.seekg(0, ios::end);
+    ifs.seekg(0, std::ios::end);
     size_t size = ifs.tellg();
-    ifs.seekg(0, ios::beg);
+    ifs.seekg(0, std::ios::beg);
 
     // read bytes
     ifs.read(reinterpret_cast<char*>(&mem[SAVE_ADDR]), size);
     size_t readed = ifs.gcount();
     if (readed != size) {
         perror(filename.c_str());
-        fatal_error("read " + to_string(size) + " bytes from file " + filename);
+        fatal_error("read " + std::to_string(size) + " bytes from file " + filename);
     }
 }
 
-void Memory::write_p_file(const string& filename) {
+void Memory::write_p_file(const std::string& filename) {
     // open file
-    ofstream ofs(filename, ios::binary);
+    std::ofstream ofs(filename, std::ios::binary);
     if (!ofs.is_open()) {
         perror(filename.c_str());
         fatal_error("open file", filename);
@@ -148,7 +147,7 @@ void Memory::write_p_file(const string& filename) {
     size_t written = ofs.tellp();
     if (written != size) {
         perror(filename.c_str());
-        fatal_error("write " + to_string(size) + " bytes to file " + filename);
+        fatal_error("write " + std::to_string(size) + " bytes to file " + filename);
     }
 }
 
@@ -177,7 +176,7 @@ int Memory::dpeek_be(int addr) {
 }
 
 double Memory::fpeek(int addr) {
-    array<Byte, 5> bytes{ 0 };
+    std::array<Byte, 5> bytes{ 0 };
     for (int i = 0; i < 5; i++) {
         bytes[i] = peek(addr + i);
     }
@@ -190,7 +189,7 @@ Bytes Memory::peek_bytes(int addr, int size) {
     return out;
 }
 
-string Memory::peek_hex(int addr, int len) {
+std::string Memory::peek_hex(int addr, int len) {
     Bytes out;
     for (int i = 0; i < len; i++) {
         out.push_back(peek(addr + i));
@@ -231,7 +230,7 @@ void Memory::dpoke_be(int addr, int value) {
 }
 
 void Memory::fpoke(int addr, double value) {
-    array<Byte, 5> bytes = float_to_zx81(value);
+    std::array<Byte, 5> bytes = float_to_zx81(value);
     for (int i = 0; i < 5; i++) {
         poke(addr + i, bytes[i]);
     }
@@ -252,11 +251,11 @@ void clear_memory() {
     g_mem.clear();
 }
 
-void read_p_file(const string& filename) {
+void read_p_file(const std::string& filename) {
     g_mem.read_p_file(filename);
 }
 
-void write_p_file(const string& filename) {
+void write_p_file(const std::string& filename) {
     g_mem.write_p_file(filename);
 }
 
@@ -284,7 +283,7 @@ Bytes peek_bytes(int addr, int size) {
     return g_mem.peek_bytes(addr, size);
 }
 
-string peek_hex(int addr, int len) {
+std::string peek_hex(int addr, int len) {
     return g_mem.peek_hex(addr, len);
 }
 

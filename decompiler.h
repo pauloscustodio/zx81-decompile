@@ -9,28 +9,27 @@
 #include "basic.h"
 #include "parser.h"
 #include <string>
-using namespace std;
 
 struct MemElement {
     enum class Type {Defb, Defw, Defm, Code, Comment};
     Type type{ Type::Defb };
     int addr{ 0 };
     int size{ 1 };
-    string label;
-    string comment;
-    string header;
+    std::string label;
+    std::string comment;
+    std::string header;
 };
 
 class Decompiler : public Scanner {
 public:
     void decompile(Basic& basic);
-    void decompile(Basic& basic, const string& ctl_filename);
+    void decompile(Basic& basic, const std::string& ctl_filename);
 
 private:
     Basic* basic{ nullptr };
     int addr{ 0 };
     int end{ 0 };
-    vector<MemElement> mem_elements;
+    std::vector<MemElement> mem_elements;
 
     void decompile_sysvars();
     void decompile_d_file();
@@ -44,9 +43,9 @@ private:
     void decompile_newline(BasicLine& basic_line);
     void decompile_vars();
     void disassemble();
-    void parse_ctl_file(const string& ctl_filename);
+    void parse_ctl_file(const std::string& ctl_filename);
     void parse_ctl_line();
 };
 
 void decompile(Basic& basic);
-void decompile(Basic& basic, const string& ctl_filename);
+void decompile(Basic& basic, const std::string& ctl_filename);

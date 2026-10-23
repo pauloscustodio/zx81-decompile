@@ -7,7 +7,6 @@
 #include "zfloat.h"
 #include <cmath>
 #include <cstdint>
-using namespace std;
 
 // unions to access to double raw bytes
 union mydouble {
@@ -21,8 +20,8 @@ static_assert(sizeof(mydouble) == 8, "expected 8 bytes");
 
 // 1 byte exponent
 // 4 bytes mantissa, with first bit replaced by sign bit
-array<uint8_t, 5> float_to_zx81(double value) {
-    array<uint8_t, 5> out{ 0 };
+std::array<uint8_t, 5> float_to_zx81(double value) {
+    std::array<uint8_t, 5> out{ 0 };
 
     if (value == 0.0) {
         return out;
@@ -52,7 +51,7 @@ array<uint8_t, 5> float_to_zx81(double value) {
     return out;
 }
 
-double zx81_to_float(array<uint8_t, 5> bytes) {
+double zx81_to_float(std::array<uint8_t, 5> bytes) {
     if (bytes[0] == 0 && bytes[1] == 0 && bytes[2] == 0 && bytes[3] == 0
             && bytes[4] == 0) {
         return 0.0;

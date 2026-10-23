@@ -9,7 +9,6 @@
 #include "consts.h"
 #include <array>
 #include <cstdint>
-using namespace std;
 
-array<Byte, 5> float_to_zx81(double value);
-double zx81_to_float(array<Byte, 5> bytes);
+std::array<Byte, 5> float_to_zx81(double value);
+double zx81_to_float(std::array<Byte, 5> bytes);

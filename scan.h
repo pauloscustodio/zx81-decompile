@@ -7,11 +7,10 @@
 #pragma once
 
 #include <string>
-using namespace std;
 
 class Scan {
 public:
-    void set_text(const string& text);
+    void set_text(const std::string& text);
     const char*& pos() {
         return p;
     }
@@ -19,13 +18,14 @@ public:
     void skip_spaces();
     bool at_end(char comment_char = '\0');
     bool parse_integer(int& value);
-    bool parse_number(double& value, string& value_text);
-    bool parse_string(string& str);
-    bool parse_ident(string& ident);
-    bool match(const string& compare);
-    int match_one_of(int not_found_result, vector<pair<string, int>> compare_list);
+    bool parse_number(double& value, std::string& value_text);
+    bool parse_string(std::string& str);
+    bool parse_ident(std::string& ident);
+    bool match(const std::string& compare);
+    int match_one_of(int not_found_result,
+                     std::vector<std::pair<std::string, int>> compare_list);
 
 private:
-    string text;
+    std::string text;
     const char* p{""};
 };

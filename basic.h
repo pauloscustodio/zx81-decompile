@@ -7,9 +7,10 @@
 #pragma once
 
 #include "consts.h"
+#include <fstream>
 #include <string>
 #include <unordered_map>
-using namespace std;
+#include <vector>
 
 enum ZX81char {
     T_none = 0x100,
@@ -238,21 +239,21 @@ struct Token {
     ZX81char code{ T_none };
     int		ivalue{ 0 };		// for T_integer
     double	fvalue{ 0.0 };		// for T_float
-    string  svalue;				// for T_string
-    string	ident;				// for T_ident, T_line_addr, T_line_num
+    std::string  svalue;				// for T_string
+    std::string	ident;				// for T_ident, T_line_addr, T_line_num
     Bytes	bytes;				// for T_rem_code
-    vector<Token> rpn;			// Expr for T_const_expr
+    std::vector<Token> rpn;			// Expr for T_const_expr
 };
 
-typedef vector<Token> Expr;
+typedef std::vector<Token> Expr;
 
 struct Symbol {
     enum class Type { Const, Addr };
     Type type{ Type::Const };
-    string name;
+    std::string name;
     int value;
 
-    Symbol(Type type_ = Type::Const, const string& name_ = "", int value_ = 0);
+    Symbol(Type type_ = Type::Const, const std::string& name_ = "", int value_ = 0);
 };
 
 class Symtab {
@@ -264,10 +265,10 @@ public:
 
     void init();
 
-    void add(Symbol::Type type, const string& name, int value);
-    void update(Symbol::Type type, const string& name, int value);
+    void add(Symbol::Type type, const std::string& name, int value);
+    void update(Symbol::Type type, const std::string& name, int value);
 
-    Symbol* get(const string& name);	// nullptr if not found
+    Symbol* get(const std::string& name);	// nullptr if not found
     Symbol* find(int value);			// last defined symbol with this value
 
     auto begin() {
@@ -287,7 +288,7 @@ public:
     }
 
 private:
-    unordered_map<string, Symbol*> symbols;
+    std::unordered_map<std::string, Symbol*> symbols;
 };
 
 struct Patch {
@@ -300,22 +301,22 @@ struct Patch {
 };
 
 struct AsmLine {
-    string source_filename;
+    std::string source_filename;
     int source_line_num;
-    string label;
+    std::string label;
     Expr equ_rpn;			// if equ
     Bytes bytes;
-    vector<Patch> patches;
+    std::vector<Patch> patches;
 
     AsmLine();
 };
 
 struct BasicLine {
-    string source_filename;
+    std::string source_filename;
     int source_line_num;
-    string label;
+    std::string label;
     int line_num{ -1 };
-    vector<Token> tokens;
+    std::vector<Token> tokens;
 
     BasicLine();
 };
@@ -338,7 +339,7 @@ struct BasicVar {
     int size{ 0 };
 
     // Number
-    string name;
+    std::string name;
     double value{ 0.0 };
 
     // ForNextLoop
@@ -347,22 +348,22 @@ struct BasicVar {
     int line_num{ 0 };
 
     // ArrayNumbers
-    vector<int> dimensions;
-    vector<double> values;
+    std::vector<int> dimensions;
+    std::vector<double> values;
 
     // String
-    string str;
+    std::string str;
 
     // ArrayStrings
-    vector<string> strs;
+    std::vector<std::string> strs;
 };
 
 struct Basic {
     Basic();
     void clear();
 
-    vector<SourceLine> source_lines;
-    vector<BasicVar> basic_vars;
+    std::vector<SourceLine> source_lines;
+    std::vector<BasicVar> basic_vars;
     Symtab symtab;
     Bytes d_file_bytes;
     Bytes e_line_bytes;
@@ -372,15 +373,15 @@ struct Basic {
 
     int eval_const_expr(const Expr& rpn);
     bool eval_expr(const Expr& rpn, int asmpc, int& value, bool do_error = true);
-    void parse_b81_file(const string& filename);
-    void write_b81_file(const string& filename);
+    void parse_b81_file(const std::string& filename);
+    void write_b81_file(const std::string& filename);
 
 private:
-    void write_sysvars(ofstream& ofs) const;
-    void write_basic_lines(ofstream& ofs) const;
-    void write_video(ofstream& ofs) const;
-    void write_basic_vars(ofstream& ofs) const;
-    void write_basic_system(ofstream& ofs) const;
-    void write_mem_info(ofstream& ofs, int start_addr, int len) const;
-    void write_basic_memory_map(ofstream& ofs) const;
+    void write_sysvars(std::ofstream& ofs) const;
+    void write_basic_lines(std::ofstream& ofs) const;
+    void write_video(std::ofstream& ofs) const;
+    void write_basic_vars(std::ofstream& ofs) const;
+    void write_basic_system(std::ofstream& ofs) const;
+    void write_mem_info(std::ofstream& ofs, int start_addr, int len) const;
+    void write_basic_memory_map(std::ofstream& ofs) const;
 };

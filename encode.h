@@ -8,9 +8,8 @@
 
 #include <string>
 #include "consts.h"
-using namespace std;
 
-string decode_zx81(char c);
-Bytes encode_zx81(const string& str);
+std::string decode_zx81(char c);
+Bytes encode_zx81(const std::string& str);
 Bytes encode_zx81(const char*& p);
-string encode_hex(const Bytes& bytes);
+std::string encode_hex(const Bytes& bytes);

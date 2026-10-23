@@ -6,7 +6,6 @@
 
 #include "errors.h"
 #include <sstream>
-using namespace std;
 
 static Errors g_errors;
 
@@ -16,7 +15,7 @@ void Errors::clear() {
     m_filename.clear();
 }
 
-void Errors::set_filename(const string& filename) {
+void Errors::set_filename(const std::string& filename) {
     m_filename = filename;
     m_line_num = 0;
 }
@@ -25,27 +24,27 @@ void Errors::set_line_num(int line_num) {
     m_line_num = line_num;
 }
 
-void Errors::error(const string& message, const string& arg) {
+void Errors::error(const std::string& message, const std::string& arg) {
     m_count++;
 
     if (!m_filename.empty()) {
-        cerr << m_filename << ":";
+        std::cerr << m_filename << ":";
         if (m_line_num > 0) {
-            cerr << m_line_num << ":";
+            std::cerr << m_line_num << ":";
         }
-        cerr << " ";
+        std::cerr << " ";
     }
 
-    cerr << "error: " << message;
+    std::cerr << "error: " << message;
 
     if (!arg.empty()) {
-        cerr << ": " << arg;
+        std::cerr << ": " << arg;
     }
 
-    cerr << endl;
+    std::cerr << std::endl;
 }
 
-void Errors::fatal_error(const string& message, const string& arg) {
+void Errors::fatal_error(const std::string& message, const std::string& arg) {
     error(message, arg);
     exit(EXIT_FAILURE);
 }
@@ -63,7 +62,7 @@ void err_clear() {
     g_errors.clear();
 }
 
-void err_set_filename(const string& filename) {
+void err_set_filename(const std::string& filename) {
     g_errors.set_filename(filename);
 }
 
@@ -71,7 +70,7 @@ void err_set_line_num(int line_num) {
     g_errors.set_line_num(line_num);
 }
 
-string err_get_filename() {
+std::string err_get_filename() {
     return g_errors.get_filename();
 }
 
@@ -83,11 +82,11 @@ int err_get_count() {
     return g_errors.get_count();
 }
 
-void error(const string& message, const string& arg) {
+void error(const std::string& message, const std::string& arg) {
     g_errors.error(message, arg);
 }
 
-void fatal_error(const string& message, const string& arg) {
+void fatal_error(const std::string& message, const std::string& arg) {
     g_errors.fatal_error(message, arg);
 }
 

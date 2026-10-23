@@ -13,7 +13,6 @@
 #include "utils.h"
 #include <fstream>
 #include <iostream>
-using namespace std;
 
 static Decompiler g_decompiler;
 
@@ -30,7 +29,7 @@ void Decompiler::decompile(Basic& basic_) {
     basic = nullptr;
 }
 
-void Decompiler::decompile(Basic& basic, const string& ctl_filename) {
+void Decompiler::decompile(Basic& basic, const std::string& ctl_filename) {
     parse_ctl_file(ctl_filename);
     decompile(basic);
 }
@@ -137,7 +136,7 @@ bool Decompiler::decompile_rem_code(BasicLine& basic_line) {
 
 bool Decompiler::decompile_number(BasicLine& basic_line) {
     Token token;
-    string num;
+    std::string num;
 
     // get mantissa
     int p = addr;
@@ -203,7 +202,7 @@ bool Decompiler::decompile_number(BasicLine& basic_line) {
     p += 5;
 
     if (abs(value1 - value2) > 1e-6) {
-        error("number " + to_string(value1) + " != " + to_string(value2));
+        error("number " + std::to_string(value1) + " != " + std::to_string(value2));
     }
 
     token.code = T_float;
@@ -367,7 +366,7 @@ void Decompiler::decompile_vars() {
             var.line_num = dpeek(addr);
             addr += 2;
         }
-        else if ((c & 0xe0) == 0x40) {	// string
+        else if ((c & 0xe0) == 0x40) {	// std::string
             addr++;
             c &= 0x3f;
             c |= 0x20;
@@ -403,11 +402,11 @@ void Decompiler::decompile_vars() {
                 var.dimensions.push_back(dimension);
             }
 
-            int last_dimension = var.dimensions.back();		// size of each string
+            int last_dimension = var.dimensions.back();		// size of each std::string
             num_elements /= last_dimension;
 
             for (int i = 0; i < num_elements; i++) {
-                string str;
+                std::string str;
                 for (int j = 0; j < last_dimension; j++) {
                     c = peek(addr++);
                     str += decode_zx81(c);
@@ -418,7 +417,7 @@ void Decompiler::decompile_vars() {
             release_assert(addr0 + size == addr);
         }
         else {
-            error("invalid variable marker", string("$") + fmt_hex(c, 2));
+            error("invalid variable marker", std::string("$") + fmt_hex(c, 2));
             break;
         }
 
@@ -466,14 +465,14 @@ void Decompiler::disassemble() {
     // search all USR n in Basic
     for (auto& line : basic->source_lines) {
         if (line.type == SourceLine::Type::Basic) {
-            vector<Token>& tokens = line.basic_line.tokens;
+            std::vector<Token>& tokens = line.basic_line.tokens;
             if (tokens.size() > 1) {
                 for (size_t i = 0; i < tokens.size() - 1; i++) {
                     if (tokens[i].code == C_USR && tokens[i + 1].code == T_float) {
                         int addr = INT(tokens[i + 1].fvalue);
                         if ((addr >= 0 && addr < 0x2000)
                                 || (addr >= PROG + 5 && addr < dpeek(E_LINE))) {
-                            string label = g_disasm_code.get_label(addr);
+                            std::string label = g_disasm_code.get_label(addr);
                             tokens[i + 1].code = T_line_addr_ref;
                             tokens[i + 1].ident = label;
                             g_disasm_code.set_code(addr);
@@ -485,8 +484,8 @@ void Decompiler::disassemble() {
     }
 }
 
-void Decompiler::parse_ctl_file(const string& ctl_filename) {
-    ifstream ifs(ctl_filename);
+void Decompiler::parse_ctl_file(const std::string& ctl_filename) {
+    std::ifstream ifs(ctl_filename);
     if (!ifs.is_open()) {
         perror(ctl_filename.c_str());
         fatal_error("read file", ctl_filename);
@@ -494,7 +493,7 @@ void Decompiler::parse_ctl_file(const string& ctl_filename) {
 
     err_set_filename(ctl_filename);
 
-    string text;
+    std::string text;
     int line_num = 0;
     while (getline(ifs, text)) {
         line_num++;
@@ -590,6 +589,6 @@ void decompile(Basic& basic) {
     g_decompiler.decompile(basic);
 }
 
-void decompile(Basic& basic, const string& ctl_filename) {
+void decompile(Basic& basic, const std::string& ctl_filename) {
     g_decompiler.decompile(basic, ctl_filename);
 }

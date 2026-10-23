@@ -8,7 +8,6 @@
 
 #include "basic.h"
 #include <string>
-using namespace std;
 
 class Compiler {
 public:
@@ -27,10 +26,10 @@ private:
     void end_basic_line();
     void compile_basic(BasicLine& basic_line);
     void compile_number(double value);
-    void compile_string(const string& str);
-    void compile_ident(const string& ident);
-    void compile_line_addr_ref(const string& ident);
-    void compile_line_num_ref(const string& ident);
+    void compile_string(const std::string& str);
+    void compile_ident(const std::string& ident);
+    void compile_line_addr_ref(const std::string& ident);
+    void compile_line_num_ref(const std::string& ident);
     void compile_expr(const Expr& rpn);
     void compile_vars();
     void assemble(AsmLine& asm_line);

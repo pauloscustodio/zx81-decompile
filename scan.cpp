@@ -7,9 +7,8 @@
 #include "consts.h"
 #include "scan.h"
 #include <cctype>
-using namespace std;
 
-void Scan::set_text(const string& text_) {
+void Scan::set_text(const std::string& text_) {
     text = text_;
     p = text.c_str();
 }
@@ -56,7 +55,7 @@ bool Scan::parse_integer(int& value) {
     }
 }
 
-bool Scan::parse_number(double& value, string& value_text) {
+bool Scan::parse_number(double& value, std::string& value_text) {
     skip_spaces();
     const char* p0 = p;
 
@@ -99,12 +98,12 @@ bool Scan::parse_number(double& value, string& value_text) {
     }
 
     value = atof(p0);
-    value_text = string(p0, p);
+    value_text = std::string(p0, p);
     return true;
 }
 
-bool Scan::parse_string(string& str) {
-    string out;
+bool Scan::parse_string(std::string& str) {
+    std::string out;
     skip_spaces();
     const char* p0 = p;
 
@@ -132,7 +131,7 @@ bool Scan::parse_string(string& str) {
     }
 }
 
-bool Scan::parse_ident(string& ident) {
+bool Scan::parse_ident(std::string& ident) {
     skip_spaces();
     if (!isalpha(*p)) {
         return false;
@@ -143,7 +142,7 @@ bool Scan::parse_ident(string& ident) {
     return true;
 }
 
-bool Scan::match(const string& compare) {
+bool Scan::match(const std::string& compare) {
     skip_spaces();
     for (size_t i = 0; i < compare.size(); i++) {
         if (p[i] == '\0') {
@@ -158,7 +157,7 @@ bool Scan::match(const string& compare) {
 }
 
 int Scan::match_one_of(int not_found_result,
-                       vector<pair<string, int>> compare_list) {
+                       std::vector<std::pair<std::string, int>> compare_list) {
     skip_spaces();
     for (auto& compare : compare_list) {
         if (match(compare.first)) {

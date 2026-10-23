@@ -11,17 +11,16 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-using namespace std;
 
 class AsmLabels {
 public:
     AsmLabels();
 
-    void add(const string& name, int value);
-    int get(const string& name);
+    void add(const std::string& name, int value);
+    int get(const std::string& name);
 
-    bool find(const string& name, int& value) const;
-    bool find(int value, string& name) const;
+    bool find(const std::string& name, int& value) const;
+    bool find(int value, std::string& name) const;
 
     void clear();
 
@@ -42,8 +41,8 @@ public:
     }
 
 private:
-    unordered_map<string, int> by_name;
-    unordered_map<int, string> by_value;
+    std::unordered_map<std::string, int> by_name;
+    std::unordered_map<int, std::string> by_value;
 };
 
 extern AsmLabels g_asm_labels;
@@ -53,26 +52,26 @@ struct Opcode {
     Type type{ Type::Unknown };
     int addr{ 0 };
     int size{ 0 };
-    string opcode;			// normalized form, e.g. "jp NN"
-    string refer_to;		// label to refer to instead of nn
+    std::string opcode;			// normalized form, e.g. "jp NN"
+    std::string refer_to;		// label to refer to instead of nn
     int n{ 0 };
     int nn{ 0 };
     int dis{ 0 };
     bool is_jump{ false };
     bool ends_flow{ false };
-    vector<int> values;		// for defb, defw
-    string str;				// for defm
+    std::vector<int> values;		// for defb, defw
+    std::string str;				// for defm
 
     Opcode(Type type_ = Type::Unknown, int addr_ = 0, int size_ = 1);
-    string to_string();
+    std::string to_string();
 
 private:
-    string decode_opcode();
-    string decode_undef();
-    string decode_defb();
-    string decode_defw();
-    string decode_defm();
-    string decode_label(int value);
+    std::string decode_opcode();
+    std::string decode_undef();
+    std::string decode_defb();
+    std::string decode_defw();
+    std::string decode_defm();
+    std::string decode_label(int value);
 };
 
 class DisasmCode {
@@ -84,22 +83,22 @@ public:
 
     Opcode::Type get_type(int addr);
     Opcode* get(int addr);
-    string get_label(int addr);
-    string get_header(int addr);
-    string get_comment(int addr);
+    std::string get_label(int addr);
+    std::string get_header(int addr);
+    std::string get_comment(int addr);
 
     void set_unknown(int addr, int size);
     void set_defb(int addr, int count);
     void set_defw(int addr, int count);
     void set_defm(int addr, int len);
     void set_code(int addr);
-    void add_header(int addr, const string& line);
-    void set_comment(int addr, const string& text);
+    void add_header(int addr, const std::string& line);
+    void set_comment(int addr, const std::string& text);
 
 private:
-    array<Opcode*, MEM_SIZE> opcodes{ 0 };
-    array<string*, MEM_SIZE> headers{ 0 };
-    array<string*, MEM_SIZE> comments{ 0 };
+    std::array<Opcode*, MEM_SIZE> opcodes{ 0 };
+    std::array<std::string*, MEM_SIZE> headers{ 0 };
+    std::array<std::string*, MEM_SIZE> comments{ 0 };
 
     bool check_range_unknown(int addr, int size);
 };
@@ -114,15 +113,15 @@ private:
     int addr{ 0 };
     Opcode opcode;
 
-    static string dd1(int n, int x);
-    static string dd2(int n, int x);
-    static string r1(int n, int x);
-    static string x1(int x);
-    static string flags1(int n);
-    static string flags2(int n);
-    static string alu1(int n);
-    static string rot1(int n);
-    static string bit1(int n);
+    static std::string dd1(int n, int x);
+    static std::string dd2(int n, int x);
+    static std::string r1(int n, int x);
+    static std::string x1(int x);
+    static std::string flags1(int n);
+    static std::string flags2(int n);
+    static std::string alu1(int n);
+    static std::string rot1(int n);
+    static std::string bit1(int n);
 
     void collect_nn();
     void collect_n();

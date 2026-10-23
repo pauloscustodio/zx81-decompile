@@ -12,7 +12,6 @@
 #include "zfloat.h"
 #include <iostream>
 #include <sstream>
-using namespace std;
 
 static Compiler g_compiler;
 
@@ -52,12 +51,13 @@ void Compiler::compute_line_numbers() {
             }
 
             if (line.basic_line.line_num <= last_line) {
-                error("line " + to_string(line.basic_line.line_num) + " follows line " +
-                      to_string(last_line));
+                error("line " + std::to_string(line.basic_line.line_num) + " follows line " +
+                      std::to_string(last_line));
             }
             else if (line.basic_line.line_num > MaxLineNum) {
-                error("line " + to_string(line.basic_line.line_num) + " above maximum of " +
-                      to_string(MaxLineNum));
+                error("line " + std::to_string(line.basic_line.line_num) + " above maximum of "
+                      +
+                      std::to_string(MaxLineNum));
             }
         }
     }
@@ -178,11 +178,11 @@ void Compiler::compile_basic(BasicLine& basic_line) {
 }
 
 void Compiler::compile_number(double value) {
-    ostringstream oss;
+    std::ostringstream oss;
 
     // encode digits
     oss << value;
-    string value_str = oss.str();
+    std::string value_str = oss.str();
     Bytes str_bytes = encode_zx81(value_str);
     for (auto& c : str_bytes) {
         poke(addr++, c);
@@ -192,13 +192,13 @@ void Compiler::compile_number(double value) {
     poke(addr++, C_number);
 
     // encode fp number
-    array<Byte, 5> fp_bytes = float_to_zx81(value);
+    std::array<Byte, 5> fp_bytes = float_to_zx81(value);
     for (auto& c : fp_bytes) {
         poke(addr++, c);
     }
 }
 
-void Compiler::compile_string(const string& str) {
+void Compiler::compile_string(const std::string& str) {
     Bytes str_bytes = encode_zx81(str);
     poke(addr++, C_dquote);
     for (auto& c : str_bytes) {
@@ -207,14 +207,14 @@ void Compiler::compile_string(const string& str) {
     poke(addr++, C_dquote);
 }
 
-void Compiler::compile_ident(const string& ident) {
+void Compiler::compile_ident(const std::string& ident) {
     Bytes str_bytes = encode_zx81(ident);
     for (auto& c : str_bytes) {
         poke(addr++, c);
     }
 }
 
-void Compiler::compile_line_addr_ref(const string& ident) {
+void Compiler::compile_line_addr_ref(const std::string& ident) {
     auto symbol = basic->symtab.get(ident);
     if (!symbol && pass == 2) {
         error("undefined symbol", ident);
@@ -227,7 +227,7 @@ void Compiler::compile_line_addr_ref(const string& ident) {
     }
 }
 
-void Compiler::compile_line_num_ref(const string& ident) {
+void Compiler::compile_line_num_ref(const std::string& ident) {
     auto symbol = basic->symtab.get(ident);
     if (!symbol && pass == 2) {
         error("undefined symbol", ident);
@@ -255,7 +255,7 @@ void Compiler::compile_vars() {
     addr = dpeek(VARS);
 
     Bytes str_bytes;
-    array<Byte, 5> fp_bytes{ 0 };
+    std::array<Byte, 5> fp_bytes{ 0 };
     int last_dimension = 0;
     int size = 0;
 

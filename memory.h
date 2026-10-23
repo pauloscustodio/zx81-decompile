@@ -9,7 +9,6 @@
 #include "consts.h"
 #include <array>
 #include <string>
-using namespace std;
 
 class Memory {
 public:
@@ -18,8 +17,8 @@ public:
     void clear();
 
     // read/write .p file
-    void read_p_file(const string& filename);
-    void write_p_file(const string& filename);
+    void read_p_file(const std::string& filename);
+    void write_p_file(const std::string& filename);
 
     // read memory
     int peek(int addr);
@@ -28,7 +27,7 @@ public:
     int dpeek_be(int addr);
     double fpeek(int addr);
     Bytes peek_bytes(int addr, int size);
-    string peek_hex(int addr, int len);
+    std::string peek_hex(int addr, int len);
     int get_line_addr(int line_num);
 
     // write memory
@@ -47,22 +46,22 @@ public:
     void init_e_line_to_stkend(int addr, const Bytes& e_line_bytes);
 
 private:
-    array<Byte, MEM_SIZE> mem{ 0 };
+    std::array<Byte, MEM_SIZE> mem{ 0 };
 
     int write_empty_d_file(int addr);
     int write_empty_vars(int addr);
 };
 
 void clear_memory();
-void read_p_file(const string& filename);
-void write_p_file(const string& filename);
+void read_p_file(const std::string& filename);
+void write_p_file(const std::string& filename);
 int peek(int addr);
 int dpeek(int addr);
 int speek(int addr);
 int dpeek_be(int addr);
 double fpeek(int addr);
 Bytes peek_bytes(int addr, int size);
-string peek_hex(int addr, int len);
+std::string peek_hex(int addr, int len);
 int get_line_addr(int line_num);
 void poke(int addr, int value);
 void dpoke(int addr, int value);

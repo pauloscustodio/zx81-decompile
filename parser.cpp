@@ -11,7 +11,6 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
-using namespace std;
 
 static Parser g_parser;
 
@@ -76,7 +75,7 @@ bool Scanner::parse_integer(int& value) {
     return false;
 }
 
-bool Scanner::parse_number(double& value, string& value_text) {
+bool Scanner::parse_number(double& value, std::string& value_text) {
     skip_spaces();
     const char* p0 = p;
 
@@ -119,12 +118,12 @@ bool Scanner::parse_number(double& value, string& value_text) {
     }
 
     value = atof(p0);
-    value_text = string(p0, p);
+    value_text = std::string(p0, p);
     return true;
 }
 
-bool Scanner::parse_string(string& str) {
-    string out;
+bool Scanner::parse_string(std::string& str) {
+    std::string out;
     skip_spaces();
     const char* p0 = p;
 
@@ -152,7 +151,7 @@ bool Scanner::parse_string(string& str) {
     }
 }
 
-bool Scanner::parse_ident(string& ident) {
+bool Scanner::parse_ident(std::string& ident) {
     skip_spaces();
     if (!isalpha(*p) && *p != '_') {
         return false;
@@ -163,7 +162,7 @@ bool Scanner::parse_ident(string& ident) {
     return true;
 }
 
-bool Scanner::match(const string& compare) {
+bool Scanner::match(const std::string& compare) {
     skip_spaces();
     for (size_t i = 0; i < compare.size(); i++) {
         if (p[i] == '\0') {
@@ -178,7 +177,7 @@ bool Scanner::match(const string& compare) {
 }
 
 int Scanner::match_one_of(int not_found_result,
-                          vector<pair<string, int>> compare_list) {
+                          std::vector<std::pair<std::string, int>> compare_list) {
     skip_spaces();
     for (auto& compare : compare_list) {
         if (match(compare.first)) {
@@ -188,12 +187,12 @@ int Scanner::match_one_of(int not_found_result,
     return not_found_result;
 }
 
-void Parser::parse_b81_file(Basic& basic_, const string& filename) {
+void Parser::parse_b81_file(Basic& basic_, const std::string& filename) {
     basic = &basic_;
     basic->clear();
     in_asm = false;
 
-    ifstream ifs(filename);
+    std::ifstream ifs(filename);
     if (!ifs.is_open()) {
         perror(filename.c_str());
         fatal_error("read file", filename);
@@ -201,7 +200,7 @@ void Parser::parse_b81_file(Basic& basic_, const string& filename) {
 
     err_set_filename(filename);
 
-    string text;
+    std::string text;
     int line_num = 0;
     while (getline(ifs, text)) {
         line_num++;
@@ -210,7 +209,7 @@ void Parser::parse_b81_file(Basic& basic_, const string& filename) {
         while (!text.empty() && text.back() == '\\') {
             text.pop_back();
             text.push_back(' ');
-            string cont;
+            std::string cont;
             if (!getline(ifs, cont)) {
                 break;
             }
@@ -228,7 +227,7 @@ void Parser::parse_b81_file(Basic& basic_, const string& filename) {
     basic = nullptr;
 }
 
-bool Parser::parse_ref(const string& prefix, string& ident) {
+bool Parser::parse_ref(const std::string& prefix, std::string& ident) {
     skip_spaces();
     const char* p0 = p;
     if (match(prefix) && parse_ident(ident)) {
@@ -240,15 +239,15 @@ bool Parser::parse_ref(const string& prefix, string& ident) {
     }
 }
 
-bool Parser::parse_line_num_ref(string& ident) {
+bool Parser::parse_line_num_ref(std::string& ident) {
     return parse_ref("@", ident);
 }
 
-bool Parser::parse_line_addr_ref(string& ident) {
+bool Parser::parse_line_addr_ref(std::string& ident) {
     return parse_ref("&", ident);
 }
 
-bool Parser::parse_label(string& ident) {
+bool Parser::parse_label(std::string& ident) {
     skip_spaces();
     const char* p0 = p;
     if (parse_line_num_ref(ident) && match(":")) {
@@ -406,87 +405,87 @@ bool Parser::parse_factor(bool in_asm, Expr& rpn) {
 }
 
 bool Parser::parse_basic_line(BasicLine& basic_line) {
-    static vector<pair<string, int>> keywords = {
-        make_pair("RND", C_RND),
-        make_pair("INKEY$", C_INKEY_dollar),
-        make_pair("PI", C_PI),
-        make_pair("AT", C_AT),
-        make_pair("TAB", C_TAB),
-        make_pair("CODE", C_CODE),
-        make_pair("VAL", C_VAL),
-        make_pair("LEN", C_LEN),
-        make_pair("SIN", C_SIN),
-        make_pair("COS", C_COS),
-        make_pair("TAN", C_TAN),
-        make_pair("ASN", C_ASN),
-        make_pair("ACS", C_ACS),
-        make_pair("ATN", C_ATN),
-        make_pair("LN", C_LN),
-        make_pair("EXP", C_EXP),
-        make_pair("INT", C_INT),
-        make_pair("SQR", C_SQR),
-        make_pair("SGN", C_SGN),
-        make_pair("ABS", C_ABS),
-        make_pair("PEEK", C_PEEK),
-        make_pair("USR", C_USR),
-        make_pair("STR$", C_STR_dollar),
-        make_pair("CHR$", C_CHR_dollar),
-        make_pair("NOT", C_NOT),
-        make_pair("**", C_power),
-        make_pair("OR", C_OR),
-        make_pair("AND", C_AND),
-        make_pair("<=", C_le),
-        make_pair(">=", C_ge),
-        make_pair("<>", C_ne),
-        make_pair("THEN", C_THEN),
-        make_pair("TO", C_TO),
-        make_pair("STEP", C_STEP),
-        make_pair("LPRINT", C_LPRINT),
-        make_pair("LLIST", C_LLIST),
-        make_pair("STOP", C_STOP),
-        make_pair("SLOW", C_SLOW),
-        make_pair("FAST", C_FAST),
-        make_pair("NEW", C_NEW),
-        make_pair("SCROLL", C_SCROLL),
-        make_pair("CONT", C_CONT),
-        make_pair("DIM", C_DIM),
-        make_pair("FOR", C_FOR),
-        make_pair("GOTO", C_GOTO),
-        make_pair("GOSUB", C_GOSUB),
-        make_pair("INPUT", C_INPUT),
-        make_pair("LOAD", C_LOAD),
-        make_pair("LIST", C_LIST),
-        make_pair("LET", C_LET),
-        make_pair("PAUSE", C_PAUSE),
-        make_pair("NEXT", C_NEXT),
-        make_pair("POKE", C_POKE),
-        make_pair("PRINT", C_PRINT),
-        make_pair("PLOT", C_PLOT),
-        make_pair("RUN", C_RUN),
-        make_pair("SAVE", C_SAVE),
-        make_pair("RAND", C_RAND),
-        make_pair("IF", C_IF),
-        make_pair("CLS", C_CLS),
-        make_pair("UNPLOT", C_UNPLOT),
-        make_pair("CLEAR", C_CLEAR),
-        make_pair("RETURN", C_RETURN),
-        make_pair("COPY", C_COPY),
-        make_pair("\\0c", C_pound),
-        make_pair("$", C_dollar),
-        make_pair(":", C_colon),
-        make_pair("?", C_quest),
-        make_pair("(", C_lparens),
-        make_pair(")", C_rparens),
-        make_pair(">", C_gt),
-        make_pair("<", C_lt),
-        make_pair("=", C_eq),
-        make_pair("+", C_plus),
-        make_pair("-", C_minus),
-        make_pair("*", C_mult),
-        make_pair("/", C_div),
-        make_pair(";", C_semicolon),
-        make_pair(",", C_comma),
-        make_pair("_", C_space),
+    static std::vector<std::pair<std::string, int>> keywords = {
+        std::make_pair("RND", C_RND),
+        std::make_pair("INKEY$", C_INKEY_dollar),
+        std::make_pair("PI", C_PI),
+        std::make_pair("AT", C_AT),
+        std::make_pair("TAB", C_TAB),
+        std::make_pair("CODE", C_CODE),
+        std::make_pair("VAL", C_VAL),
+        std::make_pair("LEN", C_LEN),
+        std::make_pair("SIN", C_SIN),
+        std::make_pair("COS", C_COS),
+        std::make_pair("TAN", C_TAN),
+        std::make_pair("ASN", C_ASN),
+        std::make_pair("ACS", C_ACS),
+        std::make_pair("ATN", C_ATN),
+        std::make_pair("LN", C_LN),
+        std::make_pair("EXP", C_EXP),
+        std::make_pair("INT", C_INT),
+        std::make_pair("SQR", C_SQR),
+        std::make_pair("SGN", C_SGN),
+        std::make_pair("ABS", C_ABS),
+        std::make_pair("PEEK", C_PEEK),
+        std::make_pair("USR", C_USR),
+        std::make_pair("STR$", C_STR_dollar),
+        std::make_pair("CHR$", C_CHR_dollar),
+        std::make_pair("NOT", C_NOT),
+        std::make_pair("**", C_power),
+        std::make_pair("OR", C_OR),
+        std::make_pair("AND", C_AND),
+        std::make_pair("<=", C_le),
+        std::make_pair(">=", C_ge),
+        std::make_pair("<>", C_ne),
+        std::make_pair("THEN", C_THEN),
+        std::make_pair("TO", C_TO),
+        std::make_pair("STEP", C_STEP),
+        std::make_pair("LPRINT", C_LPRINT),
+        std::make_pair("LLIST", C_LLIST),
+        std::make_pair("STOP", C_STOP),
+        std::make_pair("SLOW", C_SLOW),
+        std::make_pair("FAST", C_FAST),
+        std::make_pair("NEW", C_NEW),
+        std::make_pair("SCROLL", C_SCROLL),
+        std::make_pair("CONT", C_CONT),
+        std::make_pair("DIM", C_DIM),
+        std::make_pair("FOR", C_FOR),
+        std::make_pair("GOTO", C_GOTO),
+        std::make_pair("GOSUB", C_GOSUB),
+        std::make_pair("INPUT", C_INPUT),
+        std::make_pair("LOAD", C_LOAD),
+        std::make_pair("LIST", C_LIST),
+        std::make_pair("LET", C_LET),
+        std::make_pair("PAUSE", C_PAUSE),
+        std::make_pair("NEXT", C_NEXT),
+        std::make_pair("POKE", C_POKE),
+        std::make_pair("PRINT", C_PRINT),
+        std::make_pair("PLOT", C_PLOT),
+        std::make_pair("RUN", C_RUN),
+        std::make_pair("SAVE", C_SAVE),
+        std::make_pair("RAND", C_RAND),
+        std::make_pair("IF", C_IF),
+        std::make_pair("CLS", C_CLS),
+        std::make_pair("UNPLOT", C_UNPLOT),
+        std::make_pair("CLEAR", C_CLEAR),
+        std::make_pair("RETURN", C_RETURN),
+        std::make_pair("COPY", C_COPY),
+        std::make_pair("\\0c", C_pound),
+        std::make_pair("$", C_dollar),
+        std::make_pair(":", C_colon),
+        std::make_pair("?", C_quest),
+        std::make_pair("(", C_lparens),
+        std::make_pair(")", C_rparens),
+        std::make_pair(">", C_gt),
+        std::make_pair("<", C_lt),
+        std::make_pair("=", C_eq),
+        std::make_pair("+", C_plus),
+        std::make_pair("-", C_minus),
+        std::make_pair("*", C_mult),
+        std::make_pair("/", C_div),
+        std::make_pair(";", C_semicolon),
+        std::make_pair(",", C_comma),
+        std::make_pair("_", C_space),
     };
 
     basic_line = BasicLine();
@@ -550,7 +549,7 @@ bool Parser::parse_basic_var(BasicVar& var) {
         goto error;
     }
 
-    // get string marker
+    // get std::string marker
     if (match("$")) {
         is_string = true;
         if (var.name.size() > 1) {
@@ -559,7 +558,7 @@ bool Parser::parse_basic_var(BasicVar& var) {
         }
     }
 
-    // get array marker and dimensions
+    // get std::array marker and dimensions
     if (match("(")) {
         is_array = true;
         if (var.name.size() > 1) {
@@ -590,7 +589,7 @@ bool Parser::parse_basic_var(BasicVar& var) {
 
     // get value
     if (is_string == false && is_array == false) {
-        string str;
+        std::string str;
 
         var.type = BasicVar::Type::Number;
         if (!parse_number(var.value, str)) {
@@ -626,7 +625,7 @@ bool Parser::parse_basic_var(BasicVar& var) {
     }
     else if (is_string == false && is_array == true) {
         double value = 0.0;
-        string str;
+        std::string str;
 
         var.type = BasicVar::Type::ArrayNumbers;
 
@@ -656,7 +655,7 @@ bool Parser::parse_basic_var(BasicVar& var) {
         }
     }
     else if (is_string == true && is_array == true) {
-        string str;
+        std::string str;
 
         var.type = BasicVar::Type::ArrayStrings;
 
@@ -673,7 +672,7 @@ bool Parser::parse_basic_var(BasicVar& var) {
                 goto error;
             }
             if (str.size() != static_cast<size_t>(last_dimension)) {
-                error("string length should be " + to_string(last_dimension));
+                error("string length should be " + std::to_string(last_dimension));
                 return false;
             }
             var.strs.push_back(str);
@@ -769,7 +768,7 @@ bool Parser::parse_asm_line(AsmLine& asm_line) {
     }
 }
 
-bool Parser::parse_asm_label(string& ident) {
+bool Parser::parse_asm_label(std::string& ident) {
     if (isalpha(*p) || *p == '_') {		// identifier at column 0
         parse_ident(ident);
         skip_spaces();
@@ -838,7 +837,7 @@ bool Parser::parse_defm(AsmLine& asm_line) {
     const char* p0 = p;
     if (match("DEFM")) {
         while (true) {
-            string str;
+            std::string str;
             if (!parse_string(str)) {
                 return false;
             }
@@ -935,42 +934,42 @@ bool Parser::parse_z80_opcode(AsmLine& asm_line) {
 }
 
 bool Parser::parse_single_opcode(AsmLine& asm_line) {
-    static vector<pair<string, int>> single_opcode = {
-        make_pair("NOP", 0x00),
-        make_pair("RLCA", 0x07),
-        make_pair("RRCA", 0x0f),
-        make_pair("RLA", 0x17),
-        make_pair("RRA", 0x1f),
-        make_pair("DAA", 0x27),
-        make_pair("CPL", 0x2f),
-        make_pair("SCF", 0x37),
-        make_pair("CCF", 0x3f),
-        make_pair("HALT", 0x76),
-        make_pair("RETN", 0xed45),
-        make_pair("RETI", 0xed4d),
-        make_pair("RET", 0xc9),
-        make_pair("EXX", 0xd9),
-        make_pair("DI", 0xf3),
-        make_pair("EI", 0xfb),
-        make_pair("NEG", 0xed44),
-        make_pair("RRD", 0xed67),
-        make_pair("RLD", 0xed6f),
-        make_pair("LDIR", 0xedb0),
-        make_pair("CPIR", 0xedb1),
-        make_pair("INIR", 0xedb2),
-        make_pair("OTIR", 0xedb3),
-        make_pair("LDDR", 0xedb8),
-        make_pair("CPDR", 0xedb9),
-        make_pair("INDR", 0xedba),
-        make_pair("OTDR", 0xedbb),
-        make_pair("LDI", 0xeda0),
-        make_pair("CPI", 0xeda1),
-        make_pair("INI", 0xeda2),
-        make_pair("OUTI", 0xeda3),
-        make_pair("LDD", 0xeda8),
-        make_pair("CPD", 0xeda9),
-        make_pair("IND", 0xedaa),
-        make_pair("OUTD", 0xedab),
+    static std::vector<std::pair<std::string, int>> single_opcode = {
+        std::make_pair("NOP", 0x00),
+        std::make_pair("RLCA", 0x07),
+        std::make_pair("RRCA", 0x0f),
+        std::make_pair("RLA", 0x17),
+        std::make_pair("RRA", 0x1f),
+        std::make_pair("DAA", 0x27),
+        std::make_pair("CPL", 0x2f),
+        std::make_pair("SCF", 0x37),
+        std::make_pair("CCF", 0x3f),
+        std::make_pair("HALT", 0x76),
+        std::make_pair("RETN", 0xed45),
+        std::make_pair("RETI", 0xed4d),
+        std::make_pair("RET", 0xc9),
+        std::make_pair("EXX", 0xd9),
+        std::make_pair("DI", 0xf3),
+        std::make_pair("EI", 0xfb),
+        std::make_pair("NEG", 0xed44),
+        std::make_pair("RRD", 0xed67),
+        std::make_pair("RLD", 0xed6f),
+        std::make_pair("LDIR", 0xedb0),
+        std::make_pair("CPIR", 0xedb1),
+        std::make_pair("INIR", 0xedb2),
+        std::make_pair("OTIR", 0xedb3),
+        std::make_pair("LDDR", 0xedb8),
+        std::make_pair("CPDR", 0xedb9),
+        std::make_pair("INDR", 0xedba),
+        std::make_pair("OTDR", 0xedbb),
+        std::make_pair("LDI", 0xeda0),
+        std::make_pair("CPI", 0xeda1),
+        std::make_pair("INI", 0xeda2),
+        std::make_pair("OUTI", 0xeda3),
+        std::make_pair("LDD", 0xeda8),
+        std::make_pair("CPD", 0xeda9),
+        std::make_pair("IND", 0xedaa),
+        std::make_pair("OUTD", 0xedab),
     };
 
     skip_spaces();
@@ -1201,15 +1200,15 @@ bool Parser::parse_ld(AsmLine& asm_line) {
 }
 
 bool Parser::parse_alu(AsmLine& asm_line) {
-    static vector<pair<string, int>> alu1 = {
-        make_pair("ADD", 0),
-        make_pair("ADC", 1),
-        make_pair("SUB", 2),
-        make_pair("SBC", 3),
-        make_pair("AND", 4),
-        make_pair("XOR", 5),
-        make_pair("OR", 6),
-        make_pair("CP", 7),
+    static std::vector<std::pair<std::string, int>> alu1 = {
+        std::make_pair("ADD", 0),
+        std::make_pair("ADC", 1),
+        std::make_pair("SUB", 2),
+        std::make_pair("SBC", 3),
+        std::make_pair("AND", 4),
+        std::make_pair("XOR", 5),
+        std::make_pair("OR", 6),
+        std::make_pair("CP", 7),
     };
 
     skip_spaces();
@@ -1377,10 +1376,10 @@ error:
 }
 
 bool Parser::parse_bit(AsmLine& asm_line) {
-    static vector<pair<string, int>> bit1 = {
-        make_pair("BIT", 0),
-        make_pair("RES", 1),
-        make_pair("SET", 2),
+    static std::vector<std::pair<std::string, int>> bit1 = {
+        std::make_pair("BIT", 0),
+        std::make_pair("RES", 1),
+        std::make_pair("SET", 2),
     };
 
     skip_spaces();
@@ -1442,9 +1441,9 @@ error:
 }
 
 bool Parser::parse_call_jp(AsmLine& asm_line) {
-    static vector<pair<string, int>> jpcall1 = {
-        make_pair("JP", 0),
-        make_pair("CALL", 1),
+    static std::vector<std::pair<std::string, int>> jpcall1 = {
+        std::make_pair("JP", 0),
+        std::make_pair("CALL", 1),
     };
 
     skip_spaces();
@@ -1569,9 +1568,9 @@ bool Parser::parse_jr(AsmLine& asm_line) {
 }
 
 bool Parser::parse_inc_dec(AsmLine& asm_line) {
-    static vector<pair<string, int>> incdec1 = {
-        make_pair("INC", 0),
-        make_pair("DEC", 1),
+    static std::vector<std::pair<std::string, int>> incdec1 = {
+        std::make_pair("INC", 0),
+        std::make_pair("DEC", 1),
     };
 
     skip_spaces();
@@ -1757,15 +1756,15 @@ bool Parser::parse_push_pop(AsmLine& asm_line) {
 }
 
 bool Parser::parse_rotate(AsmLine& asm_line) {
-    static vector<pair<string, int>> rot1 = {
-        make_pair("RLC", 0),
-        make_pair("RRC", 1),
-        make_pair("RL", 2),
-        make_pair("RR", 3),
-        make_pair("SLA", 4),
-        make_pair("SRA", 5),
-        make_pair("SLL", 6),
-        make_pair("SRL", 7),
+    static std::vector<std::pair<std::string, int>> rot1 = {
+        std::make_pair("RLC", 0),
+        std::make_pair("RRC", 1),
+        std::make_pair("RL", 2),
+        std::make_pair("RR", 3),
+        std::make_pair("SLA", 4),
+        std::make_pair("SRA", 5),
+        std::make_pair("SLL", 6),
+        std::make_pair("SRL", 7),
     };
 
     skip_spaces();
@@ -1813,13 +1812,13 @@ error:
 }
 
 bool Parser::parse_dd_sp(int& n) {
-    static vector<pair<string, int>> regs = {
-        make_pair("BC", 0),
-        make_pair("DE", 1),
-        make_pair("HL", 2),
-        make_pair("SP", 3),
-        make_pair("IX", 0xdd02),
-        make_pair("IY", 0xfd02),
+    static std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("BC", 0),
+        std::make_pair("DE", 1),
+        std::make_pair("HL", 2),
+        std::make_pair("SP", 3),
+        std::make_pair("IX", 0xdd02),
+        std::make_pair("IY", 0xfd02),
     };
     n = match_one_of(-1, regs);
     if (n != -1) {
@@ -1831,13 +1830,13 @@ bool Parser::parse_dd_sp(int& n) {
 }
 
 bool Parser::parse_dd_af(int& n) {
-    static vector<pair<string, int>> regs = {
-        make_pair("BC", 0),
-        make_pair("DE", 1),
-        make_pair("HL", 2),
-        make_pair("AF", 3),
-        make_pair("IX", 0xdd02),
-        make_pair("IY", 0xfd02),
+    static std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("BC", 0),
+        std::make_pair("DE", 1),
+        std::make_pair("HL", 2),
+        std::make_pair("AF", 3),
+        std::make_pair("IX", 0xdd02),
+        std::make_pair("IY", 0xfd02),
     };
     n = match_one_of(-1, regs);
     if (n != -1) {
@@ -1849,9 +1848,9 @@ bool Parser::parse_dd_af(int& n) {
 }
 
 bool Parser::parse_bc_de(int& n) {
-    static vector<pair<string, int>> regs = {
-        make_pair("BC", 0),
-        make_pair("DE", 1),
+    static std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("BC", 0),
+        std::make_pair("DE", 1),
     };
     n = match_one_of(-1, regs);
     if (n != -1) {
@@ -1863,10 +1862,10 @@ bool Parser::parse_bc_de(int& n) {
 }
 
 bool Parser::parse_hl_ix_iy(int& pfx) {
-    static vector<pair<string, int>> regs = {
-        make_pair("HL", 0),
-        make_pair("IX", 0xdd),
-        make_pair("IY", 0xfd),
+    static std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("HL", 0),
+        std::make_pair("IX", 0xdd),
+        std::make_pair("IY", 0xfd),
     };
     pfx = match_one_of(-1, regs);
     if (pfx != -1) {
@@ -1878,14 +1877,14 @@ bool Parser::parse_hl_ix_iy(int& pfx) {
 }
 
 bool Parser::parse_r1(int& n) {
-    static vector<pair<string, int>> regs = {
-        make_pair("B", 0),
-        make_pair("C", 1),
-        make_pair("D", 2),
-        make_pair("E", 3),
-        make_pair("H", 4),
-        make_pair("L", 5),
-        make_pair("A", 7),
+    static std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("B", 0),
+        std::make_pair("C", 1),
+        std::make_pair("D", 2),
+        std::make_pair("E", 3),
+        std::make_pair("H", 4),
+        std::make_pair("L", 5),
+        std::make_pair("A", 7),
     };
     n = match_one_of(-1, regs);
     if (n != -1) {
@@ -1897,11 +1896,11 @@ bool Parser::parse_r1(int& n) {
 }
 
 bool Parser::parse_flags_jr(int& n) {
-    static vector<pair<string, int>> flags = {
-        make_pair("NZ", 0),
-        make_pair("Z", 1),
-        make_pair("NC", 2),
-        make_pair("C", 3),
+    static std::vector<std::pair<std::string, int>> flags = {
+        std::make_pair("NZ", 0),
+        std::make_pair("Z", 1),
+        std::make_pair("NC", 2),
+        std::make_pair("C", 3),
     };
     n = match_one_of(-1, flags);
     if (n != -1) {
@@ -1913,15 +1912,15 @@ bool Parser::parse_flags_jr(int& n) {
 }
 
 bool Parser::parse_flags_jp(int& n) {
-    static vector<pair<string, int>> flags = {
-        make_pair("NZ", 0),
-        make_pair("Z", 1),
-        make_pair("NC", 2),
-        make_pair("C", 3),
-        make_pair("PO", 4),
-        make_pair("PE", 5),
-        make_pair("P", 6),
-        make_pair("M", 7),
+    static std::vector<std::pair<std::string, int>> flags = {
+        std::make_pair("NZ", 0),
+        std::make_pair("Z", 1),
+        std::make_pair("NC", 2),
+        std::make_pair("C", 3),
+        std::make_pair("PO", 4),
+        std::make_pair("PE", 5),
+        std::make_pair("P", 6),
+        std::make_pair("M", 7),
     };
     n = match_one_of(-1, flags);
     if (n != -1) {
@@ -1933,9 +1932,9 @@ bool Parser::parse_flags_jp(int& n) {
 }
 
 bool Parser::parse_x_plus_ind(int& pfx, Expr& offset) {
-    static vector<pair<string, int>> regs = {
-        make_pair("IX", 0xdd),
-        make_pair("IY", 0xfd),
+    static std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("IX", 0xdd),
+        std::make_pair("IY", 0xfd),
     };
 
     skip_spaces();
@@ -2029,6 +2028,6 @@ void Parser::parse_line() {
     }
 }
 
-void parse_b81_file(Basic& basic, const string& filename) {
+void parse_b81_file(Basic& basic, const std::string& filename) {
     g_parser.parse_b81_file(basic, filename);
 }

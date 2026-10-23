@@ -16,7 +16,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-using namespace std;
 
 //-----------------------------------------------------------------------------
 // asm labels
@@ -29,7 +28,7 @@ AsmLabels::AsmLabels() {
 #include "consts.def"
 }
 
-void AsmLabels::add(const string& name, int value) {
+void AsmLabels::add(const std::string& name, int value) {
     auto it = by_name.find(name);
     if (it != by_name.end()) {
         error("label redefinition", name + " = $" + fmt_hex(value, 4));
@@ -40,7 +39,7 @@ void AsmLabels::add(const string& name, int value) {
     return;
 }
 
-int AsmLabels::get(const string& name) {
+int AsmLabels::get(const std::string& name) {
     int value = 0;
     if (find(name, value)) {
         return value;
@@ -51,7 +50,7 @@ int AsmLabels::get(const string& name) {
     }
 }
 
-bool AsmLabels::find(const string& name, int& value) const {
+bool AsmLabels::find(const std::string& name, int& value) const {
     auto it1 = by_name.find(name);
     if (it1 == by_name.end()) {
         return false;
@@ -62,7 +61,7 @@ bool AsmLabels::find(const string& name, int& value) const {
     }
 }
 
-bool AsmLabels::find(int value, string& name) const {
+bool AsmLabels::find(int value, std::string& name) const {
     auto it2 = by_value.find(value);
     if (it2 == by_value.end()) {
         return false;
@@ -86,23 +85,23 @@ Opcode::Opcode(Type type_, int addr_, int size_)
     : type(type_), addr(addr_), size(size_) {
 }
 
-string Opcode::to_string() {
-    ostringstream oss;
+std::string Opcode::to_string() {
+    std::ostringstream oss;
 
     // header
-    string header = g_disasm_code.get_header(addr);
+    std::string header = g_disasm_code.get_header(addr);
     if (!header.empty()) {
-        oss << endl << header << endl;
+        oss << std::endl << header << std::endl;
     }
 
     // label
-    string label;
+    std::string label;
     if (g_asm_labels.find(addr, label)) {
-        oss << label << ":" << endl;
+        oss << label << ":" << std::endl;
     }
 
     // opcode
-    oss << setw(8) << "" << setw(24) << left;
+    oss << std::setw(8) << "" << std::setw(24) << std::left;
     switch (type) {
     case Type::Undef:
     case Type::Unknown:
@@ -125,8 +124,8 @@ string Opcode::to_string() {
     }
 
     // comment
-    oss << setw(0);
-    string comment = g_disasm_code.get_comment(addr);
+    oss << std::setw(0);
+    std::string comment = g_disasm_code.get_comment(addr);
     if (!comment.empty()) {
         oss << "; " << comment;
     }
@@ -134,16 +133,16 @@ string Opcode::to_string() {
         oss << "; [$" << fmt_hex(addr, 4) << "]";
     }
 
-    oss << endl;
+    oss << std::endl;
 
     return oss.str();
 }
 
-string Opcode::decode_opcode() {
+std::string Opcode::decode_opcode() {
     // get opcode
-    string instr, args;
+    std::string instr, args;
     auto p = opcode.find(' ');
-    if (p == string::npos) {
+    if (p == std::string::npos) {
         instr = opcode;
         args = "";
     }
@@ -153,10 +152,10 @@ string Opcode::decode_opcode() {
     }
 
     // get arguments
-    if (args.find("+DIS") != string::npos) {
-        string s;
+    if (args.find("+DIS") != std::string::npos) {
+        std::string s;
         if (dis > 0) {
-            s = string("+") + std::to_string(dis);
+            s = std::string("+") + std::to_string(dis);
         }
         else if (dis < 0) {
             s = std::to_string(dis);
@@ -167,10 +166,10 @@ string Opcode::decode_opcode() {
         args = str_replace_all(args, "+DIS", s);
     }
 
-    if (args.find("NN") != string::npos) {
-        string s;
+    if (args.find("NN") != std::string::npos) {
+        std::string s;
         int value;
-        string label;
+        std::string label;
         if (!refer_to.empty() && g_asm_labels.find(refer_to, value)) {
             int offset = nn - value;
             if (offset < 0) {
@@ -190,29 +189,29 @@ string Opcode::decode_opcode() {
         args = str_replace_all(args, "NN", s);
     }
 
-    if (args.find("N") != string::npos) {
-        string s = string("$") + fmt_hex(n, 2);
+    if (args.find("N") != std::string::npos) {
+        std::string s = std::string("$") + fmt_hex(n, 2);
         args = str_replace_all(args, "N", s);
     }
 
     // result
-    ostringstream oss;
-    oss << setw(8) << left << instr
-        << setw(0) << left << args;
+    std::ostringstream oss;
+    oss << std::setw(8) << std::left << instr
+        << std::setw(0) << std::left << args;
     return oss.str();
 }
 
-string Opcode::decode_undef() {
-    ostringstream oss;
-    oss << setw(8) << left << "defb"
-        << setw(0) << left << "$" << fmt_hex(peek(addr), 2);
+std::string Opcode::decode_undef() {
+    std::ostringstream oss;
+    oss << std::setw(8) << std::left << "defb"
+        << std::setw(0) << std::left << "$" << fmt_hex(peek(addr), 2);
     return oss.str();
 }
 
-string Opcode::decode_defb() {
-    ostringstream oss;
-    oss << setw(8) << left << "defb"
-        << setw(0) << left;
+std::string Opcode::decode_defb() {
+    std::ostringstream oss;
+    oss << std::setw(8) << std::left << "defb"
+        << std::setw(0) << std::left;
     bool first = true;
     for (auto& value : values) {
         if (!first) {
@@ -225,10 +224,10 @@ string Opcode::decode_defb() {
     return oss.str();
 }
 
-string Opcode::decode_defw() {
-    ostringstream oss;
-    oss << setw(8) << left << "defw"
-        << setw(0) << left;
+std::string Opcode::decode_defw() {
+    std::ostringstream oss;
+    oss << std::setw(8) << std::left << "defw"
+        << std::setw(0) << std::left;
     bool first = true;
     for (auto& value : values) {
         if (!first) {
@@ -241,10 +240,10 @@ string Opcode::decode_defw() {
     return oss.str();
 }
 
-string Opcode::decode_defm() {
-    ostringstream oss;
-    oss << setw(8) << left << "defm"
-        << setw(0) << left
+std::string Opcode::decode_defm() {
+    std::ostringstream oss;
+    oss << std::setw(8) << std::left << "defm"
+        << std::setw(0) << std::left
         << "\"";
     for (auto& c : str) {
         if (c == '"')
@@ -257,9 +256,9 @@ string Opcode::decode_defm() {
     return oss.str();
 }
 
-string Opcode::decode_label(int value) {
-    ostringstream oss;
-    string label;
+std::string Opcode::decode_label(int value) {
+    std::ostringstream oss;
+    std::string label;
     if (g_asm_labels.find(value, label)) {
         oss << label;
     }
@@ -319,8 +318,8 @@ Opcode* DisasmCode::get(int addr) {
     return opc;
 }
 
-string DisasmCode::get_label(int addr) {
-    string name;
+std::string DisasmCode::get_label(int addr) {
+    std::string name;
     if (!g_asm_labels.find(addr, name)) {
         name = "L" + fmt_hex(addr, 4);
         g_asm_labels.add(name, addr);
@@ -328,9 +327,9 @@ string DisasmCode::get_label(int addr) {
     return name;
 }
 
-string DisasmCode::get_header(int addr) {
+std::string DisasmCode::get_header(int addr) {
     addr &= 0xffff;
-    string* header = headers[addr];
+    std::string* header = headers[addr];
     if (header == nullptr) {
         return "";
     }
@@ -339,9 +338,9 @@ string DisasmCode::get_header(int addr) {
     }
 }
 
-string DisasmCode::get_comment(int addr) {
+std::string DisasmCode::get_comment(int addr) {
     addr &= 0xffff;
-    string* comment = comments[addr];
+    std::string* comment = comments[addr];
     if (comment == nullptr) {
         return "";
     }
@@ -409,7 +408,7 @@ void DisasmCode::set_code(int addr) {
 
         Opcode opcode = dis.disasm(addr);
         if (opcode.opcode.empty()) {
-            error("invalid disassembly at", string("$") + fmt_hex(addr, 4));
+            error("invalid disassembly at", std::string("$") + fmt_hex(addr, 4));
             return;
         }
 
@@ -433,22 +432,22 @@ void DisasmCode::set_code(int addr) {
     }
 }
 
-void DisasmCode::add_header(int addr, const string& line) {
+void DisasmCode::add_header(int addr, const std::string& line) {
     addr &= 0xffff;
-    string* header = headers[addr];
+    std::string* header = headers[addr];
     if (header == nullptr) {
-        header = headers[addr] = new string(line);
+        header = headers[addr] = new std::string(line);
     }
     else {
         *header += line;
     }
 }
 
-void DisasmCode::set_comment(int addr, const string& text) {
+void DisasmCode::set_comment(int addr, const std::string& text) {
     addr &= 0xffff;
-    string* comment = comments[addr];
+    std::string* comment = comments[addr];
     if (comment == nullptr) {
-        comment = comments[addr] = new string(text);
+        comment = comments[addr] = new std::string(text);
     }
     else {
         *comment = text;
@@ -459,7 +458,7 @@ bool DisasmCode::check_range_unknown(int addr, int size) {
     for (int p = addr; p < addr + size; p++) {
         Opcode::Type type = get_type(p);
         if (type != Opcode::Type::Undef && type != Opcode::Type::Unknown) {
-            error("memory address redefinition", string("$") + fmt_hex(addr, 4));
+            error("memory address redefinition", std::string("$") + fmt_hex(addr, 4));
             return false;
         }
     }
@@ -470,7 +469,7 @@ bool DisasmCode::check_range_unknown(int addr, int size) {
 // disassembler
 //-----------------------------------------------------------------------------
 
-string Disasm::dd1(int n, int x) {
+std::string Disasm::dd1(int n, int x) {
     const char* n_lut[] = { "bc", "de", "hl", "sp" };
     const char* x_lut[] = { "hl", "ix", "iy" };
     n &= 0x03;
@@ -482,7 +481,7 @@ string Disasm::dd1(int n, int x) {
     }
 }
 
-string Disasm::dd2(int n, int x) {
+std::string Disasm::dd2(int n, int x) {
     const char* n_lut[] = { "bc", "de", "hl", "af" };
     const char* x_lut[] = { "hl", "ix", "iy" };
     n &= 0x03;
@@ -494,7 +493,7 @@ string Disasm::dd2(int n, int x) {
     }
 }
 
-string Disasm::r1(int n, int x) {
+std::string Disasm::r1(int n, int x) {
     const char* n_lut[] = { "b", "c", "d", "e", "h", "l", "(hl)", "a" };
     const char* x_lut[] = { "(hl)", "(ix+DIS)", "(iy+DIS)" };
     n &= 0x07;
@@ -506,35 +505,35 @@ string Disasm::r1(int n, int x) {
     }
 }
 
-string Disasm::x1(int x) {
+std::string Disasm::x1(int x) {
     const char* x_lut[] = { "hl", "ix", "iy" };
     return x_lut[x];
 }
 
-string Disasm::flags1(int n) {
+std::string Disasm::flags1(int n) {
     const char* n_lut[] = { "nz", "z", "nc", "c", "po", "pe", "p", "m" };
     n &= 0x07;
     return n_lut[n];
 }
 
-string Disasm::flags2(int n) {
+std::string Disasm::flags2(int n) {
     n &= 0x03;
     return flags1(n);
 }
 
-string Disasm::alu1(int n) {
+std::string Disasm::alu1(int n) {
     const char* n_lut[] = { "add a, ", "adc a, ", "sub ", "sbc a, ", "and ", "xor ", "or ", "cp " };
     n &= 0x07;
     return n_lut[n];
 }
 
-string Disasm::rot1(int n) {
+std::string Disasm::rot1(int n) {
     const char* n_lut[] = { "rlc ", "rrc ", "rl ", "rr ", "sla ", "sra ", "sll ", "srl " };
     n &= 0x07;
     return n_lut[n];
 }
 
-string Disasm::bit1(int n) {
+std::string Disasm::bit1(int n) {
     const char* n_lut[] = { "", "bit ", "res ", "set " };
     n &= 0x03;
     return n_lut[n];
@@ -575,18 +574,18 @@ Opcode Disasm::disasm(int addr_) {
         case 0x11:
         case 0x21:
         case 0x31:
-            opcode.opcode = string("ld ") + dd1(b >> 4, x) + ", NN";
+            opcode.opcode = std::string("ld ") + dd1(b >> 4, x) + ", NN";
             collect_nn();
             break;
         case 0x02:
         case 0x12:
-            opcode.opcode = string("ld (") + dd1(b >> 4, 0) + "), a";
+            opcode.opcode = std::string("ld (") + dd1(b >> 4, 0) + "), a";
             break;
         case 0x03:
         case 0x13:
         case 0x23:
         case 0x33:
-            opcode.opcode = string("inc ") + dd1(b >> 4, x);
+            opcode.opcode = std::string("inc ") + dd1(b >> 4, x);
             break;
         case 0x04:
         case 0x0c:
@@ -599,7 +598,7 @@ Opcode Disasm::disasm(int addr_) {
             if (b == 0x34 && x != 0) {
                 collect_dis();
             }
-            opcode.opcode = string("inc ") + r1(b >> 3, x);
+            opcode.opcode = std::string("inc ") + r1(b >> 3, x);
             break;
         case 0x05:
         case 0x0d:
@@ -612,7 +611,7 @@ Opcode Disasm::disasm(int addr_) {
             if (b == 0x35 && x != 0) {
                 collect_dis();
             }
-            opcode.opcode = string("dec ") + r1(b >> 3, x);
+            opcode.opcode = std::string("dec ") + r1(b >> 3, x);
             break;
         case 0x06:
         case 0x0e:
@@ -625,7 +624,7 @@ Opcode Disasm::disasm(int addr_) {
             if (b == 0x36 && x != 0) {
                 collect_dis();
             }
-            opcode.opcode = string("ld ") + r1(b >> 3, x) + ", N";
+            opcode.opcode = std::string("ld ") + r1(b >> 3, x) + ", N";
             collect_n();
             break;
         case 0x07:
@@ -638,17 +637,17 @@ Opcode Disasm::disasm(int addr_) {
         case 0x19:
         case 0x29:
         case 0x39:
-            opcode.opcode = string("add ") + x1(x) + ", " + dd1(b >> 4, x);
+            opcode.opcode = std::string("add ") + x1(x) + ", " + dd1(b >> 4, x);
             break;
         case 0x0a:
         case 0x1a:
-            opcode.opcode = string("ld a, (") + dd1(b >> 4, 0) + ")";
+            opcode.opcode = std::string("ld a, (") + dd1(b >> 4, 0) + ")";
             break;
         case 0x0b:
         case 0x1b:
         case 0x2b:
         case 0x3b:
-            opcode.opcode = string("dec ") + dd1(b >> 4, x);
+            opcode.opcode = std::string("dec ") + dd1(b >> 4, x);
             break;
         case 0x0f:
             opcode.opcode = "rrca";
@@ -674,19 +673,19 @@ Opcode Disasm::disasm(int addr_) {
         case 0x28:
         case 0x30:
         case 0x38:
-            opcode.opcode = string("jr ") + flags2(b >> 3) + ", NN";
+            opcode.opcode = std::string("jr ") + flags2(b >> 3) + ", NN";
             collect_jr();
             opcode.is_jump = true;
             break;
         case 0x22:
-            opcode.opcode = string("ld (NN), ") + x1(x);
+            opcode.opcode = std::string("ld (NN), ") + x1(x);
             collect_nn();
             break;
         case 0x27:
             opcode.opcode = "daa";
             break;
         case 0x2a:
-            opcode.opcode = string("ld ") + x1(x) + ", (NN)";
+            opcode.opcode = std::string("ld ") + x1(x) + ", (NN)";
             collect_nn();
             break;
         case 0x2f:
@@ -773,7 +772,7 @@ Opcode Disasm::disasm(int addr_) {
                 if ((b & 0x07) == 0x06 || (b & 0x38) == 0x30) {
                     collect_dis();
                 }
-            opcode.opcode = string("ld ") + r1(b >> 3, x) + ", " + r1(b, x);
+            opcode.opcode = std::string("ld ") + r1(b >> 3, x) + ", " + r1(b, x);
             break;
         case 0x76:
             opcode.opcode = "halt";
@@ -856,13 +855,13 @@ Opcode Disasm::disasm(int addr_) {
         case 0xe8:
         case 0xf0:
         case 0xf8:
-            opcode.opcode = string("ret ") + flags1(b >> 3);
+            opcode.opcode = std::string("ret ") + flags1(b >> 3);
             break;
         case 0xc1:
         case 0xd1:
         case 0xe1:
         case 0xf1:
-            opcode.opcode = string("pop ") + dd2(b >> 4, x);
+            opcode.opcode = std::string("pop ") + dd2(b >> 4, x);
             break;
         case 0xc2:
         case 0xca:
@@ -872,7 +871,7 @@ Opcode Disasm::disasm(int addr_) {
         case 0xea:
         case 0xf2:
         case 0xfa:
-            opcode.opcode = string("jp ") + flags1(b >> 3) + ", NN";
+            opcode.opcode = std::string("jp ") + flags1(b >> 3) + ", NN";
             collect_nn();
             opcode.is_jump = true;
             break;
@@ -890,7 +889,7 @@ Opcode Disasm::disasm(int addr_) {
         case 0xec:
         case 0xf4:
         case 0xfc:
-            opcode.opcode = string("call ") + flags1(b >> 3) + ", NN";
+            opcode.opcode = std::string("call ") + flags1(b >> 3) + ", NN";
             collect_nn();
             opcode.is_jump = true;
             break;
@@ -898,7 +897,7 @@ Opcode Disasm::disasm(int addr_) {
         case 0xd5:
         case 0xe5:
         case 0xf5:
-            opcode.opcode = string("push ") + dd2(b >> 4, x);
+            opcode.opcode = std::string("push ") + dd2(b >> 4, x);
             break;
         case 0xc6:
         case 0xce:
@@ -935,7 +934,8 @@ Opcode Disasm::disasm(int addr_) {
                 opcode.opcode = rot1(b >> 3) + r1(b, 0);
             }
             else {
-                opcode.opcode = bit1(b >> 6) + to_string((b >> 3) & 0x07) + ", " + r1(b, 0);
+                opcode.opcode = bit1(b >> 6) + std::to_string((b >> 3) & 0x07) + ", " + r1(b,
+                                0);
             }
             break;
         case 0xcd:
@@ -959,14 +959,14 @@ Opcode Disasm::disasm(int addr_) {
             done = false;
             break;
         case 0xe3:
-            opcode.opcode = string("ex (sp), ") + x1(x);
+            opcode.opcode = std::string("ex (sp), ") + x1(x);
             break;
         case 0xe9:
-            opcode.opcode = string("jp (") + x1(x) + ")";
+            opcode.opcode = std::string("jp (") + x1(x) + ")";
             opcode.ends_flow = true;
             break;
         case 0xeb:
-            opcode.opcode = string("ex de, ") + x1(x);
+            opcode.opcode = std::string("ex de, ") + x1(x);
             break;
         case 0xed:
             b = peek(addr++);
@@ -978,7 +978,7 @@ Opcode Disasm::disasm(int addr_) {
             case 0x60:
             case 0x68:
             case 0x78:
-                opcode.opcode = string("in ") + r1(b >> 3, 0) + ", (c)";
+                opcode.opcode = std::string("in ") + r1(b >> 3, 0) + ", (c)";
                 break;
             case 0x41:
             case 0x49:
@@ -987,19 +987,19 @@ Opcode Disasm::disasm(int addr_) {
             case 0x61:
             case 0x69:
             case 0x79:
-                opcode.opcode = string("out (c), ") + r1(b >> 3, 0);
+                opcode.opcode = std::string("out (c), ") + r1(b >> 3, 0);
                 break;
             case 0x42:
             case 0x52:
             case 0x62:
             case 0x72:
-                opcode.opcode = string("sbc hl, ") + dd1(b >> 4, 0);
+                opcode.opcode = std::string("sbc hl, ") + dd1(b >> 4, 0);
                 break;
             case 0x43:
             case 0x53:
             case 0x63:
             case 0x73:
-                opcode.opcode = string("ld (NN), ") + dd1(b >> 4, 0);
+                opcode.opcode = std::string("ld (NN), ") + dd1(b >> 4, 0);
                 collect_nn();
                 break;
             case 0x44:
@@ -1019,13 +1019,13 @@ Opcode Disasm::disasm(int addr_) {
             case 0x5a:
             case 0x6a:
             case 0x7a:
-                opcode.opcode = string("adc hl, ") + dd1(b >> 4, 0);
+                opcode.opcode = std::string("adc hl, ") + dd1(b >> 4, 0);
                 break;
             case 0x4b:
             case 0x5b:
             case 0x6b:
             case 0x7b:
-                opcode.opcode = string("ld ") + dd1(b >> 4, 0) + ", (NN)";
+                opcode.opcode = std::string("ld ") + dd1(b >> 4, 0) + ", (NN)";
                 collect_nn();
                 break;
             case 0x4d:
@@ -1308,7 +1308,7 @@ Opcode Disasm::disasm(int addr_) {
             opcode.opcode = "di";
             break;
         case 0xf9:
-            opcode.opcode = string("ld sp, ") + x1(x);
+            opcode.opcode = std::string("ld sp, ") + x1(x);
             break;
         case 0xfb:
             opcode.opcode = "ei";

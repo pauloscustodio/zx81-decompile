@@ -10,7 +10,6 @@
 #include <cstring>
 #include <iostream>
 #include <sstream>
-using namespace std;
 
 //-----------------------------------------------------------------------------
 // encode/decode zx81 character set
@@ -275,15 +274,15 @@ static const char* zx81_chars[] = {
     /* 0xff */	"COPY",
 };
 
-string decode_zx81(char c) {
-    string code = zx81_chars[c & 0xff];
+std::string decode_zx81(char c) {
+    std::string code = zx81_chars[c & 0xff];
     if (code.size() > 1 && isalnum(code.front())) {
-        code = string(" ") + code + " ";
+        code = std::string(" ") + code + " ";
     }
     return code;
 }
 
-Bytes encode_zx81(const string& str) {
+Bytes encode_zx81(const std::string& str) {
     const char* p = str.c_str();
     return encode_zx81(p);
 }
@@ -321,8 +320,8 @@ Bytes encode_zx81(const char*& p) {
     return bytes;
 }
 
-string encode_hex(const Bytes& bytes) {
-    ostringstream oss;
+std::string encode_hex(const Bytes& bytes) {
+    std::ostringstream oss;
     for (auto& b : bytes) {
         oss << "\\" << fmt_hex(b, 2);
     }
