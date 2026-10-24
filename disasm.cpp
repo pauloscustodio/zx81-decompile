@@ -130,7 +130,7 @@ std::string Opcode::to_string() {
         oss << "; " << comment;
     }
     else if ((optflags & FLAG_DEBUG) == FLAG_DEBUG) {
-        oss << "; [$" << fmt_hex(addr, 4) << "]";
+        oss << "; [" << fmt_hex(addr, 4) << "]";
     }
 
     oss << std::endl;
@@ -190,7 +190,7 @@ std::string Opcode::decode_opcode() {
     }
 
     if (args.find("N") != std::string::npos) {
-        std::string s = std::string("$") + fmt_hex(n, 2);
+        std::string s = fmt_hex(n, 2);
         args = str_replace_all(args, "N", s);
     }
 
@@ -204,7 +204,7 @@ std::string Opcode::decode_opcode() {
 std::string Opcode::decode_undef() {
     std::ostringstream oss;
     oss << std::setw(8) << std::left << "defb"
-        << std::setw(0) << std::left << "$" << fmt_hex(peek(addr), 2);
+        << std::setw(0) << std::left << fmt_hex(peek(addr), 2);
     return oss.str();
 }
 
@@ -219,7 +219,7 @@ std::string Opcode::decode_defb() {
         }
         first = false;
 
-        oss << "$" << fmt_hex(value, 2);
+        oss << fmt_hex(value, 2);
     }
     return oss.str();
 }
@@ -269,7 +269,7 @@ std::string Opcode::decode_label(int value) {
         oss << label << "+2";
     }
     else {
-        oss << "$" << fmt_hex(value, 4);
+        oss << fmt_hex(value, 4);
     }
     return oss.str();
 }
@@ -321,7 +321,7 @@ Opcode* DisasmCode::get(int addr) {
 std::string DisasmCode::get_label(int addr) {
     std::string name;
     if (!g_asm_labels.find(addr, name)) {
-        name = "L" + fmt_hex(addr, 4);
+        name = fmt_hex(addr, 4, "L");
         g_asm_labels.add(name, addr);
     }
     return name;
@@ -408,7 +408,7 @@ void DisasmCode::set_code(int addr) {
 
         Opcode opcode = dis.disasm(addr);
         if (opcode.opcode.empty()) {
-            error("invalid disassembly at", std::string("$") + fmt_hex(addr, 4));
+            error("invalid disassembly at", fmt_hex(addr, 4));
             return;
         }
 
@@ -458,7 +458,7 @@ bool DisasmCode::check_range_unknown(int addr, int size) {
     for (int p = addr; p < addr + size; p++) {
         Opcode::Type type = get_type(p);
         if (type != Opcode::Type::Undef && type != Opcode::Type::Unknown) {
-            error("memory address redefinition", std::string("$") + fmt_hex(addr, 4));
+            error("memory address redefinition", fmt_hex(addr, 4));
             return false;
         }
     }

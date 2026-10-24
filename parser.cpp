@@ -48,6 +48,20 @@ bool Scanner::parse_integer(int& value) {
         return true;
     }
 
+    // 0xhh
+    p = p0;
+    if (p[0] == '0' && p[1] == 'x') {
+        if (!isxdigit(p[2])) {
+            return false;
+        }
+        p += 2;
+        while (isxdigit(*p)) {
+            p++;
+        }
+        value = INT(strtol(p0 + 2, NULL, 16));
+        return true;
+    }
+
     // dhhhH
     p = p0;
     if (isdigit(*p)) {
@@ -698,13 +712,13 @@ void Parser::parse_meta_line() {
         }
     }
     else if (match("SYSVARS") && match("=")) {
-        poke_bytes(VERSN, encode_zx81(p));
+        poke_bytes(VERSN, parse_byte_list());
     }
     else if (match("D_FILE") && match("=")) {
-        basic->d_file_bytes = encode_zx81(p);
+        basic->d_file_bytes = parse_byte_list();
     }
     else if (match("WORKSPACE") && match("=")) {
-        basic->e_line_bytes = encode_zx81(p);
+        basic->e_line_bytes = parse_byte_list();
     }
     else if (match("AUTOSTART") && match("=") && parse_integer(n)
              && parse_end_basic()) {
@@ -726,6 +740,30 @@ void Parser::parse_meta_line() {
     else {
         // ignore, consider a comment
     }
+}
+
+Bytes Parser::parse_byte_list() {
+    if (parse_end_basic()) {
+        return Bytes{};
+    }
+
+    Bytes out;
+    while (true) {
+        int value = 0;
+        if (!parse_integer(value)) {
+            error("integer expected");
+            return Bytes{};
+        }
+        out.push_back(value);
+        if (!match(",")) {
+            break;
+        }
+    }
+    if (!parse_end_basic()) {
+        error("end of line expected");
+        return Bytes{};
+    }
+    return out;
 }
 
 bool Parser::parse_asm_line(AsmLine& asm_line) {

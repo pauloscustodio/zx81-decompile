@@ -414,7 +414,7 @@ void Decompiler::decompile_vars() {
             release_assert(addr0 + size == addr);
         }
         else {
-            error("invalid variable marker", std::string("$") + fmt_hex(c, 2));
+            error("invalid variable marker", fmt_hex(c, 2));
             break;
         }
 

@@ -263,59 +263,65 @@ void Basic::parse_b81_file(const std::string& filename) {
 }
 
 void Basic::write_sysvars(std::ofstream& ofs) const {
-    ofs << "# [VERSN     =  " << peek(VERSN) << "]" << std::endl;
-    ofs << "# [E_PPC     =  " << dpeek(E_PPC) << "]" << std::endl;
-    ofs << "# [D_FILE    = $" << fmt_hex(dpeek(D_FILE), 4) << "]" << std::endl;
-    ofs << "# [DF_CC     = $" << fmt_hex(dpeek(DF_CC), 4) << "]" << std::endl;
-    ofs << "# [VARS      = $" << fmt_hex(dpeek(VARS), 4) << "]" << std::endl;
-    ofs << "# [DEST      = $" << fmt_hex(dpeek(DEST), 4) << "]" << std::endl;
-    ofs << "# [E_LINE    = $" << fmt_hex(dpeek(E_LINE), 4) << "]" << std::endl;
-    ofs << "# [CH_ADD    = $" << fmt_hex(dpeek(CH_ADD), 4) << "]" << std::endl;
-    ofs << "# [X_PTR     = $" << fmt_hex(dpeek(X_PTR), 4) << "]" << std::endl;
-    ofs << "# [STKBOT    = $" << fmt_hex(dpeek(STKBOT), 4) << "]" << std::endl;
-    ofs << "# [STKEND    = $" << fmt_hex(dpeek(STKEND), 4) << "]" << std::endl;
-    ofs << "# [BREG      =  " << peek(BREG) << "]" << std::endl;
-    ofs << "# [MEM       = $" << fmt_hex(dpeek(MEM), 4) << "]" << std::endl;
-    ofs << "# [FREE1     =  " << peek(FREE1) << "]" << std::endl;
-    ofs << "# [DF_SZ     =  " << peek(DF_SZ) << "]" << std::endl;
-    ofs << "# [S_TOP     =  " << dpeek(S_TOP) << "]" << std::endl;
-    ofs << "# [LAST_K    = $" << fmt_hex(dpeek(LAST_K), 4) << "]" << std::endl;
-    ofs << "# [DEBOUNCE  =$" << fmt_hex(peek(DEBOUNCE), 2) << "]" << std::endl;
-    ofs << "# [MARGIN    =  " << peek(MARGIN) << "]" << std::endl;
-    ofs << "# [NXTLIN    = $" << fmt_hex(dpeek(NXTLIN), 4) << "]" << std::endl;
-    ofs << "# [OLDPPC    =  " << dpeek(OLDPPC) << "]" << std::endl;
-    ofs << "# [FLAGX     = $" << fmt_hex(peek(FLAGX), 2) << "]" << std::endl;
-    ofs << "# [STRLEN    =  " << dpeek(STRLEN) << "]" << std::endl;
-    ofs << "# [T_ADDR    = $" << fmt_hex(dpeek(T_ADDR), 4) << "]" << std::endl;
-    ofs << "# [SEED      = $" << fmt_hex(dpeek(SEED), 4) << "]" << std::endl;
-    ofs << "# [FRAMES    = $" << fmt_hex(dpeek(FRAMES), 4) << "]" << std::endl;
-    ofs << "# [COORDS_X  =  " << peek(COORDS_X) << "]" << std::endl;
-    ofs << "# [COORDS_Y  =  " << peek(COORDS_Y) << "]" << std::endl;
-    ofs << "# [PR_CC     = $" << fmt_hex(peek(PR_CC), 2) << "]" << std::endl;
-    ofs << "# [S_POSN_COL=  " << peek(S_POSN_COL) << "]" << std::endl;
-    ofs << "# [S_POSN_ROW=  " << peek(S_POSN_ROW) << "]" << std::endl;
-    ofs << "# [CDFLAG    = $" << fmt_hex(peek(CDFLAG), 2) << "]" << std::endl;
+    ofs << "# [VERSN     = " << peek(VERSN) << "]" << std::endl;
+    ofs << "# [E_PPC     = " << dpeek(E_PPC) << "]" << std::endl;
+    ofs << "# [D_FILE    = " << fmt_hex(dpeek(D_FILE), 4) << "]" << std::endl;
+    ofs << "# [DF_CC     = " << fmt_hex(dpeek(DF_CC), 4) << "]" << std::endl;
+    ofs << "# [VARS      = " << fmt_hex(dpeek(VARS), 4) << "]" << std::endl;
+    ofs << "# [DEST      = " << fmt_hex(dpeek(DEST), 4) << "]" << std::endl;
+    ofs << "# [E_LINE    = " << fmt_hex(dpeek(E_LINE), 4) << "]" << std::endl;
+    ofs << "# [CH_ADD    = " << fmt_hex(dpeek(CH_ADD), 4) << "]" << std::endl;
+    ofs << "# [X_PTR     = " << fmt_hex(dpeek(X_PTR), 4) << "]" << std::endl;
+    ofs << "# [STKBOT    = " << fmt_hex(dpeek(STKBOT), 4) << "]" << std::endl;
+    ofs << "# [STKEND    = " << fmt_hex(dpeek(STKEND), 4) << "]" << std::endl;
+    ofs << "# [BREG      = " << peek(BREG) << "]" << std::endl;
+    ofs << "# [MEM       = " << fmt_hex(dpeek(MEM), 4) << "]" << std::endl;
+    ofs << "# [FREE1     = " << peek(FREE1) << "]" << std::endl;
+    ofs << "# [DF_SZ     = " << peek(DF_SZ) << "]" << std::endl;
+    ofs << "# [S_TOP     = " << dpeek(S_TOP) << "]" << std::endl;
+    ofs << "# [LAST_K    = " << fmt_hex(dpeek(LAST_K), 4) << "]" << std::endl;
+    ofs << "# [DEBOUNCE  = " << fmt_hex(peek(DEBOUNCE), 2) << "]" << std::endl;
+    ofs << "# [MARGIN    = " << peek(MARGIN) << "]" << std::endl;
+    ofs << "# [NXTLIN    = " << fmt_hex(dpeek(NXTLIN), 4) << "]" << std::endl;
+    ofs << "# [OLDPPC    = " << dpeek(OLDPPC) << "]" << std::endl;
+    ofs << "# [FLAGX     = " << fmt_hex(peek(FLAGX), 2) << "]" << std::endl;
+    ofs << "# [STRLEN    = " << dpeek(STRLEN) << "]" << std::endl;
+    ofs << "# [T_ADDR    = " << fmt_hex(dpeek(T_ADDR), 4) << "]" << std::endl;
+    ofs << "# [SEED      = " << fmt_hex(dpeek(SEED), 4) << "]" << std::endl;
+    ofs << "# [FRAMES    = " << fmt_hex(dpeek(FRAMES), 4) << "]" << std::endl;
+    ofs << "# [COORDS_X  = " << peek(COORDS_X) << "]" << std::endl;
+    ofs << "# [COORDS_Y  = " << peek(COORDS_Y) << "]" << std::endl;
+    ofs << "# [PR_CC     = " << fmt_hex(peek(PR_CC), 2) << "]" << std::endl;
+    ofs << "# [S_POSN_COL= " << peek(S_POSN_COL) << "]" << std::endl;
+    ofs << "# [S_POSN_ROW= " << peek(S_POSN_ROW) << "]" << std::endl;
+    ofs << "# [CDFLAG    = " << fmt_hex(peek(CDFLAG), 2) << "]" << std::endl;
 
     ofs << "# [PRBUFF=";
     for (int i = 0; i < 33; i++) {
-        ofs << "\\" << fmt_hex(peek(PRBUFF + i), 2);
+        if (i > 0) {
+            ofs << ",";
+        }
+        ofs << fmt_hex(peek(PRBUFF + i), 2);
     }
     ofs << "]" << std::endl;
 
     ofs << "# [MEMBOT=";
     for (int i = 0; i < 30; i++) {
-        ofs << "\\" << fmt_hex(peek(MEMBOT + i), 2);
+        if (i > 0) {
+            ofs << ",";
+        }
+        ofs << fmt_hex(peek(MEMBOT + i), 2);
     }
     ofs << "]" << std::endl;
 
-    ofs << "# [FREE2     = $" << fmt_hex(dpeek(FREE2), 4) << "]" << std::endl;
+    ofs << "# [FREE2     = " << fmt_hex(dpeek(FREE2), 4) << "]" << std::endl;
     ofs << std::endl;
 }
 
 void Basic::write_basic_lines(std::ofstream& ofs) const {
     for (auto& line : source_lines) {
         if ((optflags & FLAG_DEBUG) == FLAG_DEBUG) {
-            ofs << "# [$" << fmt_hex(line.addr, 4) << "]" << std::endl;
+            ofs << "# [" << fmt_hex(line.addr, 4) << "]" << std::endl;
         }
         if (line.type == SourceLine::Type::Basic) {
             if (!line.basic_line.label.empty()) {
@@ -369,7 +375,7 @@ void Basic::write_video(std::ofstream& ofs) const {
     int addr = dpeek(D_FILE);
     size_t p = 0;
     while (p < d_file_bytes.size()) {
-        ofs << "# [$" << fmt_hex(addr, 4) << "] = \"";
+        ofs << "# [" << fmt_hex(addr, 4) << "] = \"";
         int c;
         do {
             if (p < d_file_bytes.size()) {
@@ -398,7 +404,7 @@ void Basic::write_basic_vars(std::ofstream& ofs) const {
         addr = var.addr;
 
         if ((optflags & FLAG_DEBUG) == FLAG_DEBUG) {
-            ofs << "# [$" << fmt_hex(addr, 4) << "]" << std::endl;
+            ofs << "# [" << fmt_hex(addr, 4) << "]" << std::endl;
         }
 
         switch (var.type) {
@@ -467,7 +473,7 @@ void Basic::write_basic_vars(std::ofstream& ofs) const {
     }
 
     if ((optflags & FLAG_DEBUG) == FLAG_DEBUG) {
-        ofs << "# [$" << fmt_hex(addr, 4) << "] = $" << fmt_hex(peek(addr),
+        ofs << "# [" << fmt_hex(addr, 4) << "] = " << fmt_hex(peek(addr),
                 2) << std::endl;
     }
 
@@ -501,7 +507,7 @@ void Basic::write_basic_memory_map(std::ofstream& ofs) const {
     int vars = dpeek(VARS);
     int e_line = dpeek(E_LINE);
     for (int addr = RAM_ADDR; addr < e_line; addr += 64) {
-        ofs << "# [$" << fmt_hex(addr, 4) << "] ";
+        ofs << "# [" << fmt_hex(addr, 4) << "] ";
         for (int p = addr; p < addr + 64; p++) {
             if (p < PROG) {
                 ofs << "!";

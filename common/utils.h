@@ -8,7 +8,8 @@
 
 #include <string>
 
-std::string fmt_hex(int value, int digits = 2);
+std::string fmt_hex(int value, int digits = 2,
+                    const std::string& prefix = "0x");
 std::string fmt_line_number(int value, int digits = 5);
 std::string str_chomp(std::string str);
 std::string str_replace_all(std::string str, const std::string& from,

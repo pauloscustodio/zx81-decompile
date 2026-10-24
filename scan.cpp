@@ -43,6 +43,17 @@ bool Scan::parse_integer(int& value) {
         value = INT(strtol(p0 + 1, NULL, 16));
         return true;
     }
+    else if (p[0] == '0' && p[1] == 'x') {
+        if (!isxdigit(p[2])) {
+            return false;
+        }
+        p += 2;
+        while (isxdigit(*p)) {
+            p++;
+        }
+        value = INT(strtol(p0 + 2, NULL, 16));
+        return true;
+    }
     else {				// decimal
         if (!isdigit(*p)) {
             return false;

@@ -48,6 +48,7 @@ private:
 
     // meta parser
     void parse_meta_line();
+    Bytes parse_byte_list();
 
     // assembler parser
     bool parse_asm_line(AsmLine& asm_line);

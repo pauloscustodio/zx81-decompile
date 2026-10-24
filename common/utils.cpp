@@ -12,9 +12,10 @@
 #include <sstream>
 #include <string>
 
-std::string fmt_hex(int value, int digits) {
+std::string fmt_hex(int value, int digits, const std::string& prefix) {
     std::ostringstream oss;
-    oss << std::setw(digits) << std::setfill('0') << std::hex << value;
+    oss << prefix << std::setw(digits) << std::setfill('0')
+        << std::hex << std::uppercase << value;
     return oss.str();
 }
 

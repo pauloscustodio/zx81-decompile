@@ -1,305 +1,305 @@
     1  REM 
 #ASM
-        defb    $00             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $00             
-        defb    $80             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $00             
-        defb    $00             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $00             
-        defb    $08             
-        defb    $00             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $00             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $08             
-        defb    $00             
-        defb    $08             
-        defb    $08             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $ee             
-        defb    $40             
-        defb    $17             
-        defb    $41             
-        defb    $13             
-        defb    $02             
-        defb    $10             
-        defb    $05             
-        defb    $29             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x80            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x08            
+        defb    0x08            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0xEE            
+        defb    0x40            
+        defb    0x17            
+        defb    0x41            
+        defb    0x13            
+        defb    0x02            
+        defb    0x10            
+        defb    0x05            
+        defb    0x29            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
     2  REM 
 #ASM
-L412c:
-        ld      hl, $40bb       
-        ld      ($411a), hl     
-        ld      hl, $4082       
-        ld      ($4118), hl     
-        ld      a, $14          
-        ld      ($411e), a      
-        ld      a, $09          
-        ld      ($411f), a      
-        ld      a, $39          
-        ld      ($4120), a      
+L412C:
+        ld      hl, 0x40BB      
+        ld      (0x411A), hl    
+        ld      hl, 0x4082      
+        ld      (0x4118), hl    
+        ld      a, 0x14         
+        ld      (0x411E), a     
+        ld      a, 0x09         
+        ld      (0x411F), a     
+        ld      a, 0x39         
+        ld      (0x4120), a     
         call    L4191           
-        call    L415b           
-        call    L415b           
+        call    L415B           
+        call    L415B           
         dec     b               
         dec     b               
         dec     c               
         dec     c               
-        ld      ($411c), bc     
-        jp      L418a           
-L415b:
+        ld      (0x411C), bc    
+        jp      L418A           
+L415B:
         inc     b               
         inc     c               
-        ld      ($411c), bc     
-        ld      ($4118), de     
-        ld      a, ($4120)      
-        sub     $08             
-        ld      ($4120), a      
-        ld      h, $00          
+        ld      (0x411C), bc    
+        ld      (0x4118), de    
+        ld      a, (0x4120)     
+        sub     0x08            
+        ld      (0x4120), a     
+        ld      h, 0x00         
         ld      l, a            
         add     hl, de          
-        ld      ($411a), hl     
-        ld      a, ($411e)      
-        sub     $02             
-        ld      ($411e), a      
-        ld      a, ($411f)      
-        sub     $02             
-        ld      ($411f), a      
+        ld      (0x411A), hl    
+        ld      a, (0x411E)     
+        sub     0x02            
+        ld      (0x411E), a     
+        ld      a, (0x411F)     
+        sub     0x02            
+        ld      (0x411F), a     
         nop                     
         nop                     
         nop                     
         call    L4191           
-L418a:
+L418A:
         ret                     
 #ENDASM
     3  REM 
 #ASM
 L4191:
-        ld      de, ($411a)     
+        ld      de, (0x411A)    
         ld      a, (de)         
-        ld      hl, ($411a)     
+        ld      hl, (0x411A)    
         dec     hl              
-        ld      b, $00          
+        ld      b, 0x00         
         push    af              
-        ld      a, ($4120)      
+        ld      a, (0x4120)     
         ld      c, a            
         pop     af              
         lddr                    
-        ld      hl, ($4118)     
+        ld      hl, (0x4118)    
         ld      (hl), a         
         push    hl              
-        ld      bc, ($411c)     
+        ld      bc, (0x411C)    
         call    L4212           
         ex      de, hl          
         pop     hl              
         push    bc              
-        ld      a, ($411e)      
-        ld      bc, $0020       
-L41b9:
+        ld      a, (0x411E)     
+        ld      bc, 0x0020      
+L41B9:
         ldi                     
         inc     bc              
         dec     a               
-        cp      $00             
-        jr      z, L41c6        
+        cp      0x00            
+        jr      z, L41C6        
         ex      de, hl          
         add     hl, bc          
         ex      de, hl          
-        jr      L41b9           
-L41c6:
-        ld      bc, ($411f)     
-        ld      b, $00          
+        jr      L41B9           
+L41C6:
+        ld      bc, (0x411F)    
+        ld      b, 0x00         
         ldir                    
-        ld      a, ($411e)      
-        ld      bc, $0022       
-L41d4:
+        ld      a, (0x411E)     
+        ld      bc, 0x0022      
+L41D4:
         ldi                     
         inc     bc              
         dec     a               
-        cp      $00             
-        jr      z, L41e3        
+        cp      0x00            
+        jr      z, L41E3        
         ex      de, hl          
         and     a               
         sbc     hl, bc          
         ex      de, hl          
-        jr      L41d4           
-L41e3:
-        ld      a, ($411f)      
-L41e6:
+        jr      L41D4           
+L41E3:
+        ld      a, (0x411F)     
+L41E6:
         dec     de              
         dec     de              
         ldi                     
         dec     a               
-        cp      $00             
-        jr      nz, L41e6       
+        cp      0x00            
+        jr      nz, L41E6       
         pop     bc              
         ex      de, hl          
         ret                     
-        defb    $3e             
-        defb    $f7             
-        defb    $bc             
-        defb    $28             
-        defb    $0d             
-        defb    $3e             
-        defb    $ef             
-        defb    $bc             
-        defb    $28             
-        defb    $08             
-        defb    $3e             
-        defb    $df             
-        defb    $bc             
-        defb    $28             
-        defb    $03             
-        defb    $c3             
-        defb    $f5             
-        defb    $43             
-        defb    $af             
-        defb    $b9             
-        defb    $ca             
-        defb    $f5             
-        defb    $43             
-        defb    $c3             
-        defb    $ea             
-        defb    $43             
+        defb    0x3E            
+        defb    0xF7            
+        defb    0xBC            
+        defb    0x28            
+        defb    0x0D            
+        defb    0x3E            
+        defb    0xEF            
+        defb    0xBC            
+        defb    0x28            
+        defb    0x08            
+        defb    0x3E            
+        defb    0xDF            
+        defb    0xBC            
+        defb    0x28            
+        defb    0x03            
+        defb    0xC3            
+        defb    0xF5            
+        defb    0x43            
+        defb    0xAF            
+        defb    0xB9            
+        defb    0xCA            
+        defb    0xF5            
+        defb    0x43            
+        defb    0xC3            
+        defb    0xEA            
+        defb    0x43            
 #ENDASM
     4  REM 
 #ASM
@@ -309,553 +309,553 @@ L4212:
         ld      hl, (D_FILE)    
         inc     hl              
         xor     a               
-        ld      de, $0021       
-L421c:
+        ld      de, 0x0021      
+L421C:
         cp      b               
         jr      z, L4223        
         add     hl, de          
         inc     a               
-        jr      L421c           
+        jr      L421C           
 L4223:
         ld      a, c            
-        ld      e, $00          
+        ld      e, 0x00         
 L4226:
         cp      e               
-        jr      z, L422d        
+        jr      z, L422D        
         inc     e               
         inc     hl              
         jr      L4226           
-L422d:
+L422D:
         pop     af              
         pop     de              
         ret                     
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
 #ENDASM
     5  REM 
 #ASM
 L4238:
-        ld      hl, $4082       
-        ld      de, ($411c)     
+        ld      hl, 0x4082      
+        ld      de, (0x411C)    
         push    de              
         ld      a, b            
         sub     d               
-        ld      d, $00          
+        ld      d, 0x00         
         ld      e, a            
         add     hl, de          
         pop     de              
         ld      a, c            
         sub     e               
-        cp      $01             
+        cp      0x01            
         jr      z, L4252        
-        jr      nc, L425c       
-        ld      (hl), $00       
+        jr      nc, L425C       
+        ld      (hl), 0x00      
         ret                     
 L4252:
-        ld      d, $00          
-        ld      a, $39          
+        ld      d, 0x00         
+        ld      a, 0x39         
         nop                     
         ld      e, a            
         add     hl, de          
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         ret                     
-L425c:
-        ld      d, $00          
-        ld      a, $39          
+L425C:
+        ld      d, 0x00         
+        ld      a, 0x39         
         nop                     
         add     a, a            
-        sub     $08             
+        sub     0x08            
         ld      e, a            
         add     hl, de          
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
     6  REM 
 #ASM
-        defb    $16             
-        defb    $08             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $87             
-        defb    $07             
-        defb    $80             
-        defb    $84             
-        defb    $04             
-        defb    $00             
-        defb    $84             
-        defb    $03             
-        defb    $07             
-        defb    $00             
-        defb    $00             
-        defb    $02             
-        defb    $80             
-        defb    $01             
-        defb    $00             
-        defb    $00             
-        defb    $07             
-        defb    $80             
-        defb    $84             
-        defb    $00             
-        defb    $00             
-        defb    $87             
-        defb    $80             
-        defb    $04             
-        defb    $00             
-        defb    $00             
-        defb    $81             
-        defb    $00             
-        defb    $82             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L429f:
-        ld      hl, ($411c)     
+        defb    0x16            
+        defb    0x08            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x04            
+        defb    0x00            
+        defb    0x84            
+        defb    0x03            
+        defb    0x07            
+        defb    0x00            
+        defb    0x00            
+        defb    0x02            
+        defb    0x80            
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x80            
+        defb    0x04            
+        defb    0x00            
+        defb    0x00            
+        defb    0x81            
+        defb    0x00            
+        defb    0x82            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L429F:
+        ld      hl, (0x411C)    
         ld      a, l            
-        add     a, $03          
-        ld      ($4274), a      
-        ld      bc, ($4274)     
+        add     a, 0x03         
+        ld      (0x4274), a     
+        ld      bc, (0x4274)    
         push    bc              
-        ld      a, ($42ef)      
-        cp      $00             
-        jr      z, L42c2        
+        ld      a, (0x42EF)     
+        cp      0x00            
+        jr      z, L42C2        
         dec     b               
-        call    L42d1           
+        call    L42D1           
         pop     bc              
         ld      a, b            
-        cp      $06             
+        cp      0x06            
         ret     nz              
         xor     a               
-L42be:
-        ld      ($42ef), a      
+L42BE:
+        ld      (0x42EF), a     
         ret                     
-L42c2:
+L42C2:
         inc     b               
-        call    L42d1           
+        call    L42D1           
         pop     bc              
         ld      a, b            
-        cp      $0a             
+        cp      0x0A            
         ret     nz              
-        ld      a, $01          
-        jr      L42be           
-        defb    $00             
-        defb    $00             
-L42d1:
-        ld      ($4274), bc     
+        ld      a, 0x01         
+        jr      L42BE           
+        defb    0x00            
+        defb    0x00            
+L42D1:
+        ld      (0x4274), bc    
         call    L4212           
         ex      de, hl          
-        ld      hl, $4277       
-        ld      a, $08          
-L42de:
-        ld      bc, $0005       
+        ld      hl, 0x4277      
+        ld      a, 0x08         
+L42DE:
+        ld      bc, 0x0005      
         ldir                    
         dec     a               
-        cp      $00             
+        cp      0x00            
         ret     z               
         ex      de, hl          
-        ld      bc, $001c       
+        ld      bc, 0x001C      
         add     hl, bc          
         ex      de, hl          
-        jr      L42de           
-        defb    $01             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        jr      L42DE           
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
     7  REM 
 #ASM
-        defb    $81             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $82             
-        defb    $82             
-        defb    $82             
-        defb    $81             
-        defb    $83             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $07             
-        defb    $07             
-        defb    $84             
-        defb    $03             
-        defb    $80             
-        defb    $84             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $07             
-        defb    $81             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $82             
-        defb    $82             
-        defb    $81             
-        defb    $83             
-        defb    $82             
-        defb    $81             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $07             
-        defb    $84             
-        defb    $03             
-        defb    $07             
-        defb    $84             
-        defb    $84             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $07             
-        defb    $81             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $82             
-        defb    $80             
-        defb    $83             
-        defb    $82             
-        defb    $81             
-        defb    $81             
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $03             
-        defb    $07             
-        defb    $84             
-        defb    $84             
-        defb    $84             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $07             
-        defb    $03             
-        defb    $00             
-        defb    $09             
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x81            
+        defb    0x83            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x07            
+        defb    0x07            
+        defb    0x84            
+        defb    0x03            
+        defb    0x80            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x82            
+        defb    0x81            
+        defb    0x83            
+        defb    0x82            
+        defb    0x81            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x07            
+        defb    0x84            
+        defb    0x03            
+        defb    0x07            
+        defb    0x84            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x80            
+        defb    0x83            
+        defb    0x82            
+        defb    0x81            
+        defb    0x81            
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x03            
+        defb    0x07            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x03            
+        defb    0x00            
+        defb    0x09            
 L4348:
-        ld      bc, ($4346)     
-L434c:
+        ld      bc, (0x4346)    
+L434C:
         call    L4212           
         ex      de, hl          
-        ld      hl, $4345       
-        ld      a, $01          
+        ld      hl, 0x4345      
+        ld      a, 0x01         
         cp      (hl)            
         jr      nz, L4361       
         inc     a               
-        ld      ($4345), a      
-        ld      hl, $42fa       
+        ld      (0x4345), a     
+        ld      hl, 0x42FA      
         jr      L4377           
 L4361:
-        ld      a, $02          
+        ld      a, 0x02         
         cp      (hl)            
-        jr      nz, L436f       
+        jr      nz, L436F       
         inc     a               
-        ld      ($4345), a      
-        ld      hl, $4313       
+        ld      (0x4345), a     
+        ld      hl, 0x4313      
         jr      L4377           
-L436f:
-        ld      a, $01          
-        ld      ($4345), a      
-        ld      hl, $432c       
+L436F:
+        ld      a, 0x01         
+        ld      (0x4345), a     
+        ld      hl, 0x432C      
 L4377:
-        ld      a, $05          
+        ld      a, 0x05         
 L4379:
-        ld      bc, $0005       
+        ld      bc, 0x0005      
         ldir                    
         dec     a               
-        cp      $00             
+        cp      0x00            
         ret     z               
         ex      de, hl          
-        ld      bc, $001c       
+        ld      bc, 0x001C      
         add     hl, bc          
         ex      de, hl          
         jr      L4379           
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
     8  REM 
 #ASM
-        defb    $cd             
-        defb    $bb             
-        defb    $02             
-        defb    $ed             
-        defb    $4b             
-        defb    $46             
-        defb    $43             
-        defb    $3e             
-        defb    $ff             
-        defb    $bd             
-        defb    $28             
-        defb    $54             
-        defb    $3d             
-        defb    $bd             
-        defb    $28             
-        defb    $2b             
-        defb    $3d             
-        defb    $bd             
-        defb    $28             
-        defb    $27             
-        defb    $3d             
-        defb    $3d             
-        defb    $bd             
-        defb    $28             
-        defb    $2d             
-        defb    $3e             
-        defb    $f7             
-        defb    $bd             
-        defb    $28             
-        defb    $28             
-        defb    $3e             
-        defb    $ef             
-        defb    $bd             
-        defb    $28             
-        defb    $38             
-        defb    $3e             
-        defb    $df             
-        defb    $bd             
-        defb    $28             
-        defb    $33             
-        defb    $3e             
-        defb    $f7             
-        defb    $94             
-        defb    $30             
-        defb    $24             
-L43c2:
-        ld      a, ($411c)      
-        sub     $08             
+        defb    0xCD            
+        defb    0xBB            
+        defb    0x02            
+        defb    0xED            
+        defb    0x4B            
+        defb    0x46            
+        defb    0x43            
+        defb    0x3E            
+        defb    0xFF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x54            
+        defb    0x3D            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x2B            
+        defb    0x3D            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x27            
+        defb    0x3D            
+        defb    0x3D            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x2D            
+        defb    0x3E            
+        defb    0xF7            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x28            
+        defb    0x3E            
+        defb    0xEF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x38            
+        defb    0x3E            
+        defb    0xDF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x33            
+        defb    0x3E            
+        defb    0xF7            
+        defb    0x94            
+        defb    0x30            
+        defb    0x24            
+L43C2:
+        ld      a, (0x411C)     
+        sub     0x08            
         cp      c               
-        jr      z, L43f5        
+        jr      z, L43F5        
         call    L4405           
         inc     c               
-        jr      L43f5           
-L43d0:
-        ld      a, $10          
+        jr      L43F5           
+L43D0:
+        ld      a, 0x10         
         cp      b               
-        jr      z, L43f5        
+        jr      z, L43F5        
         call    L4405           
         inc     b               
-        jr      L43f5           
-L43db:
-        ld      a, $03          
+        jr      L43F5           
+L43DB:
+        ld      a, 0x03         
         cp      b               
-        jr      z, L43f5        
+        jr      z, L43F5        
         call    L4405           
         dec     b               
-        jr      L43f5           
-L43e6:
+        jr      L43F5           
+L43E6:
         xor     a               
         cp      c               
-        jr      z, L43f5        
+        jr      z, L43F5        
         call    L4405           
         dec     c               
-        jr      L43f5           
-        defb    $c5             
-        defb    $cd             
-        defb    $31             
-        defb    $44             
-        defb    $c1             
-L43f5:
-        ld      ($4346), bc     
+        jr      L43F5           
+        defb    0xC5            
+        defb    0xCD            
+        defb    0x31            
+        defb    0x44            
+        defb    0xC1            
+L43F5:
+        ld      (0x4346), bc    
         call    L4348           
         ret                     
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
 #ENDASM
     9  REM 
 #ASM
 L4405:
         push    bc              
-        ld      bc, ($4346)     
+        ld      bc, (0x4346)    
         call    L4212           
-        ld      a, $05          
-        ld      de, $001c       
+        ld      a, 0x05         
+        ld      de, 0x001C      
 L4412:
-        ld      b, $05          
+        ld      b, 0x05         
 L4414:
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         inc     hl              
         djnz    L4414           
         add     hl, de          
         dec     a               
-        cp      $00             
+        cp      0x00            
         jr      nz, L4412       
         pop     bc              
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    10  REM 
 #ASM
-        defb    $00             
-        defb    $11             
-        defb    $12             
-        defb    $0a             
-        defb    $12             
+        defb    0x00            
+        defb    0x11            
+        defb    0x12            
+        defb    0x0A            
+        defb    0x12            
 L4431:
-        ld      a, ($442c)      
-        cp      $01             
+        ld      a, (0x442C)     
+        cp      0x01            
         ret     z               
-        ld      hl, ($4346)     
+        ld      hl, (0x4346)    
         inc     h               
         inc     h               
         inc     l               
         inc     l               
         inc     l               
         inc     l               
-        ld      ($442d), hl     
-        ld      ($442f), hl     
+        ld      (0x442D), hl    
+        ld      (0x442F), hl    
         ld      b, h            
         ld      c, l            
         call    L4212           
-        ld      (hl), $34       
-        ld      a, $01          
-        ld      ($442c), a      
+        ld      (hl), 0x34      
+        ld      a, 0x01         
+        ld      (0x442C), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    11  REM 
 #ASM
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
 L4460:
         xor     a               
-        ld      ($445e), a      
-        ld      ($445f), a      
-        ld      a, ($442c)      
-        cp      $00             
+        ld      (0x445E), a     
+        ld      (0x445F), a     
+        ld      a, (0x442C)     
+        cp      0x00            
         ret     z               
-        ld      bc, ($442d)     
+        ld      bc, (0x442D)    
         call    L4212           
-        ld      a, $34          
+        ld      a, 0x34         
         cp      (hl)            
-        jr      nz, L447b       
-        ld      (hl), $00       
-L447b:
-        ld      de, ($411c)     
+        jr      nz, L447B       
+        ld      (hl), 0x00      
+L447B:
+        ld      de, (0x411C)    
         ld      a, e            
         dec     a               
         sub     c               
-        jr      z, L448f        
-        jr      c, L448f        
+        jr      z, L448F        
+        jr      c, L448F        
         inc     hl              
 L4487:
-        ld      (hl), $34       
+        ld      (hl), 0x34      
         inc     c               
-        ld      ($442d), bc     
+        ld      (0x442D), bc    
         ret                     
-L448f:
+L448F:
         inc     hl              
         ld      a, e            
-        add     a, $04          
+        add     a, 0x04         
         sub     c               
-        jr      z, L44b6        
+        jr      z, L44B6        
         xor     a               
         cp      (hl)            
         jr      z, L4487        
-        ld      a, $80          
+        ld      a, 0x80         
         cp      (hl)            
-        jr      z, L44ab        
-        ld      a, $08          
+        jr      z, L44AB        
+        ld      a, 0x08         
         cp      (hl)            
-        jr      z, L44ab        
-        ld      a, $01          
-        ld      ($445f), a      
-        jr      L44b6           
-L44ab:
+        jr      z, L44AB        
+        ld      a, 0x01         
+        ld      (0x445F), a     
+        jr      L44B6           
+L44AB:
         inc     c               
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         call    L4238           
-        ld      a, $01          
-        ld      ($445e), a      
-L44b6:
+        ld      a, 0x01         
+        ld      (0x445E), a     
+L44B6:
         xor     a               
-        ld      ($442c), a      
+        ld      (0x442C), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    12  REM 
 #ASM
-        defb    $00             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L44d1:
-        ld      bc, $0301       
+        defb    0x00            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L44D1:
+        ld      bc, 0x0301      
         call    L4212           
         ex      de, hl          
-        ld      b, $0b          
-L44da:
-        ld      hl, $44ca       
+        ld      b, 0x0B         
+L44DA:
+        ld      hl, 0x44CA      
         ldi                     
         ldi                     
         ldi                     
-        djnz    L44da           
-        ld      a, $05          
-L44e7:
-        ld      b, $03          
-        ld      hl, $44ca       
-L44ec:
+        djnz    L44DA           
+        ld      a, 0x05         
+L44E7:
+        ld      b, 0x03         
+        ld      hl, 0x44CA      
+L44EC:
         push    bc              
-        ld      bc, $0020       
+        ld      bc, 0x0020      
         ex      de, hl          
         add     hl, bc          
         pop     bc              
         ex      de, hl          
         ldi                     
-        djnz    L44ec           
+        djnz    L44EC           
         dec     a               
-        cp      $00             
-        jr      nz, L44e7       
-        ld      bc, $0020       
+        cp      0x00            
+        jr      nz, L44E7       
+        ld      bc, 0x0020      
         ex      de, hl          
         add     hl, bc          
         ex      de, hl          
-        ld      b, $0a          
+        ld      b, 0x0A         
 L4505:
-        ld      hl, $44ca       
+        ld      hl, 0x44CA      
         ld      a, (hl)         
         ld      (de), a         
         inc     hl              
@@ -869,22 +869,22 @@ L4505:
         nop                     
         dec     de              
         djnz    L4505           
-        ld      bc, $0020       
+        ld      bc, 0x0020      
         ex      de, hl          
         and     a               
         sbc     hl, bc          
         ex      de, hl          
-        ld      a, $05          
+        ld      a, 0x05         
 L4520:
-        ld      b, $03          
-        ld      hl, $44ca       
+        ld      b, 0x03         
+        ld      hl, 0x44CA      
 L4525:
         push    af              
         ld      a, (hl)         
         ld      (de), a         
         pop     af              
         push    bc              
-        ld      bc, $0021       
+        ld      bc, 0x0021      
         ex      de, hl          
         and     a               
         sbc     hl, bc          
@@ -893,198 +893,198 @@ L4525:
         inc     hl              
         djnz    L4525           
         dec     a               
-        cp      $00             
+        cp      0x00            
         jr      nz, L4520       
-        ld      a, ($44ca)      
-        ld      ($44cd), a      
-        ld      a, ($44cb)      
-        ld      ($44ca), a      
-        ld      a, ($44cc)      
-        ld      ($44cb), a      
-        ld      a, ($44cd)      
-        ld      ($44cc), a      
-        ld      bc, $0b0d       
-        jp      L434c           
+        ld      a, (0x44CA)     
+        ld      (0x44CD), a     
+        ld      a, (0x44CB)     
+        ld      (0x44CA), a     
+        ld      a, (0x44CC)     
+        ld      (0x44CB), a     
+        ld      a, (0x44CD)     
+        ld      (0x44CC), a     
+        ld      bc, 0x0B0D      
+        jp      L434C           
 #ENDASM
    13  REM 
 #ASM
-        defb    $00             
-        defb    $81             
-        defb    $84             
-        defb    $07             
-        defb    $00             
-        defb    $81             
-        defb    $86             
-        defb    $07             
-        defb    $82             
-        defb    $81             
-        defb    $82             
-        defb    $07             
-        defb    $00             
-        defb    $81             
-        defb    $84             
-        defb    $07             
-        defb    $84             
-        defb    $81             
-        defb    $86             
-        defb    $07             
-        defb    $00             
-        defb    $81             
-        defb    $82             
-        defb    $07             
-        defb    $00             
-        defb    $81             
-        defb    $80             
-        defb    $00             
-        defb    $07             
-        defb    $82             
-        defb    $80             
-        defb    $81             
-        defb    $80             
-        defb    $07             
-        defb    $80             
-        defb    $80             
-        defb    $81             
-        defb    $00             
-        defb    $07             
-        defb    $80             
-        defb    $80             
-        defb    $81             
-        defb    $80             
-        defb    $07             
-        defb    $80             
-        defb    $84             
-        defb    $81             
-        defb    $00             
-        defb    $80             
-        defb    $07             
-        defb    $00             
-        defb    $84             
-        defb    $07             
-        defb    $82             
-        defb    $00             
-        defb    $82             
-        defb    $81             
-        defb    $84             
-        defb    $06             
-        defb    $82             
-        defb    $07             
-        defb    $82             
-        defb    $00             
-        defb    $84             
-        defb    $81             
-        defb    $84             
-        defb    $06             
-        defb    $82             
-        defb    $07             
-        defb    $84             
-        defb    $00             
-        defb    $84             
-        defb    $81             
-        defb    $82             
-        defb    $00             
-        defb    $81             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $82             
-        defb    $82             
-        defb    $82             
-        defb    $82             
-        defb    $82             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $00             
-        defb    $80             
-        defb    $84             
-        defb    $84             
-        defb    $84             
-        defb    $84             
-        defb    $84             
-        defb    $80             
-        defb    $80             
-        defb    $80             
-        defb    $07             
-        defb    $04             
-L45c4:
-        ld      de, $0019       
-        ld      a, ($45c3)      
+        defb    0x00            
+        defb    0x81            
+        defb    0x84            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x86            
+        defb    0x07            
+        defb    0x82            
+        defb    0x81            
+        defb    0x82            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x84            
+        defb    0x07            
+        defb    0x84            
+        defb    0x81            
+        defb    0x86            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x82            
+        defb    0x07            
+        defb    0x00            
+        defb    0x81            
+        defb    0x80            
+        defb    0x00            
+        defb    0x07            
+        defb    0x82            
+        defb    0x80            
+        defb    0x81            
+        defb    0x80            
+        defb    0x07            
+        defb    0x80            
+        defb    0x80            
+        defb    0x81            
+        defb    0x00            
+        defb    0x07            
+        defb    0x80            
+        defb    0x80            
+        defb    0x81            
+        defb    0x80            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x81            
+        defb    0x00            
+        defb    0x80            
+        defb    0x07            
+        defb    0x00            
+        defb    0x84            
+        defb    0x07            
+        defb    0x82            
+        defb    0x00            
+        defb    0x82            
+        defb    0x81            
+        defb    0x84            
+        defb    0x06            
+        defb    0x82            
+        defb    0x07            
+        defb    0x82            
+        defb    0x00            
+        defb    0x84            
+        defb    0x81            
+        defb    0x84            
+        defb    0x06            
+        defb    0x82            
+        defb    0x07            
+        defb    0x84            
+        defb    0x00            
+        defb    0x84            
+        defb    0x81            
+        defb    0x82            
+        defb    0x00            
+        defb    0x81            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x82            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x00            
+        defb    0x80            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x84            
+        defb    0x80            
+        defb    0x80            
+        defb    0x80            
+        defb    0x07            
+        defb    0x04            
+L45C4:
+        ld      de, 0x0019      
+        ld      a, (0x45C3)     
         inc     a               
-        cp      $05             
-        jr      nz, L45d1       
-        ld      a, $01          
-L45d1:
-        ld      ($45c3), a      
-        ld      hl, $4546       
+        cp      0x05            
+        jr      nz, L45D1       
+        ld      a, 0x01         
+L45D1:
+        ld      (0x45C3), a     
+        ld      hl, 0x4546      
         ld      b, a            
-L45d8:
+L45D8:
         add     hl, de          
-        djnz    L45d8           
+        djnz    L45D8           
         push    hl              
-        ld      bc, ($4346)     
+        ld      bc, (0x4346)    
         call    L4212           
         ex      de, hl          
         pop     hl              
         jp      L4377           
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    14  REM 
 #ASM
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $34             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $fa             
-        defb    $45             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x34            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0xFA            
+        defb    0x45            
 L4606:
-        ld      hl, ($4604)     
+        ld      hl, (0x4604)    
         dec     hl              
-        ld      bc, $45f3       
+        ld      bc, 0x45F3      
         and     a               
         sbc     hl, bc          
         jr      nc, L4617       
-        ld      hl, $45fb       
+        ld      hl, 0x45FB      
         jr      L4618           
 L4617:
         add     hl, bc          
 L4618:
         push    hl              
-        ld      ($4604), hl     
-        ld      bc, $0d12       
+        ld      (0x4604), hl    
+        ld      bc, 0x0D12      
         call    L4212           
         pop     de              
         ex      de, hl          
-        ld      bc, $0008       
+        ld      bc, 0x0008      
         ldir                    
         ret                     
 #ENDASM
    15  REM 
 #ASM
 L4630:
-        ld      a, ($411c)      
-        sub     $02             
+        ld      a, (0x411C)     
+        sub     0x02            
         ld      c, a            
-        ld      b, $05          
+        ld      b, 0x05         
         call    L4647           
         nop                     
         call    L4647           
@@ -1094,165 +1094,165 @@ L4630:
         ret                     
 L4647:
         call    L4212           
-        ld      (hl), $81       
-        ld      de, $0021       
+        ld      (hl), 0x81      
+        ld      de, 0x0021      
         add     hl, de          
-        ld      (hl), $02       
+        ld      (hl), 0x02      
         inc     b               
         inc     b               
         inc     b               
         inc     b               
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    16  REM 
 #ASM
-        defb    $00             
-        defb    $11             
-        defb    $00             
+        defb    0x00            
+        defb    0x11            
+        defb    0x00            
 L4663:
-        ld      a, ($4662)      
-        cp      $01             
+        ld      a, (0x4662)     
+        cp      0x01            
         ret     z               
-        ld      a, ($411c)      
-        sub     $03             
+        ld      a, (0x411C)     
+        sub     0x03            
         ld      l, a            
-        ld      a, ($4347)      
+        ld      a, (0x4347)     
         ld      h, a            
-        ld      a, $05          
+        ld      a, 0x05         
         sub     h               
-        jr      c, L467c        
-        ld      h, $05          
+        jr      c, L467C        
+        ld      h, 0x05         
         jr      L4690           
-L467c:
-        ld      a, $09          
+L467C:
+        ld      a, 0x09         
         sub     h               
         jr      c, L4685        
-        ld      h, $09          
+        ld      h, 0x09         
         jr      L4690           
 L4685:
-        ld      a, $0d          
+        ld      a, 0x0D         
         sub     h               
-        jr      c, L468e        
-        ld      h, $0d          
+        jr      c, L468E        
+        ld      h, 0x0D         
         jr      L4690           
-L468e:
-        ld      h, $11          
+L468E:
+        ld      h, 0x11         
 L4690:
-        ld      ($4660), hl     
-        ld      a, $01          
-        ld      ($4662), a      
+        ld      (0x4660), hl    
+        ld      a, 0x01         
+        ld      (0x4662), a     
         ret                     
 #ENDASM
    17  REM 
 #ASM
-        defb    $00             
-L46a0:
+        defb    0x00            
+L46A0:
         xor     a               
-        ld      ($469f), a      
-        ld      bc, ($4660)     
+        ld      (0x469F), a     
+        ld      bc, (0x4660)    
         call    L4212           
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         xor     a               
         cp      c               
-        jr      nz, L46b5       
-        ld      ($4662), a      
+        jr      nz, L46B5       
+        ld      (0x4662), a     
         ret                     
-L46b5:
+L46B5:
         dec     c               
         dec     hl              
         cp      (hl)            
-        jr      z, L46bf        
-        ld      a, $34          
+        jr      z, L46BF        
+        ld      a, 0x34         
         cp      (hl)            
-        jr      nz, L46c6       
-L46bf:
-        ld      (hl), $04       
-        ld      ($4660), bc     
+        jr      nz, L46C6       
+L46BF:
+        ld      (hl), 0x04      
+        ld      (0x4660), bc    
         ret                     
-L46c6:
+L46C6:
         inc     (hl)            
-        ld      (L46c6), a      
-        ld      a, $01          
-        ld      ($469f), a      
+        ld      (L46C6), a      
+        ld      a, 0x01         
+        ld      (0x469F), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    18  REM 
 #ASM
-        defb    $61             
-        defb    $00             
-L46dd:
-        ld      hl, ($46db)     
+        defb    0x61            
+        defb    0x00            
+L46DD:
+        ld      hl, (0x46DB)    
         inc     hl              
-        ld      de, $00c8       
+        ld      de, 0x00C8      
         and     a               
         sbc     hl, de          
-        jr      z, L46ee        
+        jr      z, L46EE        
         add     hl, de          
-        ld      ($46db), hl     
+        ld      (0x46DB), hl    
         ret                     
-L46ee:
-        ld      hl, $0000       
-        ld      ($46db), hl     
-        call    L47e1           
-        ld      bc, ($411c)     
+L46EE:
+        ld      hl, 0x0000      
+        ld      (0x46DB), hl    
+        call    L47E1           
+        ld      bc, (0x411C)    
         dec     c               
-        ld      ($411c), bc     
+        ld      (0x411C), bc    
         dec     c               
         dec     c               
         call    L4212           
-        ld      a, $14          
+        ld      a, 0x14         
 L4707:
-        ld      bc, $000d       
+        ld      bc, 0x000D      
         ld      d, h            
         ld      e, l            
         inc     hl              
         ldir                    
         dec     hl              
-        ld      (hl), $00       
-        ld      bc, $0014       
+        ld      (hl), 0x00      
+        ld      bc, 0x0014      
         add     hl, bc          
         dec     a               
-        cp      $00             
+        cp      0x00            
         jr      nz, L4707       
         ret                     
 #ENDASM
    19  REM 
 #ASM
-        defb    $38             
-        defb    $04             
-        defb    $00             
-        defb    $1d             
-        defb    $1c             
-        defb    $24             
-        defb    $1c             
-        defb    $10             
-        defb    $27             
-        defb    $e8             
-        defb    $03             
-        defb    $64             
-        defb    $00             
-        defb    $0a             
-        defb    $00             
-        defb    $01             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $01             
+        defb    0x38            
+        defb    0x04            
+        defb    0x00            
+        defb    0x1D            
+        defb    0x1C            
+        defb    0x24            
+        defb    0x1C            
+        defb    0x10            
+        defb    0x27            
+        defb    0xE8            
+        defb    0x03            
+        defb    0x64            
+        defb    0x00            
+        defb    0x0A            
+        defb    0x00            
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x01            
 L4736:
         xor     a               
-        ld      ($4735), a      
-        ld      hl, ($4722)     
-        ld      ($4733), hl     
-        ld      bc, $4724       
-        ld      hl, $4729       
+        ld      (0x4735), a     
+        ld      hl, (0x4722)    
+        ld      (0x4733), hl    
+        ld      bc, 0x4724      
+        ld      hl, 0x4729      
         push    hl              
 L4747:
         xor     a               
@@ -1262,30 +1262,30 @@ L4747:
         ld      d, (hl)         
         dec     hl              
         push    hl              
-L474e:
-        ld      hl, ($4733)     
+L474E:
+        ld      hl, (0x4733)    
         and     a               
         sbc     hl, de          
-        ld      ($4733), hl     
-        jr      c, L475c        
+        ld      (0x4733), hl    
+        jr      c, L475C        
         inc     a               
-        jr      L474e           
-L475c:
+        jr      L474E           
+L475C:
         add     hl, de          
-        cp      $00             
-        jr      nz, L476a       
-        ld      a, ($4735)      
-        cp      $00             
-        ld      a, $00          
+        cp      0x00            
+        jr      nz, L476A       
+        ld      a, (0x4735)     
+        cp      0x00            
+        ld      a, 0x00         
         jr      z, L4773        
-L476a:
-        add     a, $1c          
+L476A:
+        add     a, 0x1C         
         push    af              
-        ld      a, $01          
-        ld      ($4735), a      
+        ld      a, 0x01         
+        ld      (0x4735), a     
         pop     af              
 L4773:
-        ld      ($4733), hl     
+        ld      (0x4733), hl    
         ld      (bc), a         
         inc     bc              
         pop     hl              
@@ -1293,492 +1293,492 @@ L4773:
         inc     hl              
         push    hl              
         ld      a, e            
-        cp      $01             
+        cp      0x01            
         jr      nz, L4747       
         pop     hl              
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    20  REM 
 #ASM
 L4793:
-        ld      a, ($445f)      
-        cp      $01             
+        ld      a, (0x445F)     
+        cp      0x01            
         ret     z               
-        ld      a, ($445e)      
-        cp      $00             
+        ld      a, (0x445E)     
+        cp      0x00            
         ret     z               
         xor     a               
-        ld      ($445e), a      
-        ld      de, $0003       
-        ld      hl, ($442f)     
-        ld      h, $00          
+        ld      (0x445E), a     
+        ld      de, 0x0003      
+        ld      hl, (0x442F)    
+        ld      h, 0x00         
         and     a               
         sbc     hl, de          
         ex      de, hl          
-        ld      hl, ($4722)     
+        ld      hl, (0x4722)    
         add     hl, de          
         add     hl, de          
         add     hl, de          
         add     hl, de          
         add     hl, de          
-        ld      ($4722), hl     
+        ld      (0x4722), hl    
         call    L4736           
         ld      hl, (D_FILE)    
-        ld      de, $0012       
+        ld      de, 0x0012      
         add     hl, de          
         ex      de, hl          
-        ld      hl, $4724       
-        ld      b, $05          
-L47ca:
+        ld      hl, 0x4724      
+        ld      b, 0x05         
+L47CA:
         ld      a, (hl)         
-        cp      $00             
-        jr      z, L47d5        
+        cp      0x00            
+        jr      z, L47D5        
         ldi                     
         inc     bc              
-        djnz    L47ca           
+        djnz    L47CA           
         ret                     
-L47d5:
+L47D5:
         inc     hl              
-        djnz    L47ca           
+        djnz    L47CA           
         ret                     
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    21  REM 
 #ASM
-L47e1:
-        ld      bc, ($442d)     
+L47E1:
+        ld      bc, (0x442D)    
         call    L4212           
-        ld      a, $34          
+        ld      a, 0x34         
         cp      (hl)            
         ret     nz              
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         ret                     
-L47ef:
+L47EF:
         ldi                     
         ld      h, b            
         ld      b, (hl)         
         call    L4212           
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         ret                     
 #ENDASM
    22  REM 
 #ASM
-L47ff:
-        ld      b, $3a          
-        ld      hl, $4082       
+L47FF:
+        ld      b, 0x3A         
+        ld      hl, 0x4082      
 L4804:
-        ld      (hl), $80       
+        ld      (hl), 0x80      
         inc     hl              
         djnz    L4804           
-        ld      b, $32          
-L480b:
-        ld      (hl), $08       
+        ld      b, 0x32         
+L480B:
+        ld      (hl), 0x08      
         inc     hl              
-        djnz    L480b           
-        ld      b, $2a          
+        djnz    L480B           
+        ld      b, 0x2A         
 L4812:
-        ld      (hl), $80       
+        ld      (hl), 0x80      
         inc     hl              
         djnz    L4812           
-        ld      hl, $0215       
-        ld      ($411c), hl     
-        ld      hl, $0000       
-        ld      ($46db), hl     
-        ld      ($445e), hl     
-        ld      hl, $0900       
-        ld      ($4346), hl     
-        ld      hl, $0100       
-        ld      ($4660), hl     
+        ld      hl, 0x0215      
+        ld      (0x411C), hl    
+        ld      hl, 0x0000      
+        ld      (0x46DB), hl    
+        ld      (0x445E), hl    
+        ld      hl, 0x0900      
+        ld      (0x4346), hl    
+        ld      hl, 0x0100      
+        ld      (0x4660), hl    
         xor     a               
-        ld      ($442c), a      
-        ld      ($4662), a      
-        ld      ($469f), a      
+        ld      (0x442C), a     
+        ld      (0x4662), a     
+        ld      (0x469F), a     
         ret                     
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    23  REM 
 #ASM
-        defb    $2d             
-        defb    $2e             
-        defb    $39             
-        defb    $00             
-        defb    $26             
-        defb    $33             
-        defb    $3e             
-        defb    $00             
-        defb    $31             
-        defb    $2a             
-        defb    $39             
-        defb    $39             
-        defb    $2a             
-        defb    $37             
-        defb    $00             
-        defb    $3c             
-        defb    $2d             
-        defb    $2a             
-        defb    $33             
-        defb    $00             
-        defb    $37             
-        defb    $2a             
-        defb    $26             
-        defb    $29             
-        defb    $3e             
-L485e:
-        ld      bc, $1703       
+        defb    0x2D            
+        defb    0x2E            
+        defb    0x39            
+        defb    0x00            
+        defb    0x26            
+        defb    0x33            
+        defb    0x3E            
+        defb    0x00            
+        defb    0x31            
+        defb    0x2A            
+        defb    0x39            
+        defb    0x39            
+        defb    0x2A            
+        defb    0x37            
+        defb    0x00            
+        defb    0x3C            
+        defb    0x2D            
+        defb    0x2A            
+        defb    0x33            
+        defb    0x00            
+        defb    0x37            
+        defb    0x2A            
+        defb    0x26            
+        defb    0x29            
+        defb    0x3E            
+L485E:
+        ld      bc, 0x1703      
         call    L4212           
         ex      de, hl          
-        ld      hl, $4845       
-        ld      bc, $0019       
+        ld      hl, 0x4845      
+        ld      bc, 0x0019      
         ldir                    
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4871:
-        ld      bc, $1703       
+        ld      bc, 0x1703      
         call    L4212           
-        ld      b, $19          
+        ld      b, 0x19         
 L4879:
-        ld      (hl), $00       
+        ld      (hl), 0x00      
         inc     hl              
         djnz    L4879           
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    24  REM 
 #ASM
-        defb    $00             
-        defb    $85             
-        defb    $01             
-        defb    $85             
-        defb    $00             
-        defb    $00             
-        defb    $02             
-        defb    $80             
-        defb    $03             
-        defb    $00             
-        defb    $00             
-        defb    $87             
-        defb    $80             
-        defb    $04             
-        defb    $00             
-        defb    $00             
-        defb    $81             
-        defb    $00             
-        defb    $82             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $87             
-        defb    $07             
-        defb    $80             
-        defb    $84             
-        defb    $04             
-        defb    $00             
-        defb    $84             
-        defb    $03             
-        defb    $07             
-        defb    $00             
-        defb    $00             
-        defb    $02             
-        defb    $80             
-        defb    $01             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $01             
-L48b6:
-        ld      bc, ($411c)     
+        defb    0x00            
+        defb    0x85            
+        defb    0x01            
+        defb    0x85            
+        defb    0x00            
+        defb    0x00            
+        defb    0x02            
+        defb    0x80            
+        defb    0x03            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x80            
+        defb    0x04            
+        defb    0x00            
+        defb    0x00            
+        defb    0x81            
+        defb    0x00            
+        defb    0x82            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x07            
+        defb    0x80            
+        defb    0x84            
+        defb    0x04            
+        defb    0x00            
+        defb    0x84            
+        defb    0x03            
+        defb    0x07            
+        defb    0x00            
+        defb    0x00            
+        defb    0x02            
+        defb    0x80            
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x01            
+L48B6:
+        ld      bc, (0x411C)    
         inc     c               
         inc     c               
         inc     c               
-        ld      b, $05          
+        ld      b, 0x05         
         call    L4212           
-        ld      de, $001c       
-        ld      a, $0e          
-L48c7:
+        ld      de, 0x001C      
+        ld      a, 0x0E         
+L48C7:
         push    af              
-        ld      b, $05          
-L48ca:
+        ld      b, 0x05         
+L48CA:
         ld      a, (hl)         
-        xor     $80             
+        xor     0x80            
         ld      (hl), a         
         inc     hl              
-        djnz    L48ca           
+        djnz    L48CA           
         add     hl, de          
         pop     af              
         dec     a               
-        cp      $00             
-        jr      nz, L48c7       
+        cp      0x00            
+        jr      nz, L48C7       
         ret                     
-        defb    $eb             
-        defb    $21             
-        defb    $9c             
-        defb    $48             
-        defb    $c3             
-        defb    $77             
-        defb    $43             
-        defb    $3e             
-        defb    $02             
-        defb    $be             
-        defb    $20             
-        defb    $1f             
-        defb    $3c             
-        defb    $32             
-        defb    $b5             
-        defb    $48             
-        defb    $eb             
-        defb    $23             
-        defb    $36             
-        defb    $05             
-        defb    $23             
-        defb    $36             
-        defb    $02             
-        defb    $23             
-        defb    $36             
-        defb    $05             
-        defb    $11             
-        defb    $1f             
-        defb    $00             
-        defb    $19             
-        defb    $36             
-        defb    $03             
-        defb    $23             
-        defb    $23             
-        defb    $36             
-        defb    $01             
-        defb    $11             
-        defb    $a3             
-        defb    $00             
-        defb    $19             
-        defb    $36             
-        defb    $80             
-        defb    $c9             
-        defb    $3e             
-        defb    $01             
-        defb    $32             
-        defb    $b5             
-        defb    $48             
-        defb    $eb             
-        defb    $23             
-        defb    $23             
-        defb    $36             
-        defb    $00             
-        defb    $23             
-        defb    $36             
-        defb    $85             
-        defb    $11             
-        defb    $21             
-        defb    $00             
-        defb    $19             
-        defb    $36             
-        defb    $03             
-        defb    $11             
-        defb    $a5             
-        defb    $00             
-        defb    $19             
-        defb    $36             
-        defb    $80             
-        defb    $c9             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0xEB            
+        defb    0x21            
+        defb    0x9C            
+        defb    0x48            
+        defb    0xC3            
+        defb    0x77            
+        defb    0x43            
+        defb    0x3E            
+        defb    0x02            
+        defb    0xBE            
+        defb    0x20            
+        defb    0x1F            
+        defb    0x3C            
+        defb    0x32            
+        defb    0xB5            
+        defb    0x48            
+        defb    0xEB            
+        defb    0x23            
+        defb    0x36            
+        defb    0x05            
+        defb    0x23            
+        defb    0x36            
+        defb    0x02            
+        defb    0x23            
+        defb    0x36            
+        defb    0x05            
+        defb    0x11            
+        defb    0x1F            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x03            
+        defb    0x23            
+        defb    0x23            
+        defb    0x36            
+        defb    0x01            
+        defb    0x11            
+        defb    0xA3            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x80            
+        defb    0xC9            
+        defb    0x3E            
+        defb    0x01            
+        defb    0x32            
+        defb    0xB5            
+        defb    0x48            
+        defb    0xEB            
+        defb    0x23            
+        defb    0x23            
+        defb    0x36            
+        defb    0x00            
+        defb    0x23            
+        defb    0x36            
+        defb    0x85            
+        defb    0x11            
+        defb    0x21            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x03            
+        defb    0x11            
+        defb    0xA5            
+        defb    0x00            
+        defb    0x19            
+        defb    0x36            
+        defb    0x80            
+        defb    0xC9            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    25  REM 
 #ASM
-        defb    $ed             
-        defb    $4b             
-        defb    $1c             
-        defb    $41             
-        defb    $0c             
-        defb    $0c             
-        defb    $0c             
-        defb    $06             
-        defb    $05             
-        defb    $ed             
-        defb    $43             
-        defb    $46             
-        defb    $43             
-        defb    $cd             
-        defb    $05             
-        defb    $44             
-        defb    $06             
-        defb    $0e             
-        defb    $ed             
-        defb    $43             
-        defb    $46             
-        defb    $43             
-        defb    $cd             
-        defb    $05             
-        defb    $44             
-        defb    $c9             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0xED            
+        defb    0x4B            
+        defb    0x1C            
+        defb    0x41            
+        defb    0x0C            
+        defb    0x0C            
+        defb    0x0C            
+        defb    0x06            
+        defb    0x05            
+        defb    0xED            
+        defb    0x43            
+        defb    0x46            
+        defb    0x43            
+        defb    0xCD            
+        defb    0x05            
+        defb    0x44            
+        defb    0x06            
+        defb    0x0E            
+        defb    0xED            
+        defb    0x43            
+        defb    0x46            
+        defb    0x43            
+        defb    0xCD            
+        defb    0x05            
+        defb    0x44            
+        defb    0xC9            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    26  REM 
 #ASM
-        defb    $01             
-        defb    $00             
+        defb    0x01            
+        defb    0x00            
 L4951:
-        call    L46dd           
-        call    L49d1           
-        call    L429f           
-        call    L412c           
+        call    L46DD           
+        call    L49D1           
+        call    L429F           
+        call    L412C           
         call    L4460           
         call    L4793           
-        ld      a, ($445f)      
-        cp      $01             
+        ld      a, (0x445F)     
+        cp      0x01            
         ret     z               
         call    L4630           
-        call    L46a0           
-        ld      a, ($469f)      
-        cp      $01             
+        call    L46A0           
+        ld      a, (0x469F)     
+        cp      0x01            
         ret     z               
         call    L4663           
-        ld      hl, ($494f)     
-        ld      de, $0000       
-L497e:
+        ld      hl, (0x494F)    
+        ld      de, 0x0000      
+L497E:
         inc     de              
         and     a               
         sbc     hl, de          
         jp      z, L4951        
         add     hl, de          
-        jr      L497e           
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        jr      L497E           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    27  REM 
 #ASM
-        defb    $3e             
-        defb    $bf             
-        defb    $bd             
-        defb    $28             
-        defb    $06             
-        defb    $3e             
-        defb    $7f             
-        defb    $bd             
-        defb    $c2             
-        defb    $f0             
-        defb    $43             
-        defb    $3a             
-        defb    $1c             
-        defb    $41             
-        defb    $c3             
-        defb    $c5             
-        defb    $43             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x3E            
+        defb    0xBF            
+        defb    0xBD            
+        defb    0x28            
+        defb    0x06            
+        defb    0x3E            
+        defb    0x7F            
+        defb    0xBD            
+        defb    0xC2            
+        defb    0xF0            
+        defb    0x43            
+        defb    0x3A            
+        defb    0x1C            
+        defb    0x41            
+        defb    0xC3            
+        defb    0xC5            
+        defb    0x43            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    28  REM 
 #ASM
-L49b3:
-        ld      bc, $0200       
+L49B3:
+        ld      bc, 0x0200      
         call    L4212           
-        ld      a, $14          
-L49bb:
-        ld      b, $20          
-L49bd:
-        ld      (hl), $00       
+        ld      a, 0x14         
+L49BB:
+        ld      b, 0x20         
+L49BD:
+        ld      (hl), 0x00      
         inc     hl              
-        djnz    L49bd           
+        djnz    L49BD           
         inc     hl              
         dec     a               
-        cp      $00             
-        jr      nz, L49bb       
+        cp      0x00            
+        jr      nz, L49BB       
         ret                     
 #ENDASM
    29  REM 
 #ASM
-        defb    $df             
-        defb    $fb             
-L49d1:
+        defb    0xDF            
+        defb    0xFB            
+L49D1:
         call    KEYBOARD        
-        ld      bc, ($4346)     
-        ld      ($49cf), hl     
-        ld      de, $ffff       
+        ld      bc, (0x4346)    
+        ld      (0x49CF), hl    
+        ld      de, 0xFFFF      
         and     a               
         sbc     hl, de          
         ret     z               
-        ld      hl, ($49cf)     
+        ld      hl, (0x49CF)    
         bit     4, l            
         call    z, L4431        
-        ld      hl, ($49cf)     
-        ld      bc, ($4346)     
+        ld      hl, (0x49CF)    
+        ld      bc, (0x4346)    
         bit     5, l            
         call    z, L4431        
-        ld      hl, ($49cf)     
-        ld      bc, ($4346)     
+        ld      hl, (0x49CF)    
+        ld      bc, (0x4346)    
         bit     3, l            
-        jp      z, L43db        
+        jp      z, L43DB        
         bit     2, l            
-        jp      z, L43db        
+        jp      z, L43DB        
         bit     0, l            
-        jp      z, L43d0        
+        jp      z, L43D0        
         bit     1, l            
-        jp      z, L43d0        
+        jp      z, L43D0        
         bit     6, l            
-        jr      z, L4a18        
+        jr      z, L4A18        
         bit     7, l            
         ret     nz              
-L4a18:
+L4A18:
         nop                     
         nop                     
         nop                     
         nop                     
         nop                     
         bit     5, h            
-        jp      z, L43e6        
+        jp      z, L43E6        
         bit     4, h            
-        jp      z, L43e6        
+        jp      z, L43E6        
         bit     3, h            
-        jp      z, L43e6        
+        jp      z, L43E6        
         bit     2, h            
-        jp      z, L43c2        
+        jp      z, L43C2        
         bit     1, h            
-        jp      z, L43c2        
+        jp      z, L43C2        
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
    30  CLS 
    34  POKE 17924,252
@@ -1792,7 +1792,7 @@ L4a18:
   100  POKE 17158,128
   110  POKE 17183,128
   120  POKE 17208,128
-  140  LET L= USR &L44d1
+  140  LET L= USR &L44D1
   150  LET L= USR &L4606
   155  IF  INKEY$ ="" THEN  GOTO 140
   160  IF  INKEY$ ="N" THEN  GOTO 190
@@ -1805,7 +1805,7 @@ L4a18:
   205  POKE 18146,R
   210  POKE 18210,0
   220  POKE 18211,0
-  230  LET L= USR &L47ff
+  230  LET L= USR &L47FF
   250  PRINT  AT 0,10;"SCORE: 0"
   260  LET W=W+1
   270  IF W=34 THEN  GOTO 640
@@ -1813,18 +1813,18 @@ L4a18:
   290  POKE 17183,W
   300  POKE 17208,W
   310  LET L= USR &L4630
-  320  LET L= USR &L485e
-  340  LET L= USR &L412c
-  350  LET L= USR &L429f
+  320  LET L= USR &L485E
+  340  LET L= USR &L412C
+  350  LET L= USR &L429F
   360  LET L= USR &L4348
   370  IF  INKEY$ ="" THEN  GOTO 340
   380  LET L= USR &L4871
   390  LET L= USR &L4951
-  400  LET L= USR &L47e1
-  410  LET L= USR &L47ef
+  400  LET L= USR &L47E1
+  410  LET L= USR &L47EF
   420  IF  PEEK 17503=1 THEN  GOTO 520
   430  FOR N=1 TO 32
-  440  LET L= USR &L45c4
+  440  LET L= USR &L45C4
   450  LET L=L+N
   460  NEXT N
   470  LET L= USR &L4405
@@ -1836,7 +1836,7 @@ L4a18:
   505  POKE 18079,0
   510  GOTO 260
   520  FOR N=1 TO 50
-  540  LET L= USR &L48b6
+  540  LET L= USR &L48B6
   545  LET L=L+0
   547  LET L=L+0
   550  NEXT N
@@ -1847,10 +1847,10 @@ L4a18:
   590  POKE 18210,(S-256* PEEK 18211)
   592  IF R>20 THEN  LET R=R-20
   595  POKE 18146,R
-  600  LET L= USR &L49b3
-  620  LET L= USR &L47ff
+  600  LET L= USR &L49B3
+  620  LET L= USR &L47FF
   630  GOTO 310
-  640  LET L= USR &L49b3
+  640  LET L= USR &L49B3
   650  PRINT  AT 0,4;"FINAL";
   660  PRINT  AT 10,13;"\:'\''\''\''\''\':"
   670  PRINT  AT 11,13;"\: GAME\ :"
@@ -1908,123 +1908,123 @@ L4a18:
 #VARS S=0
 #VARS R=200
 
-#SYSVARS=\00\b8\0b\e1\58\e2\58\fa\5b\fa\5b\37\5c\d2\58\00\c0\37\5c\37\5c\0b\5d\40\00\02\39\08\ff\ff\ff\1f\d3\58\b8\0b\00\71\e2\8d\0c\00\00\17\9f\00\00\bc\21\18\40\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\82\40\00\00\00\80\80\80\80\80\80\80\80\80\80\85\92\92\93\90\00\00\00\00\00\00\00
-#D_FILE=\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76
+#SYSVARS=0x00,0xB8,0x0B,0xE1,0x58,0xE2,0x58,0xFA,0x5B,0xFA,0x5B,0x37,0x5C,0xD2,0x58,0x00,0xC0,0x37,0x5C,0x37,0x5C,0x0B,0x5D,0x40,0x00,0x02,0x39,0x08,0xFF,0xFF,0xFF,0x1F,0xD3,0x58,0xB8,0x0B,0x00,0x71,0xE2,0x8D,0x0C,0x00,0x00,0x17,0x9F,0x00,0x00,0xBC,0x21,0x18,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x82,0x40,0x00,0x00,0x00,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x85,0x92,0x92,0x93,0x90,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#D_FILE=0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76
 #WORKSPACE=
 
 #AUTOSTART=3100
 #FAST=0
 
-# [$4000] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# [$4040] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!###
-# [$4080] #---------------------------------------------------------------
-# [$40c0] ----------------------------------------------------------------
-# [$4100] --------------------------------------#####-CCCCCCCCCCCCCCCCCCCC
-# [$4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4180] CCCCCCCCCCC#####-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$41c0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------------
-# [$4200] ------------#####-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--#####-CCCCCCCC
-# [$4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####-------------
-# [$4280] -------------------------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$42c0] CCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####-------
-# [$4300] ----------------------------------------------------------------
-# [$4340] --------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4380] CCCCCCCCCC-----#####--------------------------------------------
-# [$43c0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCC--#
-# [$4400] ####-CCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####------CCCCCCCCCCCCCCC
-# [$4440] CCCCCCCCCCCCCCCCCCC-----#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----
-# [$44c0] ----#####--------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4500] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4540] CCCCCCCCCCCCCCCCCCCCCCCCC#####----------------------------------
-# [$4580] ----------------------------------------------------------------
-# [$45c0] ----CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####--------------
-# [$4600] ------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC#####-CCCCCCCCCCCCCCCC
-# [$4640] CCCCCCCCCCCCCCCCCCCCCCC---#####----CCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4680] CCCCCCCCCCCCCCCCCCCCCCCCC#####--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$46c0] CCCCCCCCCCCCCCCC-----#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCC#####---------------------CCCCCCCCCC
-# [$4740] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4780] CCC----------#####-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$47c0] CCCCCCCCCCCCCCCCCCCCCCCCC--#####-CCCCCCCCCCCCCCCCCCCCCCCC#####-C
-# [$4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--#
-# [$4840] ####--------------------------CCCCCCCCCCCCCCCC---CCCCCCCCCCCCCC-
-# [$4880] --#####-----------------------------------------------CCCCCCCCCC
-# [$48c0] CCCCCCCCCCCCCCCCCCCCCCCCC---------------------------------------
-# [$4900] ---------------------------------#####--------------------------
-# [$4940] ---------#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4980] CCCCCCCC-------#####-------------------------#####-CCCCCCCCCCCCC
-# [$49c0] CCCCCCCCC#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4a00] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC------###
-# [$4a40] ################################################################
-# [$4a80] ################################################################
-# [$4ac0] ################################################################
-# [$4b00] ################################################################
-# [$4b40] ################################################################
-# [$4b80] ################################################################
-# [$4bc0] ################################################################
-# [$4c00] ################################################################
-# [$4c40] ################################################################
-# [$4c80] ################################################################
-# [$4cc0] ################################################################
-# [$4d00] ################################################################
-# [$4d40] ################################################################
-# [$4d80] ################################################################
-# [$4dc0] ################################################################
-# [$4e00] ################################################################
-# [$4e40] ################################################################
-# [$4e80] ################################################################
-# [$4ec0] ################################################################
-# [$4f00] ################################################################
-# [$4f40] ################################################################
-# [$4f80] ################################################################
-# [$4fc0] ################################################################
-# [$5000] ################################################################
-# [$5040] ################################################################
-# [$5080] ################################################################
-# [$50c0] ################################################################
-# [$5100] ################################################################
-# [$5140] ################################################################
-# [$5180] ################################################################
-# [$51c0] ################################################################
-# [$5200] ################################################################
-# [$5240] ################################################################
-# [$5280] ################################################################
-# [$52c0] ################################################################
-# [$5300] ################################################################
-# [$5340] ################################################################
-# [$5380] ################################################################
-# [$53c0] ################################################################
-# [$5400] ################################################################
-# [$5440] ################################################################
-# [$5480] ################################################################
-# [$54c0] ################################################################
-# [$5500] ################################################################
-# [$5540] ################################################################
-# [$5580] ################################################################
-# [$55c0] ################################################################
-# [$5600] ################################################################
-# [$5640] ################################################################
-# [$5680] ################################################################
-# [$56c0] ################################################################
-# [$5700] ################################################################
-# [$5740] ################################################################
-# [$5780] ################################################################
-# [$57c0] ################################################################
-# [$5800] ################################################################
-# [$5840] ################################################################
-# [$5880] ################################################################
-# [$58c0] #################################*******************************
-# [$5900] ****************************************************************
-# [$5940] ****************************************************************
-# [$5980] ****************************************************************
-# [$59c0] ****************************************************************
-# [$5a00] ****************************************************************
-# [$5a40] ****************************************************************
-# [$5a80] ****************************************************************
-# [$5ac0] ****************************************************************
-# [$5b00] ****************************************************************
-# [$5b40] ****************************************************************
-# [$5b80] ****************************************************************
-# [$5bc0] **********************************************************$$$$$$
-# [$5c00] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# [0x4000] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# [0x4040] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!###
+# [0x4080] #---------------------------------------------------------------
+# [0x40C0] ----------------------------------------------------------------
+# [0x4100] --------------------------------------#####-CCCCCCCCCCCCCCCCCCCC
+# [0x4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4180] CCCCCCCCCCC#####-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x41C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------------
+# [0x4200] ------------#####-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--#####-CCCCCCCC
+# [0x4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####-------------
+# [0x4280] -------------------------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x42C0] CCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####-------
+# [0x4300] ----------------------------------------------------------------
+# [0x4340] --------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4380] CCCCCCCCCC-----#####--------------------------------------------
+# [0x43C0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCC--#
+# [0x4400] ####-CCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####------CCCCCCCCCCCCCCC
+# [0x4440] CCCCCCCCCCCCCCCCCCC-----#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----
+# [0x44C0] ----#####--------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4500] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4540] CCCCCCCCCCCCCCCCCCCCCCCCC#####----------------------------------
+# [0x4580] ----------------------------------------------------------------
+# [0x45C0] ----CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----#####--------------
+# [0x4600] ------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC#####-CCCCCCCCCCCCCCCC
+# [0x4640] CCCCCCCCCCCCCCCCCCCCCCC---#####----CCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4680] CCCCCCCCCCCCCCCCCCCCCCCCC#####--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x46C0] CCCCCCCCCCCCCCCC-----#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCC#####---------------------CCCCCCCCCC
+# [0x4740] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4780] CCC----------#####-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x47C0] CCCCCCCCCCCCCCCCCCCCCCCCC--#####-CCCCCCCCCCCCCCCCCCCCCCCC#####-C
+# [0x4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--#
+# [0x4840] ####--------------------------CCCCCCCCCCCCCCCC---CCCCCCCCCCCCCC-
+# [0x4880] --#####-----------------------------------------------CCCCCCCCCC
+# [0x48C0] CCCCCCCCCCCCCCCCCCCCCCCCC---------------------------------------
+# [0x4900] ---------------------------------#####--------------------------
+# [0x4940] ---------#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4980] CCCCCCCC-------#####-------------------------#####-CCCCCCCCCCCCC
+# [0x49C0] CCCCCCCCC#####---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4A00] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC------###
+# [0x4A40] ################################################################
+# [0x4A80] ################################################################
+# [0x4AC0] ################################################################
+# [0x4B00] ################################################################
+# [0x4B40] ################################################################
+# [0x4B80] ################################################################
+# [0x4BC0] ################################################################
+# [0x4C00] ################################################################
+# [0x4C40] ################################################################
+# [0x4C80] ################################################################
+# [0x4CC0] ################################################################
+# [0x4D00] ################################################################
+# [0x4D40] ################################################################
+# [0x4D80] ################################################################
+# [0x4DC0] ################################################################
+# [0x4E00] ################################################################
+# [0x4E40] ################################################################
+# [0x4E80] ################################################################
+# [0x4EC0] ################################################################
+# [0x4F00] ################################################################
+# [0x4F40] ################################################################
+# [0x4F80] ################################################################
+# [0x4FC0] ################################################################
+# [0x5000] ################################################################
+# [0x5040] ################################################################
+# [0x5080] ################################################################
+# [0x50C0] ################################################################
+# [0x5100] ################################################################
+# [0x5140] ################################################################
+# [0x5180] ################################################################
+# [0x51C0] ################################################################
+# [0x5200] ################################################################
+# [0x5240] ################################################################
+# [0x5280] ################################################################
+# [0x52C0] ################################################################
+# [0x5300] ################################################################
+# [0x5340] ################################################################
+# [0x5380] ################################################################
+# [0x53C0] ################################################################
+# [0x5400] ################################################################
+# [0x5440] ################################################################
+# [0x5480] ################################################################
+# [0x54C0] ################################################################
+# [0x5500] ################################################################
+# [0x5540] ################################################################
+# [0x5580] ################################################################
+# [0x55C0] ################################################################
+# [0x5600] ################################################################
+# [0x5640] ################################################################
+# [0x5680] ################################################################
+# [0x56C0] ################################################################
+# [0x5700] ################################################################
+# [0x5740] ################################################################
+# [0x5780] ################################################################
+# [0x57C0] ################################################################
+# [0x5800] ################################################################
+# [0x5840] ################################################################
+# [0x5880] ################################################################
+# [0x58C0] #################################*******************************
+# [0x5900] ****************************************************************
+# [0x5940] ****************************************************************
+# [0x5980] ****************************************************************
+# [0x59C0] ****************************************************************
+# [0x5A00] ****************************************************************
+# [0x5A40] ****************************************************************
+# [0x5A80] ****************************************************************
+# [0x5AC0] ****************************************************************
+# [0x5B00] ****************************************************************
+# [0x5B40] ****************************************************************
+# [0x5B80] ****************************************************************
+# [0x5BC0] **********************************************************$$$$$$
+# [0x5C00] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$

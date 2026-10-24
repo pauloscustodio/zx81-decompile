@@ -322,8 +322,13 @@ Bytes encode_zx81(const char*& p) {
 
 std::string encode_hex(const Bytes& bytes) {
     std::ostringstream oss;
+    bool first = true;
     for (auto& b : bytes) {
-        oss << "\\" << fmt_hex(b, 2);
+        if (!first) {
+            oss << ",";
+        }
+        oss << fmt_hex(b, 2);
+        first = false;
     }
     return oss.str();
 }

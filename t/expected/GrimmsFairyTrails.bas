@@ -1,13 +1,13 @@
    10  REM 
 #ASM
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4088:
-        ld      h, $00          
+        ld      h, 0x00         
         ld      l, c            
         sla     l               
         sla     l               
@@ -16,533 +16,533 @@ L4088:
         sla     l               
         rl      h               
         ld      e, c            
-        ld      d, $00          
+        ld      d, 0x00         
         add     hl, de          
         ld      e, b            
         add     hl, de          
         ld      de, (D_FILE)    
         add     hl, de          
-        ld      de, $0001       
+        ld      de, 0x0001      
         add     hl, de          
         ld      d, (hl)         
         ld      (hl), a         
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L40e0:
-        ld      c, $16          
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L40E0:
+        ld      c, 0x16         
         ld      hl, (D_FILE)    
         inc     hl              
-        ld      de, $0021       
-L40e9:
-        ld      b, $20          
+        ld      de, 0x0021      
+L40E9:
+        ld      b, 0x20         
         adc     hl, de          
-        ld      ($40ff), hl     
-L40f0:
-        ld      (hl), $80       
+        ld      (0x40FF), hl    
+L40F0:
+        ld      (hl), 0x80      
         inc     hl              
         dec     b               
-        jp      nz, L40f0       
-        ld      hl, ($40ff)     
+        jp      nz, L40F0       
+        ld      hl, (0x40FF)    
         dec     c               
-        jp      nz, L40e9       
+        jp      nz, L40E9       
         ret                     
-        defb    $bd             
-        defb    $63             
-        defb    $00             
+        defb    0xBD            
+        defb    0x63            
+        defb    0x00            
 L4102:
-        ld      b, $1e          
-        ld      c, $0f          
+        ld      b, 0x1E         
+        ld      c, 0x0F         
 L4106:
-        ld      a, $1b          
+        ld      a, 0x1B         
         call    L4088           
         dec     c               
         ld      a, c            
-        cp      $01             
+        cp      0x01            
         jr      nz, L4106       
-        ld      c, $0f          
+        ld      c, 0x0F         
         dec     b               
         jr      nz, L4106       
         ret                     
-        defb    $00             
+        defb    0x00            
 L4118:
-        ld      c, $0a          
-        ld      b, $1d          
-L411c:
-        ld      a, $80          
+        ld      c, 0x0A         
+        ld      b, 0x1D         
+L411C:
+        ld      a, 0x80         
         call    L4088           
         dec     c               
         ld      a, c            
-        cp      $06             
-        jr      nz, L411c       
-        ld      c, $0a          
+        cp      0x06            
+        jr      nz, L411C       
+        ld      c, 0x0A         
         dec     b               
         dec     b               
         ld      a, b            
-        cp      $0f             
-        jr      nz, L411c       
-        ld      c, $0a          
-        ld      b, $0e          
+        cp      0x0F            
+        jr      nz, L411C       
+        ld      c, 0x0A         
+        ld      b, 0x0E         
 L4134:
-        ld      a, $80          
+        ld      a, 0x80         
         call    L4088           
         dec     c               
         ld      a, c            
-        cp      $06             
+        cp      0x06            
         jr      nz, L4134       
-        ld      c, $0a          
+        ld      c, 0x0A         
         dec     b               
         dec     b               
         ld      a, b            
-        cp      $00             
+        cp      0x00            
         jr      nz, L4134       
-        ld      b, $10          
-        ld      c, $0a          
-L414c:
-        ld      a, $80          
+        ld      b, 0x10         
+        ld      c, 0x0A         
+L414C:
+        ld      a, 0x80         
         call    L4088           
         dec     b               
         ld      a, b            
-        cp      $0e             
-        jr      nz, L414c       
-        ld      c, $07          
-        ld      b, $10          
-L415b:
-        ld      a, $80          
+        cp      0x0E            
+        jr      nz, L414C       
+        ld      c, 0x07         
+        ld      b, 0x10         
+L415B:
+        ld      a, 0x80         
         call    L4088           
         dec     b               
         ld      a, b            
-        cp      $0e             
-        jr      nz, L415b       
+        cp      0x0E            
+        jr      nz, L415B       
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L416e:
-        ld      b, $1d          
-        ld      c, $0c          
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L416E:
+        ld      b, 0x1D         
+        ld      c, 0x0C         
 L4172:
-        ld      a, $80          
+        ld      a, 0x80         
         call    L4088           
         dec     b               
         call    L4088           
         dec     b               
         dec     b               
         ld      a, b            
-        cp      $02             
+        cp      0x02            
         jr      nz, L4172       
-        ld      b, $1d          
-        ld      c, $03          
+        ld      b, 0x1D         
+        ld      c, 0x03         
 L4186:
-        ld      a, $80          
+        ld      a, 0x80         
         call    L4088           
         dec     b               
         call    L4088           
         dec     b               
         dec     b               
         ld      a, b            
-        cp      $02             
+        cp      0x02            
         jr      nz, L4186       
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $02             
-        defb    $1e             
-        defb    $10             
-        defb    $09             
-        defb    $02             
-        defb    $1e             
-        defb    $00             
-        defb    $00             
-        defb    $09             
-        defb    $18             
-        defb    $20             
-        defb    $62             
-        defb    $01             
-        defb    $01             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L41d4:
-        ld      hl, $41a1       
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x02            
+        defb    0x1E            
+        defb    0x10            
+        defb    0x09            
+        defb    0x02            
+        defb    0x1E            
+        defb    0x00            
+        defb    0x00            
+        defb    0x09            
+        defb    0x18            
+        defb    0x20            
+        defb    0x62            
+        defb    0x01            
+        defb    0x01            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L41D4:
+        ld      hl, 0x41A1      
         ld      b, (hl)         
-        ld      hl, $41a0       
+        ld      hl, 0x41A0      
         ld      c, (hl)         
-        ld      a, $34          
+        ld      a, 0x34         
         call    L4088           
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L41e6:
-        call    L41d4           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L41E6:
+        call    L41D4           
         inc     hl              
         ld      a, (hl)         
-        cp      $80             
+        cp      0x80            
         ret     z               
-        cp      $1b             
+        cp      0x1B            
         call    z, L4290        
-        ld      de, $41b0       
+        ld      de, 0x41B0      
         ld      a, (de)         
-        cp      $c8             
+        cp      0xC8            
         ret     z               
-        ld      a, $00          
+        ld      a, 0x00         
         call    L4088           
         inc     b               
-        ld      a, $34          
+        ld      a, 0x34         
         call    L4088           
         ld      a, b            
-        ld      ($41a1), a      
+        ld      (0x41A1), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L420e:
-        call    L41d4           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L420E:
+        call    L41D4           
         dec     hl              
         ld      a, (hl)         
-        cp      $80             
+        cp      0x80            
         ret     z               
-        cp      $1b             
+        cp      0x1B            
         call    z, L4290        
-        ld      de, $41b0       
+        ld      de, 0x41B0      
         ld      a, (de)         
-        cp      $c8             
+        cp      0xC8            
         ret     z               
-        ld      a, $00          
+        ld      a, 0x00         
         call    L4088           
         dec     b               
-        ld      a, $34          
+        ld      a, 0x34         
         call    L4088           
         ld      a, b            
-        ld      ($41a1), a      
+        ld      (0x41A1), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4236:
-        call    L41d4           
-        ld      de, $0021       
+        call    L41D4           
+        ld      de, 0x0021      
         sbc     hl, de          
         ld      a, (hl)         
-        cp      $80             
+        cp      0x80            
         ret     z               
-        cp      $1b             
+        cp      0x1B            
         call    z, L4290        
-        ld      de, $41b0       
+        ld      de, 0x41B0      
         ld      a, (de)         
-        cp      $c8             
+        cp      0xC8            
         ret     z               
-        ld      a, $00          
+        ld      a, 0x00         
         call    L4088           
         dec     c               
-        ld      a, $34          
+        ld      a, 0x34         
         call    L4088           
         ld      a, c            
-        ld      ($41a0), a      
+        ld      (0x41A0), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4263:
-        call    L41d4           
-        ld      de, $0021       
+        call    L41D4           
+        ld      de, 0x0021      
         adc     hl, de          
         ld      a, (hl)         
-        cp      $80             
+        cp      0x80            
         ret     z               
-        cp      $1b             
+        cp      0x1B            
         call    z, L4290        
-        ld      de, $41b0       
+        ld      de, 0x41B0      
         ld      a, (de)         
-        cp      $c8             
+        cp      0xC8            
         ret     z               
-        ld      a, $00          
+        ld      a, 0x00         
         call    L4088           
         inc     c               
-        ld      a, $34          
+        ld      a, 0x34         
         call    L4088           
         ld      a, c            
-        ld      ($41a0), a      
+        ld      (0x41A0), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4290:
-        ld      a, ($41b0)      
-        add     a, $01          
-        ld      ($41b0), a      
+        ld      a, (0x41B0)     
+        add     a, 0x01         
+        ld      (0x41B0), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $cd             
-        defb    $f9             
-        defb    $43             
-        defb    $cd             
-        defb    $30             
-        defb    $43             
-        defb    $3a             
-        defb    $ae             
-        defb    $41             
-        defb    $fe             
-        defb    $3d             
-        defb    $c8             
-        defb    $c3             
-        defb    $1c             
-        defb    $43             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0xCD            
+        defb    0xF9            
+        defb    0x43            
+        defb    0xCD            
+        defb    0x30            
+        defb    0x43            
+        defb    0x3A            
+        defb    0xAE            
+        defb    0x41            
+        defb    0xFE            
+        defb    0x3D            
+        defb    0xC8            
+        defb    0xC3            
+        defb    0x1C            
+        defb    0x43            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4330:
-        ld      a, ($41a0)      
-        ld      hl, $41a4       
+        ld      a, (0x41A0)     
+        ld      hl, 0x41A4      
         sub     (hl)            
         jp      m, L4352        
-        ld      d, $02          
-L433c:
+        ld      d, 0x02         
+L433C:
         ld      b, a            
-        ld      a, ($41a1)      
-        ld      hl, $41a5       
+        ld      a, (0x41A1)     
+        ld      hl, 0x41A5      
         sub     (hl)            
         jp      m, L4359        
-        ld      e, $02          
+        ld      e, 0x02         
 L4349:
         ld      c, a            
         ld      a, c            
@@ -550,145 +550,145 @@ L4349:
         jp      m, L4360        
         jp      p, L4369        
 L4352:
-        ld      d, $01          
+        ld      d, 0x01         
         neg                     
-        jp      L433c           
+        jp      L433C           
 L4359:
-        ld      e, $01          
+        ld      e, 0x01         
         neg                     
         jp      L4349           
 L4360:
         ld      a, d            
-        cp      $01             
+        cp      0x01            
         jp      z, L4388        
         jp      nz, L4372       
 L4369:
         ld      a, e            
-        cp      $01             
-        jp      z, L439e        
-        jp      nz, L43b4       
+        cp      0x01            
+        jp      z, L439E        
+        jp      nz, L43B4       
 L4372:
         call    L4477           
-        cp      $80             
+        cp      0x80            
         ret     nz              
-        call    L44c0           
-        cp      $80             
+        call    L44C0           
+        cp      0x80            
         ret     nz              
-        call    L44e8           
-        cp      $80             
+        call    L44E8           
+        cp      0x80            
         ret     nz              
-        call    L449a           
+        call    L449A           
         ret                     
 L4388:
-        call    L449a           
-        cp      $80             
+        call    L449A           
+        cp      0x80            
         ret     nz              
-        call    L44c0           
-        cp      $80             
+        call    L44C0           
+        cp      0x80            
         ret     nz              
-        call    L44e8           
-        cp      $80             
+        call    L44E8           
+        cp      0x80            
         ret     nz              
         call    L4477           
         ret                     
-L439e:
-        call    L44e8           
-        cp      $80             
+L439E:
+        call    L44E8           
+        cp      0x80            
         ret     nz              
-        call    L449a           
-        cp      $80             
-        ret     nz              
-        call    L4477           
-        cp      $80             
-        ret     nz              
-        call    L44c0           
-        ret                     
-L43b4:
-        call    L44c0           
-        cp      $80             
+        call    L449A           
+        cp      0x80            
         ret     nz              
         call    L4477           
-        cp      $80             
+        cp      0x80            
         ret     nz              
-        call    L449a           
-        cp      $80             
-        ret     nz              
-        call    L44e8           
+        call    L44C0           
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $23             
-L43f9:
+L43B4:
+        call    L44C0           
+        cp      0x80            
+        ret     nz              
+        call    L4477           
+        cp      0x80            
+        ret     nz              
+        call    L449A           
+        cp      0x80            
+        ret     nz              
+        call    L44E8           
+        ret                     
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x23            
+L43F9:
         ld      a, (LAST_K)     
         nop                     
         ld      a, (LAST_K+1)   
         ld      b, a            
         ld      a, (LAST_K)     
         cp      c               
-        jp      nz, L440d       
+        jp      nz, L440D       
         ld      a, (LAST_K+1)   
         cp      b               
         ret     z               
-L440d:
+L440D:
         ld      a, (LAST_K+1)   
         ld      b, a            
         ld      a, (LAST_K)     
         ld      c, a            
-        cp      $ff             
+        cp      0xFF            
         ret     z               
-        ld      e, $ff          
-        ld      d, $00          
+        ld      e, 0xFF         
+        ld      d, 0x00         
         ld      a, b            
         rrca                    
         ld      b, a            
         ld      a, e            
         sbc     a, a            
-        or      $26             
-        ld      l, $05          
+        or      0x26            
+        ld      l, 0x05         
         sub     l               
 L4426:
         add     a, l            
@@ -701,678 +701,678 @@ L4426:
         jr      c, L4426        
         ld      c, b            
         dec     l               
-        ld      l, $01          
+        ld      l, 0x01         
         jr      nz, L4426       
-        ld      hl, $007d       
+        ld      hl, 0x007D      
         ld      e, a            
         add     hl, de          
         ld      a, (hl)         
-        ld      ($43f8), a      
-        cp      $21             
-        call    z, L420e        
-        cp      $22             
+        ld      (0x43F8), a     
+        cp      0x21            
+        call    z, L420E        
+        cp      0x22            
         call    z, L4263        
-        cp      $23             
+        cp      0x23            
         call    z, L4236        
-        cp      $24             
-        call    z, L41e6        
+        cp      0x24            
+        call    z, L41E6        
         ret                     
-        defb    $f9             
-        defb    $43             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L445c:
-        ld      hl, $41a5       
+        defb    0xF9            
+        defb    0x43            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L445C:
+        ld      hl, 0x41A5      
         ld      b, (hl)         
-        ld      hl, $41a4       
+        ld      hl, 0x41A4      
         ld      c, (hl)         
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ret                     
-        defb    $7a             
-        defb    $44             
-        defb    $c9             
-        defb    $a2             
-        defb    $44             
-        defb    $c9             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x7A            
+        defb    0x44            
+        defb    0xC9            
+        defb    0xA2            
+        defb    0x44            
+        defb    0xC9            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4477:
-        call    L445c           
-        ld      de, $0021       
+        call    L445C           
+        ld      de, 0x0021      
         adc     hl, de          
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         inc     c               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, c            
-        ld      ($41a4), a      
+        ld      (0x41A4), a     
         ret                     
-        defb    $00             
-L449a:
-        call    L445c           
-        ld      de, $0021       
+        defb    0x00            
+L449A:
+        call    L445C           
+        ld      de, 0x0021      
         sbc     hl, de          
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         dec     c               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, c            
-        ld      ($41a4), a      
+        ld      (0x41A4), a     
         ret                     
-        defb    $41             
-        defb    $c9             
-        defb    $9f             
-        defb    $44             
-L44c0:
-        call    L445c           
+        defb    0x41            
+        defb    0xC9            
+        defb    0x9F            
+        defb    0x44            
+L44C0:
+        call    L445C           
         inc     hl              
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         inc     b               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, b            
-        ld      ($41a5), a      
+        ld      (0x41A5), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L44e8:
-        call    L445c           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L44E8:
+        call    L445C           
         dec     hl              
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         dec     b               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, b            
-        ld      ($41a5), a      
+        ld      (0x41A5), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4524:
-        ld      hl, $41a9       
+        ld      hl, 0x41A9      
         ld      b, (hl)         
-        ld      hl, $41a8       
+        ld      hl, 0x41A8      
         ld      c, (hl)         
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ret                     
-        defb    $88             
+        defb    0x88            
 L4533:
         call    L4524           
-        ld      de, $0021       
+        ld      de, 0x0021      
         adc     hl, de          
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         inc     c               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, c            
-        ld      ($41a8), a      
+        ld      (0x41A8), a     
         ret                     
-        defb    $cd             
+        defb    0xCD            
 L4556:
         call    L4524           
-        ld      de, $0021       
+        ld      de, 0x0021      
         sbc     hl, de          
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         dec     c               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, c            
-        ld      ($41a8), a      
+        ld      (0x41A8), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4588:
-        ld      a, ($41ac)      
-        cp      $02             
+        ld      a, (0x41AC)     
+        cp      0x02            
         jp      z, L4596        
-        ld      a, $3d          
-        ld      ($41ae), a      
+        ld      a, 0x3D         
+        ld      (0x41AE), a     
         ret                     
 L4596:
-        call    L477c           
+        call    L477C           
         ret                     
-        defb    $00             
-        defb    $00             
-L459c:
+        defb    0x00            
+        defb    0x00            
+L459C:
         call    L4524           
         inc     hl              
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         inc     b               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, b            
-        ld      ($41a9), a      
+        ld      (0x41A9), a     
         ret                     
-L45ba:
+L45BA:
         call    L4524           
         dec     hl              
         ld      a, (hl)         
         bit     7, a            
         ret     nz              
-        cp      $34             
+        cp      0x34            
         call    z, L4588        
-        cp      $08             
+        cp      0x08            
         ret     z               
         call    L4088           
         dec     b               
-        ld      a, $08          
+        ld      a, 0x08         
         call    L4088           
         ld      a, b            
-        ld      ($41a9), a      
+        ld      (0x41A9), a     
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 L4650:
-        call    L43f9           
-        ld      a, ($41ad)      
-        cp      $02             
-        jp      nz, L466f       
-        ld      a, $01          
-        ld      ($41ad), a      
+        call    L43F9           
+        ld      a, (0x41AD)     
+        cp      0x02            
+        jp      nz, L466F       
+        ld      a, 0x01         
+        ld      (0x41AD), a     
         call    L4330           
-        call    L46b4           
-        ld      a, ($41ae)      
-        cp      $3d             
+        call    L46B4           
+        ld      a, (0x41AE)     
+        cp      0x3D            
         ret     z               
         jp      L4674           
-L466f:
-        add     a, $01          
-        ld      ($41ad), a      
+L466F:
+        add     a, 0x01         
+        ld      (0x41AD), a     
 L4674:
-        ld      c, $05          
+        ld      c, 0x05         
 L4676:
-        ld      b, $fa          
+        ld      b, 0xFA         
 L4678:
-        ld      a, $01          
+        ld      a, 0x01         
         dec     b               
         jr      nz, L4678       
         dec     c               
         jr      nz, L4676       
-        ld      a, ($41b0)      
-        cp      $fa             
+        ld      a, (0x41B0)     
+        cp      0xFA            
         ret     z               
-        ld      hl, ($41aa)     
+        ld      hl, (0x41AA)    
         ld      b, (hl)         
         ld      a, b            
-        cp      $34             
-        call    z, L474a        
+        cp      0x34            
+        call    z, L474A        
         jp      L4650           
-        defb    $50             
-        defb    $46             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L46b4:
-        ld      a, ($41a0)      
-        ld      hl, $41a8       
+        defb    0x50            
+        defb    0x46            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L46B4:
+        ld      a, (0x41A0)     
+        ld      hl, 0x41A8      
         sub     (hl)            
-        jp      m, L46d6        
-        ld      d, $02          
-L46c0:
+        jp      m, L46D6        
+        ld      d, 0x02         
+L46C0:
         ld      b, a            
-        ld      a, ($41a1)      
-        ld      hl, $41a9       
+        ld      a, (0x41A1)     
+        ld      hl, 0x41A9      
         sub     (hl)            
-        jp      m, L46dd        
-        ld      e, $02          
-L46cd:
+        jp      m, L46DD        
+        ld      e, 0x02         
+L46CD:
         ld      c, a            
         ld      a, c            
         cp      b               
-        jp      m, L46e4        
-        jp      p, L46ed        
-L46d6:
-        ld      d, $01          
+        jp      m, L46E4        
+        jp      p, L46ED        
+L46D6:
+        ld      d, 0x01         
         neg                     
-        jp      L46c0           
-L46dd:
-        ld      e, $01          
+        jp      L46C0           
+L46DD:
+        ld      e, 0x01         
         neg                     
-        jp      L46cd           
-L46e4:
+        jp      L46CD           
+L46E4:
         ld      a, d            
-        cp      $01             
-        jp      z, L470c        
-        jp      nz, L46f6       
-L46ed:
+        cp      0x01            
+        jp      z, L470C        
+        jp      nz, L46F6       
+L46ED:
         ld      a, e            
-        cp      $01             
+        cp      0x01            
         jp      z, L4715        
-        jp      nz, L471e       
-L46f6:
+        jp      nz, L471E       
+L46F6:
         call    L4533           
-        cp      $80             
+        cp      0x80            
         ret     nz              
-        call    L45ba           
-        cp      $80             
+        call    L45BA           
+        cp      0x80            
         ret     nz              
-        call    L459c           
-        cp      $80             
+        call    L459C           
+        cp      0x80            
         ret     nz              
         call    L4556           
         ret                     
-L470c:
+L470C:
         call    L4556           
-        cp      $80             
+        cp      0x80            
         ret     nz              
         nop                     
         nop                     
         nop                     
 L4715:
-        call    L45ba           
-        cp      $80             
+        call    L45BA           
+        cp      0x80            
         ret     nz              
-        jp      L46f6           
-L471e:
-        call    L459c           
-        cp      $80             
+        jp      L46F6           
+L471E:
+        call    L459C           
+        cp      0x80            
         ret     nz              
-        jp      L46f6           
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L472c:
-        ld      hl, $41a2       
+        jp      L46F6           
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L472C:
+        ld      hl, 0x41A2      
         ld      b, (hl)         
-        ld      hl, $41a3       
+        ld      hl, 0x41A3      
         ld      c, (hl)         
-        ld      a, $97          
+        ld      a, 0x97         
         call    L4088           
-        ld      ($41aa), hl     
+        ld      (0x41AA), hl    
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L474a:
-        ld      a, ($41ac)      
-        add     a, $01          
-        ld      ($41ac), a      
-        ld      b, $10          
-        ld      c, $09          
-        ld      a, $00          
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L474A:
+        ld      a, (0x41AC)     
+        add     a, 0x01         
+        ld      (0x41AC), a     
+        ld      b, 0x10         
+        ld      c, 0x09         
+        ld      a, 0x00         
         call    L4088           
-        ld      a, $10          
-        ld      ($41a1), a      
-        ld      a, $0f          
-        ld      ($41a0), a      
-        ld      a, $34          
-        call    L41d4           
+        ld      a, 0x10         
+        ld      (0x41A1), a     
+        ld      a, 0x0F         
+        ld      (0x41A0), a     
+        ld      a, 0x34         
+        call    L41D4           
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L477c:
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L477C:
         dec     a               
-        ld      ($41ac), a      
-        ld      a, $10          
-        ld      ($41a1), a      
-        ld      a, $0f          
-        ld      ($41a0), a      
-        ld      a, $34          
+        ld      (0x41AC), a     
+        ld      a, 0x10         
+        ld      (0x41A1), a     
+        ld      a, 0x0F         
+        ld      (0x41A0), a     
+        ld      a, 0x34         
         push    bc              
         push    de              
         push    hl              
-        call    L41d4           
+        call    L41D4           
         pop     hl              
         pop     de              
         pop     bc              
-        ld      a, $00          
+        ld      a, 0x00         
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $07             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $87             
-        defb    $04             
-        defb    $83             
-        defb    $02             
-        defb    $85             
-        defb    $06             
-        defb    $81             
-        defb    $01             
-        defb    $86             
-        defb    $05             
-        defb    $82             
-        defb    $03             
-        defb    $84             
-        defb    $07             
-        defb    $80             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-L47c2:
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x07            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x87            
+        defb    0x04            
+        defb    0x83            
+        defb    0x02            
+        defb    0x85            
+        defb    0x06            
+        defb    0x81            
+        defb    0x01            
+        defb    0x86            
+        defb    0x05            
+        defb    0x82            
+        defb    0x03            
+        defb    0x84            
+        defb    0x07            
+        defb    0x80            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+L47C2:
         ld      hl, (D_FILE)    
         inc     hl              
-        ld      bc, $01f1       
-        ld      a, ($47aa)      
-        cp      $01             
-        jp      nz, L47d6       
+        ld      bc, 0x01F1      
+        ld      a, (0x47AA)     
+        cp      0x01            
+        jp      nz, L47D6       
         adc     hl, bc          
         ld      (DF_CC), hl     
-L47d6:
-        ld      hl, $47a9       
+L47D6:
+        ld      hl, 0x47A9      
         ld      a, (hl)         
         and     a               
         rla                     
         rla                     
         ret     c               
         rla                     
-        ld      d, $00          
+        ld      d, 0x00         
         rl      d               
         ld      e, a            
-        ld      hl, $1e00       
+        ld      hl, 0x1E00      
         add     hl, de          
-        ld      c, $04          
-L47ea:
-        ld      b, $04          
+        ld      c, 0x04         
+L47EA:
+        ld      b, 0x04         
         ld      d, (hl)         
         inc     hl              
         ld      e, (hl)         
         inc     hl              
         push    hl              
-L47f1:
+L47F1:
         xor     a               
         rl      d               
         rla                     
@@ -1382,7 +1382,7 @@ L47f1:
         rla                     
         rl      e               
         rla                     
-        ld      hl, $47ae       
+        ld      hl, 0x47AE      
         add     a, l            
         ld      l, a            
         ld      a, (hl)         
@@ -1390,2243 +1390,2243 @@ L47f1:
         ld      (hl), a         
         inc     hl              
         ld      (DF_CC), hl     
-        djnz    L47f1           
+        djnz    L47F1           
         push    de              
-        ld      de, $001d       
+        ld      de, 0x001D      
         add     hl, de          
         ld      (DF_CC), hl     
         pop     de              
         pop     hl              
         dec     c               
-        jr      nz, L47ea       
-        ld      de, $ff80       
+        jr      nz, L47EA       
+        ld      de, 0xFF80      
         ld      hl, (DF_CC)     
         add     hl, de          
         ld      (DF_CC), hl     
         ld      a, (hl)         
         ret                     
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
-        defb    $00             
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
+        defb    0x00            
 #ENDASM
   990  SLOW 
   995  POKE 16625,8
- 1000  LET C1= USR &L40e0
+ 1000  LET C1= USR &L40E0
  1002  POKE 16816,0
  1004  POKE 16814,0
  1006  GOSUB 4000
@@ -3643,7 +3643,7 @@ L47f1:
  1028  POKE 16773,5
  1030  POKE 16767,0
  1032  POKE 16787,0
- 1034  LET C1= USR &L416e
+ 1034  LET C1= USR &L416E
  1036  POKE 16751,29
  1038  POKE 16753,12
  1040  POKE 16771,29
@@ -3651,7 +3651,7 @@ L47f1:
  1042  POKE 16773,3
  1044  POKE 16767,2
  1046  POKE 16787,2
- 1048  LET C1= USR &L416e
+ 1048  LET C1= USR &L416E
  1049  PRINT  AT 8,14;"."
  1050  PRINT  AT 3,1;".\::"
  1051  PRINT  AT 14,30;"."
@@ -3660,7 +3660,7 @@ L47f1:
  1056  PRINT  AT 18,5;"%S%C%O%R%E"
  1057  POKE 16802,16
  1058  POKE 16803,9
- 1059  LET C1= USR &L472c
+ 1059  LET C1= USR &L472C
  1060  POKE 16801,16
  1062  POKE 16800,15
  1064  PRINT  AT 15,16;"O"
@@ -3679,7 +3679,7 @@ L47f1:
  3020  IF  INKEY$ ="" THEN  GOTO 3000
  3025  GOTO 3000
  3030  STOP 
- 3050  LET C1= USR &L40e0
+ 3050  LET C1= USR &L40E0
  3060  POKE 16814,0
  3062  POKE 16816,0
  3064  GOTO 1010
@@ -3707,7 +3707,7 @@ L47f1:
  4086  IF Y=5 THEN  POKE 18037,25
  4087  IF Y=6 THEN  POKE 18037,30
  4088  IF Y<1 OR Y>6 THEN  GOTO 4019
- 4090  LET C1= USR &L40e0
+ 4090  LET C1= USR &L40E0
  4099  RETURN 
  5000  REM 
  5002  DIM A$(6,7)
@@ -3723,55 +3723,55 @@ L47f1:
  5022  LET B$=A$(J,N TO N)
  5024  POKE 18345, CODE B$
  5026  POKE 18346,N
- 5028  LET C1= USR &L47c2
+ 5028  LET C1= USR &L47C2
  5030  NEXT N
  5032  FOR L=1 TO 3
  5034  NEXT L
- 5036  IF J=3 THEN  LET C1= USR &L40e0
+ 5036  IF J=3 THEN  LET C1= USR &L40E0
  5037  IF J=4 THEN  PRINT  AT 5,24;"\.'"
  5038  NEXT J
  5040  REM 
 #ASM
-        defb    $f5             
-        defb    $c1             
-        defb    $1e             
-        defb    $1c             
-        defb    $1a             
-        defb    $1d             
-        defb    $19             
-        defb    $0b             
-        defb    $35             
-        defb    $37             
-        defb    $2a             
-        defb    $38             
-        defb    $38             
-        defb    $00             
-        defb    $2a             
-        defb    $33             
-        defb    $39             
-        defb    $2a             
-        defb    $37             
-        defb    $00             
-        defb    $3c             
-        defb    $2d             
-        defb    $2a             
-        defb    $33             
-        defb    $00             
-        defb    $37             
-        defb    $2a             
-        defb    $26             
-        defb    $29             
-        defb    $3e             
-        defb    $0b             
+        defb    0xF5            
+        defb    0xC1            
+        defb    0x1E            
+        defb    0x1C            
+        defb    0x1A            
+        defb    0x1D            
+        defb    0x19            
+        defb    0x0B            
+        defb    0x35            
+        defb    0x37            
+        defb    0x2A            
+        defb    0x38            
+        defb    0x38            
+        defb    0x00            
+        defb    0x2A            
+        defb    0x33            
+        defb    0x39            
+        defb    0x2A            
+        defb    0x37            
+        defb    0x00            
+        defb    0x3C            
+        defb    0x2D            
+        defb    0x2A            
+        defb    0x33            
+        defb    0x00            
+        defb    0x37            
+        defb    0x2A            
+        defb    0x26            
+        defb    0x29            
+        defb    0x3E            
+        defb    0x0B            
 #ENDASM
  5042  REM 
 #ASM
-        defb    $ee             
-        defb    $3e             
-        defb    $0d             
+        defb    0xEE            
+        defb    0x3E            
+        defb    0x0D            
 #ENDASM
  5990  POKE 16625,0
- 5995  LET C1= USR &L40e0
+ 5995  LET C1= USR &L40E0
  5999  RETURN 
  6000  REM 
  6002  IF J=1 OR J=4 THEN  POKE 18375,167
@@ -3804,7 +3804,7 @@ L47f1:
  6385  PRINT  AT 21,1;"%P%R%E%S%S\::%E%N%T%E%R\::%W%H%E%N\::%R%E%A%D%Y"
  6387  INPUT Y$
  6390  POKE 16625,128
- 6392  LET C1= USR &L40e0
+ 6392  LET C1= USR &L40E0
  6399  RETURN 
  9000  STOP 
  9010  INPUT A
@@ -3837,156 +3837,156 @@ L47f1:
 #VARS B$=" "
 #VARS Y$=""
 
-#SYSVARS=\00\f0\23\e6\60\08\61\ff\63\78\64\7c\64\d2\60\00\c0\7c\64\7c\64\23\5d\40\00\02\be\23\bf\fd\ff\1f\d3\60\fa\23\01\00\00\8d\0c\46\ff\4b\b9\00\00\bc\21\17\40\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\81\00\00\00\00\80\80\80\80\80\80\80\80\80\80\80\80\89\96\90\00\00\00\00\00\00\00
-#D_FILE=\76\38\2a\39\00\39\26\35\2a\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\76
+#SYSVARS=0x00,0xF0,0x23,0xE6,0x60,0x08,0x61,0xFF,0x63,0x78,0x64,0x7C,0x64,0xD2,0x60,0x00,0xC0,0x7C,0x64,0x7C,0x64,0x23,0x5D,0x40,0x00,0x02,0xBE,0x23,0xBF,0xFD,0xFF,0x1F,0xD3,0x60,0xFA,0x23,0x01,0x00,0x00,0x8D,0x0C,0x46,0xFF,0x4B,0xB9,0x00,0x00,0xBC,0x21,0x17,0x40,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x81,0x00,0x00,0x00,0x00,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x89,0x96,0x90,0x00,0x00,0x00,0x00,0x00,0x00,0x00
+#D_FILE=0x76,0x38,0x2A,0x39,0x00,0x39,0x26,0x35,0x2A,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x76
 #WORKSPACE=
 
 #AUTOSTART=9212
 #FAST=0
 
-# [$4000] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# [$4040] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!###
-# [$4080] #-------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----------------------
-# [$40c0] --------------------------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-
-# [$4100] --CCCCCCCCCCCCCCCCCCCCC-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-------CCCCCCCCCCCCCCCCCC
-# [$4180] CCCCCCCCCCCCCCCCCCCCCCC-----------------------------------------
-# [$41c0] --------------------CCCCCCCCCCCCCC----CCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4200] CCCCCCCCCC----CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC----CCCCCCCCCC
-# [$4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4280] CCCCCCCCCCC-----CCCCCCCCC---------------------------------------
-# [$42c0] ----------------------------------------------------------------
-# [$4300] ------------------------------------------------CCCCCCCCCCCCCCCC
-# [$4340] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4380] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$43c0] CCCCCCCCCC-----------------------------------------------CCCCCCC
-# [$4400] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4440] CCCCCCCCCCCCCCCCCCC---------CCCCCCCCCCCCCC-------------CCCCCCCCC
-# [$4480] CCCCCCCCCCCCCCCCCCCCCCCCC-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC----
-# [$44c0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC----------CCCCCCCCCCCCCCCCCCCCCCCC
-# [$4500] CCCCCC------------------------------CCCCCCCCCCCCCC-CCCCCCCCCCCCC
-# [$4540] CCCCCCCCCCCCCCCCCCCCC-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------
-# [$4580] --------CCCCCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$45c0] CCCCCCCCCCCCCCCCCCCCCCCC----------------------------------------
-# [$4600] ----------------------------------------------------------------
-# [$4640] ----------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4680] CCCCCCCCCCCCCCCCCCC---------------------------------CCCCCCCCCCCC
-# [$46c0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCCCCCCCCCCC---
-# [$4740] ----------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----------------CCCC
-# [$4780] CCCCCCCCCCCCCCCCCCCCCCCC----------------------------------------
-# [$47c0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-# [$4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-------------------------
-# [$4840] ----------------------------------------------------------------
-# [$4880] ----------------------------------------------------------------
-# [$48c0] ----------------------------------------------------------------
-# [$4900] ----------------------------------------------------------------
-# [$4940] ----------------------------------------------------------------
-# [$4980] ----------------------------------------------------------------
-# [$49c0] ----------------------------------------------------------------
-# [$4a00] ----------------------------------------------------------------
-# [$4a40] ----------------------------------------------------------------
-# [$4a80] ----------------------------------------------------------------
-# [$4ac0] ----------------------------------------------------------------
-# [$4b00] ----------------------------------------------------------------
-# [$4b40] ----------------------------------------------------------------
-# [$4b80] ----------------------------------------------------------------
-# [$4bc0] ----------------------------------------------------------------
-# [$4c00] ----------------------------------------------------------------
-# [$4c40] ----------------------------------------------------------------
-# [$4c80] ----------------------------------------------------------------
-# [$4cc0] ----------------------------------------------------------------
-# [$4d00] ----------------------------------------------------------------
-# [$4d40] ----------------------------------------------------------------
-# [$4d80] ----------------------------------------------------------------
-# [$4dc0] ----------------------------------------------------------------
-# [$4e00] ----------------------------------------------------------------
-# [$4e40] ----------------------------------------------------------------
-# [$4e80] ----------------------------------------------------------------
-# [$4ec0] ----------------------------------------------------------------
-# [$4f00] ----------------------------------------------------------------
-# [$4f40] ----------------------------------------------------------------
-# [$4f80] ----------------------------------------------------------------
-# [$4fc0] ----------------------------------------------------------------
-# [$5000] ----------------------------------------------------------------
-# [$5040] ----------------------------------------------------------------
-# [$5080] ----------------------------------------------------------------
-# [$50c0] -----------------###############################################
-# [$5100] ################################################################
-# [$5140] ################################################################
-# [$5180] ################################################################
-# [$51c0] ################################################################
-# [$5200] ################################################################
-# [$5240] ################################################################
-# [$5280] ################################################################
-# [$52c0] ################################################################
-# [$5300] ################################################################
-# [$5340] ################################################################
-# [$5380] ################################################################
-# [$53c0] ################################################################
-# [$5400] ################################################################
-# [$5440] ################################################################
-# [$5480] ################################################################
-# [$54c0] ################################################################
-# [$5500] ################################################################
-# [$5540] ################################################################
-# [$5580] ################################################################
-# [$55c0] ################################################################
-# [$5600] ################################################################
-# [$5640] ################################################################
-# [$5680] ################################################################
-# [$56c0] ################################################################
-# [$5700] ################################################################
-# [$5740] ################################################################
-# [$5780] ################################################################
-# [$57c0] ################################################################
-# [$5800] ################################################################
-# [$5840] ################################################################
-# [$5880] ################################################################
-# [$58c0] ################################################################
-# [$5900] ################################################################
-# [$5940] ################################################################
-# [$5980] ################################################################
-# [$59c0] ################################################################
-# [$5a00] ################################################################
-# [$5a40] ################################################################
-# [$5a80] ################################################################
-# [$5ac0] ################################################################
-# [$5b00] ################################################################
-# [$5b40] ################################################################
-# [$5b80] ##########################################################------
-# [$5bc0] --------------------------#####----#############################
-# [$5c00] ################################################################
-# [$5c40] ################################################################
-# [$5c80] ################################################################
-# [$5cc0] ################################################################
-# [$5d00] ################################################################
-# [$5d40] ################################################################
-# [$5d80] ################################################################
-# [$5dc0] ################################################################
-# [$5e00] ################################################################
-# [$5e40] ################################################################
-# [$5e80] ################################################################
-# [$5ec0] ################################################################
-# [$5f00] ################################################################
-# [$5f40] ################################################################
-# [$5f80] ################################################################
-# [$5fc0] ################################################################
-# [$6000] ################################################################
-# [$6040] ################################################################
-# [$6080] ################################################################
-# [$60c0] ######################################**************************
-# [$6100] ****************************************************************
-# [$6140] ****************************************************************
-# [$6180] ****************************************************************
-# [$61c0] ****************************************************************
-# [$6200] ****************************************************************
-# [$6240] ****************************************************************
-# [$6280] ****************************************************************
-# [$62c0] ****************************************************************
-# [$6300] ****************************************************************
-# [$6340] ****************************************************************
-# [$6380] ****************************************************************
-# [$63c0] ***************************************************************$
-# [$6400] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-# [$6440] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# [0x4000] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# [0x4040] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!###
+# [0x4080] #-------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----------------------
+# [0x40C0] --------------------------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-
+# [0x4100] --CCCCCCCCCCCCCCCCCCCCC-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-------CCCCCCCCCCCCCCCCCC
+# [0x4180] CCCCCCCCCCCCCCCCCCCCCCC-----------------------------------------
+# [0x41C0] --------------------CCCCCCCCCCCCCC----CCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4200] CCCCCCCCCC----CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC----CCCCCCCCCC
+# [0x4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4280] CCCCCCCCCCC-----CCCCCCCCC---------------------------------------
+# [0x42C0] ----------------------------------------------------------------
+# [0x4300] ------------------------------------------------CCCCCCCCCCCCCCCC
+# [0x4340] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4380] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x43C0] CCCCCCCCCC-----------------------------------------------CCCCCCC
+# [0x4400] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4440] CCCCCCCCCCCCCCCCCCC---------CCCCCCCCCCCCCC-------------CCCCCCCCC
+# [0x4480] CCCCCCCCCCCCCCCCCCCCCCCCC-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC----
+# [0x44C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC----------CCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4500] CCCCCC------------------------------CCCCCCCCCCCCCC-CCCCCCCCCCCCC
+# [0x4540] CCCCCCCCCCCCCCCCCCCCC-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------
+# [0x4580] --------CCCCCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x45C0] CCCCCCCCCCCCCCCCCCCCCCCC----------------------------------------
+# [0x4600] ----------------------------------------------------------------
+# [0x4640] ----------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4680] CCCCCCCCCCCCCCCCCCC---------------------------------CCCCCCCCCCCC
+# [0x46C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCCCCCCCCCCC---
+# [0x4740] ----------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----------------CCCC
+# [0x4780] CCCCCCCCCCCCCCCCCCCCCCCC----------------------------------------
+# [0x47C0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+# [0x4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-------------------------
+# [0x4840] ----------------------------------------------------------------
+# [0x4880] ----------------------------------------------------------------
+# [0x48C0] ----------------------------------------------------------------
+# [0x4900] ----------------------------------------------------------------
+# [0x4940] ----------------------------------------------------------------
+# [0x4980] ----------------------------------------------------------------
+# [0x49C0] ----------------------------------------------------------------
+# [0x4A00] ----------------------------------------------------------------
+# [0x4A40] ----------------------------------------------------------------
+# [0x4A80] ----------------------------------------------------------------
+# [0x4AC0] ----------------------------------------------------------------
+# [0x4B00] ----------------------------------------------------------------
+# [0x4B40] ----------------------------------------------------------------
+# [0x4B80] ----------------------------------------------------------------
+# [0x4BC0] ----------------------------------------------------------------
+# [0x4C00] ----------------------------------------------------------------
+# [0x4C40] ----------------------------------------------------------------
+# [0x4C80] ----------------------------------------------------------------
+# [0x4CC0] ----------------------------------------------------------------
+# [0x4D00] ----------------------------------------------------------------
+# [0x4D40] ----------------------------------------------------------------
+# [0x4D80] ----------------------------------------------------------------
+# [0x4DC0] ----------------------------------------------------------------
+# [0x4E00] ----------------------------------------------------------------
+# [0x4E40] ----------------------------------------------------------------
+# [0x4E80] ----------------------------------------------------------------
+# [0x4EC0] ----------------------------------------------------------------
+# [0x4F00] ----------------------------------------------------------------
+# [0x4F40] ----------------------------------------------------------------
+# [0x4F80] ----------------------------------------------------------------
+# [0x4FC0] ----------------------------------------------------------------
+# [0x5000] ----------------------------------------------------------------
+# [0x5040] ----------------------------------------------------------------
+# [0x5080] ----------------------------------------------------------------
+# [0x50C0] -----------------###############################################
+# [0x5100] ################################################################
+# [0x5140] ################################################################
+# [0x5180] ################################################################
+# [0x51C0] ################################################################
+# [0x5200] ################################################################
+# [0x5240] ################################################################
+# [0x5280] ################################################################
+# [0x52C0] ################################################################
+# [0x5300] ################################################################
+# [0x5340] ################################################################
+# [0x5380] ################################################################
+# [0x53C0] ################################################################
+# [0x5400] ################################################################
+# [0x5440] ################################################################
+# [0x5480] ################################################################
+# [0x54C0] ################################################################
+# [0x5500] ################################################################
+# [0x5540] ################################################################
+# [0x5580] ################################################################
+# [0x55C0] ################################################################
+# [0x5600] ################################################################
+# [0x5640] ################################################################
+# [0x5680] ################################################################
+# [0x56C0] ################################################################
+# [0x5700] ################################################################
+# [0x5740] ################################################################
+# [0x5780] ################################################################
+# [0x57C0] ################################################################
+# [0x5800] ################################################################
+# [0x5840] ################################################################
+# [0x5880] ################################################################
+# [0x58C0] ################################################################
+# [0x5900] ################################################################
+# [0x5940] ################################################################
+# [0x5980] ################################################################
+# [0x59C0] ################################################################
+# [0x5A00] ################################################################
+# [0x5A40] ################################################################
+# [0x5A80] ################################################################
+# [0x5AC0] ################################################################
+# [0x5B00] ################################################################
+# [0x5B40] ################################################################
+# [0x5B80] ##########################################################------
+# [0x5BC0] --------------------------#####----#############################
+# [0x5C00] ################################################################
+# [0x5C40] ################################################################
+# [0x5C80] ################################################################
+# [0x5CC0] ################################################################
+# [0x5D00] ################################################################
+# [0x5D40] ################################################################
+# [0x5D80] ################################################################
+# [0x5DC0] ################################################################
+# [0x5E00] ################################################################
+# [0x5E40] ################################################################
+# [0x5E80] ################################################################
+# [0x5EC0] ################################################################
+# [0x5F00] ################################################################
+# [0x5F40] ################################################################
+# [0x5F80] ################################################################
+# [0x5FC0] ################################################################
+# [0x6000] ################################################################
+# [0x6040] ################################################################
+# [0x6080] ################################################################
+# [0x60C0] ######################################**************************
+# [0x6100] ****************************************************************
+# [0x6140] ****************************************************************
+# [0x6180] ****************************************************************
+# [0x61C0] ****************************************************************
+# [0x6200] ****************************************************************
+# [0x6240] ****************************************************************
+# [0x6280] ****************************************************************
+# [0x62C0] ****************************************************************
+# [0x6300] ****************************************************************
+# [0x6340] ****************************************************************
+# [0x6380] ****************************************************************
+# [0x63C0] ***************************************************************$
+# [0x6400] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+# [0x6440] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
