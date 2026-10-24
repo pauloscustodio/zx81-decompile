@@ -162,7 +162,6 @@ struct Basic {
     std::vector<BasicVar> basic_vars;
     Symtab symtab;
     Bytes d_file_bytes;
-    Bytes e_line_bytes;
     int autostart;
     int auto_increment;
     bool fast;

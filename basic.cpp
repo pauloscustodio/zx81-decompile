@@ -99,7 +99,6 @@ void Basic::clear() {
     basic_vars.clear();
     symtab.init();
     d_file_bytes = get_empty_d_file();
-    e_line_bytes = get_empty_e_line();
     autostart = 0;
     auto_increment = 10;
     fast = false;
@@ -485,13 +484,9 @@ void Basic::write_basic_vars(std::ofstream& ofs) const {
 void Basic::write_basic_system(std::ofstream& ofs) const {
     int d_file = dpeek(D_FILE);
     int vars = dpeek(VARS);
-    int e_line = dpeek(E_LINE);
-    int stkbot = dpeek(STKBOT);
 
     ofs << "#SYSVARS=" << encode_hex(peek_bytes(VERSN, PROG - VERSN)) << std::endl;
     ofs << "#D_FILE=" << encode_hex(peek_bytes(d_file, vars - d_file)) << std::endl;
-    ofs << "#WORKSPACE=" << encode_hex(peek_bytes(e_line,
-                                       stkbot - e_line)) << std::endl;
     ofs << std::endl;
 
     // autostart

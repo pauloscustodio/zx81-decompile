@@ -101,7 +101,7 @@ void Compiler::compile_prog() {
         end_basic_line();
     }
 
-    init_video_to_stkend(addr, basic->d_file_bytes, basic->e_line_bytes);
+    init_video_to_stkend(addr, basic->d_file_bytes);
 
     // autostart
     if (basic->autostart) {
@@ -366,7 +366,7 @@ void Compiler::compile_vars() {
     }
 
     poke(addr++, 0x80);
-    init_e_line_to_stkend(addr, basic->e_line_bytes);
+    init_e_line_to_stkend(addr);
 }
 
 void Compiler::assemble(AsmLine& asm_line) {

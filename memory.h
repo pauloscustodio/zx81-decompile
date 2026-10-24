@@ -40,11 +40,9 @@ public:
     int poke_bytes(int addr, const Byte* data, int size);
 
     static Bytes get_empty_d_file();
-    static Bytes get_empty_e_line();
 
-    void init_video_to_stkend(int addr, const Bytes& d_file_bytes,
-                              const Bytes& e_line_bytes);
-    void init_e_line_to_stkend(int addr, const Bytes& e_line_bytes);
+    void init_video_to_stkend(int addr, const Bytes& d_file_bytes);
+    void init_e_line_to_stkend(int addr);
 
 private:
     std::array<Byte, MEM_SIZE> mem{ 0 };
@@ -71,7 +69,5 @@ void fpoke(int addr, double value);
 int poke_bytes(int addr, const Bytes& bytes);
 int poke_bytes(int addr, const Byte* data, int size);
 Bytes get_empty_d_file();
-Bytes get_empty_e_line();
-void init_video_to_stkend(int addr, const Bytes& d_file_bytes,
-                          const Bytes& e_line_bytes);
-void init_e_line_to_stkend(int addr, const Bytes& e_line_bytes);
+void init_video_to_stkend(int addr, const Bytes& d_file_bytes);
+void init_e_line_to_stkend(int addr);

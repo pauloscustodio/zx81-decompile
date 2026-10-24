@@ -718,9 +718,6 @@ void Parser::parse_meta_line() {
     else if (match("D_FILE") && match("=")) {
         basic->d_file_bytes = parse_byte_list();
     }
-    else if (match("WORKSPACE") && match("=")) {
-        basic->e_line_bytes = parse_byte_list();
-    }
     else if (match("AUTOSTART") && match("=") && parse_integer(n)
              && parse_end_basic()) {
         basic->autostart = n;

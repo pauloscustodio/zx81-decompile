@@ -20,7 +20,6 @@ void Decompiler::decompile(Basic& basic_) {
 
     decompile_sysvars();
     decompile_d_file();
-    decompile_e_line();
     decompile_basic();
     decompile_vars();
     disassemble();
@@ -57,12 +56,6 @@ void Decompiler::decompile_d_file() {
     int d_file = dpeek(D_FILE);
     int vars = dpeek(VARS);
     basic->d_file_bytes = peek_bytes(d_file, vars - d_file);
-}
-
-void Decompiler::decompile_e_line() {
-    int e_line = dpeek(E_LINE);
-    int stkbot = dpeek(STKBOT);
-    basic->e_line_bytes = peek_bytes(e_line, stkbot - e_line);
 }
 
 void Decompiler::decompile_basic() {

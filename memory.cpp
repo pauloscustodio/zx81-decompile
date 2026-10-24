@@ -75,13 +75,7 @@ Bytes Memory::get_empty_d_file() {
     return out;
 }
 
-Bytes Memory::get_empty_e_line() {
-    Bytes out;
-    return out;
-}
-
-void Memory::init_video_to_stkend(int addr, const Bytes& d_file_bytes,
-                                  const Bytes& e_line_bytes) {
+void Memory::init_video_to_stkend(int addr, const Bytes& d_file_bytes) {
     dpoke(D_FILE, addr);
     dpoke(NXTLIN, addr);
     if (dpeek(DF_CC) < addr + 1
@@ -94,13 +88,12 @@ void Memory::init_video_to_stkend(int addr, const Bytes& d_file_bytes,
     dpoke(VARS, addr);
     poke(addr++, 0x80);
 
-    init_e_line_to_stkend(addr, e_line_bytes);
+    init_e_line_to_stkend(addr);
 }
 
-void Memory::init_e_line_to_stkend(int addr, const Bytes& e_line_bytes) {
+void Memory::init_e_line_to_stkend(int addr) {
     // edit line
     dpoke(E_LINE, addr);
-    addr = poke_bytes(addr, e_line_bytes);
 
     // calculator stack
     dpoke(STKBOT, addr);
@@ -318,15 +311,10 @@ Bytes get_empty_d_file() {
     return Memory::get_empty_d_file();
 }
 
-Bytes get_empty_e_line() {
-    return Memory::get_empty_e_line();
+void init_video_to_stkend(int addr, const Bytes& d_file_bytes) {
+    g_mem.init_video_to_stkend(addr, d_file_bytes);
 }
 
-void init_video_to_stkend(int addr, const Bytes& d_file_bytes,
-                          const Bytes& e_line_bytes) {
-    g_mem.init_video_to_stkend(addr, d_file_bytes, e_line_bytes);
-}
-
-void init_e_line_to_stkend(int addr, const Bytes& e_line_bytes) {
-    g_mem.init_e_line_to_stkend(addr, e_line_bytes);
+void init_e_line_to_stkend(int addr) {
+    g_mem.init_e_line_to_stkend(addr);
 }
