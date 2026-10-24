@@ -4,10 +4,7 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#include "decompiler.h"
-#include "errors.h"
 #include "getopt.h"
-#include "memory.h"
 #include "utils.h"
 #include <cstdlib>
 #include <iostream>
@@ -51,6 +48,7 @@ int main(int argc, char* argv[]) {
         out_file = replace_extension(p_file, ".bas");
     }
 
+#if 0
     read_p_file(p_file);
     if (err_get_count()) {
         exit_status();
@@ -70,4 +68,5 @@ int main(int argc, char* argv[]) {
     basic.write_b81_file(out_file);
 
     exit_status();
+#endif
 }

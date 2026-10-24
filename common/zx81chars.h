@@ -28,6 +28,6 @@ enum ZX81char {
 };
 
 std::string decode_zx81(char c);
-Bytes encode_zx81(const std::string& str);
-Bytes encode_zx81(const char*& p);
+Bytes encode_zx81(const std::string& str, const SourceLoc& loc);
+Bytes encode_zx81(const char*& p, const SourceLoc& loc);
 std::string encode_hex(const Bytes& bytes);

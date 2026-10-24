@@ -4,11 +4,7 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#include "basic.h"
-#include "compiler.h"
-#include "errors.h"
 #include "getopt.h"
-#include "memory.h"
 #include "utils.h"
 #include <cstdlib>
 #include <iostream>
@@ -45,6 +41,7 @@ int main(int argc, char* argv[]) {
         out_file = replace_extension(b81_file, ".p");
     }
 
+#if 0
     Basic basic;
     basic.parse_b81_file(b81_file);
     if (err_get_count()) {
@@ -59,4 +56,5 @@ int main(int argc, char* argv[]) {
     write_p_file(out_file);
 
     exit_status();
+#endif
 }

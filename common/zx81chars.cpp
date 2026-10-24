@@ -36,12 +36,12 @@ std::string decode_zx81(char c) {
     return code;
 }
 
-Bytes encode_zx81(const std::string& str) {
+Bytes encode_zx81(const std::string& str, const SourceLoc& loc) {
     const char* p = str.c_str();
-    return encode_zx81(p);
+    return encode_zx81(p, loc);
 }
 
-Bytes encode_zx81(const char*& p) {
+Bytes encode_zx81(const char*& p, const SourceLoc& loc) {
     Bytes bytes;
     while (*p != '\0') {
         if (p[0] == '\\' &&
@@ -69,7 +69,7 @@ Bytes encode_zx81(const char*& p) {
             }
         }
         if (!encoded) {
-            error("cannot encode", p);
+            error(loc, "cannot encode: " + std::string(p));
             break;
         }
     }
