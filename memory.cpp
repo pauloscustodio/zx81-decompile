@@ -8,7 +8,7 @@
 #include "encode.h"
 #include "errors.h"
 #include "memory.h"
-#include "zfloat.h"
+#include "zx81float.h"
 #include "zx81consts.h"
 #include <array>
 #include <cstdint>

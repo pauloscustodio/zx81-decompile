@@ -9,7 +9,7 @@
 #include "errors.h"
 #include "memory.h"
 #include "release_assert.h"
-#include "zfloat.h"
+#include "zx81float.h"
 #include <iostream>
 #include <sstream>
 
