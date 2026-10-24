@@ -15,6 +15,7 @@ use Text::Diff;
 use File::Copy;
 use File::Spec;
 use Text::ParseWords qw(shellwords);
+use ZX81::Tape       qw(dump_p);
 
 $ENV{PATH} = join( $Config{path_sep}, "build/Debug", $ENV{PATH} );
 
@@ -26,7 +27,7 @@ unlink_testfiles();
 
 #------------------------------------------------------------------------------
 sub check_text_file {
-    my ( $got_file, $exp_file ) = @_;
+    my ( $exp_file, $got_file ) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     ( my $got_text = path($got_file)->slurp ) =~ s/\r\n/\n/g;
@@ -47,6 +48,31 @@ sub check_text_file {
     ok $diff eq "", "text files are equal";
 
     ( Test::More->builder->is_passing ) or die;
+}
+
+#------------------------------------------------------------------------------
+sub compare_p {
+    my ( $exp_p, $got_p ) = @_;
+
+    my $exp_bytes = path($exp_p)->slurp_raw;
+    my $got_bytes = path($got_p)->slurp_raw;
+
+    eq_or_dump_diff(
+        $exp_bytes, $got_bytes,
+        { address => 0x4009 },
+        "diff $exp_p $got_p"
+    );
+    if ( $exp_bytes ne $got_bytes ) {
+        if ( $ENV{DEVELOPER} ) {
+            dump_p( $exp_p, "$exp_p.txt" );
+            dump_p( $got_p, "$got_p.txt" );
+            system "start \"\" WinMergeU.exe $exp_p.txt $got_p.txt";
+        }
+    }
+
+    if ( Test::More->builder->is_passing ) {
+        unlink "$exp_p.txt", "$got_p.txt";
+    }
 }
 
 #------------------------------------------------------------------------------

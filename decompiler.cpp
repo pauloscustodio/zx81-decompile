@@ -301,8 +301,6 @@ void Decompiler::decompile_vars() {
             // second, ... letter
             while (((c = peek(addr)) & 0xc0) == 0x00) {
                 addr++;
-                c &= 0x3f;
-                c |= 0x20;
                 var.name += decode_zx81(c);
             }
 
@@ -314,8 +312,7 @@ void Decompiler::decompile_vars() {
             }
             else {
                 addr++;
-                c &= 0x3f;
-                c |= 0x20;
+                c &= 0x7f;
                 var.name += decode_zx81(c);
             }
             var.value = fpeek(addr);
