@@ -4,10 +4,6 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#ifndef X
-#define X(name, value)
-#endif
-
 // system variables
 X(ERR_NO, 0x4000)
 X(FLAGS, 0x4001)
@@ -54,5 +50,3 @@ X(PROG, 0x407d)
 
 // ROM routines
 X(KEYBOARD, 0x02bb)
-
-#undef X

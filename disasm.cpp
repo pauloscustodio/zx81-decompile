@@ -25,7 +25,7 @@ AsmLabels g_asm_labels;
 
 AsmLabels::AsmLabels() {
 #define X(name, value)		add(#name, value);
-#include "consts.def"
+#include "zx81consts.def"
 }
 
 void AsmLabels::add(const std::string& name, int value) {

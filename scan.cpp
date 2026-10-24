@@ -4,8 +4,8 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#include "consts.h"
 #include "scan.h"
+#include "types.h"
 #include <cctype>
 
 void Scan::set_text(const std::string& text_) {

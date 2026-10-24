@@ -4,12 +4,12 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#include "consts.h"
 #include "basic.h"
 #include "encode.h"
 #include "errors.h"
 #include "memory.h"
 #include "zfloat.h"
+#include "zx81consts.h"
 #include <array>
 #include <cstdint>
 #include <fstream>

@@ -6,8 +6,9 @@
 
 #pragma once
 
+#include "types.h"
+#include "zx81consts.h"
 #include <string>
-#include "consts.h"
 
 std::string decode_zx81(char c);
 Bytes encode_zx81(const std::string& str);

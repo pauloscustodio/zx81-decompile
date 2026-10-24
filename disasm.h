@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "consts.h"
+#include "zx81consts.h"
 #include <array>
 #include <string>
 #include <unordered_map>

@@ -6,19 +6,10 @@
 
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include <vector>
-
-#define NUM_ELEMS(a)	(sizeof(a) / sizeof(a[0]))
-#define INT(x)			static_cast<int>(x)
-
-typedef uint8_t Byte;
-typedef std::vector<uint8_t> Bytes;
-
 enum ZX81const {
 #define X(name, value)		name = value,
-#include "consts.def"
+#include "zx81consts.def"
+#undef X
 };
 
 static inline const int MEM_SIZE = 0x10000;
@@ -28,4 +19,3 @@ static inline const int NumRows = 24;
 static inline const int NumCols = 32;
 static inline const int MaxLineNum = 0x3fff;
 static inline const int FlagSlow = 0x40;
-

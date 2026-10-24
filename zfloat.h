@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "consts.h"
+#include "types.h"
 #include <array>
 #include <cstdint>
 

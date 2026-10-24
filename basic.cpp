@@ -42,7 +42,7 @@ void Symtab::init() {
     symbols.clear();
 
 #define X(name, value)		add(Symbol::Type::Const, #name, value);
-#include "consts.def"
+#include "zx81consts.def"
 }
 
 void Symtab::add(Symbol::Type type, const std::string& name, int value) {

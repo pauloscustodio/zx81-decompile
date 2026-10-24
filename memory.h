@@ -6,7 +6,8 @@
 
 #pragma once
 
-#include "consts.h"
+#include "types.h"
+#include "zx81consts.h"
 #include <array>
 #include <string>
 
