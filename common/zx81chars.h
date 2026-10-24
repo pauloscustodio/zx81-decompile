@@ -9,6 +9,24 @@
 #include "types.h"
 #include <string>
 
+enum ZX81char {
+    T_none = 0x100,
+    T_integer,
+    T_float,
+    T_string,
+    T_ident,
+    T_rem_code,
+    T_line_addr_ref,
+    T_line_num_ref,
+    T_const_expr,
+    T_unary_minus,
+    T_ASMPC,
+
+#define X(code, name, str) name = code,
+#include "zx81chars.def"
+#undef X
+};
+
 std::string decode_zx81(char c);
 Bytes encode_zx81(const std::string& str);
 Bytes encode_zx81(const char*& p);
