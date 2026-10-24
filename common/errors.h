@@ -16,6 +16,7 @@ struct SourceLoc {
         : filename(filename), line(line) {}
 };
 
+int get_error_count();
 void error(const SourceLoc& loc, const std::string& message);
 void error(const std::string& message);
 [[noreturn]] void fatal_error(const std::string& message);

@@ -10,6 +10,10 @@
 
 static int num_errors = 0;
 
+int get_error_count() {
+    return num_errors;
+}
+
 void error(const SourceLoc& loc, const std::string& message) {
     if (loc.filename.empty()) {
         std::cout << "error: " << message << std::endl;

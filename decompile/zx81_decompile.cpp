@@ -49,11 +49,11 @@ int main(int argc, char* argv[]) {
 
     Memory* mem = new Memory();
     mem->read_p_file(p_file);
-
-#if 0
-    if (err_get_count()) {
+    if (get_error_count()) {
         exit_status();
     }
+
+#if 0
 
     Basic basic;
     if (ctl_file.empty()) {
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     else {
         decompile(basic, ctl_file);
     }
-    if (err_get_count()) {
+    if (get_error_count()) {
         exit_status();
     }
 

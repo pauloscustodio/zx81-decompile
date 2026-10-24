@@ -46,18 +46,18 @@ int main(int argc, char* argv[]) {
 #if 0
     Basic basic;
     basic.parse_b81_file(b81_file);
-    if (err_get_count()) {
+    if (get_error_count()) {
         exit_status();
     }
 
     compile(basic);
-    if (err_get_count()) {
-        exit_status();
-    }
 #endif
 
     Memory* mem = new Memory();
     mem->write_p_file(out_file);
+    if (get_error_count()) {
+        exit_status();
+    }
 
     delete mem;
     exit_status();
