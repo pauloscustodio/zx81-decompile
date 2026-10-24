@@ -19,3 +19,4 @@ static inline const int NumRows = 24;
 static inline const int NumCols = 32;
 static inline const int MaxLineNum = 0x3fff;
 static inline const int FlagSlow = 0x40;
+static inline const int FlagFast = 0x00;

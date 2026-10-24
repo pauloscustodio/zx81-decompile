@@ -25,9 +25,16 @@ void error(const std::string& message) {
     error(SourceLoc(), message);
 }
 
-[[noreturn]] void exit_error_status() {
+void fatal_error(const std::string& message) {
+    error(message);
+    exit_status();
+}
+
+[[noreturn]] void exit_status() {
     if (num_errors > 0) {
         std::exit(EXIT_FAILURE);
     }
-    std::exit(EXIT_SUCCESS);
+    else {
+        std::exit(EXIT_SUCCESS);
+    }
 }

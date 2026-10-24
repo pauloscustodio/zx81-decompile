@@ -14,8 +14,10 @@
 class Memory {
 public:
     Memory();
+    virtual ~Memory() = default;
 
     void clear();
+    void init_basic();
 
     // read/write .p file
     void read_p_file(const std::string& filename);
@@ -50,24 +52,3 @@ private:
     int write_empty_d_file(int addr);
     int write_empty_vars(int addr);
 };
-
-void clear_memory();
-void read_p_file(const std::string& filename);
-void write_p_file(const std::string& filename);
-int peek(int addr);
-int dpeek(int addr);
-int speek(int addr);
-int dpeek_be(int addr);
-double fpeek(int addr);
-Bytes peek_bytes(int addr, int size);
-std::string peek_hex(int addr, int len);
-int get_line_addr(int line_num);
-void poke(int addr, int value);
-void dpoke(int addr, int value);
-void dpoke_be(int addr, int value);
-void fpoke(int addr, double value);
-int poke_bytes(int addr, const Bytes& bytes);
-int poke_bytes(int addr, const Byte* data, int size);
-Bytes get_empty_d_file();
-void init_video_to_stkend(int addr, const Bytes& d_file_bytes);
-void init_e_line_to_stkend(int addr);

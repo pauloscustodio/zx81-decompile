@@ -4,27 +4,34 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#include "basic.h"
 #include "errors.h"
 #include "memory.h"
+#include "types.h"
 #include "zx81chars.h"
 #include "zx81consts.h"
 #include "zx81float.h"
 #include <array>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
-
-static Memory g_mem;
+#include <string>
 
 //-----------------------------------------------------------------------------
 // init memory
 //-----------------------------------------------------------------------------
 
 Memory::Memory() {
-    clear();
+    init_basic();
 }
 
 void Memory::clear() {
+    mem.fill(0);
+}
+
+void Memory::init_basic() {
+    clear();
+
+    // memory pointers
     int addr = PROG;
     dpoke(D_FILE, addr);
     dpoke(NXTLIN, addr);
@@ -32,21 +39,23 @@ void Memory::clear() {
     dpoke(VARS, addr);
     addr = write_empty_vars(addr);
     dpoke(E_LINE, addr);
-    dpoke(STKBOT, addr);
-    dpoke(STKEND, addr);
+    dpoke(CH_ADD, addr + 1);
+    dpoke(STKBOT, addr + 2);
+    dpoke(STKEND, addr + 2);
 
     // print position
-    dpoke(DF_CC, dpeek(D_FILE) + 1);
     poke(DF_SZ, 2);
-    poke(S_POSN_ROW, NumRows + 1);
+    dpoke(DF_CC, dpeek(D_FILE) + 1);
+    poke(S_POSN_ROW, NumRows);
     poke(S_POSN_COL, NumCols + 1);
-    poke(PR_CC, PRBUFF >> 8);
+    poke(PR_CC, 0xbc);
 
     // system variables
     dpoke(MEM, MEMBOT);
     dpoke(LAST_K, 0xffff);
-    poke(DEBOUNCE, 0xff);
+    poke(DEBOUNCE, 0x0f);
     poke(MARGIN, 55);
+    dpoke(T_ADDR, 0x0c6b);
     dpoke(FRAMES, 0xffff);
     poke(CDFLAG, FlagSlow);
     poke(PRBUFF + 32, C_newline);
@@ -78,10 +87,7 @@ Bytes Memory::get_empty_d_file() {
 void Memory::init_video_to_stkend(int addr, const Bytes& d_file_bytes) {
     dpoke(D_FILE, addr);
     dpoke(NXTLIN, addr);
-    if (dpeek(DF_CC) < addr + 1
-            || dpeek(DF_CC) >= addr + 1 + NumRows * (NumCols + 1)) {
-        dpoke(DF_CC, addr + 1);
-    }
+    dpoke(DF_CC, addr + 1);
     addr = poke_bytes(addr, d_file_bytes);
 
     // vars
@@ -92,12 +98,10 @@ void Memory::init_video_to_stkend(int addr, const Bytes& d_file_bytes) {
 }
 
 void Memory::init_e_line_to_stkend(int addr) {
-    // edit line
     dpoke(E_LINE, addr);
-
-    // calculator stack
-    dpoke(STKBOT, addr);
-    dpoke(STKEND, addr);
+    dpoke(CH_ADD, addr + 1);
+    dpoke(STKBOT, addr + 2);
+    dpoke(STKEND, addr + 2);
 }
 
 //-----------------------------------------------------------------------------
@@ -109,7 +113,7 @@ void Memory::read_p_file(const std::string& filename) {
     std::ifstream ifs(filename, std::ios::binary);
     if (!ifs.is_open()) {
         perror(filename.c_str());
-        fatal_error("open file", filename);
+        fatal_error("open file: " + filename);
     }
 
     // get size
@@ -131,7 +135,7 @@ void Memory::write_p_file(const std::string& filename) {
     std::ofstream ofs(filename, std::ios::binary);
     if (!ofs.is_open()) {
         perror(filename.c_str());
-        fatal_error("open file", filename);
+        fatal_error("open file: " + filename);
     }
 
     size_t size = dpeek(E_LINE) - SAVE_ADDR;
@@ -237,84 +241,4 @@ int Memory::poke_bytes(int addr, const Byte* data, int size) {
         poke(addr++, *(data++));
     }
     return addr;
-}
-
-void clear_memory() {
-    g_mem.clear();
-}
-
-void read_p_file(const std::string& filename) {
-    g_mem.read_p_file(filename);
-}
-
-void write_p_file(const std::string& filename) {
-    g_mem.write_p_file(filename);
-}
-
-int peek(int addr) {
-    return g_mem.peek(addr);
-}
-
-int dpeek(int addr) {
-    return g_mem.dpeek(addr);
-}
-
-int speek(int addr) {
-    return g_mem.speek(addr);
-}
-
-int dpeek_be(int addr) {
-    return g_mem.dpeek_be(addr);
-}
-
-double fpeek(int addr) {
-    return g_mem.fpeek(addr);
-}
-
-Bytes peek_bytes(int addr, int size) {
-    return g_mem.peek_bytes(addr, size);
-}
-
-std::string peek_hex(int addr, int len) {
-    return g_mem.peek_hex(addr, len);
-}
-
-int get_line_addr(int line_num) {
-    return g_mem.get_line_addr(line_num);
-}
-
-void poke(int addr, int value) {
-    g_mem.poke(addr, value);
-}
-
-void dpoke(int addr, int value) {
-    g_mem.dpoke(addr, value);
-}
-
-void dpoke_be(int addr, int value) {
-    g_mem.dpoke_be(addr, value);
-}
-
-void fpoke(int addr, double value) {
-    g_mem.fpoke(addr, value);
-}
-
-int poke_bytes(int addr, const Bytes& bytes) {
-    return g_mem.poke_bytes(addr, bytes);
-}
-
-int poke_bytes(int addr, const Byte* data, int size) {
-    return g_mem.poke_bytes(addr, data, size);
-}
-
-Bytes get_empty_d_file() {
-    return Memory::get_empty_d_file();
-}
-
-void init_video_to_stkend(int addr, const Bytes& d_file_bytes) {
-    g_mem.init_video_to_stkend(addr, d_file_bytes);
-}
-
-void init_e_line_to_stkend(int addr) {
-    g_mem.init_e_line_to_stkend(addr);
 }

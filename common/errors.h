@@ -18,4 +18,5 @@ struct SourceLoc {
 
 void error(const SourceLoc& loc, const std::string& message);
 void error(const std::string& message);
-[[noreturn]] void exit_error_status();
+[[noreturn]] void fatal_error(const std::string& message);
+[[noreturn]] void exit_status();
