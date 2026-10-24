@@ -6,13 +6,12 @@
 
 #include "decompiler.h"
 #include "disasm.h"
-#include "encode.h"
 #include "errors.h"
 #include "memory.h"
 #include "release_assert.h"
 #include "utils.h"
+#include "zx81chars.h"
 #include <fstream>
-#include <iostream>
 
 static Decompiler g_decompiler;
 

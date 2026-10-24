@@ -5,12 +5,12 @@
 //-----------------------------------------------------------------------------
 
 #include "disasm.h"
-#include "encode.h"
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
 #include "release_assert.h"
 #include "utils.h"
+#include "zx81chars.h"
 #include <array>
 #include <iomanip>
 #include <iostream>

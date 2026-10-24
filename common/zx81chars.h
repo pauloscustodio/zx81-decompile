@@ -7,7 +7,6 @@
 #pragma once
 
 #include "types.h"
-#include "zx81consts.h"
 #include <string>
 
 std::string decode_zx81(char c);

@@ -6,7 +6,7 @@
 
 #include "scan.h"
 #include "types.h"
-#include <cctype>
+#include "utils.h"
 
 void Scan::set_text(const std::string& text_) {
     text = text_;
@@ -14,7 +14,7 @@ void Scan::set_text(const std::string& text_) {
 }
 
 void Scan::skip_spaces() {
-    while (*p != '\0' && isspace(*p)) {
+    while (*p != '\0' && isspace_safe(*p)) {
         p++;
     }
 }
@@ -33,32 +33,32 @@ bool Scan::parse_integer(int& value) {
     skip_spaces();
     const char* p0 = p;
     if (*p == '$') {	// hex
-        if (!isxdigit(p[1])) {
+        if (!isxdigit_safe(p[1])) {
             return false;
         }
         p++;
-        while (isxdigit(*p)) {
+        while (isxdigit_safe(*p)) {
             p++;
         }
         value = INT(strtol(p0 + 1, NULL, 16));
         return true;
     }
     else if (p[0] == '0' && p[1] == 'x') {
-        if (!isxdigit(p[2])) {
+        if (!isxdigit_safe(p[2])) {
             return false;
         }
         p += 2;
-        while (isxdigit(*p)) {
+        while (isxdigit_safe(*p)) {
             p++;
         }
         value = INT(strtol(p0 + 2, NULL, 16));
         return true;
     }
     else {				// decimal
-        if (!isdigit(*p)) {
+        if (!isdigit_safe(*p)) {
             return false;
         }
-        while (isdigit(*p)) {
+        while (isdigit_safe(*p)) {
             p++;
         }
         value = atoi(p0);
@@ -82,7 +82,7 @@ bool Scan::parse_number(double& value, std::string& value_text) {
                 return false;
             }
         }
-        else if (isdigit(*p)) {
+        else if (isdigit_safe(*p)) {
             p++;
             num_digits++;
         }
@@ -96,7 +96,7 @@ bool Scan::parse_number(double& value, std::string& value_text) {
     }
 
     // collect exponent
-    if (toupper(*p) == 'E') {
+    if (toupper_safe(*p) == 'E') {
         p++;
         if (*p == '-' || *p == '+') {
             p++;
@@ -144,10 +144,10 @@ bool Scan::parse_string(std::string& str) {
 
 bool Scan::parse_ident(std::string& ident) {
     skip_spaces();
-    if (!isalpha(*p)) {
+    if (!isalpha_safe(*p)) {
         return false;
     }
-    while (isalnum(*p)) {
+    while (isalnum_safe(*p)) {
         ident.push_back(*p++);
     }
     return true;
@@ -159,7 +159,7 @@ bool Scan::match(const std::string& compare) {
         if (p[i] == '\0') {
             return false;
         }
-        if (toupper(p[i]) != toupper(compare[i])) {
+        if (toupper_safe(p[i]) != toupper_safe(compare[i])) {
             return false;
         }
     }

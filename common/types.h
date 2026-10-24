@@ -12,6 +12,5 @@
 using Byte = uint8_t;
 using Bytes = std::vector<uint8_t>;
 
-#define NUM_ELEMS(a)	(sizeof(a) / sizeof(a[0]))
 #define INT(x)			static_cast<int>(x)
 #define BYTE(x)			static_cast<Byte>(x)

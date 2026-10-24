@@ -4,10 +4,11 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#include "encode.h"
 #include "errors.h"
 #include "memory.h"
 #include "parser.h"
+#include "utils.h"
+#include "zx81chars.h"
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -15,7 +16,7 @@
 static Parser g_parser;
 
 void Scanner::skip_spaces() {
-    while (*p != '\0' && isspace(*p)) {
+    while (*p != '\0' && isspace_safe(*p)) {
         p++;
     }
 }
@@ -37,11 +38,11 @@ bool Scanner::parse_integer(int& value) {
     // $hhhh
     p = p0;
     if (*p == '$') {
-        if (!isxdigit(p[1])) {
+        if (!isxdigit_safe(p[1])) {
             return false;
         }
         p++;
-        while (isxdigit(*p)) {
+        while (isxdigit_safe(*p)) {
             p++;
         }
         value = INT(strtol(p0 + 1, NULL, 16));
@@ -51,11 +52,11 @@ bool Scanner::parse_integer(int& value) {
     // 0xhh
     p = p0;
     if (p[0] == '0' && p[1] == 'x') {
-        if (!isxdigit(p[2])) {
+        if (!isxdigit_safe(p[2])) {
             return false;
         }
         p += 2;
-        while (isxdigit(*p)) {
+        while (isxdigit_safe(*p)) {
             p++;
         }
         value = INT(strtol(p0 + 2, NULL, 16));
@@ -64,11 +65,11 @@ bool Scanner::parse_integer(int& value) {
 
     // dhhhH
     p = p0;
-    if (isdigit(*p)) {
-        while (isxdigit(*p)) {
+    if (isdigit_safe(*p)) {
+        while (isxdigit_safe(*p)) {
             p++;
         }
-        if (toupper(*p) == 'H') {
+        if (toupper_safe(*p) == 'H') {
             p++;
             value = INT(strtol(p0, NULL, 16));
             return true;
@@ -77,8 +78,8 @@ bool Scanner::parse_integer(int& value) {
 
     // decimal
     p = p0;
-    if (isdigit(*p)) {
-        while (isdigit(*p)) {
+    if (isdigit_safe(*p)) {
+        while (isdigit_safe(*p)) {
             p++;
         }
         value = atoi(p0);
@@ -105,7 +106,7 @@ bool Scanner::parse_number(double& value, std::string& value_text) {
                 return false;
             }
         }
-        else if (isdigit(*p)) {
+        else if (isdigit_safe(*p)) {
             p++;
             num_digits++;
         }
@@ -119,7 +120,7 @@ bool Scanner::parse_number(double& value, std::string& value_text) {
     }
 
     // collect exponent
-    if (toupper(*p) == 'E') {
+    if (toupper_safe(*p) == 'E') {
         p++;
         if (*p == '-' || *p == '+') {
             p++;
@@ -167,10 +168,10 @@ bool Scanner::parse_string(std::string& str) {
 
 bool Scanner::parse_ident(std::string& ident) {
     skip_spaces();
-    if (!isalpha(*p) && *p != '_') {
+    if (!isalpha_safe(*p) && *p != '_') {
         return false;
     }
-    while (isalnum(*p) || *p == '_') {
+    while (isalnum_safe(*p) || *p == '_') {
         ident.push_back(*p++);
     }
     return true;
@@ -182,7 +183,7 @@ bool Scanner::match(const std::string& compare) {
         if (p[i] == '\0') {
             return false;
         }
-        if (toupper(p[i]) != toupper(compare[i])) {
+        if (toupper_safe(p[i]) != toupper_safe(compare[i])) {
             return false;
         }
     }
@@ -807,7 +808,7 @@ bool Parser::parse_asm_line(AsmLine& asm_line) {
 }
 
 bool Parser::parse_asm_label(std::string& ident) {
-    if (isalpha(*p) || *p == '_') {		// identifier at column 0
+    if (isalpha_safe(*p) || *p == '_') {		// identifier at column 0
         parse_ident(ident);
         skip_spaces();
         match(":");						// optional colon

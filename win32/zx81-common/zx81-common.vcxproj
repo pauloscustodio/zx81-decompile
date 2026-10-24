@@ -24,13 +24,13 @@
     <ClInclude Include="..\..\common\release_assert.h" />
     <ClInclude Include="..\..\common\types.h" />
     <ClInclude Include="..\..\common\utils.h" />
+    <ClInclude Include="..\..\common\zx81chars.h" />
     <ClInclude Include="..\..\common\zx81consts.h" />
     <ClInclude Include="..\..\common\zx81float.h" />
     <ClInclude Include="..\..\compiler.h" />
     <ClInclude Include="..\..\consts.h" />
     <ClInclude Include="..\..\decompiler.h" />
     <ClInclude Include="..\..\disasm.h" />
-    <ClInclude Include="..\..\encode.h" />
     <ClInclude Include="..\..\errors.h" />
     <ClInclude Include="..\..\memory.h" />
     <ClInclude Include="..\..\parser.h" />
@@ -41,10 +41,10 @@
     <ClCompile Include="..\..\basic.cpp" />
     <ClCompile Include="..\..\common\getopt.cpp" />
     <ClCompile Include="..\..\common\utils.cpp" />
+    <ClCompile Include="..\..\common\zx81chars.cpp" />
     <ClCompile Include="..\..\common\zx81float.cpp" />
     <ClCompile Include="..\..\compiler.cpp" />
     <ClCompile Include="..\..\decompiler.cpp" />
-    <ClCompile Include="..\..\encode.cpp" />
     <ClCompile Include="..\..\errors.cpp" />
     <ClCompile Include="..\..\memory.cpp" />
     <ClCompile Include="..\..\parser.cpp" />
@@ -52,6 +52,8 @@
     <ClCompile Include="..\..\disasm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\common\zx81chars.def" />
+    <None Include="..\..\common\zx81consts.def" />
     <None Include="..\..\consts.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -27,9 +27,6 @@
     <ClInclude Include="..\..\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\encode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\disasm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,6 +63,9 @@
     <ClInclude Include="..\..\common\zx81float.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\zx81chars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\errors.cpp">
@@ -75,9 +75,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\memory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\encode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\scan.cpp">
@@ -104,10 +101,19 @@
     <ClCompile Include="..\..\common\zx81float.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\zx81chars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\consts.def">
       <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\..\common\zx81chars.def">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\common\zx81consts.def">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -26,7 +26,7 @@ std::string fmt_line_number(int value, int digits) {
 }
 
 std::string str_chomp(std::string str) {
-    while (!str.empty() && isspace(str.back())) {
+    while (!str.empty() && isspace_safe(str.back())) {
         str.pop_back();
     }
     return str;
@@ -65,3 +65,54 @@ std::string replace_extension(const std::string& filename,
     }
 }
 
+bool isdigit_safe(char c) {
+    return std::isdigit(static_cast<unsigned char>(c)) != 0;
+}
+
+bool isxdigit_safe(char c) {
+    return std::isxdigit(static_cast<unsigned char>(c)) != 0;
+}
+
+bool isspace_safe(char c) {
+    return std::isspace(static_cast<unsigned char>(c)) != 0;
+}
+
+bool isalpha_safe(char c) {
+    return std::isalpha(static_cast<unsigned char>(c)) != 0;
+}
+
+bool isalnum_safe(char c) {
+    return std::isalnum(static_cast<unsigned char>(c)) != 0;
+}
+
+bool isprint_safe(char c) {
+    return std::isprint(static_cast<unsigned char>(c)) != 0;
+}
+
+bool isgraph_safe(char c) {
+    return std::isgraph(static_cast<unsigned char>(c)) != 0;
+}
+
+bool ispunct_safe(char c) {
+    return std::ispunct(static_cast<unsigned char>(c)) != 0;
+}
+
+bool iscntrl_safe(char c) {
+    return std::iscntrl(static_cast<unsigned char>(c)) != 0;
+}
+
+bool islower_safe(char c) {
+    return std::islower(static_cast<unsigned char>(c)) != 0;
+}
+
+bool isupper_safe(char c) {
+    return std::isupper(static_cast<unsigned char>(c)) != 0;
+}
+
+char tolower_safe(char c) {
+    return static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+}
+
+char toupper_safe(char c) {
+    return static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+}

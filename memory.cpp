@@ -5,13 +5,12 @@
 //-----------------------------------------------------------------------------
 
 #include "basic.h"
-#include "encode.h"
 #include "errors.h"
 #include "memory.h"
-#include "zx81float.h"
+#include "zx81chars.h"
 #include "zx81consts.h"
+#include "zx81float.h"
 #include <array>
-#include <cstdint>
 #include <fstream>
 #include <iostream>
 

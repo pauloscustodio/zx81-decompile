@@ -5,10 +5,10 @@
 //-----------------------------------------------------------------------------
 
 #include "compiler.h"
-#include "encode.h"
 #include "errors.h"
 #include "memory.h"
 #include "release_assert.h"
+#include "zx81chars.h"
 #include "zx81float.h"
 #include <iostream>
 #include <sstream>
