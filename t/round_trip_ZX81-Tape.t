@@ -5,9 +5,9 @@ BEGIN { use lib 't'; require 'testlib.pl'; }
 use Modern::Perl;
 use ZX81::Tape qw(make_p);
 
-for my $input_bas_file ( path("t/input/ZX81-Tape")->children(qr/\.bas$/) ) {
+for my $input_bas_file ( path("t/ZX81-Tape/input")->children(qr/\.bas$/) ) {
     my $basename     = $input_bas_file->basename('.bas');
-    my $build_p_file = path("t/expected/ZX81-Tape")->child("$basename.p");
+    my $build_p_file = path("t/ZX81-Tape/expected")->child("$basename.p");
 
     # make benchmark .p file
     make_p( $input_bas_file, $build_p_file );
@@ -18,7 +18,7 @@ for my $input_bas_file ( path("t/input/ZX81-Tape")->children(qr/\.bas$/) ) {
 
     # decompile .p file and compare with benchmark
     run_ok("zx81_decompile -o $test.bas $build_p_file");
-    check_text_file( "$test.bas", "t/expected/ZX81-Tape/$basename.bas" );
+    check_text_file( "$test.bas", "t/ZX81-Tape/expected/$basename.bas" );
 }
 
 unlink_testfiles;
