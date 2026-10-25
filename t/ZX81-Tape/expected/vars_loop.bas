@@ -4,3 +4,7 @@
 
 #VARS I=0,10,1,100
 
+   10  NEXT I
+   20  STOP 
+  100  PRINT "HELLO"
+

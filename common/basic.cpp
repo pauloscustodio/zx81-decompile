@@ -23,7 +23,7 @@ void Basic::write_bas_file(const std::string& filename) const {
     // write components
     write_sysvars(file);
     write_dfile(file);
-    write_basic_vars(file);
+    write_vars(file);
     write_source_lines(file);
 }
 
@@ -89,7 +89,7 @@ void Basic::write_dfile(std::ostream& os) const {
     }
 }
 
-void Basic::write_basic_vars(std::ostream& os) const {
+void Basic::write_vars(std::ostream& os) const {
     int num_elems = 0;
     int last_dim = 0;
 
@@ -164,5 +164,59 @@ void Basic::write_basic_vars(std::ostream& os) const {
 }
 
 void Basic::write_source_lines(std::ostream& os) const {
-    (void)os;
+    for (auto& line : source_lines) {
+        if (line.type == SourceLine::Type::Basic) {
+            if (!line.label.empty()) {
+                os << "@" << line.label << ":" << std::endl;
+            }
+
+            os << fmt_line_number(line.line_num) << " ";
+
+            bool is_rem = !line.tokens.empty() && line.tokens[0].code == C_REM;
+            for (auto& token : line.tokens) {
+                switch (token.code) {
+                case T_none:
+                    break;
+                case T_float:
+                    os << token.svalue;
+                    break;
+                case T_string:
+                    os << "\"" << token.svalue << "\"";
+                    break;
+                case T_ident:
+                    os << token.ident;
+                    break;
+                case T_rem_code:
+                    for (auto byte : token.bytes) {
+                        os << fmt_hex(byte, 2, "\\");
+                    }
+                    break;
+                case T_line_addr_ref:
+                    os << "&" << token.ident;
+                    break;
+                case T_line_num_ref:
+                    os << "@" << token.ident;
+                    break;
+                case C_space:
+                    if (is_rem) {
+                        os << " ";
+                    }
+                    else {
+                        os << fmt_hex(token.code, 2, "\\");
+                    }
+                    break;
+                case C_newline:
+                    os << std::endl;
+                    break;
+                default:
+                    release_assert(token.code < 0x100);
+                    os << decode_zx81(token.code);
+                }
+            }
+        }
+    }
+
+    if (!source_lines.empty()) {
+        os << std::endl;
+    }
 }

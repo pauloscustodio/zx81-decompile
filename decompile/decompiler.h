@@ -22,8 +22,17 @@ private:
     Memory* mem = nullptr;
     CtlFile* ctl_file = nullptr;
     Basic* basic = nullptr;
+    int addr = 0;
+    int end = 0;
 
     void decompile_sysvars();
     void decompile_dfile();
     void decompile_vars();
+    void decompile_basic();
+    void decompile_basic_line(SourceLine& line);
+    bool decompile_rem_code(SourceLine& line);
+    bool decompile_number(SourceLine& line);
+    bool decompile_ident(SourceLine& line);
+    bool decompile_string(SourceLine& line);
+    void decompile_newline(SourceLine& line);
 };

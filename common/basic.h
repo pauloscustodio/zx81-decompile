@@ -26,6 +26,7 @@ struct SourceLine {
     enum class Type { Basic, Asm };
     Type type = Type::Basic;
     SourceLoc loc;
+    int addr = -1;
     std::string label;
     int line_num = -1;
     std::vector<Token> tokens;
@@ -76,6 +77,6 @@ struct Basic {
 private:
     void write_sysvars(std::ostream& os) const;
     void write_dfile(std::ostream& os) const;
-    void write_basic_vars(std::ostream& os) const;
+    void write_vars(std::ostream& os) const;
     void write_source_lines(std::ostream& os) const;
 };

@@ -245,65 +245,11 @@ void Basic::write_b81_file(const std::string& filename) {
         fatal_error("write file", filename);
     }
 
-    write_basic_lines(ofs);
     write_basic_memory_map(ofs);
 }
 
 void Basic::parse_b81_file(const std::string& filename) {
     ::parse_b81_file(*this, filename);
-}
-
-void Basic::write_basic_lines(std::ofstream& ofs) const {
-    for (auto& line : source_lines) {
-        if ((optflags & FLAG_DEBUG) == FLAG_DEBUG) {
-            ofs << "# [" << fmt_hex(line.addr, 4) << "]" << std::endl;
-        }
-        if (line.type == SourceLine::Type::Basic) {
-            if (!line.basic_line.label.empty()) {
-                ofs << "@" << line.basic_line.label << ":" << std::endl;
-            }
-
-            ofs << fmt_line_number(line.basic_line.line_num) << " ";
-
-            for (auto& token : line.basic_line.tokens) {
-                switch (token.code) {
-                case T_none:
-                    break;
-                case T_float:
-                    ofs << token.svalue;
-                    break;
-                case T_string:
-                    ofs << "\"" << token.svalue << "\"";
-                    break;
-                case T_ident:
-                    ofs << token.ident;
-                    break;
-                case T_rem_code:
-                    write_mem_info(ofs, line.addr + 5, INT(token.bytes.size()));
-                    break;
-                case T_line_addr_ref:
-                    ofs << "&" << token.ident;
-                    break;
-                case T_line_num_ref:
-                    ofs << "@" << token.ident;
-                    break;
-                case C_space:
-                    ofs << "_";
-                    break;
-                case C_newline:
-                    ofs << std::endl;
-                    break;
-                default:
-                    release_assert(token.code < 0x100);
-                    ofs << decode_zx81(token.code);
-                }
-            }
-        }
-    }
-
-    if (!source_lines.empty()) {
-        ofs << std::endl;
-    }
 }
 
 void Basic::write_basic_memory_map(std::ofstream& ofs) const {

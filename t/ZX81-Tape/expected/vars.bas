@@ -117,3 +117,21 @@
 #VARS M(2,3)=11,12,13,21,22,23
 #VARS M$(2,3,2)="AA","AB","AC","BA","BB","BC"
 
+   10  PRINT A;" ";AB;" ";ABC
+   20  PRINT A00;" ";A01;" ";A02;" ";A03;" ";A04;" ";A05;" ";A06;" ";A07;" ";A08;" ";A09;" ";A0A;" ";A0B;" ";A0C;" ";A0D;" ";A0E;" ";A0F;" ";A0G;" ";A0H;" ";A0I;" ";A0J;" ";A0K;" ";A0L;" ";A0M;" ";A0N;" ";A0O;" ";A0P;" ";A0Q;" ";A0R;" ";A0S;" ";A0T;" ";A0U;" ";A0V;" ";A0W;" ";A0X;" ";A0Y;" ";A0Z
+   30  PRINT A10;" ";A11;" ";A12;" ";A13;" ";A14;" ";A15;" ";A16;" ";A17;" ";A18;" ";A19;" ";A1A;" ";A1B;" ";A1C;" ";A1D;" ";A1E;" ";A1F;" ";A1G;" ";A1H;" ";A1I;" ";A1J;" ";A1K;" ";A1L;" ";A1M;" ";A1N;" ";A1O;" ";A1P;" ";A1Q;" ";A1R;" ";A1S;" ";A1T;" ";A1U;" ";A1V;" ";A1W;" ";A1X;" ";A1Y;" ";A1Z
+   40  PRINT A20;" ";A21;" ";A22;" ";A23;" ";A24;" ";A25;" ";A26;" ";A27;" ";A28;" ";A29;" ";A2A;" ";A2B;" ";A2C;" ";A2D;" ";A2E;" ";A2F;" ";A2G;" ";A2H;" ";A2I;" ";A2J;" ";A2K;" ";A2L;" ";A2M;" ";A2N;" ";A2O;" ";A2P;" ";A2Q;" ";A2R;" ";A2S;" ";A2T;" ";A2U;" ";A2V;" ";A2W;" ";A2X;" ";A2Y;" ";A2Z
+   50  PRINT A$
+   60  FOR I=1 TO 2
+   70  FOR J=1 TO 3
+   80  PRINT M(I,J);" ";
+   90  NEXT J
+  100  PRINT 
+  110  NEXT I
+  120  FOR I=1 TO 2
+  130  FOR J=1 TO 3
+  140  PRINT M$(I,J);" ";
+  150  NEXT J
+  160  PRINT 
+  170  NEXT I
+
