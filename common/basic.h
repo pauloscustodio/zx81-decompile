@@ -9,6 +9,7 @@
 #include "errors.h"
 #include "types.h"
 #include "zx81chars.h"
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -71,4 +72,10 @@ struct Basic {
     bool fast = false;
 
     void write_bas_file(const std::string& filename) const;
+
+private:
+    void write_sysvars(std::ostream& os) const;
+    void write_dfile(std::ostream& os) const;
+    void write_basic_vars(std::ostream& os) const;
+    void write_source_lines(std::ostream& os) const;
 };

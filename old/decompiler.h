@@ -31,9 +31,6 @@ private:
     int end{ 0 };
     std::vector<MemElement> mem_elements;
 
-    void decompile_sysvars();
-    void decompile_d_file();
-    void decompile_e_line();
     void decompile_basic();
     void decompile_basic_line(BasicLine& basic_line);
     bool decompile_rem_code(BasicLine& basic_line);

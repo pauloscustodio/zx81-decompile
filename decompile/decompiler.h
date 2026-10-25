@@ -25,4 +25,5 @@ private:
 
     void decompile_sysvars();
     void decompile_dfile();
+    void decompile_vars();
 };

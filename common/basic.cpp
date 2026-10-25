@@ -6,6 +6,7 @@
 
 #include "basic.h"
 #include "errors.h"
+#include "release_assert.h"
 #include "types.h"
 #include "utils.h"
 #include <fstream>
@@ -19,22 +20,26 @@ void Basic::write_bas_file(const std::string& filename) const {
         fatal_error("write file: " + filename);
     }
 
+    // write components
+    write_sysvars(file);
+    write_dfile(file);
+    write_basic_vars(file);
+    write_source_lines(file);
+}
+
+void Basic::write_sysvars(std::ostream& os) const {
+    bool need_newline = false;
+
     // AUTOSTART and FAST flags
     if (autostart) {
-        file << "#AUTOSTART=1" << std::endl;
-        file << "#AUTOSTART_LINE=" << autostart_line << std::endl;
+        os << "#AUTOSTART=1" << std::endl;
+        os << "#AUTOSTART_LINE=" << autostart_line << std::endl;
+        need_newline = true;
     }
 
     if (fast) {
-        file << "#FAST=1" << std::endl;
-    }
-
-    // DFILE_COLLAPSED and DFILE lines
-    if (dfile_collapsed) {
-        file << "#DFILE_COLLAPSED=1" << std::endl;
-    }
-    for (const auto& line : dfile_lines) {
-        file << "#DFILE=\"" << line << "\"" << std::endl;
+        os << "#FAST=1" << std::endl;
+        need_newline = true;
     }
 
     // SYSVARS
@@ -43,24 +48,121 @@ void Basic::write_bas_file(const std::string& filename) const {
         sysvars.pop_back();
     }
     if (!sysvars.empty()) {
-        file << "#SYSVARS=";
+        os << "#SYSVARS=";
         bool first = true;
         for (auto byte : sysvars) {
             if (!first) {
-                file << ",";
+                os << ",";
             }
             first = false;
             if (byte < 10) {
-                file << static_cast<unsigned int>(byte);
+                os << static_cast<unsigned int>(byte);
             }
             else {
-                file << fmt_hex(byte, 2);
+                os << fmt_hex(byte, 2);
             }
         }
-        file << std::endl;
+        os << std::endl;
+        need_newline = true;
     }
 
-    // dump BASIC VARS
+    if (need_newline) {
+        os << std::endl;
+    }
+}
 
-    // dump BASIC source lines
+void Basic::write_dfile(std::ostream& os) const {
+    bool need_newline = false;
+
+    // DFILE_COLLAPSED and DFILE lines
+    if (dfile_collapsed) {
+        os << "#DFILE_COLLAPSED=1" << std::endl;
+        need_newline = true;
+    }
+    for (const auto& line : dfile_lines) {
+        os << "#DFILE=\"" << line << "\"" << std::endl;
+        need_newline = true;
+    }
+
+    if (need_newline) {
+        os << std::endl;
+    }
+}
+
+void Basic::write_basic_vars(std::ostream& os) const {
+    int num_elems = 0;
+    int last_dim = 0;
+
+    for (auto& var : basic_vars) {
+        switch (var.type) {
+        case BasicVar::Type::Number:
+            os << "#VARS " << var.name << "=" << var.value << std::endl;
+            break;
+        case BasicVar::Type::ArrayNumbers:
+            num_elems = 1;
+            os << "#VARS " << var.name << "(";
+
+            for (size_t i = 0; i < var.dims.size(); i++) {
+                if (i > 0) {
+                    os << ",";
+                }
+                os << var.dims[i];
+                num_elems *= var.dims[i];
+            }
+
+            os << ")=";
+
+            for (int i = 0; i < num_elems; i++) {
+                if (i > 0) {
+                    os << ",";
+                }
+                os << var.values[i];
+            }
+
+            os << std::endl;
+            break;
+        case BasicVar::Type::ForNextLoop:
+            os << "#VARS " << var.name << "=" << var.value
+               << "," << var.limit << "," << var.step << "," << var.line_num << std::endl;
+            break;
+        case BasicVar::Type::String:
+            os << "#VARS " << var.name << "$=\"" << var.str << "\"" << std::endl;
+            break;
+        case BasicVar::Type::ArrayStrings:
+            num_elems = 1;
+            os << "#VARS " << var.name << "$(";
+
+            for (size_t i = 0; i < var.dims.size(); i++) {
+                if (i > 0) {
+                    os << ",";
+                }
+                os << var.dims[i];
+                num_elems *= var.dims[i];
+            }
+
+            os << ")=";
+
+            last_dim = var.dims.back();
+            num_elems /= last_dim;
+            for (int i = 0; i < num_elems; i++) {
+                if (i > 0) {
+                    os << ",";
+                }
+                os << "\"" << var.strs[i] << "\"";
+            }
+
+            os << std::endl;
+            break;
+        default:
+            release_assert(0);
+        }
+    }
+
+    if (!basic_vars.empty()) {
+        os << std::endl;
+    }
+}
+
+void Basic::write_source_lines(std::ostream& os) const {
+    (void)os;
 }
