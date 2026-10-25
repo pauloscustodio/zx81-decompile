@@ -13,6 +13,7 @@
 #include <vector>
 
 void Decompiler::decompile() {
+    (void)ctl_file;
     decompile_sysvars();
     decompile_dfile();
 }
