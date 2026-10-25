@@ -18,8 +18,6 @@ static Decompiler g_decompiler;
 void Decompiler::decompile(Basic& basic_) {
     basic = &basic_;
 
-    decompile_sysvars();
-    decompile_d_file();
     decompile_basic();
     decompile_vars();
     disassemble();
@@ -30,32 +28,6 @@ void Decompiler::decompile(Basic& basic_) {
 void Decompiler::decompile(Basic& basic, const std::string& ctl_filename) {
     parse_ctl_file(ctl_filename);
     decompile(basic);
-}
-
-void Decompiler::decompile_sysvars() {
-    // autostart
-    int d_file = dpeek(D_FILE);
-    int nxtlin = dpeek(NXTLIN);
-    if (nxtlin >= d_file) {
-        basic->autostart = 0;
-    }
-    else {
-        basic->autostart = dpeek_be(nxtlin);
-    }
-
-    // fast
-    if ((peek(CDFLAG) & FlagSlow) == FlagSlow) {
-        basic->fast = false;
-    }
-    else {
-        basic->fast = true;
-    }
-}
-
-void Decompiler::decompile_d_file() {
-    int d_file = dpeek(D_FILE);
-    int vars = dpeek(VARS);
-    basic->d_file_bytes = peek_bytes(d_file, vars - d_file);
 }
 
 void Decompiler::decompile_basic() {

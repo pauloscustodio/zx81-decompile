@@ -13,7 +13,7 @@
 
 class Memory {
 public:
-    Memory();
+    explicit Memory();
     virtual ~Memory() = default;
 
     void clear();

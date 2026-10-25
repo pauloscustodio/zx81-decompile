@@ -27,7 +27,7 @@ unlink_testfiles();
 
 #------------------------------------------------------------------------------
 sub check_text_file {
-    my ( $exp_file, $got_file ) = @_;
+    my ( $got_file, $exp_file ) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     ( my $got_text = path($got_file)->slurp ) =~ s/\r\n/\n/g;

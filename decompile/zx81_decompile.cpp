@@ -4,6 +4,9 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
+#include "basic.h"
+#include "ctl_file.h"
+#include "decompiler.h"
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
@@ -18,8 +21,8 @@ static void exit_usage() {
 }
 
 int main(int argc, char* argv[]) {
-    std::string out_file;
-    std::string ctl_file;
+    std::string out_filename;
+    std::string ctl_filename;
 
     while (true) {
         int c = getopt(argc, argv, const_cast<char*>("do:c:"));
@@ -28,10 +31,10 @@ int main(int argc, char* argv[]) {
         }
         switch (c) {
         case 'c':
-            ctl_file = optarg;
+            ctl_filename = optarg;
             break;
         case 'o':
-            out_file = optarg;
+            out_filename = optarg;
             break;
         default:
             exit_usage();
@@ -43,32 +46,30 @@ int main(int argc, char* argv[]) {
     }
 
     std::string p_file = argv[optind];
-    if (out_file.empty()) {
-        out_file = replace_extension(p_file, ".bas");
+    if (out_filename.empty()) {
+        out_filename = replace_extension(p_file, ".bas");
     }
 
     Memory* mem = new Memory();
     mem->read_p_file(p_file);
+
+    CtlFile* ctl_file = new CtlFile();
+    if (!ctl_filename.empty()) {
+        ctl_file->load_ctl_file(ctl_filename);
+    }
+
+    Basic* basic = new Basic();
+    Decompiler* decompiler = new Decompiler(mem, ctl_file, basic);
+    decompiler->decompile();
     if (get_error_count()) {
         exit_status();
     }
 
-#if 0
+    basic->write_bas_file(out_filename);
 
-    Basic basic;
-    if (ctl_file.empty()) {
-        decompile(basic);
-    }
-    else {
-        decompile(basic, ctl_file);
-    }
-    if (get_error_count()) {
-        exit_status();
-    }
-
-    basic.write_b81_file(out_file);
-#endif
-
+    delete decompiler;
+    delete basic;
+    delete ctl_file;
     delete mem;
     exit_status();
 }

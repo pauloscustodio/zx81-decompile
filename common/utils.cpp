@@ -32,6 +32,13 @@ std::string str_chomp(std::string str) {
     return str;
 }
 
+std::string str_trim(std::string str) {
+    while (!str.empty() && isspace_safe(str.back())) {
+        str.pop_back();
+    }
+    return str;
+}
+
 std::string str_replace_all(std::string str, const std::string& from,
                             const std::string& to) {
     std::string::size_type n = 0;

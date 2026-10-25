@@ -140,7 +140,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\decompile\ctl_file.cpp" />
+    <ClCompile Include="..\..\decompile\decompiler.cpp" />
     <ClCompile Include="..\..\decompile\zx81_decompile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\decompile\ctl_file.h" />
+    <ClInclude Include="..\..\decompile\decompiler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "errors.h"
 #include "types.h"
 #include <string>
 
@@ -18,9 +19,6 @@ enum ZX81char {
     T_rem_code,
     T_line_addr_ref,
     T_line_num_ref,
-    T_const_expr,
-    T_unary_minus,
-    T_ASMPC,
 
 #define X(code, name, str) name = code,
 #include "zx81chars.def"

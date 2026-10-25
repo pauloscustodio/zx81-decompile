@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\basic.h" />
     <ClInclude Include="..\..\common\errors.h" />
     <ClInclude Include="..\..\common\getopt.h" />
     <ClInclude Include="..\..\common\memory.h" />
@@ -28,10 +29,9 @@
     <ClInclude Include="..\..\common\zx81chars.h" />
     <ClInclude Include="..\..\common\zx81consts.h" />
     <ClInclude Include="..\..\common\zx81float.h" />
-    <ClInclude Include="..\..\consts.h" />
-    <ClInclude Include="..\..\zx81float.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\basic.cpp" />
     <ClCompile Include="..\..\common\errors.cpp" />
     <ClCompile Include="..\..\common\getopt.cpp" />
     <ClCompile Include="..\..\common\memory.cpp" />
@@ -42,7 +42,6 @@
   <ItemGroup>
     <None Include="..\..\common\zx81chars.def" />
     <None Include="..\..\common\zx81consts.def" />
-    <None Include="..\..\consts.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
