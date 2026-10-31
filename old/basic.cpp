@@ -17,76 +17,6 @@
 #include <iostream>
 
 //-----------------------------------------------------------------------------
-// Symtab
-//-----------------------------------------------------------------------------
-
-Symbol::Symbol(Type type_, const std::string& name_, int value_)
-    : type(type_), name(name_), value(value_) {
-}
-
-Symtab::Symtab() {
-    init();
-}
-
-Symtab::~Symtab() {
-    for (auto& it : symbols) {
-        delete it.second;
-    }
-    symbols.clear();
-}
-
-void Symtab::init() {
-    for (auto& it : symbols) {
-        delete it.second;
-    }
-    symbols.clear();
-
-#define X(name, value)		add(Symbol::Type::Const, #name, value);
-#include "zx81consts.def"
-}
-
-void Symtab::add(Symbol::Type type, const std::string& name, int value) {
-    auto it = symbols.find(name);
-    if (it != symbols.end()) {
-        error("duplicate definition", name);
-    }
-    else {
-        auto symbol = new Symbol(type, name, value);
-        symbols[name] = symbol;
-    }
-}
-
-void Symtab::update(Symbol::Type type, const std::string& name, int value) {
-    auto symbol = get(name);
-    if (symbol) {
-        symbol->type = type;
-        symbol->value = value;
-    }
-    else {
-        add(type, name, value);
-    }
-}
-
-Symbol* Symtab::get(const std::string& name) {
-    auto it = symbols.find(name);
-    if (it != symbols.end()) {
-        return it->second;
-    }
-    else {
-        return nullptr;
-    }
-}
-
-Symbol* Symtab::find(int value) {
-    for (auto& it : symbols) {
-        if (it.second->value == value) {
-            return it.second;
-        }
-    }
-    return nullptr;
-}
-
-//-----------------------------------------------------------------------------
 // Basic
 //-----------------------------------------------------------------------------
 
@@ -239,12 +169,6 @@ bool Basic::eval_expr(const Expr& rpn, int asmpc, int& value, bool do_error) {
 }
 
 void Basic::write_b81_file(const std::string& filename) {
-    std::ofstream ofs(filename);
-    if (!ofs.is_open()) {
-        perror(filename.c_str());
-        fatal_error("write file", filename);
-    }
-
     write_basic_memory_map(ofs);
 }
 

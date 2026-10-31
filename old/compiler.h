@@ -15,21 +15,7 @@ public:
 
 private:
     Basic* basic{ nullptr };
-    int line_addr{ 0 };
-    int asmpc{ 0 };
-    int addr{ 0 };
-    int pass{ 0 };
 
-    void compute_line_numbers();
-    void compile_prog();
-    void start_basic_line(int line_num);
-    void end_basic_line();
-    void compile_basic(BasicLine& basic_line);
-    void compile_number(double value);
-    void compile_string(const std::string& str);
-    void compile_ident(const std::string& ident);
-    void compile_line_addr_ref(const std::string& ident);
-    void compile_line_num_ref(const std::string& ident);
     void compile_expr(const Expr& rpn);
     void compile_vars();
     void assemble(AsmLine& asm_line);

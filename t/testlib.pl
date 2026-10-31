@@ -27,11 +27,11 @@ unlink_testfiles();
 
 #------------------------------------------------------------------------------
 sub check_text_file {
-    my ( $got_file, $exp_file ) = @_;
+    my ( $exp_file, $got_file ) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    ( my $got_text = path($got_file)->slurp ) =~ s/\r\n/\n/g;
     ( my $exp_text = path($exp_file)->slurp ) =~ s/\r\n/\n/g;
+    ( my $got_text = path($got_file)->slurp ) =~ s/\r\n/\n/g;
 
     # remove version
     $got_text =~ s/Version: .*//;
@@ -105,7 +105,7 @@ sub capture_ok {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     run_ok( $cmd . " > ${test}.stdout" );
-    check_text_file( "${test}.stdout", $exp_out );
+    check_text_file( $exp_out, "${test}.stdout" );
 
     ( Test::More->builder->is_passing ) or die;
 }
@@ -116,7 +116,7 @@ sub capture_nok {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     run_nok( $cmd . " 2> ${test}.stderr" );
-    check_text_file( "${test}.stderr", $exp_err );
+    check_text_file( $exp_err, "${test}.stderr" );
 
     ( Test::More->builder->is_passing ) or die;
 }

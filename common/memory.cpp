@@ -7,6 +7,7 @@
 #include "errors.h"
 #include "memory.h"
 #include "types.h"
+#include "utils.h"
 #include "zx81chars.h"
 #include "zx81consts.h"
 #include "zx81float.h"
@@ -15,6 +16,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 //-----------------------------------------------------------------------------
 // init memory
@@ -84,11 +86,27 @@ Bytes Memory::get_empty_d_file() {
     return out;
 }
 
-void Memory::init_video_to_stkend(int addr, const Bytes& d_file_bytes) {
+void Memory::init_video_to_stkend(int addr, bool dfile_collapsed,
+                                  const std::vector<std::string>& dfile_lines) {
     dpoke(D_FILE, addr);
     dpoke(NXTLIN, addr);
     dpoke(DF_CC, addr + 1);
-    addr = poke_bytes(addr, d_file_bytes);
+
+    poke(addr++, C_newline);
+    for (int row = 0; row < NumRows; row++) {
+        std::string line = (row < INT(dfile_lines.size()) ? dfile_lines[row] : "");
+        if (dfile_collapsed) {
+            line = str_trim(line);
+        }
+        else {
+            line += std::string(NumCols, ' ');
+        }
+        line = line.substr(0, NumCols);
+
+        Bytes bytes = encode_zx81(line, SourceLoc());
+        addr = poke_bytes(addr, bytes);
+        poke(addr++, C_newline);
+    }
 
     // vars
     dpoke(VARS, addr);

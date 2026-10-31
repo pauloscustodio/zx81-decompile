@@ -47,7 +47,8 @@ Bytes encode_zx81(const char*& p, const SourceLoc& loc) {
         if (p[0] == '\\' &&
                 isxdigit_safe(p[1]) &&
                 isxdigit_safe(p[2])) {
-            bytes.push_back(strtol(p + 1, NULL, 16) & 0xff);
+            char hex[3] = { p[1], p[2], '\0' };
+            bytes.push_back(strtol(hex, NULL, 16) & 0xff);
             p += 3;
             continue;
         }

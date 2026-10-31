@@ -38,6 +38,7 @@ struct SourceLine {
 struct BasicVar {
     enum class Type { Number, ArrayNumbers, ForNextLoop, String, ArrayStrings };
     Type type = Type::Number;
+    SourceLoc loc;
 
     std::string name;       // excluding the '$' for strings
 

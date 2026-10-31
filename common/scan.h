@@ -9,24 +9,27 @@
 #include <string>
 #include <vector>
 
-class Scan {
+class Scanner {
 public:
-    void set_text(const std::string& text);
-    const char*& pos() {
-        return p;
-    }
+    enum class Type { Asm, Basic };
+    explicit Scanner(Type type_ = Type::Basic, const std::string& text_ = "");
+    void set_text(Type type_, const std::string& text_);
+
+    const char* pos() const;
+    void set_pos(const char* new_pos);
 
     void skip_spaces();
-    bool at_end(char comment_char = '\0');
+    bool at_end();
     bool parse_integer(int& value);
     bool parse_number(double& value, std::string& value_text);
     bool parse_string(std::string& str);
     bool parse_ident(std::string& ident);
     bool match(const std::string& compare);
     int match_one_of(int not_found_result,
-                     std::vector<std::pair<std::string, int>> compare_list);
+                     const std::vector<std::pair<std::string, int>>& compare_list);
 
 private:
+    Type type = Type::Basic;
     std::string text;
-    const char* p{""};
+    const char* p{ "" };
 };

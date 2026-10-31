@@ -7,20 +7,38 @@
 #include "scan.h"
 #include "types.h"
 #include "utils.h"
+#include <cmath>
+#include <cstdlib>
+#include <utility>
+#include <vector>
 
-void Scan::set_text(const std::string& text_) {
+Scanner::Scanner(Type type_, const std::string& text_) {
+    set_text(type_, text_);
+}
+
+void Scanner::set_text(Type type_, const std::string& text_) {
+    type = type_;
     text = text_;
     p = text.c_str();
 }
 
-void Scan::skip_spaces() {
+const char* Scanner::pos() const {
+    return p;
+}
+
+void Scanner::set_pos(const char* new_pos) {
+    p = new_pos;
+}
+
+void Scanner::skip_spaces() {
     while (*p != '\0' && isspace_safe(*p)) {
         p++;
     }
 }
 
-bool Scan::at_end(char comment_char) {
+bool Scanner::at_end() {
     skip_spaces();
+    char comment_char = (type == Type::Asm) ? ';' : '\'';
     if (*p == '\0' || *p == comment_char) {
         return true;
     }
@@ -29,7 +47,7 @@ bool Scan::at_end(char comment_char) {
     }
 }
 
-bool Scan::parse_integer(int& value) {
+bool Scanner::parse_integer(int& value) {
     skip_spaces();
     const char* p0 = p;
     if (*p == '$') {	// hex
@@ -66,7 +84,7 @@ bool Scan::parse_integer(int& value) {
     }
 }
 
-bool Scan::parse_number(double& value, std::string& value_text) {
+bool Scanner::parse_number(double& value, std::string& value_text) {
     skip_spaces();
     const char* p0 = p;
 
@@ -113,7 +131,7 @@ bool Scan::parse_number(double& value, std::string& value_text) {
     return true;
 }
 
-bool Scan::parse_string(std::string& str) {
+bool Scanner::parse_string(std::string& str) {
     std::string out;
     skip_spaces();
     const char* p0 = p;
@@ -142,18 +160,18 @@ bool Scan::parse_string(std::string& str) {
     }
 }
 
-bool Scan::parse_ident(std::string& ident) {
+bool Scanner::parse_ident(std::string& ident) {
     skip_spaces();
-    if (!isalpha_safe(*p)) {
+    if (!(isalpha_safe(*p) || *p == '_')) {
         return false;
     }
-    while (isalnum_safe(*p)) {
+    while (isalnum_safe(*p) || *p == '_') {
         ident.push_back(*p++);
     }
     return true;
 }
 
-bool Scan::match(const std::string& compare) {
+bool Scanner::match(const std::string& compare) {
     skip_spaces();
     for (size_t i = 0; i < compare.size(); i++) {
         if (p[i] == '\0') {
@@ -167,13 +185,14 @@ bool Scan::match(const std::string& compare) {
     return true;
 }
 
-int Scan::match_one_of(int not_found_result,
-                       std::vector<std::pair<std::string, int>> compare_list) {
+int Scanner::match_one_of(int not_found_result,
+                          const std::vector<std::pair<std::string, int>>& compare_list) {
     skip_spaces();
-    for (auto& compare : compare_list) {
+    for (const auto& compare : compare_list) {
         if (match(compare.first)) {
             return compare.second;
         }
     }
     return not_found_result;
 }
+

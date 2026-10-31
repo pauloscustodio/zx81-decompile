@@ -4,9 +4,12 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
+#include "basic.h"
+#include "compiler.h"
 #include "errors.h"
 #include "getopt.h"
 #include "memory.h"
+#include "parser.h"
 #include "utils.h"
 #include <cstdlib>
 #include <iostream>
@@ -18,7 +21,7 @@ static void exit_usage() {
 }
 
 int main(int argc, char* argv[]) {
-    std::string out_file;
+    std::string out_filename;
 
     while (true) {
         int c = getopt(argc, argv, const_cast<char*>("o:"));
@@ -27,7 +30,7 @@ int main(int argc, char* argv[]) {
         }
         switch (c) {
         case 'o':
-            out_file = optarg;
+            out_filename = optarg;
             break;
         default:
             exit_usage();
@@ -38,27 +41,28 @@ int main(int argc, char* argv[]) {
         exit_usage();
     }
 
-    std::string b81_file = argv[optind];
-    if (out_file.empty()) {
-        out_file = replace_extension(b81_file, ".p");
+    std::string bas_filename = argv[optind];
+    if (out_filename.empty()) {
+        out_filename = replace_extension(bas_filename, ".p");
     }
 
-#if 0
-    Basic basic;
-    basic.parse_b81_file(b81_file);
+    Basic* basic = new Basic();
+    Parser* parser = new Parser(basic);
+    parser->parse_bas_file(bas_filename);
     if (get_error_count()) {
         exit_status();
     }
 
-    compile(basic);
-#endif
-
-    Memory* mem = new Memory();
-    mem->write_p_file(out_file);
+    Compiler* compiler = new Compiler(basic);
+    compiler->compile();
     if (get_error_count()) {
         exit_status();
     }
 
-    delete mem;
+    compiler->write_p_file(out_filename);
+
+    delete compiler;
+    delete parser;
+    delete basic;
     exit_status();
 }

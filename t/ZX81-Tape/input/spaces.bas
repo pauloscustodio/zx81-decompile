@@ -1,2 +1,3 @@
 10 LET\00X\00=\000
 20 PRINT X
+30 REM   S P A C E S  

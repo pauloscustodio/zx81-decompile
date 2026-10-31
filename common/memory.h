@@ -43,7 +43,8 @@ public:
 
     static Bytes get_empty_d_file();
 
-    void init_video_to_stkend(int addr, const Bytes& d_file_bytes);
+    void init_video_to_stkend(int addr, bool dfile_collapsed,
+                              const std::vector<std::string>& dfile_lines);
     void init_e_line_to_stkend(int addr);
 
 private:

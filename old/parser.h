@@ -9,46 +9,15 @@
 #include "basic.h"
 #include <string>
 
-struct Scanner {
-    const char* p{ nullptr };
-
-    void skip_spaces();
-    bool at_end(char comment_char = '\0');
-    bool parse_integer(int& value);
-    bool parse_number(double& value, std::string& value_text);
-    bool parse_string(std::string& str);
-    bool parse_ident(std::string& ident);
-    bool match(const std::string& compare);
-    int match_one_of(int not_found_result,
-                     std::vector<std::pair<std::string, int>> compare_list);
-};
-
-struct Parser : public Scanner {
-    void parse_b81_file(Basic& basic, const std::string& filename);
-
+struct Parser {
 private:
-    Basic* basic{ nullptr };
-    bool in_asm{ false };
-
     // basic parser
-    bool parse_ref(const std::string& prefix, std::string& ident);
-    bool parse_line_num_ref(std::string& ident);
-    bool parse_line_addr_ref(std::string& ident);
-    bool parse_label(std::string& ident);
-    void parse_label_line_num(BasicLine& basic_line);
-    bool parse_end_basic();
     bool parse_asm_expr(Expr& rpn);
     bool parse_basic_expr(Expr& rpn);
     bool parse_const_expr(bool in_asm, Expr& rpn);
     bool parse_expr(bool in_asm, Expr& rpn);
     bool parse_term(bool in_asm, Expr& rpn);
     bool parse_factor(bool in_asm, Expr& rpn);
-    bool parse_basic_line(BasicLine& basic_line);
-    bool parse_basic_var(BasicVar& var);
-
-    // meta parser
-    void parse_meta_line();
-    Bytes parse_byte_list();
 
     // assembler parser
     bool parse_asm_line(AsmLine& asm_line);
@@ -87,8 +56,6 @@ private:
     void add_word_patch(AsmLine& asm_line, const Expr& rpn);
     void add_jr_patch(AsmLine& asm_line, const Expr& rpn);
 
-    // parser
-    void parse_line();
 };
 
 void parse_b81_file(Basic& basic, const std::string& filename);

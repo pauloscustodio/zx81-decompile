@@ -140,7 +140,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\compile\compiler.cpp" />
+    <ClCompile Include="..\..\compile\parser.cpp" />
+    <ClCompile Include="..\..\compile\symtab.cpp" />
     <ClCompile Include="..\..\compile\zx81_compile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\compile\compiler.h" />
+    <ClInclude Include="..\..\compile\parser.h" />
+    <ClInclude Include="..\..\compile\symtab.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
