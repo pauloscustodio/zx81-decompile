@@ -4,21 +4,6 @@
 // License: The Artistic License 2.0, http://www.perlfoundation.org/artistic_license_2_0
 //-----------------------------------------------------------------------------
 
-#pragma once
+#include "token.h"
 
-#include "basic.h"
-#include <string>
 
-class Compiler {
-public:
-    void compile(Basic& basic);
-
-private:
-    Basic* basic{ nullptr };
-
-    void compile_expr(const Expr& rpn);
-    void compile_vars();
-    void assemble(AsmLine& asm_line);
-};
-
-void compile(Basic& basic);

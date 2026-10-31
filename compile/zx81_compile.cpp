@@ -8,7 +8,6 @@
 #include "compiler.h"
 #include "errors.h"
 #include "getopt.h"
-#include "memory.h"
 #include "parser.h"
 #include "utils.h"
 #include <cstdlib>

@@ -8,10 +8,12 @@
 #include "errors.h"
 #include "parser.h"
 #include "scan.h"
+#include "token.h"
 #include "types.h"
 #include "utils.h"
 #include "zx81chars.h"
 #include "zx81consts.h"
+#include <cmath>
 #include <cstdio>
 #include <fstream>
 #include <string>
@@ -63,8 +65,6 @@ static bool is_label_line_num_continuation(const std::string& l0,
 }
 
 void Parser::parse_bas_file(const std::string& filename) {
-    in_asm = false;
-
     std::ifstream ifs(filename);
     if (!ifs.is_open()) {
         perror(filename.c_str());
@@ -105,15 +105,13 @@ void Parser::parse_bas_file(const std::string& filename) {
         }
     }
     // parse each line
+    in_asm = false;
     for (size_t i = 0; i < lines.size(); i++) {
         auto& l0 = lines[i];
         loc = l0.first;
         scan.set_text(in_asm ? Scanner::Type::Asm : Scanner::Type::Basic, l0.second);
         parse_line();
     }
-
-    // join continuation lines with @label:/line_num and no text
-    // TODO
 }
 
 void Parser::parse_line() {
@@ -134,7 +132,7 @@ void Parser::parse_line() {
         scan.set_pos(p0);
 
         SourceLine source_line(SourceLine::Type::Asm, loc);
-        if (parse_asm_line(source_line)) {
+        if (parse_asm_line(source_line.asm_line)) {
             basic->source_lines.push_back(source_line);
         }
     }
@@ -155,8 +153,7 @@ void Parser::parse_pragma_line() {
     }
 
     if (keyword == "VARS") {
-        BasicVar basic_var;
-        basic_var.loc = loc;
+        BasicVar basic_var(BasicVar::Type::Number, loc);
         if (parse_basic_var(basic_var)) {
             basic->basic_vars.push_back(basic_var);
         }
@@ -218,7 +215,7 @@ void Parser::parse_pragma_line() {
 }
 
 bool Parser::parse_basic_var(BasicVar& var) {
-    var = BasicVar();
+    var = BasicVar(BasicVar::Type::Number, loc);
 
     bool is_string = false;
     bool is_array = false;
@@ -532,13 +529,6 @@ bool Parser::parse_basic_line(SourceLine& source_line) {
             continue;
         }
 
-        int n = scan.match_one_of(-1, keywords);
-        if (n != -1) {
-            token.code = static_cast<ZX81char>(n);
-            source_line.tokens.push_back(token);
-            continue;
-        }
-
         if (scan.match("REM")) {
             token.code = C_REM;
             source_line.tokens.push_back(token);
@@ -569,12 +559,6 @@ bool Parser::parse_basic_line(SourceLine& source_line) {
             continue;
         }
 
-        if (scan.parse_ident(token.ident)) {
-            token.code = T_ident;
-            source_line.tokens.push_back(token);
-            continue;
-        }
-
         if (parse_line_num_ref(token.ident)) {
             token.code = T_line_num_ref;
             source_line.tokens.push_back(token);
@@ -583,6 +567,19 @@ bool Parser::parse_basic_line(SourceLine& source_line) {
 
         if (parse_line_addr_ref(token.ident)) {
             token.code = T_line_addr_ref;
+            source_line.tokens.push_back(token);
+            continue;
+        }
+
+        int n = scan.match_one_of(-1, keywords);
+        if (n != -1) {
+            token.code = static_cast<ZX81char>(n);
+            source_line.tokens.push_back(token);
+            continue;
+        }
+
+        if (scan.parse_ident(token.ident)) {
+            token.code = T_ident;
             source_line.tokens.push_back(token);
             continue;
         }
@@ -643,7 +640,1610 @@ void Parser::parse_label_line_num(SourceLine& source_line) {
     }
 }
 
-bool Parser::parse_asm_line(SourceLine& source_line) {
-    (void)source_line;
+bool Parser::parse_primary_expr(Expr& expr) {
+    Token token;
+    const char* p0 = scan.pos();
+
+    // at end
+    scan.set_pos(p0);
+    if (scan.at_end()) {
+        return false;
+    }
+
+    // number
+    scan.set_pos(p0);
+    if (scan.parse_integer(token.ivalue)) {
+        token.code = T_integer;
+        expr.rpn.push_back(token);
+        return true;
+    }
+    scan.set_pos(p0);
+    if (scan.parse_number(token.fvalue, token.svalue)
+            && floor(token.fvalue) == token.fvalue) {
+        token.code = T_integer;
+        token.ivalue = INT(token.fvalue);
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    // symbol reference
+    scan.set_pos(p0);
+    if (scan.parse_ident(token.ident)) {
+        token.code = T_symbol;
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    // ASMPC
+    scan.set_pos(p0);
+    if (scan.match("$")) {
+        token.code = T_ASMPC;
+        expr.rpn.push_back(token);
+        return true;
+    }
+    scan.set_pos(p0);
+    if (scan.match("ASMPC")) {
+        token.code = T_ASMPC;
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    // subexpression
+    scan.set_pos(p0);
+    if (scan.match("(") && parse_expr(expr) && scan.match(")")) {
+        return true;
+    }
+
+    // character literal
+    scan.set_pos(p0);
+    const char* p = scan.pos();
+    if (*p == '\'') {
+        p++;
+        Byte b = encode_zx81_char(p, loc);
+        if (*p != '\'') {
+            scan.set_pos(p0);
+            return false;
+        }
+        scan.set_pos(p + 1);
+
+        token.code = T_integer;
+        token.ivalue = b;
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    scan.set_pos(p0);
     return false;
+}
+
+bool Parser::parse_unary_expr(Expr& expr) {
+    Token token;
+    const char* p0 = scan.pos();
+
+    // unary minus
+    scan.set_pos(p0);
+    if (scan.match("-") && parse_unary_expr(expr)) {
+        token.code = T_unary_minus;
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    // unary plus
+    scan.set_pos(p0);
+    if (scan.match("+") && parse_unary_expr(expr)) {
+        return true;
+    }
+
+    // logical not
+    scan.set_pos(p0);
+    if (scan.match("!") && parse_unary_expr(expr)) {
+        token.code = T_log_not;
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    // binary not
+    scan.set_pos(p0);
+    if (scan.match("~") && parse_unary_expr(expr)) {
+        token.code = T_bin_not;
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    return parse_primary_expr(expr);
+}
+
+bool Parser::parse_mult_expr(Expr& expr) {
+    if (!parse_unary_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("*") && parse_unary_expr(expr)) {
+            token.code = C_mult;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match("/") && parse_unary_expr(expr)) {
+            token.code = C_div;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match("%") && parse_unary_expr(expr)) {
+            token.code = T_mod;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_add_expr(Expr& expr) {
+    if (!parse_mult_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("+") && parse_mult_expr(expr)) {
+            token.code = C_plus;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match("-") && parse_mult_expr(expr)) {
+            token.code = C_minus;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_shift_expr(Expr& expr) {
+    if (!parse_add_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("<<") && parse_add_expr(expr)) {
+            token.code = T_left_shift;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match(">>") && parse_add_expr(expr)) {
+            token.code = T_right_shift;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_rel_expr(Expr& expr) {
+    if (!parse_shift_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("<") && parse_shift_expr(expr)) {
+            token.code = C_lt;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match("<=") && parse_shift_expr(expr)) {
+            token.code = C_le;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match(">") && parse_shift_expr(expr)) {
+            token.code = C_gt;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match(">=") && parse_shift_expr(expr)) {
+            token.code = C_ge;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_eq_expr(Expr& expr) {
+    if (!parse_rel_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("==") && parse_rel_expr(expr)) {
+            token.code = C_eq;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match("=") && parse_rel_expr(expr)) {
+            token.code = C_eq;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match("<>") && parse_rel_expr(expr)) {
+            token.code = C_ne;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match("!=") && parse_rel_expr(expr)) {
+            token.code = C_ne;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_bin_and_expr(Expr& expr) {
+    if (!parse_eq_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("&") && *scan.pos() != '&' && parse_eq_expr(expr)) {
+            token.code = T_bin_and;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_bin_xor_expr(Expr& expr) {
+    if (!parse_bin_and_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("^") && parse_bin_and_expr(expr)) {
+            token.code = T_bin_xor;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_bin_or_expr(Expr& expr) {
+    if (!parse_bin_xor_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("|") && *scan.pos() != '|' && parse_bin_xor_expr(expr)) {
+            token.code = T_bin_or;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_log_and_expr(Expr& expr) {
+    if (!parse_bin_or_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("&&") && parse_bin_or_expr(expr)) {
+            token.code = T_log_and;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_log_or_expr(Expr& expr) {
+    if (!parse_log_and_expr(expr)) {
+        return false;
+    }
+    while (true) {
+        Token token;
+        if (scan.match("||") && parse_log_and_expr(expr)) {
+            token.code = T_log_or;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        break;
+    }
+    return true;
+}
+
+bool Parser::parse_conditional_expr(Expr& expr) {
+    if (!parse_log_or_expr(expr)) {
+        return false;
+    }
+    if (scan.match("?")) {
+        if (!parse_log_or_expr(expr)) {
+            return false;
+        }
+        if (!scan.match(":")) {
+            return false;
+        }
+        if (!parse_conditional_expr(expr)) {
+            return false;
+        }
+        Token token;
+        token.code = T_conditional;
+        expr.rpn.push_back(token);
+    }
+    return true;
+}
+
+bool Parser::parse_expr(Expr& expr) {
+    return parse_conditional_expr(expr);
+}
+
+bool Parser::parse_asm_line(AsmLine& asm_line) {
+    if (parse_asm_label(asm_line.label)) {
+        // is it EQU?
+        scan.skip_spaces();
+        const char* p0 = scan.pos();
+        if (scan.match("EQU")) {
+            if (parse_expr(asm_line.equ_expr) && scan.at_end()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        scan.set_pos(p0);
+    }
+
+    if (parse_defb(asm_line) && scan.at_end()) {
+        return true;
+    }
+    if (parse_defw(asm_line) && scan.at_end()) {
+        return true;
+    }
+    if (parse_defs(asm_line) && scan.at_end()) {
+        return true;
+    }
+    if (parse_z80_opcode(asm_line)) {
+        return true;
+    }
+    if (scan.at_end()) {
+        return true;
+    }
+
+    error(loc, "cannot parse: " + std::string(scan.pos()));
+    return false;
+}
+
+// identifier at column 0
+bool Parser::parse_asm_label(std::string& ident) {
+    const char* p = scan.pos();
+    if (isalpha_safe(*p) || *p == '_') {
+        scan.parse_ident(ident);
+        scan.skip_spaces();
+        scan.match(":");						// optional colon
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_defb(AsmLine& asm_line) {
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    if (scan.match("DEFB") || scan.match("DEFM")) {
+        while (true) {
+            std::string str;
+            if (scan.parse_string(str)) {
+                Bytes bytes = encode_zx81(str, loc);
+                for (auto& b : bytes) {
+                    asm_line.bytes.push_back(b);
+                }
+
+                if (scan.match(",")) {
+                    continue;
+                }
+                else {
+                    break;
+                }
+            }
+
+            Expr expr(loc);
+            if (parse_expr(expr)) {
+                add_byte_patch(asm_line, expr);
+
+                if (scan.match(",")) {
+                    continue;
+                }
+                else {
+                    break;
+                }
+            }
+
+            return false;
+        }
+        return true;
+    }
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_defw(AsmLine& asm_line) {
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    if (scan.match("DEFW")) {
+        while (true) {
+            Expr expr(loc);
+            if (!parse_expr(expr)) {
+                return false;
+            }
+            add_word_patch(asm_line, expr);
+
+            if (scan.match(",")) {
+                continue;
+            }
+            else {
+                break;
+            }
+        }
+        return true;
+    }
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_defs(AsmLine& asm_line) {
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    if (scan.match("DEFS")) {
+        Expr expr(loc);
+        if (parse_expr(expr) && scan.at_end()) {
+            int value = eval_const_expr(expr);
+            for (int i = 0; i < value; i++) {
+                asm_line.bytes.push_back(0);
+            }
+            return true;
+        }
+    }
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_z80_opcode(AsmLine& asm_line) {
+    if (scan.at_end()) {
+        return true;
+    }
+    if (parse_single_opcode(asm_line)) {
+        return true;
+    }
+    else if (parse_ld(asm_line)) {
+        return true;
+    }
+    if (parse_alu(asm_line)) {
+        return true;
+    }
+    if (parse_ex(asm_line)) {
+        return true;
+    }
+    if (parse_bit(asm_line)) {
+        return true;
+    }
+    if (parse_call_jp(asm_line)) {
+        return true;
+    }
+    if (parse_rst(asm_line)) {
+        return true;
+    }
+    if (parse_ret(asm_line)) {
+        return true;
+    }
+    if (parse_jr(asm_line)) {
+        return true;
+    }
+    if (parse_inc_dec(asm_line)) {
+        return true;
+    }
+    if (parse_in(asm_line)) {
+        return true;
+    }
+    if (parse_out(asm_line)) {
+        return true;
+    }
+    if (parse_im(asm_line)) {
+        return true;
+    }
+    if (parse_push_pop(asm_line)) {
+        return true;
+    }
+    if (parse_rotate(asm_line)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool Parser::parse_single_opcode(AsmLine& asm_line) {
+    static const std::vector<std::pair<std::string, int>> single_opcode = {
+        std::make_pair("NOP", 0x00),
+        std::make_pair("RLCA", 0x07),
+        std::make_pair("RRCA", 0x0f),
+        std::make_pair("RLA", 0x17),
+        std::make_pair("RRA", 0x1f),
+        std::make_pair("DAA", 0x27),
+        std::make_pair("CPL", 0x2f),
+        std::make_pair("SCF", 0x37),
+        std::make_pair("CCF", 0x3f),
+        std::make_pair("HALT", 0x76),
+        std::make_pair("RETN", 0xed45),
+        std::make_pair("RETI", 0xed4d),
+        std::make_pair("RET", 0xc9),
+        std::make_pair("EXX", 0xd9),
+        std::make_pair("DI", 0xf3),
+        std::make_pair("EI", 0xfb),
+        std::make_pair("NEG", 0xed44),
+        std::make_pair("RRD", 0xed67),
+        std::make_pair("RLD", 0xed6f),
+        std::make_pair("LDIR", 0xedb0),
+        std::make_pair("CPIR", 0xedb1),
+        std::make_pair("INIR", 0xedb2),
+        std::make_pair("OTIR", 0xedb3),
+        std::make_pair("LDDR", 0xedb8),
+        std::make_pair("CPDR", 0xedb9),
+        std::make_pair("INDR", 0xedba),
+        std::make_pair("OTDR", 0xedbb),
+        std::make_pair("LDI", 0xeda0),
+        std::make_pair("CPI", 0xeda1),
+        std::make_pair("INI", 0xeda2),
+        std::make_pair("OUTI", 0xeda3),
+        std::make_pair("LDD", 0xeda8),
+        std::make_pair("CPD", 0xeda9),
+        std::make_pair("IND", 0xedaa),
+        std::make_pair("OUTD", 0xedab),
+    };
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+
+    int n = scan.match_one_of(-1, single_opcode);
+    if (n != -1 && scan.at_end()) {
+        if ((n & 0xff00) != 0) {
+            asm_line.bytes.push_back((n >> 8) & 0xff);
+        }
+        asm_line.bytes.push_back(n & 0xff);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_ld(AsmLine& asm_line) {
+    if (!scan.match("LD")) {
+        return false;
+    }
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+
+    int r1, r2, pfx;
+    Expr expr1(loc), expr2(loc);
+
+    // ld (bc|de), a
+    scan.set_pos(p0);
+    if (scan.match("(") && parse_bc_de(r1) && scan.match(")")
+            && scan.match(",") && scan.match("A") && scan.at_end()) {
+        asm_line.bytes.push_back(0x02 + 16 * r1);
+        return true;
+    }
+
+    // ld a, (bc|de)
+    scan.set_pos(p0);
+    if (scan.match("A") && scan.match(",")
+            && scan.match("(") && parse_bc_de(r1) && scan.match(")") && scan.at_end()) {
+        asm_line.bytes.push_back(0x0a + 16 * r1);
+        return true;
+    }
+
+    // ld r1, r2
+    scan.set_pos(p0);
+    if (parse_r1(r1) && scan.match(",") && parse_r1(r2) && scan.at_end()) {
+        asm_line.bytes.push_back(0x40 + 8 * r1 + r2);
+        return true;
+    }
+
+    // ld (hl), r
+    scan.set_pos(p0);
+    if (scan.match("(") && scan.match("HL") && scan.match(")") && scan.match(",")
+            && parse_r1(r1)
+            && scan.at_end()) {
+        asm_line.bytes.push_back(0x40 + 8 * 6 + r1);
+        return true;
+    }
+
+    // ld r, (hl)
+    scan.set_pos(p0);
+    if (parse_r1(r1) && scan.match(",") && scan.match("(") && scan.match("HL")
+            && scan.match(")")
+            && scan.at_end()) {
+        asm_line.bytes.push_back(0x40 + 8 * r1 + 6);
+        return true;
+    }
+
+    // ld i, a
+    scan.set_pos(p0);
+    if (scan.match("I") && scan.match(",") && scan.match("A") && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x47);
+        return true;
+    }
+
+    // ld r, a
+    scan.set_pos(p0);
+    if (scan.match("R") && scan.match(",") && scan.match("A") && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x4f);
+        return true;
+    }
+
+    // ld a, i
+    scan.set_pos(p0);
+    if (scan.match("A") && scan.match(",") && scan.match("I") && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x57);
+        return true;
+    }
+
+    // ld a, r
+    scan.set_pos(p0);
+    if (scan.match("A") && scan.match(",") && scan.match("R") && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x5f);
+        return true;
+    }
+
+    // ld (hl), N
+    scan.set_pos(p0);
+    if (scan.match("(") && scan.match("HL") && scan.match(")")
+            && scan.match(",") && parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x06 + 8 * 6);
+        add_byte_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld (x+d), r
+    scan.set_pos(p0);
+    if (parse_x_plus_ind(pfx, expr1) && scan.match(",") && parse_r1(r1)
+            && scan.at_end()) {
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0x40 + 8 * 6 + r1);
+        add_sbyte_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld r, (x+d)
+    scan.set_pos(p0);
+    if (parse_r1(r1) && scan.match(",") && parse_x_plus_ind(pfx, expr1)
+            && scan.at_end()) {
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0x40 + 8 * r1 + 6);
+        add_byte_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld (x+d), N
+    scan.set_pos(p0);
+    if (parse_x_plus_ind(pfx, expr1)
+            && scan.match(",") && parse_expr(expr2) && scan.at_end()) {
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0x06 + 8 * 6);
+        add_sbyte_patch(asm_line, expr1);
+        add_byte_patch(asm_line, expr2);
+        return true;
+    }
+
+    // ld sp, x
+    scan.set_pos(p0);
+    if (scan.match("SP") && scan.match(",") && parse_hl_ix_iy(pfx)
+            && scan.at_end()) {
+        if (pfx != 0) {
+            asm_line.bytes.push_back(pfx);
+        }
+        asm_line.bytes.push_back(0xf9);
+        return true;
+    }
+
+    // ld dd, (NN)
+    scan.set_pos(p0);
+    if (parse_dd_sp(r1) && scan.match(",")
+            && scan.match("(") && parse_expr(expr1) && scan.match(")") && scan.at_end()) {
+        if (r1 == 2) {
+            asm_line.bytes.push_back(0x2a);
+        }
+        else if ((r1 & 0xff00) != 0) {
+            asm_line.bytes.push_back(r1 >> 8);
+            asm_line.bytes.push_back(0x2a);
+        }
+        else {
+            asm_line.bytes.push_back(0xed);
+            asm_line.bytes.push_back(0x4b + 16 * (r1 & 0xff));
+        }
+        add_word_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld dd, NN
+    scan.set_pos(p0);
+    if (parse_dd_sp(r1) && scan.match(",") && parse_expr(expr1) && scan.at_end()) {
+        if ((r1 & 0xff00) != 0) {
+            asm_line.bytes.push_back(r1 >> 8);
+        }
+        asm_line.bytes.push_back(0x01 + 16 * (r1 & 0xff));
+        add_word_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld (NN), dd
+    scan.set_pos(p0);
+    if (scan.match("(") && parse_expr(expr1) && scan.match(")")
+            && scan.match(",") && parse_dd_sp(r1) && scan.at_end()) {
+        if (r1 == 2) {
+            asm_line.bytes.push_back(0x22);
+        }
+        else if ((r1 & 0xff00) != 0) {
+            asm_line.bytes.push_back(r1 >> 8);
+            asm_line.bytes.push_back(0x22);
+        }
+        else {
+            asm_line.bytes.push_back(0xed);
+            asm_line.bytes.push_back(0x43 + 16 * (r1 & 0xff));
+        }
+        add_word_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld a, (NN)
+    scan.set_pos(p0);
+    if (scan.match("A") && scan.match(",")
+            && scan.match("(") && parse_expr(expr1) && scan.match(")") && scan.at_end()) {
+        asm_line.bytes.push_back(0x3a);
+        add_word_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld (NN), a
+    scan.set_pos(p0);
+    if (scan.match("(") && parse_expr(expr1) && scan.match(")")
+            && scan.match(",") && scan.match("A") && scan.at_end()) {
+        asm_line.bytes.push_back(0x32);
+        add_word_patch(asm_line, expr1);
+        return true;
+    }
+
+    // ld r1, N
+    scan.set_pos(p0);
+    if (parse_r1(r1) && scan.match(",") && parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x06 + 8 * r1);
+        add_byte_patch(asm_line, expr1);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_alu(AsmLine& asm_line) {
+    static const std::vector<std::pair<std::string, int>> alu1 = {
+        std::make_pair("ADD", 0),
+        std::make_pair("ADC", 1),
+        std::make_pair("SUB", 2),
+        std::make_pair("SBC", 3),
+        std::make_pair("AND", 4),
+        std::make_pair("XOR", 5),
+        std::make_pair("OR", 6),
+        std::make_pair("CP", 7),
+    };
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+    int r1, r2, pfx;
+    Expr expr1(loc), expr2(loc);
+
+    int op = scan.match_one_of(-1, alu1);
+    if (op == -1) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // add hl|ix|iy, dd
+    scan.set_pos(p1);
+    if (op == 0 && parse_dd_sp(r1) && (r1 & 0xff) == 2 && scan.match(",")
+            && parse_dd_sp(r2) && scan.at_end()) {
+        if ((r2 & 0xff) == 2 && (r1 & 0xff00) != (r2 & 0xff00)) {
+            scan.set_pos(p0);
+            return false;
+        }
+        if ((r1 & 0xff00) != 0) {
+            asm_line.bytes.push_back((r1 >> 8) & 0xff);
+        }
+        asm_line.bytes.push_back(0x09 + 16 * (r2 & 0xff));
+        return true;
+    }
+
+    // adc hl, dd
+    scan.set_pos(p1);
+    if (op == 1 && parse_dd_sp(r1) && r1 == 2 && scan.match(",") && parse_dd_sp(r2)
+            && (r2 & 0xff00) == 0 && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x4a + 16 * (r2 & 0xff));
+        return true;
+    }
+
+    // sbc hl, dd
+    scan.set_pos(p1);
+    if (op == 3 && parse_dd_sp(r1) && r1 == 2 && scan.match(",") && parse_dd_sp(r2)
+            && (r2 & 0xff00) == 0 && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x42 + 16 * (r2 & 0xff));
+        return true;
+    }
+
+    // {alu} a, r
+    scan.set_pos(p1);
+    if (scan.match("A") && scan.match(",") && parse_r1(r1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x80 + 8 * op + r1);
+        return true;
+    }
+
+    // {alu} r
+    scan.set_pos(p1);
+    if (parse_r1(r1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x80 + 8 * op + r1);
+        return true;
+    }
+
+    // {alu} a, (hl)
+    scan.set_pos(p1);
+    if (scan.match("A") && scan.match(",") && scan.match("(") && scan.match("HL")
+            && scan.match(")")
+            && scan.at_end()) {
+        asm_line.bytes.push_back(0x80 + 8 * op + 6);
+        return true;
+    }
+
+    // {alu} (hl)
+    scan.set_pos(p1);
+    if (scan.match("(") && scan.match("HL") && scan.match(")") && scan.at_end()) {
+        asm_line.bytes.push_back(0x80 + 8 * op + 6);
+        return true;
+    }
+
+    // {alu} a, (x+DIS)
+    scan.set_pos(p1);
+    if (scan.match("A") && scan.match(",") && parse_x_plus_ind(pfx, expr1)
+            && scan.at_end()) {
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0x80 + 8 * op + 6);
+        add_sbyte_patch(asm_line, expr1);
+        return true;
+    }
+
+    // {alu} (x+DIS)
+    scan.set_pos(p1);
+    if (parse_x_plus_ind(pfx, expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0x80 + 8 * op + 6);
+        add_sbyte_patch(asm_line, expr1);
+        return true;
+    }
+
+    // {alu} a, N
+    scan.set_pos(p1);
+    if (scan.match("A") && scan.match(",") && parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0xc6 + 8 * op);
+        add_byte_patch(asm_line, expr1);
+        return true;
+    }
+
+    // {alu} N
+    scan.set_pos(p1);
+    if (parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0xc6 + 8 * op);
+        add_byte_patch(asm_line, expr1);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_ex(AsmLine& asm_line) {
+    int pfx;
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+
+    if (!scan.match("EX")) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // ex (sp), x
+    scan.set_pos(p1);
+    if (scan.match("(") && scan.match("SP") && scan.match(")") && scan.match(",")
+            && parse_hl_ix_iy(pfx) && scan.at_end()) {
+        if (pfx) {
+            asm_line.bytes.push_back(pfx);
+        }
+        asm_line.bytes.push_back(0xe3);
+        return true;
+    }
+
+    // ex af, af'
+    scan.set_pos(p1);
+    if (scan.match("AF") && scan.match(",") && scan.match("AF") && scan.match("'")
+            && scan.at_end()) {
+        asm_line.bytes.push_back(0x08);
+        return true;
+    }
+
+    // ex af, af
+    scan.set_pos(p1);
+    if (scan.match("AF") && scan.match(",") && scan.match("AF") && scan.at_end()) {
+        asm_line.bytes.push_back(0x08);
+        return true;
+    }
+
+    // ex de, hl
+    scan.set_pos(p1);
+    if (scan.match("DE") && scan.match(",") && scan.match("HL") && scan.at_end()) {
+        asm_line.bytes.push_back(0xeb);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_bit(AsmLine& asm_line) {
+    static const std::vector<std::pair<std::string, int>> bit1 = {
+        std::make_pair("BIT", 0),
+        std::make_pair("RES", 1),
+        std::make_pair("SET", 2),
+    };
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+    int r1, pfx;
+    Expr bit_num(loc), expr1(loc);
+
+    int op = scan.match_one_of(-1, bit1);
+    if (op == -1) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // {bit} N, r
+    scan.set_pos(p1);
+    if (parse_expr(bit_num) && scan.match(",") && parse_r1(r1) && scan.at_end()) {
+        int bit = eval_const_expr(bit_num);
+        if (bit < 0 || bit > 7) {
+            scan.set_pos(p0);
+            return false;
+        }
+        asm_line.bytes.push_back(0xcb);
+        asm_line.bytes.push_back(0x40 + 0x40 * op + 8 * bit + r1);
+        return true;
+    }
+
+    // {bit} N, (hl)
+    scan.set_pos(p1);
+    if (parse_expr(bit_num) && scan.match(",") && scan.match("(")
+            && scan.match("HL")
+            && scan.match(")") && scan.at_end()) {
+        int bit = eval_const_expr(bit_num);
+        if (bit < 0 || bit > 7) {
+            scan.set_pos(p0);
+            return false;
+        }
+        asm_line.bytes.push_back(0xcb);
+        asm_line.bytes.push_back(0x40 + 0x40 * op + 8 * bit + 6);
+        return true;
+    }
+
+    // {bit} N, (x+DIS)
+    scan.set_pos(p1);
+    if (parse_expr(bit_num) && scan.match(",")
+            && parse_x_plus_ind(pfx, expr1) && scan.at_end()) {
+        int bit = eval_const_expr(bit_num);
+        if (bit < 0 || bit > 7) {
+            scan.set_pos(p0);
+            return false;
+        }
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0xcb);
+        add_sbyte_patch(asm_line, expr1);
+        asm_line.bytes.push_back(0x40 + 0x40 * op + 8 * bit + 6);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_call_jp(AsmLine& asm_line) {
+    static const std::vector<std::pair<std::string, int>> jpcall1 = {
+        std::make_pair("JP", 0),
+        std::make_pair("CALL", 1),
+    };
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+    int f1, pfx;
+    Expr expr1(loc), expr2(loc);
+
+    int op = scan.match_one_of(-1, jpcall1);
+    if (op == -1) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // jp (hl|ix|iy)
+    scan.set_pos(p1);
+    if (op == 0 && scan.match("(") && parse_hl_ix_iy(pfx) && scan.match(")")
+            && scan.at_end()) {
+        if (pfx != 0) {
+            asm_line.bytes.push_back(pfx);
+        }
+        asm_line.bytes.push_back(0xe9);
+        return true;
+    }
+
+    // jp|call flag, NN
+    scan.set_pos(p1);
+    if (parse_flags_jp(f1) && scan.match(",") && parse_expr(expr1)
+            && scan.at_end()) {
+        asm_line.bytes.push_back(0xc2 + 2 * op + 8 * f1);
+        add_word_patch(asm_line, expr1);
+        return true;
+    }
+
+    // jp|call NN
+    scan.set_pos(p1);
+    if (parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0xc3 + 10 * op);
+        add_word_patch(asm_line, expr1);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_rst(AsmLine& asm_line) {
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    Expr expr1(loc);
+
+    if (scan.match("RST") && parse_expr(expr1) && scan.at_end()) {
+        int n = eval_const_expr(expr1);
+        switch (n) {
+        case 0x00:
+        case 0x08:
+        case 0x10:
+        case 0x18:
+        case 0x20:
+        case 0x28:
+        case 0x30:
+        case 0x38:
+            asm_line.bytes.push_back(0xc7 + n);
+            return true;
+        }
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_ret(AsmLine& asm_line) {
+    int f1;
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+
+    if (scan.match("RET") && parse_flags_jp(f1) && scan.at_end()) {
+        asm_line.bytes.push_back(0xc0 + 8 * f1);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_jr(AsmLine& asm_line) {
+    Expr expr1(loc);
+    int f1;
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+
+    // djnz NN
+    scan.set_pos(p0);
+    if (scan.match("DJNZ") && parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x10);
+        add_jr_patch(asm_line, expr1);
+        return true;
+    }
+
+    // jr f, NN
+    scan.set_pos(p0);
+    if (scan.match("JR") && parse_flags_jr(f1) && scan.match(",")
+            && parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x20 + 8 * f1);
+        add_jr_patch(asm_line, expr1);
+        return true;
+    }
+
+    // jr NN
+    scan.set_pos(p0);
+    if (scan.match("JR") && parse_expr(expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x18);
+        add_jr_patch(asm_line, expr1);
+        return true;
+    }
+
+    return false;
+}
+
+bool Parser::parse_inc_dec(AsmLine& asm_line) {
+    static const std::vector<std::pair<std::string, int>> incdec1 = {
+        std::make_pair("INC", 0),
+        std::make_pair("DEC", 1),
+    };
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+    int r1, pfx;
+    Expr expr1(loc);
+
+    int op = scan.match_one_of(-1, incdec1);
+    if (op == -1) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // inc|dec dd
+    scan.set_pos(p1);
+    if (parse_dd_sp(r1) && scan.at_end()) {
+        if ((r1 & 0xff00) != 0) {
+            asm_line.bytes.push_back((r1 >> 8) & 0xff);
+        }
+        asm_line.bytes.push_back(0x03 + 8 * op + 16 * (r1 & 0xff));
+        return true;
+    }
+
+    // inc|dec r
+    scan.set_pos(p1);
+    if (parse_r1(r1) && scan.at_end()) {
+        asm_line.bytes.push_back(0x04 + 1 * op + 8 * r1);
+        return true;
+    }
+
+    // inc|dec (hl)
+    scan.set_pos(p1);
+    if (scan.match("(") && scan.match("HL") && scan.match(")") && scan.at_end()) {
+        asm_line.bytes.push_back(0x04 + 1 * op + 8 * 6);
+        return true;
+    }
+
+    // inc|dec (x+DIS)
+    scan.set_pos(p1);
+    if (parse_x_plus_ind(pfx, expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0x04 + 1 * op + 8 * 6);
+        add_sbyte_patch(asm_line, expr1);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_in(AsmLine& asm_line) {
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+    int r1;
+    Expr expr1(loc);
+
+    if (!scan.match("IN")) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // in r, (c)
+    scan.set_pos(p1);
+    if (parse_r1(r1) && scan.match(",")
+            && scan.match("(") && scan.match("C") && scan.match(")") && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x40 + 8 * r1);
+        return true;
+    }
+
+    // in a, (n)
+    scan.set_pos(p1);
+    if (scan.match("A") && scan.match(",")
+            && scan.match("(") && parse_expr(expr1) && scan.match(")") && scan.at_end()) {
+        asm_line.bytes.push_back(0xdb);
+        add_byte_patch(asm_line, expr1);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_out(AsmLine& asm_line) {
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+    int r1;
+    Expr expr1(loc);
+
+    if (!scan.match("OUT")) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // out (c), r
+    scan.set_pos(p1);
+    if (scan.match("(") && scan.match("C") && scan.match(")") &&
+            scan.match(",") && parse_r1(r1) && scan.at_end()) {
+        asm_line.bytes.push_back(0xed);
+        asm_line.bytes.push_back(0x41 + 8 * r1);
+        return true;
+    }
+
+    // out (n), a
+    scan.set_pos(p1);
+    if (scan.match("(") && parse_expr(expr1) && scan.match(")")
+            && scan.match(",") && scan.match("A") && scan.at_end()) {
+        asm_line.bytes.push_back(0xd3);
+        add_byte_patch(asm_line, expr1);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_im(AsmLine& asm_line) {
+    Expr expr(loc);
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+
+    if (scan.match("IM") && parse_expr(expr) && scan.at_end()) {
+        int n = eval_const_expr(expr);
+        switch (n) {
+        case 0:
+            asm_line.bytes.push_back(0xed);
+            asm_line.bytes.push_back(0x46);
+            return true;
+        case 1:
+            asm_line.bytes.push_back(0xed);
+            asm_line.bytes.push_back(0x56);
+            return true;
+        case 2:
+            asm_line.bytes.push_back(0xed);
+            asm_line.bytes.push_back(0x5e);
+            return true;
+        default:
+            ;
+        }
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_push_pop(AsmLine& asm_line) {
+    int r1;
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+
+    // push dd
+    scan.set_pos(p0);
+    if (scan.match("PUSH") && parse_dd_af(r1) && scan.at_end()) {
+        if ((r1 & 0xff00) != 0) {
+            asm_line.bytes.push_back((r1 >> 8) & 0xff);
+        }
+        asm_line.bytes.push_back(0xc5 + 16 * (r1 & 0xff));
+        return true;
+    }
+
+    // pop dd
+    scan.set_pos(p0);
+    if (scan.match("POP") && parse_dd_af(r1) && scan.at_end()) {
+        if ((r1 & 0xff00) != 0) {
+            asm_line.bytes.push_back((r1 >> 8) & 0xff);
+        }
+        asm_line.bytes.push_back(0xc1 + 16 * (r1 & 0xff));
+        return true;
+    }
+
+    return false;
+}
+
+bool Parser::parse_rotate(AsmLine& asm_line) {
+    static const std::vector<std::pair<std::string, int>> rot1 = {
+        std::make_pair("RLC", 0),
+        std::make_pair("RRC", 1),
+        std::make_pair("RL", 2),
+        std::make_pair("RR", 3),
+        std::make_pair("SLA", 4),
+        std::make_pair("SRA", 5),
+        std::make_pair("SLL", 6),
+        std::make_pair("SRL", 7),
+    };
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    const char* p1 = scan.pos();
+    int r1, pfx;
+    Expr expr1(loc);
+
+    int op = scan.match_one_of(-1, rot1);
+    if (op == -1) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    p1 = scan.pos();
+
+    // {rot} r
+    scan.set_pos(p1);
+    if (parse_r1(r1) && scan.at_end()) {
+        asm_line.bytes.push_back(0xcb);
+        asm_line.bytes.push_back(0x00 + 8 * op + r1);
+        return true;
+    }
+
+    // {rot} (hl)
+    scan.set_pos(p1);
+    if (scan.match("(") && scan.match("HL") && scan.match(")") && scan.at_end()) {
+        asm_line.bytes.push_back(0xcb);
+        asm_line.bytes.push_back(0x00 + 8 * op + 6);
+        return true;
+    }
+
+    // {rot} (x+DIS)
+    scan.set_pos(p1);
+    if (parse_x_plus_ind(pfx, expr1) && scan.at_end()) {
+        asm_line.bytes.push_back(pfx);
+        asm_line.bytes.push_back(0xcb);
+        add_sbyte_patch(asm_line, expr1);
+        asm_line.bytes.push_back(0x00 + 8 * op + 6);
+        return true;
+    }
+
+    scan.set_pos(p0);
+    return false;
+}
+
+bool Parser::parse_dd_sp(int& n) {
+    static const std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("BC", 0),
+        std::make_pair("DE", 1),
+        std::make_pair("HL", 2),
+        std::make_pair("SP", 3),
+        std::make_pair("IX", 0xdd02),
+        std::make_pair("IY", 0xfd02),
+    };
+    n = scan.match_one_of(-1, regs);
+    if (n != -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_dd_af(int& n) {
+    static const std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("BC", 0),
+        std::make_pair("DE", 1),
+        std::make_pair("HL", 2),
+        std::make_pair("AF", 3),
+        std::make_pair("IX", 0xdd02),
+        std::make_pair("IY", 0xfd02),
+    };
+    n = scan.match_one_of(-1, regs);
+    if (n != -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_bc_de(int& n) {
+    static const std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("BC", 0),
+        std::make_pair("DE", 1),
+    };
+    n = scan.match_one_of(-1, regs);
+    if (n != -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_hl_ix_iy(int& pfx) {
+    static const std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("HL", 0),
+        std::make_pair("IX", 0xdd),
+        std::make_pair("IY", 0xfd),
+    };
+    pfx = scan.match_one_of(-1, regs);
+    if (pfx != -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_r1(int& n) {
+    static const std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("B", 0),
+        std::make_pair("C", 1),
+        std::make_pair("D", 2),
+        std::make_pair("E", 3),
+        std::make_pair("H", 4),
+        std::make_pair("L", 5),
+        std::make_pair("A", 7),
+    };
+    n = scan.match_one_of(-1, regs);
+    if (n != -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_flags_jr(int& n) {
+    static const std::vector<std::pair<std::string, int>> flags = {
+        std::make_pair("NZ", 0),
+        std::make_pair("Z", 1),
+        std::make_pair("NC", 2),
+        std::make_pair("C", 3),
+    };
+    n = scan.match_one_of(-1, flags);
+    if (n != -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_flags_jp(int& n) {
+    static const std::vector<std::pair<std::string, int>> flags = {
+        std::make_pair("NZ", 0),
+        std::make_pair("Z", 1),
+        std::make_pair("NC", 2),
+        std::make_pair("C", 3),
+        std::make_pair("PO", 4),
+        std::make_pair("PE", 5),
+        std::make_pair("P", 6),
+        std::make_pair("M", 7),
+    };
+    n = scan.match_one_of(-1, flags);
+    if (n != -1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Parser::parse_x_plus_ind(int& pfx, Expr& offset) {
+    static const std::vector<std::pair<std::string, int>> regs = {
+        std::make_pair("IX", 0xdd),
+        std::make_pair("IY", 0xfd),
+    };
+
+    scan.skip_spaces();
+    const char* p0 = scan.pos();
+    if (!scan.match("(")) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    pfx = scan.match_one_of(-1, regs);
+    if (pfx == -1) {
+        scan.set_pos(p0);
+        return false;
+    }
+
+    if (scan.match(")")) {			// no offset
+        Token token;
+        token.code = T_integer;
+        token.ivalue = 0;
+        offset.rpn.push_back(token);
+        return true;
+    }
+    else if (parse_expr(offset) && scan.match(")")) {
+        return true;
+    }
+    else {
+        scan.set_pos(p0);
+        return false;
+    }
+}
+
+void Parser::add_sbyte_patch(AsmLine& asm_line, const Expr& expr) {
+    Patch patch(Patch::Type::SByte, expr.loc);
+    patch.expr = expr;
+    patch.offset = INT(asm_line.bytes.size());
+    asm_line.patches.push_back(patch);
+    asm_line.bytes.push_back(0);
+}
+
+void Parser::add_byte_patch(AsmLine& asm_line, const Expr& expr) {
+    Patch patch(Patch::Type::Byte, expr.loc);
+    patch.expr = expr;
+    patch.offset = INT(asm_line.bytes.size());
+    asm_line.patches.push_back(patch);
+    asm_line.bytes.push_back(0);
+}
+
+void Parser::add_word_patch(AsmLine& asm_line, const Expr& expr) {
+    Patch patch(Patch::Type::Word, expr.loc);
+    patch.expr = expr;
+    patch.offset = INT(asm_line.bytes.size());
+    asm_line.patches.push_back(patch);
+    asm_line.bytes.push_back(0);
+    asm_line.bytes.push_back(0);
+}
+
+void Parser::add_jr_patch(AsmLine& asm_line, const Expr& expr) {
+    Patch patch(Patch::Type::JrOffset, expr.loc);
+    patch.expr = expr;
+    patch.offset = INT(asm_line.bytes.size());
+    asm_line.patches.push_back(patch);
+    asm_line.bytes.push_back(0);
 }

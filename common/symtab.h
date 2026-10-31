@@ -11,15 +11,14 @@
 #include <unordered_map>
 
 struct Symbol {
-    enum class Type { Const, Addr };
-    Type type = Type::Const;
     std::string name;
     int value;
     SourceLoc loc;
 
-    explicit Symbol(Type type_ = Type::Const,
-                    const std::string& name_ = "", int value_ = 0,
-                    const SourceLoc& loc_ = SourceLoc());
+    explicit Symbol(const std::string& name_, int value_,
+                    const SourceLoc& loc_)
+        : name(name_), value(value_), loc(loc_) {}
+
 };
 
 class Symtab {
@@ -31,13 +30,13 @@ public:
 
     void init();
 
-    void add(Symbol::Type type, const std::string& name, int value,
+    void add(const std::string& name, int value,
              const SourceLoc& loc);
-    void update(Symbol::Type type, const std::string& name, int value,
+    void update(const std::string& name, int value,
                 const SourceLoc& loc);
 
-    Symbol* get(const std::string& name);	// nullptr if not found
-    Symbol* find(int value);			// last defined symbol with this value
+    Symbol* get(const std::string& name) const;	// nullptr if not found
+    Symbol* find(int value) const;			// last defined symbol with this value
 
     auto begin() {
         return symbols.begin();
@@ -58,4 +57,3 @@ public:
 private:
     std::unordered_map<std::string, Symbol*> symbols;
 };
-

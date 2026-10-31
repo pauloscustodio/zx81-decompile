@@ -9,6 +9,7 @@
 #include "utils.h"
 #include <cmath>
 #include <cstdlib>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -87,6 +88,16 @@ bool Scanner::parse_integer(int& value) {
 bool Scanner::parse_number(double& value, std::string& value_text) {
     skip_spaces();
     const char* p0 = p;
+
+    if (p[0] == '$' || (p[0] == '0' && p[1] == 'x')) {	// hex
+        int int_value;
+        if (!parse_integer(int_value)) {
+            return false;
+        }
+        value = static_cast<double>(int_value);
+        value_text = std::to_string(int_value);
+        return true;
+    }
 
     // collect mantissa
     int num_dots = 0;
@@ -172,6 +183,9 @@ bool Scanner::parse_ident(std::string& ident) {
 }
 
 bool Scanner::match(const std::string& compare) {
+    if (compare.empty()) {
+        return false;
+    }
     skip_spaces();
     for (size_t i = 0; i < compare.size(); i++) {
         if (p[i] == '\0') {
@@ -180,6 +194,10 @@ bool Scanner::match(const std::string& compare) {
         if (toupper_safe(p[i]) != toupper_safe(compare[i])) {
             return false;
         }
+    }
+    if (isalnum_safe(compare.back()) &&
+            isalnum_safe(p[compare.size()])) {
+        return false;       // e.g. match("LD") on "LDI" is false
     }
     p += compare.size();
     return true;

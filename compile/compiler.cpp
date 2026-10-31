@@ -7,15 +7,16 @@
 #include "basic.h"
 #include "compiler.h"
 #include "errors.h"
+#include "expr.h"
 #include "release_assert.h"
 #include "symtab.h"
 #include "types.h"
-#include "utils.h"
 #include "zx81consts.h"
 #include "zx81float.h"
 #include <array>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 
 Compiler::Compiler(Basic* basic_)
     : basic(basic_) {
@@ -34,6 +35,9 @@ void Compiler::compile() {
     int last_end_addr = 0;
     for (pass = 1; pass <= 2; pass++) {
         compile_prog();
+        if (get_error_count()) {
+            return;
+        }
 
         if (addr != last_end_addr) {	// source size changed
             pass = 0;    // keep on pass 1
@@ -100,44 +104,61 @@ void Compiler::remove_empty_basic_lines() {
 }
 
 void Compiler::compile_prog() {
+    bool last_rem = false;
+    int last_line_addr = 0;
+    int last_line_num = -1;
+    SourceLine::Type last_line_type = SourceLine::Type::Basic;
+
     addr = PROG;
-    line_addr = 0;
-    bool last_basic = false;
     for (auto& line : basic->source_lines) {
         switch (line.type) {
         case SourceLine::Type::Basic:
-            if (line_addr > 0 && !last_basic) {	// end last asm statement
+            if (last_line_type == SourceLine::Type::Asm) {  // end last asm statement
                 mem.poke(addr++, C_newline);
-                end_basic_line();
+                end_basic_line(last_line_addr);
             }
+
+            last_line_addr = addr;
             start_basic_line(line.line_num);
             compile_basic(line);
-            end_basic_line();
-            last_basic = true;
+            end_basic_line(last_line_addr);
+            last_line_num = line.line_num;
+
+            if (!line.tokens.empty() && line.tokens.front().code == C_REM) {
+                last_rem = true;
+            }
+            else {
+                last_rem = false;
+            }
             break;
 
         case SourceLine::Type::Asm:			// concatenate to last basic line
-            if (line_addr == 0) {			// create REM line
-                start_basic_line(0);
-                mem.poke(addr++, C_REM);
+            if (last_line_type == SourceLine::Type::Basic) {
+                if (last_rem) {
+                    addr--;						// overwrite newline
+                    last_rem = false;
+                }
+                else {
+                    last_line_addr = addr;
+                    start_basic_line(++last_line_num);
+                    mem.poke(addr++, C_REM);
+                }
             }
-            else if (last_basic) {
-                addr--;						// overwrite newline
-            }
-            asmpc = addr;
-            assemble(line);
-            end_basic_line();
-            last_basic = false;
+
+            symtab.update("ASMPC", addr, line.loc);
+            assemble(line.asm_line);
             break;
 
         default:
             release_assert(0);
         }
+
+        last_line_type = line.type;
     }
 
-    if (line_addr > 0 && !last_basic) {
+    if (last_line_type == SourceLine::Type::Asm) {
         mem.poke(addr++, C_newline);
-        end_basic_line();
+        end_basic_line(last_line_addr);
     }
 
     // video to stkend
@@ -172,22 +193,20 @@ void Compiler::compile_prog() {
 }
 
 void Compiler::start_basic_line(int line_num) {
-    line_addr = addr;
     mem.dpoke_be(addr, line_num);
     addr += 2;
     mem.dpoke(addr, 0); // placeholder for size
     addr += 2;
 }
 
-void Compiler::end_basic_line() {
+void Compiler::end_basic_line(int line_addr) {
     mem.dpoke(line_addr + 2, addr - line_addr - 4);		// fill size
-    line_addr = 0;
 }
 
 void Compiler::compile_basic(SourceLine& line) {
     // define label on possibly multiple passes 1
     if (pass == 1 && !line.label.empty()) {
-        symtab.update(Symbol::Type::Addr, line.label, line_addr, line.loc);
+        symtab.update(line.label, addr - 4, line.loc);
     }
 
     // process each token
@@ -390,6 +409,64 @@ void Compiler::compile_vars() {
     addr = mem.dpeek(E_LINE);
 }
 
-void Compiler::assemble(SourceLine& line) {
-    (void)line;
+void Compiler::assemble(AsmLine& line) {
+    int opc_addr = addr;
+
+    // define label on possibly multiple passes 1
+    if (pass == 1 && !line.label.empty()) {
+        symtab.update(line.label, addr, line.loc);
+    }
+
+    // define EQU on pass 1
+    if (pass == 1 && !line.equ_expr.empty()) {
+        int value = eval_expr(line.equ_expr, symtab);
+        symtab.update(line.label, value, line.loc);
+    }
+
+    // add bytes
+    for (auto& c : line.bytes) {
+        mem.poke(addr++, c);
+    }
+
+    // add patches on pass 2
+    if (pass == 2) {
+        for (auto& patch : line.patches) {
+            int value = eval_expr(patch.expr, symtab);
+            int patch_addr = opc_addr + patch.offset;
+            switch (patch.type) {
+            case Patch::Type::SByte:
+                if (value < -128 || value > 255) {
+                    error(patch.expr.loc, "value out of range for SByte: " + std::to_string(value));
+                    return;
+                }
+                mem.poke(patch_addr, value & 0xff);
+                break;
+            case Patch::Type::Byte:
+                if (value < -128 || value > 255) {
+                    error(patch.expr.loc, "value out of range for Byte: " + std::to_string(value));
+                    return;
+                }
+                mem.poke(patch_addr, value & 0xff);
+                break;
+            case Patch::Type::Word:
+                if (value < -32768 || value > 65535) {
+                    error(patch.expr.loc, "value out of range for Word: " + std::to_string(value));
+                    return;
+                }
+                mem.dpoke(patch_addr, value & 0xffff);
+                break;
+            case Patch::Type::JrOffset:
+                value -= opc_addr + INT(line.bytes.size());
+                if (value < -128 || value > 127) {
+                    error(patch.expr.loc, "value out of range for JrOffset: " + std::to_string(
+                              value));
+                    return;
+                }
+                mem.poke(patch_addr, value & 0xff);
+                break;
+            default:
+                release_assert(0);
+            }
+        }
+    }
 }

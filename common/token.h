@@ -8,19 +8,14 @@
 
 #include "types.h"
 #include "zx81chars.h"
-#include <fstream>
 #include <string>
-#include <unordered_map>
-#include <vector>
 
-typedef std::vector<Token> Expr;
-
-struct Patch {
-    enum class Type { Byte, Word, SByte, JrOffset };
-    Type type{ Type::Byte };
-    int offset{ 0 };
-    Expr rpn;
-
-    Patch(Type type_ = Type::Byte) : type(type_) {}
+struct Token {
+    ZX81char code = T_none;
+    int ivalue = 0;         // for T_integer
+    double fvalue = 0.0;    // for T_float
+    std::string svalue;     // for T_string
+    std::string ident;      // for T_ident, T_line_addr, T_line_num
+    Bytes bytes;            // for T_rem_code
 };
 

@@ -7,19 +7,21 @@
 #pragma once
 
 #include "errors.h"
+#include "expr.h"
 #include "types.h"
-#include "zx81chars.h"
 #include <iostream>
 #include <string>
 #include <vector>
 
-struct Token {
-    ZX81char code = T_none;
-    int ivalue = 0;         // for T_integer
-    double fvalue = 0.0;    // for T_float
-    std::string svalue;     // for T_string
-    std::string ident;      // for T_ident, T_line_addr, T_line_num
-    Bytes bytes;            // for T_rem_code
+struct AsmLine {
+    SourceLoc loc;
+    std::string label;
+    Expr equ_expr;			// if equ
+    Bytes bytes;
+    std::vector<Patch> patches;
+
+    explicit AsmLine(const SourceLoc& loc_)
+        : loc(loc_), equ_expr(loc_) {}
 };
 
 struct SourceLine {
@@ -30,9 +32,10 @@ struct SourceLine {
     std::string label;
     int line_num = -1;
     std::vector<Token> tokens;
+    AsmLine asm_line;       // for Asm
 
-    SourceLine(Type type_ = Type::Basic, const SourceLoc& loc_ = SourceLoc())
-        : type(type_), loc(loc_) {}
+    SourceLine(Type type_, const SourceLoc& loc_)
+        : type(type_), loc(loc_), asm_line(loc_) {}
 };
 
 struct BasicVar {
@@ -59,6 +62,9 @@ struct BasicVar {
 
     // ArrayStrings
     std::vector<std::string> strs;
+
+    explicit BasicVar(Type type_, const SourceLoc& loc_)
+        : type(type_), loc(loc_) {}
 };
 
 struct Basic {

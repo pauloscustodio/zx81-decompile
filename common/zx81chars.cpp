@@ -44,37 +44,37 @@ Bytes encode_zx81(const std::string& str, const SourceLoc& loc) {
 Bytes encode_zx81(const char*& p, const SourceLoc& loc) {
     Bytes bytes;
     while (*p != '\0') {
-        if (p[0] == '\\' &&
-                isxdigit_safe(p[1]) &&
-                isxdigit_safe(p[2])) {
-            char hex[3] = { p[1], p[2], '\0' };
-            bytes.push_back(strtol(hex, NULL, 16) & 0xff);
-            p += 3;
-            continue;
-        }
+        Byte b = encode_zx81_char(p, loc);
+        bytes.push_back(b);
+    }
+    return bytes;
+}
 
-        bool encoded = false;
-        for (size_t i = 0; i < zx81chars.size(); i++) {
-            bool found = true;
-            for (size_t j = 0; j < zx81chars[i].size(); j++) {
-                if (toupper_safe(p[j]) != toupper_safe(zx81chars[i][j])) {
-                    found = false;
-                    break;
-                }
-            }
-            if (found) {
-                bytes.push_back(i & 0xff);
-                encoded = true;
-                p += zx81chars[i].size();
+Byte encode_zx81_char(const char*& p, const SourceLoc& loc) {
+    if (p[0] == '\\' &&
+            isxdigit_safe(p[1]) &&
+            isxdigit_safe(p[2])) {
+        char hex[3] = { p[1], p[2], '\0' };
+        p += 3;
+        return strtol(hex, NULL, 16) & 0xff;
+    }
+
+    for (size_t i = 0; i < zx81chars.size(); i++) {
+        bool found = true;
+        for (size_t j = 0; j < zx81chars[i].size(); j++) {
+            if (toupper_safe(p[j]) != toupper_safe(zx81chars[i][j])) {
+                found = false;
                 break;
             }
         }
-        if (!encoded) {
-            error(loc, "cannot encode: " + std::string(p));
-            break;
+        if (found) {
+            p += zx81chars[i].size();
+            return i & 0xff;
         }
     }
-    return bytes;
+
+    error(loc, "cannot encode: " + std::string(p));
+    return 0;
 }
 
 std::string encode_hex(const Bytes& bytes) {

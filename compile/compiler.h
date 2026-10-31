@@ -10,7 +10,6 @@
 #include "memory.h"
 #include "symtab.h"
 #include <string>
-#include <vector>
 
 class Compiler {
 public:
@@ -24,8 +23,6 @@ private:
     Basic* basic = nullptr;
     Symtab symtab;
     Memory mem;
-    int line_addr = 0;
-    int asmpc = 0;
     int addr = 0;
     int pass = 0;
 
@@ -33,7 +30,7 @@ private:
     void remove_empty_basic_lines();
     void compile_prog();
     void start_basic_line(int line_num);
-    void end_basic_line();
+    void end_basic_line(int line_addr);
     void compile_basic(SourceLine& line);
     void compile_number(double value, const std::string& value_str,
                         const SourceLoc& loc);
@@ -41,6 +38,7 @@ private:
     void compile_ident(const std::string& ident, const SourceLoc& loc);
     void compile_line_addr_ref(const std::string& ident, const SourceLoc& loc);
     void compile_vars();
+    void set_asmpc(int asmpc);
 
-    void assemble(SourceLine& line);
+    void assemble(AsmLine& line);
 };

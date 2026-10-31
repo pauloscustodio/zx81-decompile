@@ -108,7 +108,7 @@ void Decompiler::decompile_vars() {
     int addr = mem->dpeek(VARS);
     int c = 0;
     while ((c = mem->peek(addr)) != 0x80) {
-        BasicVar var;
+        BasicVar var(BasicVar::Type::Number, SourceLoc());
 
         if ((c & 0xe0) == 0x60) {		// single letter variable
             addr++;
@@ -258,7 +258,7 @@ void Decompiler::decompile_vars() {
 void Decompiler::decompile_basic() {
     basic->source_lines.clear();
     for (addr = PROG; addr < mem->dpeek(D_FILE); ) {
-        SourceLine line(SourceLine::Type::Basic);
+        SourceLine line(SourceLine::Type::Basic, SourceLoc());
         line.addr = addr;
         line.line_num = mem->dpeek_be(addr);
         int size = mem->dpeek(addr + 2);

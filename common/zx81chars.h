@@ -19,6 +19,20 @@ enum ZX81char {
     T_rem_code,
     T_line_addr_ref,
     T_line_num_ref,
+    T_symbol,
+    T_unary_minus,
+    T_log_not,
+    T_log_and,
+    T_log_or,
+    T_bin_not,
+    T_bin_and,
+    T_bin_xor,
+    T_bin_or,
+    T_mod,
+    T_conditional,
+    T_left_shift,
+    T_right_shift,
+    T_ASMPC,
 
 #define X(code, name, str) name = code,
 #include "zx81chars.def"
@@ -28,4 +42,5 @@ enum ZX81char {
 std::string decode_zx81(char c);
 Bytes encode_zx81(const std::string& str, const SourceLoc& loc);
 Bytes encode_zx81(const char*& p, const SourceLoc& loc);
+Byte encode_zx81_char(const char*& p, const SourceLoc& loc);
 std::string encode_hex(const Bytes& bytes);

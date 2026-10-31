@@ -21,10 +21,13 @@
   <ItemGroup>
     <ClInclude Include="..\..\common\basic.h" />
     <ClInclude Include="..\..\common\errors.h" />
+    <ClInclude Include="..\..\common\expr.h" />
     <ClInclude Include="..\..\common\getopt.h" />
     <ClInclude Include="..\..\common\memory.h" />
     <ClInclude Include="..\..\common\release_assert.h" />
     <ClInclude Include="..\..\common\scan.h" />
+    <ClInclude Include="..\..\common\symtab.h" />
+    <ClInclude Include="..\..\common\token.h" />
     <ClInclude Include="..\..\common\types.h" />
     <ClInclude Include="..\..\common\utils.h" />
     <ClInclude Include="..\..\common\zx81chars.h" />
@@ -34,9 +37,12 @@
   <ItemGroup>
     <ClCompile Include="..\..\common\basic.cpp" />
     <ClCompile Include="..\..\common\errors.cpp" />
+    <ClCompile Include="..\..\common\expr.cpp" />
     <ClCompile Include="..\..\common\getopt.cpp" />
     <ClCompile Include="..\..\common\memory.cpp" />
     <ClCompile Include="..\..\common\scan.cpp" />
+    <ClCompile Include="..\..\common\symtab.cpp" />
+    <ClCompile Include="..\..\common\token.cpp" />
     <ClCompile Include="..\..\common\utils.cpp" />
     <ClCompile Include="..\..\common\zx81chars.cpp" />
     <ClCompile Include="..\..\common\zx81float.cpp" />
