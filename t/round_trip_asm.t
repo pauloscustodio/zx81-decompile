@@ -5,12 +5,12 @@ BEGIN { use lib 't'; require 'testlib.pl'; }
 use Modern::Perl;
 use ZX81::Tape qw(dump_p);
 
-for my $input_bas_file ( path("t/input")->children(qr/\.bas$/) ) {
+for my $input_bas_file ( path("t/asm/input")->children(qr/\.bas$/) ) {
     note "$input_bas_file";
     my $basename     = $input_bas_file->basename('.bas');
-    my $exp_p_file   = path( "t/expected", "$basename.p" );
-    my $exp_txt_file = path( "t/expected", "$basename.txt" );
-    my $exp_bas_file = path( "t/expected", "$basename.bas" );
+    my $exp_p_file   = path( "t/asm/expected", "$basename.p" );
+    my $exp_txt_file = path( "t/asm/expected", "$basename.txt" );
+    my $exp_bas_file = path( "t/asm/expected", "$basename.bas" );
 
     # make .p file
     run_ok("zx81_compile -o $exp_p_file $input_bas_file");

@@ -104,8 +104,8 @@ sub capture_ok {
     my ( $cmd, $exp_out ) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    run_ok( $cmd . " > ${test}.stdout" );
-    check_text_file( $exp_out, "${test}.stdout" );
+    run_ok( $cmd . " > ${test}.out 2>&1" );
+    check_text_file( $exp_out, "${test}.out" );
 
     ( Test::More->builder->is_passing ) or die;
 }
@@ -115,8 +115,8 @@ sub capture_nok {
     my ( $cmd, $exp_err ) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    run_nok( $cmd . " 2> ${test}.stderr" );
-    check_text_file( $exp_err, "${test}.stderr" );
+    run_nok( $cmd . " > ${test}.out 2>&1" );
+    check_text_file( $exp_err, "${test}.out" );
 
     ( Test::More->builder->is_passing ) or die;
 }

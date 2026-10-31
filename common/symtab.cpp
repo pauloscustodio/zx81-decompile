@@ -31,7 +31,7 @@ void Symtab::add(const std::string& name, int value,
                  const SourceLoc& loc) {
     auto it = symbols.find(name);
     if (it != symbols.end()) {
-        error(loc, "duplicate definition:" + name);
+        error(loc, "duplicate definition: " + name);
     }
     else {
         auto symbol = new Symbol(name, value, loc);

@@ -1,0 +1,1 @@
+t/input/undef_labels.bas:3: error: undefined symbol: START

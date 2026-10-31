@@ -11,6 +11,7 @@
 #include "release_assert.h"
 #include "symtab.h"
 #include "types.h"
+#include "zx81chars.h"
 #include "zx81consts.h"
 #include "zx81float.h"
 #include <array>
@@ -19,28 +20,36 @@
 #include <unordered_map>
 
 Compiler::Compiler(Basic* basic_)
-    : basic(basic_) {
-}
+    : basic(basic_) {}
 
 void Compiler::compile() {
     symtab.init();
 
     // replace all @line by the line number
     fix_line_refs();
+    if (get_error_count()) {
+        return;
+    }
 
     // remove empty lines with no labels,
     // now that GOTO @line have been resolved
     remove_empty_basic_lines();
 
+    // pass 0: define symbols
+    // pass 1: layout program and udate symbols; repeats while layout changes
+    // pass 2: compute expressions
     int last_end_addr = 0;
-    for (pass = 1; pass <= 2; pass++) {
+    for (pass = 0; pass <= 2; pass++) {
         compile_prog();
         if (get_error_count()) {
             return;
         }
 
-        if (addr != last_end_addr) {	// source size changed
-            pass = 0;    // keep on pass 1
+        // repeat pass 1 if the program size changed
+        if (pass == 1) {
+            if (addr != last_end_addr) {	// source size changed
+                pass--;    // keep on pass 1
+            }
         }
 
         last_end_addr = addr;
@@ -72,7 +81,10 @@ void Compiler::fix_line_refs() {
             for (auto& token : line.tokens) {
                 if (token.code == ZX81char::T_line_num_ref) {
                     auto it = line_map.find(token.ident);
-                    release_assert(it != line_map.end());
+                    if (it == line_map.end()) {
+                        error(line.loc, "undefined symbol: " + token.ident);
+                        return;
+                    }
                     token.code = ZX81char::T_integer;
                     token.ivalue = it->second;
                 }
@@ -204,9 +216,14 @@ void Compiler::end_basic_line(int line_addr) {
 }
 
 void Compiler::compile_basic(SourceLine& line) {
-    // define label on possibly multiple passes 1
-    if (pass == 1 && !line.label.empty()) {
-        symtab.update(line.label, addr - 4, line.loc);
+    // define label on pass 0, update on possibly multiple passes 1
+    if (!line.label.empty()) {
+        if (pass == 0) {
+            symtab.add(line.label, addr - 4, line.loc);
+        }
+        else if (pass == 1) {
+            symtab.update(line.label, addr - 4, line.loc);
+        }
     }
 
     // process each token
@@ -280,7 +297,7 @@ void Compiler::compile_line_addr_ref(const std::string& ident,
                                      const SourceLoc& loc) {
     auto symbol = symtab.get(ident);
     if (!symbol && pass == 2) {
-        error(loc, "undefined symbol:" + ident);
+        error(loc, "undefined symbol: " + ident);
     }
     if (symbol) {
         compile_number(symbol->value, std::to_string(symbol->value), loc);
@@ -412,15 +429,22 @@ void Compiler::compile_vars() {
 void Compiler::assemble(AsmLine& line) {
     int opc_addr = addr;
 
-    // define label on possibly multiple passes 1
-    if (pass == 1 && !line.label.empty()) {
-        symtab.update(line.label, addr, line.loc);
-    }
+    // define label/equ on pass 0, update on possibly multiple passes 1
+    if (!line.label.empty()) {
+        int value = 0;
+        if (!line.equ_expr.empty()) {
+            value = eval_expr(line.equ_expr, symtab);
+        }
+        else {
+            value = addr;
+        }
 
-    // define EQU on pass 1
-    if (pass == 1 && !line.equ_expr.empty()) {
-        int value = eval_expr(line.equ_expr, symtab);
-        symtab.update(line.label, value, line.loc);
+        if (pass == 0) {
+            symtab.add(line.label, value, line.loc);
+        }
+        else if (pass == 1) {
+            symtab.update(line.label, value, line.loc);
+        }
     }
 
     // add bytes

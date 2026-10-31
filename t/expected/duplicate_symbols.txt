@@ -1,0 +1,1 @@
+t/input/duplicate_symbols.bas:4: error: duplicate definition: start
