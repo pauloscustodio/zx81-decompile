@@ -17,5 +17,5 @@ struct Token {
     std::string svalue;     // for T_string
     std::string ident;      // for T_ident, T_line_addr, T_line_num
     Bytes bytes;            // for T_rem_code
+    size_t expr_index = 0;  // for T_const_expr, index into g_expr_pool
 };
-

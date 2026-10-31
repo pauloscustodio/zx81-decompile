@@ -33,6 +33,7 @@ enum ZX81char {
     T_left_shift,
     T_right_shift,
     T_ASMPC,
+    T_const_expr,
 
 #define X(code, name, str) name = code,
 #include "zx81chars.def"

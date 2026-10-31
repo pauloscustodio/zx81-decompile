@@ -9,6 +9,8 @@
 #include "release_assert.h"
 #include <vector>
 
+std::vector<Expr> g_expr_pool;
+
 int eval_expr(const Expr& expr, const Symtab& symtab) {
     std::vector<int> stack;
     int a = 0, b = 0, cond = 0;

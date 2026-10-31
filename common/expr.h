@@ -31,5 +31,7 @@ struct Patch {
         : type(type_), expr(loc_) {}
 };
 
+extern std::vector<Expr> g_expr_pool;
+
 int eval_expr(const Expr& expr, const Symtab& symtab);
 int eval_const_expr(const Expr& expr);

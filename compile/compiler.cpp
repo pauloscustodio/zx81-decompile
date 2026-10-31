@@ -254,6 +254,18 @@ void Compiler::compile_basic(SourceLine& line) {
         case T_line_num_ref:
             release_assert(0);  // already mapped by fix_line_refs()
             break;
+        case T_const_expr: {
+            release_assert(token.expr_index < g_expr_pool.size());
+            Expr& expr = g_expr_pool[token.expr_index];
+            if (pass == 0) {
+                compile_number(0, "0", line.loc);	// placeholder
+            }
+            else {
+                int value = eval_expr(expr, symtab);
+                compile_number(value, std::to_string(value), line.loc);
+            }
+            break;
+        }
         default:
             release_assert(token.code < 0x100);
             mem.poke(addr++, token.code);

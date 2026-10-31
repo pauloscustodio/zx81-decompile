@@ -6,6 +6,7 @@
 
 #include "basic.h"
 #include "errors.h"
+#include "expr.h"
 #include "parser.h"
 #include "scan.h"
 #include "token.h"
@@ -520,6 +521,8 @@ bool Parser::parse_basic_line(SourceLine& source_line) {
         }
 
         Token token;
+
+        // hex \hh
         const char* p = scan.pos();
         if (p[0] == '\\' && isxdigit_safe(p[1]) && isxdigit_safe(p[2])) {
             char hex[3] = { p[1], p[2], 0 };
@@ -529,6 +532,7 @@ bool Parser::parse_basic_line(SourceLine& source_line) {
             continue;
         }
 
+        // REM
         if (scan.match("REM")) {
             token.code = C_REM;
             source_line.tokens.push_back(token);
@@ -547,30 +551,52 @@ bool Parser::parse_basic_line(SourceLine& source_line) {
             continue;
         }
 
+        // floating point number, may be $hh or 0xhh
         if (scan.parse_number(token.fvalue, token.svalue)) {
             token.code = T_float;
             source_line.tokens.push_back(token);
             continue;
         }
 
+        // string literal
         if (scan.parse_string(token.svalue)) {
             token.code = T_string;
             source_line.tokens.push_back(token);
             continue;
         }
 
+        // @line
         if (parse_line_num_ref(token.ident)) {
             token.code = T_line_num_ref;
             source_line.tokens.push_back(token);
             continue;
         }
 
+        // &line
         if (parse_line_addr_ref(token.ident)) {
             token.code = T_line_addr_ref;
             source_line.tokens.push_back(token);
             continue;
         }
 
+        // '{', expr, '}'
+        if (scan.match("{")) {
+            Expr expr(loc);
+            if (!parse_expr(expr)) {
+                return false;
+            }
+            if (!scan.match("}")) {
+                return false;
+            }
+
+            token.code = T_const_expr;
+            token.expr_index = g_expr_pool.size();
+            g_expr_pool.push_back(expr);
+            source_line.tokens.push_back(token);
+            continue;
+        }
+
+        // keywords and BASIC symbols
         int n = scan.match_one_of(-1, keywords);
         if (n != -1) {
             token.code = static_cast<ZX81char>(n);
@@ -578,6 +604,7 @@ bool Parser::parse_basic_line(SourceLine& source_line) {
             continue;
         }
 
+        // identifier, mut be after keywords to avoid matching keywords as identifiers
         if (scan.parse_ident(token.ident)) {
             token.code = T_ident;
             source_line.tokens.push_back(token);
@@ -687,6 +714,12 @@ bool Parser::parse_primary_expr(Expr& expr) {
         expr.rpn.push_back(token);
         return true;
     }
+    scan.set_pos(p0);
+    if (scan.match("&") && scan.parse_ident(token.ident)) {
+        token.code = T_symbol;
+        expr.rpn.push_back(token);
+        return true;
+    }
 
     // subexpression
     scan.set_pos(p0);
@@ -712,6 +745,7 @@ bool Parser::parse_primary_expr(Expr& expr) {
         return true;
     }
 
+    error(expr.loc, "cannot parse expression: " + std::string(p0));
     scan.set_pos(p0);
     return false;
 }
