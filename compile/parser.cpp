@@ -674,6 +674,7 @@ bool Parser::parse_primary_expr(Expr& expr) {
     // at end
     scan.set_pos(p0);
     if (scan.at_end()) {
+        error(expr.loc, "expression expected");
         return false;
     }
 
@@ -861,23 +862,23 @@ bool Parser::parse_rel_expr(Expr& expr) {
     }
     while (true) {
         Token token;
-        if (scan.match("<") && parse_shift_expr(expr)) {
-            token.code = C_lt;
-            expr.rpn.push_back(token);
-            continue;
-        }
         if (scan.match("<=") && parse_shift_expr(expr)) {
             token.code = C_le;
             expr.rpn.push_back(token);
             continue;
         }
-        if (scan.match(">") && parse_shift_expr(expr)) {
-            token.code = C_gt;
+        if (scan.match("<") && parse_shift_expr(expr)) {
+            token.code = C_lt;
             expr.rpn.push_back(token);
             continue;
         }
         if (scan.match(">=") && parse_shift_expr(expr)) {
             token.code = C_ge;
+            expr.rpn.push_back(token);
+            continue;
+        }
+        if (scan.match(">") && parse_shift_expr(expr)) {
+            token.code = C_gt;
             expr.rpn.push_back(token);
             continue;
         }
@@ -923,10 +924,19 @@ bool Parser::parse_bin_and_expr(Expr& expr) {
     }
     while (true) {
         Token token;
-        if (scan.match("&") && *scan.pos() != '&' && parse_eq_expr(expr)) {
-            token.code = T_bin_and;
-            expr.rpn.push_back(token);
-            continue;
+        const char* p0 = scan.pos();
+        if (scan.match("&")) {
+            if (*scan.pos() == '&') {
+                scan.set_pos(p0);
+            }
+            else if (parse_eq_expr(expr)) {
+                token.code = T_bin_and;
+                expr.rpn.push_back(token);
+                continue;
+            }
+            else {
+                scan.set_pos(p0);
+            }
         }
         break;
     }
@@ -955,10 +965,19 @@ bool Parser::parse_bin_or_expr(Expr& expr) {
     }
     while (true) {
         Token token;
-        if (scan.match("|") && *scan.pos() != '|' && parse_bin_xor_expr(expr)) {
-            token.code = T_bin_or;
-            expr.rpn.push_back(token);
-            continue;
+        const char* p0 = scan.pos();
+        if (scan.match("|")) {
+            if (*scan.pos() == '|') {
+                scan.set_pos(p0);
+            }
+            else if (parse_bin_xor_expr(expr)) {
+                token.code = T_bin_or;
+                expr.rpn.push_back(token);
+                continue;
+            }
+            else {
+                scan.set_pos(p0);
+            }
         }
         break;
     }
@@ -1002,10 +1021,11 @@ bool Parser::parse_conditional_expr(Expr& expr) {
         return false;
     }
     if (scan.match("?")) {
-        if (!parse_log_or_expr(expr)) {
+        if (!parse_conditional_expr(expr)) {
             return false;
         }
         if (!scan.match(":")) {
+            error(expr.loc, "':' expected");
             return false;
         }
         if (!parse_conditional_expr(expr)) {

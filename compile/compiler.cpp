@@ -15,6 +15,7 @@
 #include "zx81consts.h"
 #include "zx81float.h"
 #include <array>
+#include <cmath>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -285,7 +286,8 @@ void Compiler::compile_number(double value, const std::string& value_str,
     mem.poke(addr++, C_number);
 
     // encode fp number
-    std::array<Byte, 5> fp_bytes = float_to_zx81(value);
+    // use fabs() because sign is stored in str_bytes and parsed separately by the ZX81
+    std::array<Byte, 5> fp_bytes = float_to_zx81(fabs(value));
     addr = mem.poke_bytes(addr, fp_bytes.data(), INT(fp_bytes.size()));
 }
 
