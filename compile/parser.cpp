@@ -666,14 +666,6 @@ bool Parser::parse_primary_expr(Expr& expr) {
         return true;
     }
 
-    // symbol reference
-    scan.set_pos(p0);
-    if (scan.parse_ident(token.ident)) {
-        token.code = T_symbol;
-        expr.rpn.push_back(token);
-        return true;
-    }
-
     // ASMPC
     scan.set_pos(p0);
     if (scan.match("$")) {
@@ -684,6 +676,14 @@ bool Parser::parse_primary_expr(Expr& expr) {
     scan.set_pos(p0);
     if (scan.match("ASMPC")) {
         token.code = T_ASMPC;
+        expr.rpn.push_back(token);
+        return true;
+    }
+
+    // symbol reference
+    scan.set_pos(p0);
+    if (scan.parse_ident(token.ident)) {
+        token.code = T_symbol;
         expr.rpn.push_back(token);
         return true;
     }
