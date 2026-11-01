@@ -16,11 +16,11 @@ int get_error_count() {
 
 void error(const SourceLoc& loc, const std::string& message) {
     if (loc.filename.empty()) {
-        std::cout << "error: " << message << std::endl;
+        std::cerr << "error: " << message << std::endl;
     }
     else {
-        std::cout << loc.filename << ":" << loc.line << ": error: " << message <<
-                  std::endl;
+        std::cerr << loc.filename << ":" << loc.line << ": error: " << message
+                  << std::endl;
     }
     ++num_errors;
 }
