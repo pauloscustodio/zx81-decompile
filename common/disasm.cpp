@@ -23,8 +23,8 @@ void AsmLabels::add(const std::string& name, int value) {
         if (it->second == value) {
             return;     // nothing to do
         }
-        error("label redefinition: " + name + " = " + fmt_hex(value,
-                4) + " != " + fmt_hex(it->second, 4));
+        error("label redefinition: " + name + " = " +
+              fmt_hex(value, 4) + " != " + fmt_hex(it->second, 4));
     }
 
     by_name[name] = value;
@@ -77,6 +77,10 @@ const AsmLabels& DisasmCode::get_labels() const {
     return labels;
 }
 
+void DisasmCode::add_label(const std::string& name, int addr) {
+    labels.add(name, addr);
+}
+
 std::string DisasmCode::get_line_num_label(int line_num) {
     std::string label;
     if (labels.find(line_num, label)) {
@@ -107,8 +111,7 @@ MemType DisasmCode::get_mem_type(int addr) const {
 
 void DisasmCode::set_mem_type(int addr, MemType type, int count) {
     for (int i = 0; i < count; ++i) {
-        if (mem_map[(addr + i) & 0xffff] != MemType::Undefined &&
-                mem_map[(addr + i) & 0xffff] != MemType::Unknown) {
+        if (mem_map[(addr + i) & 0xffff] != MemType::Unknown) {
             error("memory overlap at address " + fmt_hex(addr + i, 4));
         }
         mem_map[(addr + i) & 0xffff] = type;
@@ -122,10 +125,18 @@ void DisasmCode::set_mem_type_no_overlap_check(int addr, MemType type,
     }
 }
 
-void DisasmCode::set_code(int addr, const std::string& label) {
-    std::cout << "set_code: " << fmt_hex(addr, 4) << " = " << label << std::endl;
+void DisasmCode::set_code(int addr) {
+    std::cout << "set_code: " << fmt_hex(addr, 4) << std::endl;
 
-    if (!label.empty()) {
-        labels.add(label, addr);
+    if (get_mem_type(addr) == MemType::Asm) {
+        return; // already analysed
     }
+
+    int addr0 = addr;
+    set_mem_type(addr, MemType::Asm);
+
+    // disassemble instruction
+    addr++;
+
+    set_mem_type(addr, MemType::Asm, addr - addr0);
 }

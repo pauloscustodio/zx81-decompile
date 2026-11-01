@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------------
 
 #include "basic.h"
+#include "ctl_file.h"
 #include "decompiler.h"
 #include "errors.h"
 #include "release_assert.h"
@@ -20,14 +21,15 @@
 #include <vector>
 
 void Decompiler::decompile() {
-    (void)ctl_file;
-
     decompile_sysvars();
     init_ctl_mem();
 
     decompile_dfile();
     decompile_vars();
     decompile_basic();
+
+    map_source_lines();
+    analyse_ctl_file();
     analyse_gotos();
 }
 
@@ -503,16 +505,62 @@ void Decompiler::init_ctl_mem() {
     }
 }
 
-void Decompiler::analyse_gotos() {
-    std::unordered_map<int, SourceLine*> lines;
-
+void Decompiler::map_source_lines() {
     // map all source lines by line number
+    source_lines.clear();
     for (auto& line : basic->source_lines) {
         if (line.type == SourceLine::Type::Basic) {
-            lines[line.line_num] = &line;
+            source_lines[line.line_num] = &line;
         }
     }
+}
 
+void Decompiler::analyse_ctl_file() {
+    for (auto& elem : ctl_file->elems) {
+        if (elem.type == CtlElement::Type::Code) {
+            if (elem.addr < RAM_ADDR) {
+                // Basic line number
+                auto  it = source_lines.find(elem.addr);
+                if (it == source_lines.end()) {
+                    error(elem.loc, "undefined line number: " + std::to_string(elem.addr));
+                }
+                else {
+                    if (!elem.label.empty()) {
+                        // create new label
+                        basic->disasm_code.add_label(elem.label, elem.addr);
+                    }
+
+                    // get created label or automatically generated label
+                    std::string label = basic->disasm_code.get_line_num_label(elem.addr);
+                    SourceLine* target_line = it->second;
+                    target_line->label = label;
+                }
+            }
+            else {
+                // Asm code
+                if (elem.addr < SAVE_ADDR || elem.addr >= mem->dpeek(E_LINE)) {
+                    error(elem.loc, "invalid Asm code address: " + fmt_hex(elem.addr, 4));
+                }
+                else if (basic->disasm_code.get_mem_type(elem.addr) != MemType::Asm &&
+                         basic->disasm_code.get_mem_type(elem.addr) != MemType::Unknown) {
+                    error(elem.loc, "invalid Asm code address: " + fmt_hex(elem.addr, 4));
+                }
+                else {
+                    if (!elem.label.empty()) {
+                        // create new label
+                        basic->disasm_code.add_label(elem.label, elem.addr);
+                    }
+                    basic->disasm_code.set_code(elem.addr);
+                }
+            }
+            continue;
+        }
+
+        error(elem.loc, "invalid element type");
+    }
+}
+
+void Decompiler::analyse_gotos() {
     // search for GOTO, GOSUB, RUN and line number references
     for (auto& line : basic->source_lines) {
         if (line.type == SourceLine::Type::Basic) {
@@ -523,8 +571,8 @@ void Decompiler::analyse_gotos() {
                         auto& next_token = line.tokens[index + 1];
                         if (next_token.code == T_float) {
                             int target_line_num = static_cast<int>(next_token.fvalue);
-                            auto it = lines.find(target_line_num);
-                            if (it == lines.end()) {
+                            auto it = source_lines.find(target_line_num);
+                            if (it == source_lines.end()) {
                                 std::cerr << "undefined line number: " + std::to_string(
                                               target_line_num) << std::endl;
                             }

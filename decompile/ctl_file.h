@@ -6,19 +6,20 @@
 
 #pragma once
 
+#include "errors.h"
 #include <string>
 #include <vector>
 
 struct CtlElement {
-    enum class Type { Basic, Asm };
-    Type type = Type::Basic;
-    int line_num = -1;
+    enum class Type { None, Code };
+    SourceLoc loc;
+    Type type = Type::None;
     int addr = -1;
-    std::string name;
+    std::string label;
 };
 
 struct CtlFile {
-    std::vector<CtlElement> elements;
+    std::vector<CtlElement> elems;
 
     void load_ctl_file(const std::string& filename);
 };

@@ -61,7 +61,7 @@
   155  IF  INKEY$ ="" THEN  GOTO @Line__140
   160  IF  INKEY$ ="N" THEN  GOTO @Line__190
   170  IF  INKEY$ <>"Y" THEN  GOTO @Line__140
-  180  GOSUB @Line_1000
+  180  GOSUB @Line_Instructions
 
 @Line__190:
   190  GOSUB @Line_2000
@@ -139,7 +139,7 @@
   730  IF  INKEY$ ="Y" THEN  GOTO @Line__190
   740  GOTO @Line__720
 
-@Line_1000:
+@Line_Instructions:
  1000  CLS 
  1010  PRINT  AT 0,10;"YOUR GOAL:"
  1020  PRINT  AT 2,0;"TO SCORE AS MANY POINTS AS YOU   CAN BY DESTROYING THE ALIEN AND BLOCKS OF HIS FORTRESS."
@@ -311,7 +311,7 @@
 #: Line__640        = 0x0280 =   640
 #: KEYBOARD         = 0x02BB =   699
 #: Line__720        = 0x02D0 =   720
-#: Line_1000        = 0x03E8 =  1000
+#: Line_Instructions = 0x03E8 =  1000
 #: Line_1070        = 0x042E =  1070
 #: Line_1130        = 0x046A =  1130
 #: Line_2000        = 0x07D0 =  2000

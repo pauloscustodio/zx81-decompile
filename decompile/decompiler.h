@@ -6,9 +6,10 @@
 
 #pragma once
 
-#include "memory.h"
 #include "basic.h"
 #include "ctl_file.h"
+#include "memory.h"
+#include <unordered_map>
 
 class Decompiler {
 public:
@@ -22,6 +23,7 @@ private:
     Memory* mem = nullptr;
     CtlFile* ctl_file = nullptr;
     Basic* basic = nullptr;
+    std::unordered_map<int, SourceLine*> source_lines;
     int addr = 0;
     int end = 0;
 
@@ -36,5 +38,7 @@ private:
     bool decompile_string(SourceLine& line);
     void decompile_newline(SourceLine& line);
     void init_ctl_mem();
+    void map_source_lines();
+    void analyse_ctl_file();
     void analyse_gotos();
 };

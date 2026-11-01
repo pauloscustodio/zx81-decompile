@@ -67,13 +67,14 @@ public:
 
     AsmLabels& get_labels();
     const AsmLabels& get_labels() const;
+    void add_label(const std::string& name, int addr);
     std::string get_line_num_label(int line_num) ;
     std::string get_asm_label(int addr) ;
 
     MemType get_mem_type(int addr) const;
     void set_mem_type(int addr, MemType type, int count = 1);
     void set_mem_type_no_overlap_check(int addr, MemType type, int count = 1);
-    void set_code(int addr, const std::string& label);
+    void set_code(int addr);
 
 private:
     AsmLabels labels;
