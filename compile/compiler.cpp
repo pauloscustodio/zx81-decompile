@@ -43,6 +43,9 @@ void Compiler::compile() {
     // now that GOTO @line have been resolved
     remove_empty_basic_lines();
 
+    // initialize system variables
+    mem.poke_bytes(SAVE_ADDR, basic->sysvars);
+
     // pass 0: define symbols
     // pass 1: layout program and udate symbols; repeats while layout changes
     // pass 2: compute expressions
@@ -208,14 +211,17 @@ void Compiler::compile_prog() {
     }
 
     // video to stkend
-    mem.init_video_to_stkend(addr, basic->dfile_collapsed, basic->dfile_lines);
+    mem.init_video_to_stkend(addr, basic->dfile_collapsed, basic->dfile_lines,
+                             basic->sysvars.empty());
 
     // E_PPC
-    if (addr == PROG) {
-        mem.dpoke(E_PPC, 0);
-    }
-    else {
-        mem.dpoke(E_PPC, mem.dpeek_be(PROG));
+    if (basic->sysvars.empty()) {
+        if (addr == PROG) {
+            mem.dpoke(E_PPC, 0);
+        }
+        else {
+            mem.dpoke(E_PPC, mem.dpeek_be(PROG));
+        }
     }
 
     // autostart
@@ -469,7 +475,7 @@ void Compiler::compile_vars() {
     }
 
     mem.poke(addr++, 0x80);
-    mem.init_e_line_to_stkend(addr);
+    mem.init_e_line_to_stkend(addr, basic->sysvars.empty());
     addr = mem.dpeek(E_LINE);
 }
 

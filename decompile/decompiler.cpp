@@ -8,6 +8,7 @@
 #include "decompiler.h"
 #include "errors.h"
 #include "release_assert.h"
+#include "token.h"
 #include "utils.h"
 #include "zx81chars.h"
 #include "zx81consts.h"
@@ -39,7 +40,7 @@ void Decompiler::decompile_sysvars() {
         basic->autostart_line = mem->dpeek_be(nxtlin);
     }
 
-    // fast
+    // get fast
     if ((mem->peek(CDFLAG) & FlagSlow) == FlagSlow) {
         basic->fast = false;
     }

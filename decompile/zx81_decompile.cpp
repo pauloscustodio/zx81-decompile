@@ -16,7 +16,8 @@
 #include <string>
 
 static void exit_usage() {
-    std::cerr << "Usage: zx81_decompile [-o file.bas] [-d] file.p" << std::endl;
+    std::cerr << "Usage: zx81_decompile [-c file.ctl] [-o file.bas] file.p" <<
+              std::endl;
     exit(EXIT_FAILURE);
 }
 
@@ -25,7 +26,7 @@ int main(int argc, char* argv[]) {
     std::string ctl_filename;
 
     while (true) {
-        int c = getopt(argc, argv, const_cast<char*>("do:c:"));
+        int c = getopt(argc, argv, const_cast<char*>("o:c:"));
         if (c == -1) {
             break;
         }

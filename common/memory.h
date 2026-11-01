@@ -10,6 +10,7 @@
 #include "zx81consts.h"
 #include <array>
 #include <string>
+#include <vector>
 
 class Memory {
 public:
@@ -44,8 +45,9 @@ public:
     static Bytes get_empty_d_file();
 
     void init_video_to_stkend(int addr, bool dfile_collapsed,
-                              const std::vector<std::string>& dfile_lines);
-    void init_e_line_to_stkend(int addr);
+                              const std::vector<std::string>& dfile_lines,
+                              bool default_ch_add_stack);
+    void init_e_line_to_stkend(int addr, bool default_ch_add_stack);
 
 private:
     std::array<Byte, MEM_SIZE> mem{ 0 };

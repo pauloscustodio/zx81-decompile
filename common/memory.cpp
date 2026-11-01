@@ -87,10 +87,13 @@ Bytes Memory::get_empty_d_file() {
 }
 
 void Memory::init_video_to_stkend(int addr, bool dfile_collapsed,
-                                  const std::vector<std::string>& dfile_lines) {
+                                  const std::vector<std::string>& dfile_lines,
+                                  bool default_ch_add_stack) {
     dpoke(D_FILE, addr);
     dpoke(NXTLIN, addr);
-    dpoke(DF_CC, addr + 1);
+    if (default_ch_add_stack) {
+        dpoke(DF_CC, addr + 1);
+    }
 
     poke(addr++, C_newline);
     for (int row = 0; row < NumRows; row++) {
@@ -112,14 +115,16 @@ void Memory::init_video_to_stkend(int addr, bool dfile_collapsed,
     dpoke(VARS, addr);
     poke(addr++, 0x80);
 
-    init_e_line_to_stkend(addr);
+    init_e_line_to_stkend(addr, default_ch_add_stack);
 }
 
-void Memory::init_e_line_to_stkend(int addr) {
+void Memory::init_e_line_to_stkend(int addr, bool default_ch_add_stack) {
     dpoke(E_LINE, addr);
-    dpoke(CH_ADD, addr + 1);
-    dpoke(STKBOT, addr + 2);
-    dpoke(STKEND, addr + 2);
+    if (default_ch_add_stack) {
+        dpoke(CH_ADD, addr + 1);
+        dpoke(STKBOT, addr + 2);
+        dpoke(STKEND, addr + 2);
+    }
 }
 
 //-----------------------------------------------------------------------------
