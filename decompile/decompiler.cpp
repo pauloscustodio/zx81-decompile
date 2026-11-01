@@ -319,8 +319,8 @@ bool Decompiler::decompile_rem_code(SourceLine& line) {
             line.tokens.push_back(bytes);
 
             // mark rem code in memory map
-            basic->set_mem_map_no_overlap_check(addr + 1, MemType::Unknown,
-                                                INT(bytes.bytes.size()));
+            basic->disasm_code.set_mem_type_no_overlap_check(addr + 1, MemType::Unknown,
+                    INT(bytes.bytes.size()));
 
             addr = end - 1;
             decompile_newline(line);
@@ -487,15 +487,15 @@ void Decompiler::init_ctl_mem() {
     int e_line = mem->dpeek(E_LINE);
 
     for (int addr = ERR_NO; addr < PROG; addr++) {
-        basic->mem_map.poke(addr, BYTE(MemType::Sysvars));
+        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Sysvars);
     }
     for (int addr = PROG; addr < d_file; addr++) {
-        basic->mem_map.poke(addr, BYTE(MemType::Basic));
+        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Basic);
     }
     for (int addr = d_file; addr < vars; addr++) {
-        basic->mem_map.poke(addr, BYTE(MemType::Dfile));
+        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Dfile);
     }
     for (int addr = vars; addr < e_line; addr++) {
-        basic->mem_map.poke(addr, BYTE(MemType::Vars));
+        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Vars);
     }
 }

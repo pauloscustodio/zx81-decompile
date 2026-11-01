@@ -159,117 +159,161 @@
  3000  SAVE "ATTAC%K"
  3100  GOTO 30
 
-# [0x4000] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-# [0x4040] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb
-# [0x4080] bb--------------------------------------------------------------
-# [0x40C0] ----------------------------------------------------------------
-# [0x4100] --------------------------------------bbbbbb--------------------
-# [0x4140] ----------------------------------------------------------------
-# [0x4180] -----------bbbbbb-----------------------------------------------
-# [0x41C0] ----------------------------------------------------------------
-# [0x4200] ------------bbbbbb--------------------------------bbbbbb--------
-# [0x4240] ----------------------------------------------bbbbbb------------
-# [0x4280] ----------------------------------------------------------------
-# [0x42C0] ----------------------------------------------------bbbbbb------
-# [0x4300] ----------------------------------------------------------------
-# [0x4340] ----------------------------------------------------------------
-# [0x4380] ---------------bbbbbb-------------------------------------------
-# [0x43C0] ---------------------------------------------------------------b
-# [0x4400] bbbbb---------------------------------bbbbbb--------------------
-# [0x4440] ------------------------bbbbbb----------------------------------
-# [0x4480] ----------------------------------------------------------------
-# [0x44C0] ----bbbbbb------------------------------------------------------
-# [0x4500] ----------------------------------------------------------------
-# [0x4540] -------------------------bbbbbb---------------------------------
-# [0x4580] ----------------------------------------------------------------
-# [0x45C0] ---------------------------------------------bbbbbb-------------
-# [0x4600] ------------------------------------------bbbbbb----------------
-# [0x4640] --------------------------bbbbbb--------------------------------
-# [0x4680] -------------------------bbbbbb---------------------------------
-# [0x46C0] ---------------------bbbbbb-------------------------------------
-# [0x4700] ----------------------------bbbbbb------------------------------
-# [0x4740] ----------------------------------------------------------------
-# [0x4780] -------------bbbbbb---------------------------------------------
-# [0x47C0] ---------------------------bbbbbb------------------------bbbbbb-
-# [0x4800] ---------------------------------------------------------------b
-# [0x4840] bbbbb-----------------------------------------------------------
-# [0x4880] --bbbbbb--------------------------------------------------------
-# [0x48C0] ----------------------------------------------------------------
-# [0x4900] ---------------------------------bbbbbb-------------------------
-# [0x4940] ---------bbbbbb-------------------------------------------------
-# [0x4980] ---------------bbbbbb------------------------bbbbbb-------------
-# [0x49C0] ---------bbbbbb-------------------------------------------------
-# [0x4A00] -------------------------------------------------------------bbb
-# [0x4A40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4A80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4AC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4B00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4B40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4B80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4BC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4C00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4C40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4C80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4CC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4D00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4D40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4D80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4DC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4E00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4E40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4E80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4EC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4F00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4F40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4F80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x4FC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5000] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5040] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5080] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x50C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5100] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5140] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5180] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x51C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5200] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5240] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5280] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x52C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5300] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5340] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5380] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x53C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5400] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5440] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5480] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x54C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5500] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5540] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5580] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x55C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5600] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5640] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5680] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x56C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5700] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5740] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5780] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x57C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5800] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5840] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x5880] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-# [0x58C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb###############################
-# [0x5900] ################################################################
-# [0x5940] ################################################################
-# [0x5980] ################################################################
-# [0x59C0] ################################################################
-# [0x5A00] ################################################################
-# [0x5A40] ################################################################
-# [0x5A80] ################################################################
-# [0x5AC0] ################################################################
-# [0x5B00] ################################################################
-# [0x5B40] ################################################################
-# [0x5B80] ################################################################
-# [0x5BC0] ##########################################################vvvvvv
-# [0x5C00] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+#: [0x4000] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+#: [0x4040] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb
+#: [0x4080] bb--------------------------------------------------------------
+#: [0x40C0] ----------------------------------------------------------------
+#: [0x4100] --------------------------------------bbbbbb--------------------
+#: [0x4140] ----------------------------------------------------------------
+#: [0x4180] -----------bbbbbb-----------------------------------------------
+#: [0x41C0] ----------------------------------------------------------------
+#: [0x4200] ------------bbbbbb--------------------------------bbbbbb--------
+#: [0x4240] ----------------------------------------------bbbbbb------------
+#: [0x4280] ----------------------------------------------------------------
+#: [0x42C0] ----------------------------------------------------bbbbbb------
+#: [0x4300] ----------------------------------------------------------------
+#: [0x4340] ----------------------------------------------------------------
+#: [0x4380] ---------------bbbbbb-------------------------------------------
+#: [0x43C0] ---------------------------------------------------------------b
+#: [0x4400] bbbbb---------------------------------bbbbbb--------------------
+#: [0x4440] ------------------------bbbbbb----------------------------------
+#: [0x4480] ----------------------------------------------------------------
+#: [0x44C0] ----bbbbbb------------------------------------------------------
+#: [0x4500] ----------------------------------------------------------------
+#: [0x4540] -------------------------bbbbbb---------------------------------
+#: [0x4580] ----------------------------------------------------------------
+#: [0x45C0] ---------------------------------------------bbbbbb-------------
+#: [0x4600] ------------------------------------------bbbbbb----------------
+#: [0x4640] --------------------------bbbbbb--------------------------------
+#: [0x4680] -------------------------bbbbbb---------------------------------
+#: [0x46C0] ---------------------bbbbbb-------------------------------------
+#: [0x4700] ----------------------------bbbbbb------------------------------
+#: [0x4740] ----------------------------------------------------------------
+#: [0x4780] -------------bbbbbb---------------------------------------------
+#: [0x47C0] ---------------------------bbbbbb------------------------bbbbbb-
+#: [0x4800] ---------------------------------------------------------------b
+#: [0x4840] bbbbb-----------------------------------------------------------
+#: [0x4880] --bbbbbb--------------------------------------------------------
+#: [0x48C0] ----------------------------------------------------------------
+#: [0x4900] ---------------------------------bbbbbb-------------------------
+#: [0x4940] ---------bbbbbb-------------------------------------------------
+#: [0x4980] ---------------bbbbbb------------------------bbbbbb-------------
+#: [0x49C0] ---------bbbbbb-------------------------------------------------
+#: [0x4A00] -------------------------------------------------------------bbb
+#: [0x4A40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4A80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4AC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4B00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4B40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4B80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4BC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4C00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4C40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4C80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4CC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4D00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4D40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4D80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4DC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4E00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4E40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4E80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4EC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4F00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4F40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4F80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x4FC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5000] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5040] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5080] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x50C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5100] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5140] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5180] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x51C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5200] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5240] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5280] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x52C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5300] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5340] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5380] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x53C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5400] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5440] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5480] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x54C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5500] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5540] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5580] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x55C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5600] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5640] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5680] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x56C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5700] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5740] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5780] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x57C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5800] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5840] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x5880] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [0x58C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb###############################
+#: [0x5900] ################################################################
+#: [0x5940] ################################################################
+#: [0x5980] ################################################################
+#: [0x59C0] ################################################################
+#: [0x5A00] ################################################################
+#: [0x5A40] ################################################################
+#: [0x5A80] ################################################################
+#: [0x5AC0] ################################################################
+#: [0x5B00] ################################################################
+#: [0x5B40] ################################################################
+#: [0x5B80] ################################################################
+#: [0x5BC0] ##########################################################vvvvvv
+#: [0x5C00] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+#: KEYBOARD         = 0x02BB
+#: ERR_NO           = 0x4000
+#: FLAGS            = 0x4001
+#: ERR_SP           = 0x4002
+#: RAMTOP           = 0x4004
+#: MODE             = 0x4006
+#: PPC              = 0x4007
+#: VERSN            = 0x4009
+#: E_PPC            = 0x400A
+#: D_FILE           = 0x400C
+#: DF_CC            = 0x400E
+#: VARS             = 0x4010
+#: DEST             = 0x4012
+#: E_LINE           = 0x4014
+#: CH_ADD           = 0x4016
+#: X_PTR            = 0x4018
+#: STKBOT           = 0x401A
+#: STKEND           = 0x401C
+#: BREG             = 0x401E
+#: MEM              = 0x401F
+#: FREE1            = 0x4021
+#: DF_SZ            = 0x4022
+#: S_TOP            = 0x4023
+#: LAST_K           = 0x4025
+#: DEBOUNCE         = 0x4027
+#: MARGIN           = 0x4028
+#: NXTLIN           = 0x4029
+#: OLDPPC           = 0x402B
+#: FLAGX            = 0x402D
+#: STRLEN           = 0x402E
+#: T_ADDR           = 0x4030
+#: SEED             = 0x4032
+#: FRAMES           = 0x4034
+#: COORDS_X         = 0x4036
+#: COORDS_Y         = 0x4037
+#: PR_CC            = 0x4038
+#: S_POSN_COL       = 0x4039
+#: S_POSN_ROW       = 0x403A
+#: CDFLAG           = 0x403B
+#: PRBUFF           = 0x403C
+#: MEMBOT           = 0x405D
+#: FREE2            = 0x407B
+#: PROG             = 0x407D
 

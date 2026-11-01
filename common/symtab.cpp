@@ -25,6 +25,7 @@ void Symtab::init() {
 
 #define X(name, value)		add(#name, value, SourceLoc());
 #include "zx81consts.def"
+#undef X
 }
 
 void Symtab::add(const std::string& name, int value,

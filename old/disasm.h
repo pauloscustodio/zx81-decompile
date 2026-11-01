@@ -12,41 +12,6 @@
 #include <unordered_map>
 #include <vector>
 
-class AsmLabels {
-public:
-    AsmLabels();
-
-    void add(const std::string& name, int value);
-    int get(const std::string& name);
-
-    bool find(const std::string& name, int& value) const;
-    bool find(int value, std::string& name) const;
-
-    void clear();
-
-    auto begin() {
-        return by_name.begin();
-    }
-    auto end() {
-        return by_name.end();
-    }
-    auto cbegin() const {
-        return by_name.cbegin();
-    }
-    auto cend() const {
-        return by_name.cend();
-    }
-    auto size() const {
-        return by_name.size();
-    }
-
-private:
-    std::unordered_map<std::string, int> by_name;
-    std::unordered_map<int, std::string> by_value;
-};
-
-extern AsmLabels g_asm_labels;
-
 struct Opcode {
     enum class Type { Undef, Unknown, Asm, AsmData, Defb, DefbData, Defw, DefwData, Defm, DefmData };
     Type type{ Type::Unknown };
@@ -76,11 +41,6 @@ private:
 
 class DisasmCode {
 public:
-    DisasmCode();
-    virtual ~DisasmCode();
-    DisasmCode(const DisasmCode& other) = delete;
-    DisasmCode& operator=(const DisasmCode& other) = delete;
-
     Opcode::Type get_type(int addr);
     Opcode* get(int addr);
     std::string get_label(int addr);

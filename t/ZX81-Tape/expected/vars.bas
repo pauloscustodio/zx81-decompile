@@ -135,3 +135,47 @@
   160  PRINT 
   170  NEXT I
 
+#: KEYBOARD         = 0x02BB
+#: ERR_NO           = 0x4000
+#: FLAGS            = 0x4001
+#: ERR_SP           = 0x4002
+#: RAMTOP           = 0x4004
+#: MODE             = 0x4006
+#: PPC              = 0x4007
+#: VERSN            = 0x4009
+#: E_PPC            = 0x400A
+#: D_FILE           = 0x400C
+#: DF_CC            = 0x400E
+#: VARS             = 0x4010
+#: DEST             = 0x4012
+#: E_LINE           = 0x4014
+#: CH_ADD           = 0x4016
+#: X_PTR            = 0x4018
+#: STKBOT           = 0x401A
+#: STKEND           = 0x401C
+#: BREG             = 0x401E
+#: MEM              = 0x401F
+#: FREE1            = 0x4021
+#: DF_SZ            = 0x4022
+#: S_TOP            = 0x4023
+#: LAST_K           = 0x4025
+#: DEBOUNCE         = 0x4027
+#: MARGIN           = 0x4028
+#: NXTLIN           = 0x4029
+#: OLDPPC           = 0x402B
+#: FLAGX            = 0x402D
+#: STRLEN           = 0x402E
+#: T_ADDR           = 0x4030
+#: SEED             = 0x4032
+#: FRAMES           = 0x4034
+#: COORDS_X         = 0x4036
+#: COORDS_Y         = 0x4037
+#: PR_CC            = 0x4038
+#: S_POSN_COL       = 0x4039
+#: S_POSN_ROW       = 0x403A
+#: CDFLAG           = 0x403B
+#: PRBUFF           = 0x403C
+#: MEMBOT           = 0x405D
+#: FREE2            = 0x407B
+#: PROG             = 0x407D
+

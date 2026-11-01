@@ -23,59 +23,6 @@
 
 AsmLabels g_asm_labels;
 
-AsmLabels::AsmLabels() {
-#define X(name, value)		add(#name, value);
-#include "zx81consts.def"
-}
-
-void AsmLabels::add(const std::string& name, int value) {
-    auto it = by_name.find(name);
-    if (it != by_name.end()) {
-        error("label redefinition", name + " = $" + fmt_hex(value, 4));
-    }
-
-    by_name[name] = value;
-    by_value[value] = name;		// overwrite if tow labels with same value
-    return;
-}
-
-int AsmLabels::get(const std::string& name) {
-    int value = 0;
-    if (find(name, value)) {
-        return value;
-    }
-    else {
-        error("label undefined", name);
-        return 0;
-    }
-}
-
-bool AsmLabels::find(const std::string& name, int& value) const {
-    auto it1 = by_name.find(name);
-    if (it1 == by_name.end()) {
-        return false;
-    }
-    else {
-        value = it1->second;
-        return true;
-    }
-}
-
-bool AsmLabels::find(int value, std::string& name) const {
-    auto it2 = by_value.find(value);
-    if (it2 == by_value.end()) {
-        return false;
-    }
-    else {
-        name = it2->second;
-        return true;
-    }
-}
-
-void AsmLabels::clear() {
-    by_name.clear();
-    by_value.clear();
-}
 
 //-----------------------------------------------------------------------------
 // opcode
