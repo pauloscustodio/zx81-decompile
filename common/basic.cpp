@@ -174,7 +174,7 @@ void Basic::write_source_lines(std::ostream& os) const {
     for (auto& line : source_lines) {
         if (line.type == SourceLine::Type::Basic) {
             if (!line.label.empty()) {
-                os << "@" << line.label << ":" << std::endl;
+                os << std::endl << "@" << line.label << ":" << std::endl;
             }
 
             os << fmt_line_number(line.line_num) << " ";
@@ -289,7 +289,8 @@ void Basic::write_labels(std::ostream& os) const {
 
         for (auto& [label, addr] : labels) {
             os << "#: " << std::setw(16) << std::left << label
-               << " = " << fmt_hex(addr, 4) << std::endl;
+               << " = " << fmt_hex(addr, 4)
+               << " = " << std::setw(5) << std::right  << addr << std::endl;
         }
 
         os << std::endl;

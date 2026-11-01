@@ -36,4 +36,5 @@ private:
     bool decompile_string(SourceLine& line);
     void decompile_newline(SourceLine& line);
     void init_ctl_mem();
+    void analyse_gotos();
 };

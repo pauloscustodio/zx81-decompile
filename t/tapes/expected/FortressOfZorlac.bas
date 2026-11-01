@@ -40,6 +40,8 @@
    27  REM \3E\BF\BD\28\06\3E\7F\BD\C2\F0\43\3A\1C\41\C3\C5\43\00\00\00\00\00\00\00
    28  REM \01\00\02\CD\12\42\3E\14\06\20\36\00\23\10\FB\23\3D\FE\00\20\F3\C9
    29  REM \DF\FB\CD\BB\02\ED\4B\46\43\22\CF\49\11\FF\FF\A7\ED\52\C8\2A\CF\49\CB\65\CC\31\44\2A\CF\49\ED\4B\46\43\CB\6D\CC\31\44\2A\CF\49\ED\4B\46\43\CB\5D\CA\DB\43\CB\55\CA\DB\43\CB\45\CA\D0\43\CB\4D\CA\D0\43\CB\75\28\03\CB\7D\C0\00\00\00\00\00\CB\6C\CA\E6\43\CB\64\CA\E6\43\CB\5C\CA\E6\43\CB\54\CA\C2\43\CB\4C\CA\C2\43\C9\00\00\00\00\00\00
+
+@Line___30:
    30  CLS 
    34  POKE 17924,252
    35  POKE 17925,69
@@ -52,13 +54,17 @@
   100  POKE 17158,128
   110  POKE 17183,128
   120  POKE 17208,128
+
+@Line__140:
   140  LET L= USR 17617
   150  LET L= USR 17926
-  155  IF  INKEY$ ="" THEN  GOTO 140
-  160  IF  INKEY$ ="N" THEN  GOTO 190
-  170  IF  INKEY$ <>"Y" THEN  GOTO 140
-  180  GOSUB 1000
-  190  GOSUB 2000
+  155  IF  INKEY$ ="" THEN  GOTO @Line__140
+  160  IF  INKEY$ ="N" THEN  GOTO @Line__190
+  170  IF  INKEY$ <>"Y" THEN  GOTO @Line__140
+  180  GOSUB @Line_1000
+
+@Line__190:
+  190  GOSUB @Line_2000
   195  LET W=28
   200  LET S=0
   202  LET R=200
@@ -67,22 +73,28 @@
   220  POKE 18211,0
   230  LET L= USR 18431
   250  PRINT  AT 0,10;"SCORE: 0"
+
+@Line__260:
   260  LET W=W+1
-  270  IF W=34 THEN  GOTO 640
+  270  IF W=34 THEN  GOTO @Line__640
   280  POKE 17158,W
   290  POKE 17183,W
   300  POKE 17208,W
+
+@Line__310:
   310  LET L= USR 17968
   320  LET L= USR 18526
+
+@Line__340:
   340  LET L= USR 16684
   350  LET L= USR 17055
   360  LET L= USR 17224
-  370  IF  INKEY$ ="" THEN  GOTO 340
+  370  IF  INKEY$ ="" THEN  GOTO @Line__340
   380  LET L= USR 18545
   390  LET L= USR 18769
   400  LET L= USR 18401
   410  LET L= USR 18415
-  420  IF  PEEK 17503=1 THEN  GOTO 520
+  420  IF  PEEK 17503=1 THEN  GOTO @Line__520
   430  FOR N=1 TO 32
   440  LET L= USR 17860
   450  LET L=L+N
@@ -94,7 +106,9 @@
   490  POKE 17222,0
   500  POKE 17223,9
   505  POKE 18079,0
-  510  GOTO 260
+  510  GOTO @Line__260
+
+@Line__520:
   520  FOR N=1 TO 50
   540  LET L= USR 18614
   545  LET L=L+0
@@ -109,7 +123,9 @@
   595  POKE 18146,R
   600  LET L= USR 18867
   620  LET L= USR 18431
-  630  GOTO 310
+  630  GOTO @Line__310
+
+@Line__640:
   640  LET L= USR 18867
   650  PRINT  AT 0,4;"FINAL";
   660  PRINT  AT 10,13;"\:'\''\''\''\''\':"
@@ -117,9 +133,13 @@
   680  PRINT  AT 12,13;"\: OVER\ :"
   690  PRINT  AT 13,13;"\:.\..\..\..\..\.:"
   700  PRINT  AT 16,6;"PLAY AGAIN? (Y OR N)"
+
+@Line__720:
   720  IF  INKEY$ ="N" THEN  STOP 
-  730  IF  INKEY$ ="Y" THEN  GOTO 190
-  740  GOTO 720
+  730  IF  INKEY$ ="Y" THEN  GOTO @Line__190
+  740  GOTO @Line__720
+
+@Line_1000:
  1000  CLS 
  1010  PRINT  AT 0,10;"YOUR GOAL:"
  1020  PRINT  AT 2,0;"TO SCORE AS MANY POINTS AS YOU   CAN BY DESTROYING THE ALIEN AND BLOCKS OF HIS FORTRESS."
@@ -127,14 +147,20 @@
  1040  PRINT  AT 11,0;"POINTS ARE AWARDED BASED ON      SKILL LEVEL AND THE DISTANCE    YOUR SHIP IS FROM THE LEFT EDGE OF THE SCREEN WHEN IT FIRES."
  1050  PRINT  AT 16,0;"DESTROYING THE ALIEN IS WORTH    FIFTY TIMES THE POINTS AWARDED  FOR DESTROYING A BLOCK OF HIS   FORTRESS."
  1060  PRINT  AT 21,1;"HIT ANY LETTER TO CONTINUE..."
- 1070  IF  INKEY$ ="" THEN  GOTO 1070
+
+@Line_1070:
+ 1070  IF  INKEY$ ="" THEN  GOTO @Line_1070
  1080  CLS 
  1090  PRINT  AT 0,3;"YOUR SHIPS CONTROL PANEL:"
  1100  PRINT  AT 3,2;"\:'\''\''\''\''\''\''\''\''\''\''\':    \:'\''\''\''\''\''\''\''\''\''\''\':    \: 1 2 3 4 5 \ :    \: 6 7 8 9 0 \ :    \:  Q W E R T\ :    \:  Y U I O P\ :    \:.\..\..\..\..\..\..\..\..\..\..\.:    \:.\..\..\..\..\..\..\..\..\..\..\.:    MOVE SHIP UP    FIRE TORPEDO"\00
  1110  PRINT  AT 11,0;"\:'\''\''\''\''\''\''\''\''\''\':  \:'\''\''\''\''\''\''\': \:'\''\''\''\''\''\''\''\''\':\: A S D F G\ :  \:  H J K\ : \:  L ENTER\ :\:  Z X C V \ :  \: B N M \ : \: . SPACE \ :\:.\..\..\..\..\..\..\..\..\..\.:  \:.\..\..\..\..\..\..\.: \:.\..\..\..\..\..\..\..\..\.: MOVE SHIP     MOVE      MOVE      DOWN        SHIP      SHIP                  LEFT      RIGHT"
  1120  PRINT  AT 21,1;"HIT ANY LETTER TO CONTINUE..."
- 1130  IF  INKEY$ ="" THEN  GOTO 1130
+
+@Line_1130:
+ 1130  IF  INKEY$ ="" THEN  GOTO @Line_1130
  1140  RETURN 
+
+@Line_2000:
  2000  CLS 
  2010  PRINT  AT 2,1;"SKILL LEVELS:"
  2020  PRINT  AT 4,15;"1 = SLOW"
@@ -143,9 +169,11 @@
  2050  PRINT  AT 10,15;"4 = VERY FAST"
  2060  PRINT  AT 12,15;"5 = SUICIDAL"
  2070  PRINT  AT 16,6;"PRESS SKILL LEVEL..."
- 2080  IF  INKEY$ ="" THEN  GOTO 2080
+
+@Line_2080:
+ 2080  IF  INKEY$ ="" THEN  GOTO @Line_2080
  2090  LET V= CODE  INKEY$ -28
- 2100  IF V<1 OR V>5 THEN  GOTO 2080
+ 2100  IF V<1 OR V>5 THEN  GOTO @Line_2080
  2105  CLS 
  2110  POKE 18767,1
  2120  POKE 18768,5-V
@@ -157,7 +185,7 @@
  2190  NEXT N
  2200  RETURN 
  3000  SAVE "ATTAC%K"
- 3100  GOTO 30
+ 3100  GOTO @Line___30
 
 #: [0x4000] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 #: [0x4040] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb
@@ -273,47 +301,61 @@
 #: [0x5BC0] ##########################################################vvvvvv
 #: [0x5C00] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-#: KEYBOARD         = 0x02BB
-#: ERR_NO           = 0x4000
-#: FLAGS            = 0x4001
-#: ERR_SP           = 0x4002
-#: RAMTOP           = 0x4004
-#: MODE             = 0x4006
-#: PPC              = 0x4007
-#: VERSN            = 0x4009
-#: E_PPC            = 0x400A
-#: D_FILE           = 0x400C
-#: DF_CC            = 0x400E
-#: VARS             = 0x4010
-#: DEST             = 0x4012
-#: E_LINE           = 0x4014
-#: CH_ADD           = 0x4016
-#: X_PTR            = 0x4018
-#: STKBOT           = 0x401A
-#: STKEND           = 0x401C
-#: BREG             = 0x401E
-#: MEM              = 0x401F
-#: FREE1            = 0x4021
-#: DF_SZ            = 0x4022
-#: S_TOP            = 0x4023
-#: LAST_K           = 0x4025
-#: DEBOUNCE         = 0x4027
-#: MARGIN           = 0x4028
-#: NXTLIN           = 0x4029
-#: OLDPPC           = 0x402B
-#: FLAGX            = 0x402D
-#: STRLEN           = 0x402E
-#: T_ADDR           = 0x4030
-#: SEED             = 0x4032
-#: FRAMES           = 0x4034
-#: COORDS_X         = 0x4036
-#: COORDS_Y         = 0x4037
-#: PR_CC            = 0x4038
-#: S_POSN_COL       = 0x4039
-#: S_POSN_ROW       = 0x403A
-#: CDFLAG           = 0x403B
-#: PRBUFF           = 0x403C
-#: MEMBOT           = 0x405D
-#: FREE2            = 0x407B
-#: PROG             = 0x407D
+#: Line___30        = 0x001E =    30
+#: Line__140        = 0x008C =   140
+#: Line__190        = 0x00BE =   190
+#: Line__260        = 0x0104 =   260
+#: Line__310        = 0x0136 =   310
+#: Line__340        = 0x0154 =   340
+#: Line__520        = 0x0208 =   520
+#: Line__640        = 0x0280 =   640
+#: KEYBOARD         = 0x02BB =   699
+#: Line__720        = 0x02D0 =   720
+#: Line_1000        = 0x03E8 =  1000
+#: Line_1070        = 0x042E =  1070
+#: Line_1130        = 0x046A =  1130
+#: Line_2000        = 0x07D0 =  2000
+#: Line_2080        = 0x0820 =  2080
+#: ERR_NO           = 0x4000 = 16384
+#: FLAGS            = 0x4001 = 16385
+#: ERR_SP           = 0x4002 = 16386
+#: RAMTOP           = 0x4004 = 16388
+#: MODE             = 0x4006 = 16390
+#: PPC              = 0x4007 = 16391
+#: VERSN            = 0x4009 = 16393
+#: E_PPC            = 0x400A = 16394
+#: D_FILE           = 0x400C = 16396
+#: DF_CC            = 0x400E = 16398
+#: VARS             = 0x4010 = 16400
+#: DEST             = 0x4012 = 16402
+#: E_LINE           = 0x4014 = 16404
+#: CH_ADD           = 0x4016 = 16406
+#: X_PTR            = 0x4018 = 16408
+#: STKBOT           = 0x401A = 16410
+#: STKEND           = 0x401C = 16412
+#: BREG             = 0x401E = 16414
+#: MEM              = 0x401F = 16415
+#: FREE1            = 0x4021 = 16417
+#: DF_SZ            = 0x4022 = 16418
+#: S_TOP            = 0x4023 = 16419
+#: LAST_K           = 0x4025 = 16421
+#: DEBOUNCE         = 0x4027 = 16423
+#: MARGIN           = 0x4028 = 16424
+#: NXTLIN           = 0x4029 = 16425
+#: OLDPPC           = 0x402B = 16427
+#: FLAGX            = 0x402D = 16429
+#: STRLEN           = 0x402E = 16430
+#: T_ADDR           = 0x4030 = 16432
+#: SEED             = 0x4032 = 16434
+#: FRAMES           = 0x4034 = 16436
+#: COORDS_X         = 0x4036 = 16438
+#: COORDS_Y         = 0x4037 = 16439
+#: PR_CC            = 0x4038 = 16440
+#: S_POSN_COL       = 0x4039 = 16441
+#: S_POSN_ROW       = 0x403A = 16442
+#: CDFLAG           = 0x403B = 16443
+#: PRBUFF           = 0x403C = 16444
+#: MEMBOT           = 0x405D = 16477
+#: FREE2            = 0x407B = 16507
+#: PROG             = 0x407D = 16509
 

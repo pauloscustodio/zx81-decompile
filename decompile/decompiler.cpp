@@ -14,7 +14,9 @@
 #include "zx81chars.h"
 #include "zx81consts.h"
 #include <cmath>
+#include <iostream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 void Decompiler::decompile() {
@@ -26,6 +28,7 @@ void Decompiler::decompile() {
     decompile_dfile();
     decompile_vars();
     decompile_basic();
+    analyse_gotos();
 }
 
 void Decompiler::decompile_sysvars() {
@@ -497,5 +500,48 @@ void Decompiler::init_ctl_mem() {
     }
     for (int addr = vars; addr < e_line; addr++) {
         basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Vars);
+    }
+}
+
+void Decompiler::analyse_gotos() {
+    std::unordered_map<int, SourceLine*> lines;
+
+    // map all source lines by line number
+    for (auto& line : basic->source_lines) {
+        if (line.type == SourceLine::Type::Basic) {
+            lines[line.line_num] = &line;
+        }
+    }
+
+    // search for GOTO, GOSUB, RUN and line number references
+    for (auto& line : basic->source_lines) {
+        if (line.type == SourceLine::Type::Basic) {
+            for (auto& token : line.tokens) {
+                if (token.code == C_GOTO || token.code == C_GOSUB || token.code == C_RUN) {
+                    size_t index = &token - &line.tokens[0];
+                    if (index + 1 < line.tokens.size()) {
+                        auto& next_token = line.tokens[index + 1];
+                        if (next_token.code == T_float) {
+                            int target_line_num = static_cast<int>(next_token.fvalue);
+                            auto it = lines.find(target_line_num);
+                            if (it == lines.end()) {
+                                std::cerr << "undefined line number: " + std::to_string(
+                                              target_line_num) << std::endl;
+                            }
+                            else {
+                                // create new label/use existing one
+                                std::string label = basic->disasm_code.get_line_num_label(target_line_num);
+                                SourceLine* target_line = it->second;
+                                target_line->label = label;
+
+                                // replace token with label
+                                next_token.code = T_line_num_ref;
+                                next_token.ident = label;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -7,7 +7,9 @@
 #include "disasm.h"
 #include "errors.h"
 #include "utils.h"
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 
 AsmLabels::AsmLabels() {
 #define X(name, value)		add(#name, value);
@@ -73,6 +75,30 @@ AsmLabels& DisasmCode::get_labels() {
 
 const AsmLabels& DisasmCode::get_labels() const {
     return labels;
+}
+
+std::string DisasmCode::get_line_num_label(int line_num) {
+    std::string label;
+    if (labels.find(line_num, label)) {
+        return label;
+    }
+
+    std::ostringstream oss;
+    oss << "Line" << std::setw(5) << std::setfill('_') << line_num;
+    label = oss.str();
+    labels.add(label, line_num);
+    return label;
+}
+
+std::string DisasmCode::get_asm_label(int addr) {
+    std::string label;
+    if (labels.find(addr, label)) {
+        return label;
+    }
+
+    label = fmt_hex(addr, 4, "L");
+    labels.add(label, addr);
+    return label;
 }
 
 MemType DisasmCode::get_mem_type(int addr) const {

@@ -19,7 +19,9 @@
  1000  LET C1= USR 16608
  1002  POKE 16816,0
  1004  POKE 16814,0
- 1006  GOSUB 4000
+ 1006  GOSUB @Line_4000
+
+@Line_1010:
  1010  LET C1= USR 16642
  1011  PRINT  AT 15,1;"                              "
  1012  PRINT  AT 8,15;" "
@@ -63,32 +65,42 @@
  2035  POKE 16813,1
  2055  LET C1= USR 18000
  2070  PRINT  AT 18,11; PEEK 16816
+
+@Line_3000:
  3000  PRINT  AT 20,3;"GO-AGAIN - PRINCE ? Y/N"
- 3010  IF  INKEY$ ="Y" THEN  GOTO 3050
+ 3010  IF  INKEY$ ="Y" THEN  GOTO @Line_3050
  3015  IF  INKEY$ ="N" THEN  GOTO 1
- 3020  IF  INKEY$ ="" THEN  GOTO 3000
- 3025  GOTO 3000
+ 3020  IF  INKEY$ ="" THEN  GOTO @Line_3000
+ 3025  GOTO @Line_3000
  3030  STOP 
+
+@Line_3050:
  3050  LET C1= USR 16608
  3060  POKE 16814,0
  3062  POKE 16816,0
- 3064  GOTO 1010
+ 3064  GOTO @Line_1010
+
+@Line_4000:
  4000  REM 
- 4005  GOSUB 5000
- 4007  GOSUB 6200
+ 4005  GOSUB @Line_5000
+ 4007  GOSUB @Line_6200
  4010  PRINT  AT 2,1;"USING THE ROYAL ARROW KEYS"
  4012  PRINT  AT 3,1;"YOU MUST GUIDE PRINCE BILLY"
  4014  PRINT  AT 4,1;"THROUGH THE MAZE AND GET"
  4016  PRINT  AT 5,1;"ALL THE B-LERS"
  4017  PRINT  AT 7,1;"GOOD LUCK"
+
+@Line_4019:
  4019  PRINT  AT 12,2;"WHAT LEVEL OF PLAY?"
  4020  PRINT  AT 14,2;"1=SUPER PRINCE"
  4030  PRINT  AT 15,2;"2=SKILLED HUNTER"
  4032  PRINT  AT 16,2;"3=SCHOOL DAZE"
  4034  PRINT  AT 17,2;"4=FIRST TIME"
  4036  PRINT  AT 18,2;"5=LEAD FEET"
+
+@Line_4038:
  4038  PRINT  AT 19,2;"6=POISON APPLE"
- 4040  IF  INKEY$ ="" THEN  GOTO 4038
+ 4040  IF  INKEY$ ="" THEN  GOTO @Line_4038
  4080  LET Y= VAL  INKEY$ 
  4082  IF Y=1 THEN  POKE 18037,5
  4083  IF Y=2 THEN  POKE 18037,10
@@ -96,9 +108,11 @@
  4085  IF Y=4 THEN  POKE 18037,20
  4086  IF Y=5 THEN  POKE 18037,25
  4087  IF Y=6 THEN  POKE 18037,30
- 4088  IF Y<1 OR Y>6 THEN  GOTO 4019
+ 4088  IF Y<1 OR Y>6 THEN  GOTO @Line_4019
  4090  LET C1= USR 16608
  4099  RETURN 
+
+@Line_5000:
  5000  REM 
  5002  DIM A$(6,7)
  5004  LET A$(1)=" TIMEX "
@@ -108,7 +122,7 @@
  5012  LET A$(5)=" FAIRY "
  5014  LET A$(6)="TRAILS "
  5016  FOR J=1 TO 6
- 5018  GOSUB 6000
+ 5018  GOSUB @Line_6000
  5020  FOR N=1 TO 7
  5022  LET B$=A$(J,N TO N)
  5024  POKE 18345, CODE B$
@@ -125,6 +139,8 @@
  5990  POKE 16625,0
  5995  LET C1= USR 16608
  5999  RETURN 
+
+@Line_6000:
  6000  REM 
  6002  IF J=1 OR J=4 THEN  POKE 18375,167
  6004  IF J=1 OR J=4 THEN  POKE 18376,0
@@ -133,6 +149,8 @@
  6010  IF J=3 OR J=6 THEN  POKE 18375,241
  6020  IF J=3 OR J=6 THEN  POKE 18376,1
  6199  RETURN 
+
+@Line_6200:
  6200  REM 
  6202  PRINT  AT 1,0;"ONCE UPON A TIME, IN A FAR"
  6204  PRINT "AND DISTANT LAND THERE LIVED"
@@ -160,20 +178,24 @@
  6399  RETURN 
  9000  STOP 
  9010  INPUT A
+
+@Line_9020:
  9020  INPUT B
  9030  PRINT B
  9040  POKE A,B
  9050  LET A=A+1
- 9060  GOTO 9020
+ 9060  GOTO @Line_9020
  9070  INPUT X
  9080  LET A$=""
+
+@Line_9090:
  9090  IF A$="" THEN  INPUT A$
  9100  IF A$="S" THEN  STOP 
  9110  POKE X,16* CODE A$+ CODE A$(2)-476
  9120  PRINT X;" ";A$
  9130  LET X=X+1
  9140  LET A$=A$(3 TO )
- 9150  GOTO 9090
+ 9150  GOTO @Line_9090
  9200  PRINT "SET TAPE"
  9205  INPUT Y$
  9210  SAVE "GFTRAIL%S"
@@ -327,47 +349,58 @@
 #: [0x6400] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 #: [0x6440] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-#: KEYBOARD         = 0x02BB
-#: ERR_NO           = 0x4000
-#: FLAGS            = 0x4001
-#: ERR_SP           = 0x4002
-#: RAMTOP           = 0x4004
-#: MODE             = 0x4006
-#: PPC              = 0x4007
-#: VERSN            = 0x4009
-#: E_PPC            = 0x400A
-#: D_FILE           = 0x400C
-#: DF_CC            = 0x400E
-#: VARS             = 0x4010
-#: DEST             = 0x4012
-#: E_LINE           = 0x4014
-#: CH_ADD           = 0x4016
-#: X_PTR            = 0x4018
-#: STKBOT           = 0x401A
-#: STKEND           = 0x401C
-#: BREG             = 0x401E
-#: MEM              = 0x401F
-#: FREE1            = 0x4021
-#: DF_SZ            = 0x4022
-#: S_TOP            = 0x4023
-#: LAST_K           = 0x4025
-#: DEBOUNCE         = 0x4027
-#: MARGIN           = 0x4028
-#: NXTLIN           = 0x4029
-#: OLDPPC           = 0x402B
-#: FLAGX            = 0x402D
-#: STRLEN           = 0x402E
-#: T_ADDR           = 0x4030
-#: SEED             = 0x4032
-#: FRAMES           = 0x4034
-#: COORDS_X         = 0x4036
-#: COORDS_Y         = 0x4037
-#: PR_CC            = 0x4038
-#: S_POSN_COL       = 0x4039
-#: S_POSN_ROW       = 0x403A
-#: CDFLAG           = 0x403B
-#: PRBUFF           = 0x403C
-#: MEMBOT           = 0x405D
-#: FREE2            = 0x407B
-#: PROG             = 0x407D
+#: KEYBOARD         = 0x02BB =   699
+#: Line_1010        = 0x03F2 =  1010
+#: Line_3000        = 0x0BB8 =  3000
+#: Line_3050        = 0x0BEA =  3050
+#: Line_4000        = 0x0FA0 =  4000
+#: Line_4019        = 0x0FB3 =  4019
+#: Line_4038        = 0x0FC6 =  4038
+#: Line_5000        = 0x1388 =  5000
+#: Line_6000        = 0x1770 =  6000
+#: Line_6200        = 0x1838 =  6200
+#: Line_9020        = 0x233C =  9020
+#: Line_9090        = 0x2382 =  9090
+#: ERR_NO           = 0x4000 = 16384
+#: FLAGS            = 0x4001 = 16385
+#: ERR_SP           = 0x4002 = 16386
+#: RAMTOP           = 0x4004 = 16388
+#: MODE             = 0x4006 = 16390
+#: PPC              = 0x4007 = 16391
+#: VERSN            = 0x4009 = 16393
+#: E_PPC            = 0x400A = 16394
+#: D_FILE           = 0x400C = 16396
+#: DF_CC            = 0x400E = 16398
+#: VARS             = 0x4010 = 16400
+#: DEST             = 0x4012 = 16402
+#: E_LINE           = 0x4014 = 16404
+#: CH_ADD           = 0x4016 = 16406
+#: X_PTR            = 0x4018 = 16408
+#: STKBOT           = 0x401A = 16410
+#: STKEND           = 0x401C = 16412
+#: BREG             = 0x401E = 16414
+#: MEM              = 0x401F = 16415
+#: FREE1            = 0x4021 = 16417
+#: DF_SZ            = 0x4022 = 16418
+#: S_TOP            = 0x4023 = 16419
+#: LAST_K           = 0x4025 = 16421
+#: DEBOUNCE         = 0x4027 = 16423
+#: MARGIN           = 0x4028 = 16424
+#: NXTLIN           = 0x4029 = 16425
+#: OLDPPC           = 0x402B = 16427
+#: FLAGX            = 0x402D = 16429
+#: STRLEN           = 0x402E = 16430
+#: T_ADDR           = 0x4030 = 16432
+#: SEED             = 0x4032 = 16434
+#: FRAMES           = 0x4034 = 16436
+#: COORDS_X         = 0x4036 = 16438
+#: COORDS_Y         = 0x4037 = 16439
+#: PR_CC            = 0x4038 = 16440
+#: S_POSN_COL       = 0x4039 = 16441
+#: S_POSN_ROW       = 0x403A = 16442
+#: CDFLAG           = 0x403B = 16443
+#: PRBUFF           = 0x403C = 16444
+#: MEMBOT           = 0x405D = 16477
+#: FREE2            = 0x407B = 16507
+#: PROG             = 0x407D = 16509
 

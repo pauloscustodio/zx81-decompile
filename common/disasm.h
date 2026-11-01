@@ -67,6 +67,8 @@ public:
 
     AsmLabels& get_labels();
     const AsmLabels& get_labels() const;
+    std::string get_line_num_label(int line_num) ;
+    std::string get_asm_label(int addr) ;
 
     MemType get_mem_type(int addr) const;
     void set_mem_type(int addr, MemType type, int count = 1);
