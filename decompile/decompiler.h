@@ -35,4 +35,5 @@ private:
     bool decompile_ident(SourceLine& line);
     bool decompile_string(SourceLine& line);
     void decompile_newline(SourceLine& line);
+    void init_ctl_mem();
 };

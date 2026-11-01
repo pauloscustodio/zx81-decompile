@@ -9,6 +9,7 @@
 #include "errors.h"
 #include "release_assert.h"
 #include "token.h"
+#include "types.h"
 #include "utils.h"
 #include "zx81chars.h"
 #include "zx81consts.h"
@@ -18,7 +19,10 @@
 
 void Decompiler::decompile() {
     (void)ctl_file;
+
     decompile_sysvars();
+    init_ctl_mem();
+
     decompile_dfile();
     decompile_vars();
     decompile_basic();
@@ -312,8 +316,11 @@ bool Decompiler::decompile_rem_code(SourceLine& line) {
             bytes.code = T_rem_code;
             bytes.bytes = mem->peek_bytes(addr + 1,
                                           end - addr - 2);	// all bytes except final newline)
-            //g_disasm_code.set_unknown(addr, INT(bytes.bytes.size()));
             line.tokens.push_back(bytes);
+
+            // mark rem code in memory map
+            basic->set_mem_map_no_overlap_check(addr + 1, MemType::Unknown,
+                                                INT(bytes.bytes.size()));
 
             addr = end - 1;
             decompile_newline(line);
@@ -472,4 +479,23 @@ void Decompiler::decompile_newline(SourceLine& line) {
     }
 
     line.tokens.push_back(token);
+}
+
+void Decompiler::init_ctl_mem() {
+    int d_file = mem->dpeek(D_FILE);
+    int vars = mem->dpeek(VARS);
+    int e_line = mem->dpeek(E_LINE);
+
+    for (int addr = ERR_NO; addr < PROG; addr++) {
+        basic->mem_map.poke(addr, BYTE(MemType::Sysvars));
+    }
+    for (int addr = PROG; addr < d_file; addr++) {
+        basic->mem_map.poke(addr, BYTE(MemType::Basic));
+    }
+    for (int addr = d_file; addr < vars; addr++) {
+        basic->mem_map.poke(addr, BYTE(MemType::Dfile));
+    }
+    for (int addr = vars; addr < e_line; addr++) {
+        basic->mem_map.poke(addr, BYTE(MemType::Vars));
+    }
 }

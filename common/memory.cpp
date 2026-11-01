@@ -174,15 +174,15 @@ void Memory::write_p_file(const std::string& filename) {
 // read memory
 //-----------------------------------------------------------------------------
 
-int Memory::peek(int addr) {
+int Memory::peek(int addr) const {
     return mem[addr & 0xffff];
 }
 
-int Memory::dpeek(int addr) {
+int Memory::dpeek(int addr) const {
     return peek(addr) + (peek(addr + 1) << 8);
 }
 
-int Memory::speek(int addr) {
+int Memory::speek(int addr) const {
     int n = peek(addr);
     if (n >= 0x80) {
         n -= 0x100;
@@ -190,11 +190,11 @@ int Memory::speek(int addr) {
     return n;
 }
 
-int Memory::dpeek_be(int addr) {
+int Memory::dpeek_be(int addr) const {
     return (peek(addr) << 8) + peek(addr + 1);
 }
 
-double Memory::fpeek(int addr) {
+double Memory::fpeek(int addr) const {
     std::array<Byte, 5> bytes{ 0 };
     for (int i = 0; i < 5; i++) {
         bytes[i] = peek(addr + i);
@@ -202,13 +202,13 @@ double Memory::fpeek(int addr) {
     return zx81_to_float(bytes);
 }
 
-Bytes Memory::peek_bytes(int addr, int size) {
+Bytes Memory::peek_bytes(int addr, int size) const {
     Bytes out;
     out.insert(out.end(), mem.begin() + addr, mem.begin() + addr + size);
     return out;
 }
 
-std::string Memory::peek_hex(int addr, int len) {
+std::string Memory::peek_hex(int addr, int len) const {
     Bytes out;
     for (int i = 0; i < len; i++) {
         out.push_back(peek(addr + i));
@@ -216,7 +216,7 @@ std::string Memory::peek_hex(int addr, int len) {
     return encode_hex(out);
 }
 
-int Memory::get_line_addr(int line_num) {
+int Memory::get_line_addr(int line_num) const {
     int addr = PROG;
     int d_file = dpeek(D_FILE);
     while (addr < d_file) {

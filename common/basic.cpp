@@ -9,6 +9,7 @@
 #include "release_assert.h"
 #include "types.h"
 #include "utils.h"
+#include "zx81consts.h"
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -25,6 +26,23 @@ void Basic::write_bas_file(const std::string& filename) const {
     write_dfile(file);
     write_vars(file);
     write_source_lines(file);
+    write_mem_map(file);
+}
+
+void Basic::set_mem_map(int addr, MemType type, int size) {
+    for (int i = 0; i < size; i++) {
+        if (mem_map.peek(addr + i) != INT(MemType::Undefined) &&
+                mem_map.peek(addr + i) != INT(MemType::Unknown)) {
+            error("memory overlap at address " + fmt_hex(addr + i, 4));
+        }
+        mem_map.poke(addr + i, BYTE(type));
+    }
+}
+
+void Basic::set_mem_map_no_overlap_check(int addr, MemType type, int size) {
+    for (int i = 0; i < size; i++) {
+        mem_map.poke(addr + i, BYTE(type));
+    }
 }
 
 void Basic::write_sysvars(std::ostream& os) const {
@@ -219,4 +237,51 @@ void Basic::write_source_lines(std::ostream& os) const {
     if (!source_lines.empty()) {
         os << std::endl;
     }
+}
+
+bool Basic::has_asm_code() const {
+    for (int addr = RAM_ADDR; addr < MEM_SIZE; addr ++) {
+        switch (mem_map.peek(addr)) {
+        case INT(MemType::Undefined):
+            return false;   // reached end of loaded memory
+
+        case INT(MemType::Sysvars):
+        case INT(MemType::Dfile):
+        case INT(MemType::Vars):
+        case INT(MemType::Basic):
+            break;
+
+        case INT(MemType::Asm):
+        case INT(MemType::Byte):
+        case INT(MemType::Word):
+        case INT(MemType::Unknown):
+            return true;    // has asm code
+
+        default:
+            release_assert(0);
+        }
+    }
+    return false;   // no asm code found
+}
+
+void Basic::write_mem_map(std::ostream& os) const {
+    if (!has_asm_code()) {
+        return;
+    }
+
+    for (int addr = RAM_ADDR; addr < MEM_SIZE; addr += 64) {
+        if (mem_map.peek(addr) == INT(MemType::Undefined)) {
+            break;  // reached end of loaded memory
+        }
+        os << "# [" << fmt_hex(addr, 4) << "] ";
+        for (int addr1 = addr; addr1 < addr + 64; addr1++) {
+            if (mem_map.peek(addr1) == INT(MemType::Undefined)) {
+                break;  // reached end of loaded memory
+            }
+            os << static_cast<char>(mem_map.peek(addr1));
+        }
+        os << std::endl;
+    }
+
+    os << std::endl;
 }

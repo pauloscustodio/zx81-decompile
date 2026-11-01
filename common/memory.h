@@ -25,14 +25,14 @@ public:
     void write_p_file(const std::string& filename);
 
     // read memory
-    int peek(int addr);
-    int dpeek(int addr);
-    int speek(int addr);
-    int dpeek_be(int addr);
-    double fpeek(int addr);
-    Bytes peek_bytes(int addr, int size);
-    std::string peek_hex(int addr, int len);
-    int get_line_addr(int line_num);
+    int peek(int addr) const;
+    int dpeek(int addr) const;
+    int speek(int addr) const;
+    int dpeek_be(int addr) const;
+    double fpeek(int addr) const;
+    Bytes peek_bytes(int addr, int size) const;
+    std::string peek_hex(int addr, int len) const;
+    int get_line_addr(int line_num) const;
 
     // write memory
     void poke(int addr, int value);
