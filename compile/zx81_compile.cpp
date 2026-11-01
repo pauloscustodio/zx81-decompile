@@ -15,19 +15,24 @@
 #include <string>
 
 static void exit_usage() {
-    std::cerr << "Usage: zx81_compile [-o file.p] file.bas" << std::endl;
+    std::cerr << "Usage: zx81_compile [-m file.map] [-o file.p] file.bas" <<
+              std::endl;
     exit(EXIT_FAILURE);
 }
 
 int main(int argc, char* argv[]) {
     std::string out_filename;
+    std::string map_filename;
 
     while (true) {
-        int c = getopt(argc, argv, const_cast<char*>("o:"));
+        int c = getopt(argc, argv, const_cast<char*>("m:o:"));
         if (c == -1) {
             break;
         }
         switch (c) {
+        case 'm':
+            map_filename = optarg;
+            break;
         case 'o':
             out_filename = optarg;
             break;
@@ -40,11 +45,13 @@ int main(int argc, char* argv[]) {
         exit_usage();
     }
 
+    // get the input .bas filename
     std::string bas_filename = argv[optind];
     if (out_filename.empty()) {
         out_filename = replace_extension(bas_filename, ".p");
     }
 
+    // parse
     Basic* basic = new Basic();
     Parser* parser = new Parser(basic);
     parser->parse_bas_file(bas_filename);
@@ -52,13 +59,18 @@ int main(int argc, char* argv[]) {
         exit_status();
     }
 
+    // compile
     Compiler* compiler = new Compiler(basic);
     compiler->compile();
     if (get_error_count()) {
         exit_status();
     }
 
+    // write output files
     compiler->write_p_file(out_filename);
+    if (!map_filename.empty()) {
+        compiler->write_map_file(map_filename);
+    }
 
     delete compiler;
     delete parser;

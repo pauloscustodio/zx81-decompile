@@ -18,6 +18,7 @@ public:
 
     void compile();
     void write_p_file(const std::string& filename);
+    void write_map_file(const std::string& filename);
 
 private:
     Basic* basic = nullptr;

@@ -9,11 +9,13 @@ for my $input_bas_file ( path("t/asm/input")->children(qr/\.bas$/) ) {
     note "$input_bas_file";
     my $basename     = $input_bas_file->basename('.bas');
     my $exp_p_file   = path( "t/asm/expected", "$basename.p" );
+    my $exp_map_file = path( "t/asm/expected", "$basename.map" );
     my $exp_txt_file = path( "t/asm/expected", "$basename.txt" );
     my $exp_bas_file = path( "t/asm/expected", "$basename.bas" );
 
-    # make .p file
-    run_ok("zx81_compile -o $exp_p_file $input_bas_file");
+    # make .p file and .map file
+    run_ok("zx81_compile -o $exp_p_file -m $test.map $input_bas_file");
+    check_text_file( $exp_map_file, "$test.map" );
 
     # make .txt file
     dump_p( $exp_p_file, "$test.txt" );

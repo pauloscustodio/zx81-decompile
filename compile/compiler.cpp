@@ -11,14 +11,21 @@
 #include "release_assert.h"
 #include "symtab.h"
 #include "types.h"
+#include "utils.h"
 #include "zx81chars.h"
 #include "zx81consts.h"
 #include "zx81float.h"
+#include <algorithm>
 #include <array>
 #include <cmath>
+#include <cstdio>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 Compiler::Compiler(Basic* basic_)
     : basic(basic_) {}
@@ -61,6 +68,32 @@ void Compiler::compile() {
 
 void Compiler::write_p_file(const std::string& filename) {
     mem.write_p_file(filename);
+}
+
+void Compiler::write_map_file(const std::string& filename) {
+    std::ofstream ofs(filename, std::ios::binary);
+    if (!ofs.is_open()) {
+        perror(filename.c_str());
+        fatal_error("open file: " + filename);
+    }
+
+    std::vector<Symbol*> symbols;
+    for (auto& it : symtab) {
+        if (it.first != "ASMPC") {
+            symbols.push_back(it.second);
+        }
+    }
+    std::sort(symbols.begin(), symbols.end(),
+    [](const Symbol * a, const Symbol * b) {
+        return a->value < b->value;
+    });
+
+    for (auto symbol : symbols) {
+        ofs << std::setw(16) << std::left << symbol->name
+            << " = " << fmt_hex(symbol->value, 4)
+            << " = " << std::setw(5) << std::right << symbol->value
+            << std::endl;
+    }
 }
 
 void Compiler::fix_line_refs() {
