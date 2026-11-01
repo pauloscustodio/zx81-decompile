@@ -16,9 +16,11 @@ struct Expr {
     SourceLoc loc; // location of the expression in the source code
 
     explicit Expr(const SourceLoc& loc_) : loc(loc_) {}
-    bool empty() const {
-        return rpn.empty();
-    }
+    void clear();
+    bool empty() const;
+
+    Expr plus_n(int n) const;
+    Expr negate() const;
 };
 
 struct Patch {

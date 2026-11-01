@@ -98,6 +98,12 @@ test:: $(COMPILE_DEBUG_EXE) $(COMPILE_RELEASE_EXE) \
 	  $(DECOMPILE_DEBUG_EXE) $(DECOMPILE_RELEASE_EXE)
 	perl -S prove -j9 --state=slow,save t/*.t
 
+inittests: t/input/cpu_test_z80_ok.lis
+
+t/input/cpu_test_z80_ok.lis: t/input/cpu_test_z80_ok.asm Makefile
+	z88dk-z80asm -l -b t/input/cpu_test_z80_ok.asm
+	$(RM) t/input/cpu_test_z80_ok.bin t/input/cpu_test_z80_ok.o
+
 #------------------------------------------------------------------------------
 # tidy
 #------------------------------------------------------------------------------
@@ -121,7 +127,6 @@ clean::
 	$(RM) $(DEPENDS)
 	$(RM) -r build
 	find . -name '*.bak' -o -name '*.orig' | xargs $(RM)
-
 	
 #------------------------------------------------------------------------------
 # install

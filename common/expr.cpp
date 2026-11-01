@@ -7,6 +7,8 @@
 #include "errors.h"
 #include "expr.h"
 #include "release_assert.h"
+#include "token.h"
+#include <cstdlib>
 #include <vector>
 
 std::vector<Expr> g_expr_pool;
@@ -179,11 +181,50 @@ int eval_expr(const Expr& expr, const Symtab& symtab) {
         }
     }
 
-    release_assert(stack.size() == 1);
+    if (stack.size() != 1) {
+        error(expr.loc, "internal error, invalid expression");
+        exit(EXIT_FAILURE);
+    }
+
     return stack.back();
 }
 
 int eval_const_expr(const Expr& expr) {
     Symtab dummy_symtab;
     return eval_expr(expr, dummy_symtab);
+}
+
+void Expr::clear() {
+    rpn.clear();
+}
+
+bool Expr::empty() const {
+    return rpn.empty();
+}
+
+Expr Expr::plus_n(int n) const {
+    Expr new_expr(loc);
+    new_expr.rpn = rpn;
+
+    Token num;
+    num.code = T_integer;
+    num.ivalue = n;
+    new_expr.rpn.push_back(num);
+
+    Token plus;
+    plus.code = C_plus;
+    new_expr.rpn.push_back(plus);
+
+    return new_expr;
+}
+
+Expr Expr::negate() const {
+    Expr new_expr(loc);
+    new_expr.rpn = rpn;
+
+    Token neg;
+    neg.code = T_unary_minus;
+    new_expr.rpn.push_back(neg);
+
+    return new_expr;
 }

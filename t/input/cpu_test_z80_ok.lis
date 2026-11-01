@@ -1,0 +1,1950 @@
+t/input/cpu_test_z80_ok.asm:
+     1                           org 16514
+     2  0000  8e                 adc (hl)                       ; 8E
+     3  0001  8e23               adc (hl+)                      ; 8E 23
+     4  0003  8e2b               adc (hl-)                      ; 8E 2B
+     5  0005  dd8e00             adc (ix)                       ; DD 8E 00
+     6  0008  dd8e00             adc (ix+0)                     ; DD 8E 00
+     7  000b  dd8e7e             adc (ix+126)                   ; DD 8E 7E
+     8  000e  dd8e80             adc (ix-128)                   ; DD 8E 80
+     9  0011  fd8e00             adc (iy)                       ; FD 8E 00
+    10  0014  fd8e00             adc (iy+0)                     ; FD 8E 00
+    11  0017  fd8e7e             adc (iy+126)                   ; FD 8E 7E
+    12  001a  fd8e80             adc (iy-128)                   ; FD 8E 80
+    13  001d  ce00               adc 0                          ; CE 00
+    14  001f  ce7f               adc 127                        ; CE 7F
+    15  0021  ceff               adc 255                        ; CE FF
+    16  0023  8f                 adc a                          ; 8F
+    17  0024  8e                 adc a, (hl)                    ; 8E
+    18  0025  8e23               adc a, (hl+)                   ; 8E 23
+    19  0027  8e2b               adc a, (hl-)                   ; 8E 2B
+    20  0029  dd8e00             adc a, (ix)                    ; DD 8E 00
+    21  002c  dd8e00             adc a, (ix+0)                  ; DD 8E 00
+    22  002f  dd8e7e             adc a, (ix+126)                ; DD 8E 7E
+    23  0032  dd8e80             adc a, (ix-128)                ; DD 8E 80
+    24  0035  fd8e00             adc a, (iy)                    ; FD 8E 00
+    25  0038  fd8e00             adc a, (iy+0)                  ; FD 8E 00
+    26  003b  fd8e7e             adc a, (iy+126)                ; FD 8E 7E
+    27  003e  fd8e80             adc a, (iy-128)                ; FD 8E 80
+    28  0041  ce00               adc a, 0                       ; CE 00
+    29  0043  ce7f               adc a, 127                     ; CE 7F
+    30  0045  ceff               adc a, 255                     ; CE FF
+    31  0047  8f                 adc a, a                       ; 8F
+    32  0048  88                 adc a, b                       ; 88
+    33  0049  89                 adc a, c                       ; 89
+    34  004a  8a                 adc a, d                       ; 8A
+    35  004b  8b                 adc a, e                       ; 8B
+    36  004c  8c                 adc a, h                       ; 8C
+    37  004d  dd8c               adc a, ixh                     ; DD 8C
+    38  004f  dd8d               adc a, ixl                     ; DD 8D
+    39  0051  fd8c               adc a, iyh                     ; FD 8C
+    40  0053  fd8d               adc a, iyl                     ; FD 8D
+    41  0055  8d                 adc a, l                       ; 8D
+    42  0056  88                 adc b                          ; 88
+    43  0057  89                 adc c                          ; 89
+    44  0058  8a                 adc d                          ; 8A
+    45  0059  8b                 adc e                          ; 8B
+    46  005a  8c                 adc h                          ; 8C
+    47  005b  ed4a               adc hl, bc                     ; ED 4A
+    48  005d  ed5a               adc hl, de                     ; ED 5A
+    49  005f  ed6a               adc hl, hl                     ; ED 6A
+    50  0061  ed7a               adc hl, sp                     ; ED 7A
+    51  0063  dd8c               adc ixh                        ; DD 8C
+    52  0065  dd8d               adc ixl                        ; DD 8D
+    53  0067  fd8c               adc iyh                        ; FD 8C
+    54  0069  fd8d               adc iyl                        ; FD 8D
+    55  006b  8d                 adc l                          ; 8D
+    56  006c  86                 add (hl)                       ; 86
+    57  006d  8623               add (hl+)                      ; 86 23
+    58  006f  862b               add (hl-)                      ; 86 2B
+    59  0071  dd8600             add (ix)                       ; DD 86 00
+    60  0074  dd8600             add (ix+0)                     ; DD 86 00
+    61  0077  dd867e             add (ix+126)                   ; DD 86 7E
+    62  007a  dd8680             add (ix-128)                   ; DD 86 80
+    63  007d  fd8600             add (iy)                       ; FD 86 00
+    64  0080  fd8600             add (iy+0)                     ; FD 86 00
+    65  0083  fd867e             add (iy+126)                   ; FD 86 7E
+    66  0086  fd8680             add (iy-128)                   ; FD 86 80
+    67  0089  c600               add 0                          ; C6 00
+    68  008b  c67f               add 127                        ; C6 7F
+    69  008d  c6ff               add 255                        ; C6 FF
+    70  008f  87                 add a                          ; 87
+    71  0090  86                 add a, (hl)                    ; 86
+    72  0091  8623               add a, (hl+)                   ; 86 23
+    73  0093  862b               add a, (hl-)                   ; 86 2B
+    74  0095  dd8600             add a, (ix)                    ; DD 86 00
+    75  0098  dd8600             add a, (ix+0)                  ; DD 86 00
+    76  009b  dd867e             add a, (ix+126)                ; DD 86 7E
+    77  009e  dd8680             add a, (ix-128)                ; DD 86 80
+    78  00a1  fd8600             add a, (iy)                    ; FD 86 00
+    79  00a4  fd8600             add a, (iy+0)                  ; FD 86 00
+    80  00a7  fd867e             add a, (iy+126)                ; FD 86 7E
+    81  00aa  fd8680             add a, (iy-128)                ; FD 86 80
+    82  00ad  c600               add a, 0                       ; C6 00
+    83  00af  c67f               add a, 127                     ; C6 7F
+    84  00b1  c6ff               add a, 255                     ; C6 FF
+    85  00b3  87                 add a, a                       ; 87
+    86  00b4  80                 add a, b                       ; 80
+    87  00b5  81                 add a, c                       ; 81
+    88  00b6  82                 add a, d                       ; 82
+    89  00b7  83                 add a, e                       ; 83
+    90  00b8  84                 add a, h                       ; 84
+    91  00b9  dd84               add a, ixh                     ; DD 84
+    92  00bb  dd85               add a, ixl                     ; DD 85
+    93  00bd  fd84               add a, iyh                     ; FD 84
+    94  00bf  fd85               add a, iyl                     ; FD 85
+    95  00c1  85                 add a, l                       ; 85
+    96  00c2  80                 add b                          ; 80
+    97  00c3  e521341209444de1   add bc, 0x1234                 ; E5 21 34 12 09 44 4D E1
+    98  00cb  81                 add c                          ; 81
+    99  00cc  82                 add d                          ; 82
+   100  00cd  e521341219545de1   add de, 0x1234                 ; E5 21 34 12 19 54 5D E1
+   101  00d5  83                 add e                          ; 83
+   102  00d6  84                 add h                          ; 84
+   103  00d7  d511341219d1       add hl, 0x1234                 ; D5 11 34 12 19 D1
+   104  00dd  09                 add hl, bc                     ; 09
+   105  00de  19                 add hl, de                     ; 19
+   106  00df  29                 add hl, hl                     ; 29
+   107  00e0  39                 add hl, sp                     ; 39
+   108  00e1  dd09               add ix, bc                     ; DD 09
+   109  00e3  dd19               add ix, de                     ; DD 19
+   110  00e5  dd29               add ix, ix                     ; DD 29
+   111  00e7  dd39               add ix, sp                     ; DD 39
+   112  00e9  dd84               add ixh                        ; DD 84
+   113  00eb  dd85               add ixl                        ; DD 85
+   114  00ed  fd09               add iy, bc                     ; FD 09
+   115  00ef  fd19               add iy, de                     ; FD 19
+   116  00f1  fd29               add iy, iy                     ; FD 29
+   117  00f3  fd39               add iy, sp                     ; FD 39
+   118  00f5  fd84               add iyh                        ; FD 84
+   119  00f7  fd85               add iyl                        ; FD 85
+   120  00f9  85                 add l                          ; 85
+   121  00fa  a6                 and (hl)                       ; A6
+   122  00fb  a623               and (hl+)                      ; A6 23
+   123  00fd  a62b               and (hl-)                      ; A6 2B
+   124  00ff  dda600             and (ix)                       ; DD A6 00
+   125  0102  dda600             and (ix+0)                     ; DD A6 00
+   126  0105  dda67e             and (ix+126)                   ; DD A6 7E
+   127  0108  dda680             and (ix-128)                   ; DD A6 80
+   128  010b  fda600             and (iy)                       ; FD A6 00
+   129  010e  fda600             and (iy+0)                     ; FD A6 00
+   130  0111  fda67e             and (iy+126)                   ; FD A6 7E
+   131  0114  fda680             and (iy-128)                   ; FD A6 80
+   132  0117  e600               and 0                          ; E6 00
+   133  0119  e67f               and 127                        ; E6 7F
+   134  011b  e6ff               and 255                        ; E6 FF
+   135  011d  a7                 and a                          ; A7
+   136  011e  a6                 and a, (hl)                    ; A6
+   137  011f  a623               and a, (hl+)                   ; A6 23
+   138  0121  a62b               and a, (hl-)                   ; A6 2B
+   139  0123  dda600             and a, (ix)                    ; DD A6 00
+   140  0126  dda600             and a, (ix+0)                  ; DD A6 00
+   141  0129  dda67e             and a, (ix+126)                ; DD A6 7E
+   142  012c  dda680             and a, (ix-128)                ; DD A6 80
+   143  012f  fda600             and a, (iy)                    ; FD A6 00
+   144  0132  fda600             and a, (iy+0)                  ; FD A6 00
+   145  0135  fda67e             and a, (iy+126)                ; FD A6 7E
+   146  0138  fda680             and a, (iy-128)                ; FD A6 80
+   147  013b  e600               and a, 0                       ; E6 00
+   148  013d  e67f               and a, 127                     ; E6 7F
+   149  013f  e6ff               and a, 255                     ; E6 FF
+   150  0141  a7                 and a, a                       ; A7
+   151  0142  a0                 and a, b                       ; A0
+   152  0143  a1                 and a, c                       ; A1
+   153  0144  a2                 and a, d                       ; A2
+   154  0145  a3                 and a, e                       ; A3
+   155  0146  a4                 and a, h                       ; A4
+   156  0147  dda4               and a, ixh                     ; DD A4
+   157  0149  dda5               and a, ixl                     ; DD A5
+   158  014b  fda4               and a, iyh                     ; FD A4
+   159  014d  fda5               and a, iyl                     ; FD A5
+   160  014f  a5                 and a, l                       ; A5
+   161  0150  a0                 and b                          ; A0
+   162  0151  a1                 and c                          ; A1
+   163  0152  a2                 and d                          ; A2
+   164  0153  a3                 and e                          ; A3
+   165  0154  a4                 and h                          ; A4
+   166  0155  f57ca0677da16ff1   and hl, bc                     ; F5 7C A0 67 7D A1 6F F1
+   167  015d  f57ca2677da36ff1   and hl, de                     ; F5 7C A2 67 7D A3 6F F1
+   168  0165  f5dd7ca0dd67dd7d   and ix, bc                     ; F5 DD 7C A0 DD 67 DD 7D A1 DD 6F F1
+              a1dd6ff1          
+   169  0171  f5dd7ca2dd67dd7d   and ix, de                     ; F5 DD 7C A2 DD 67 DD 7D A3 DD 6F F1
+              a3dd6ff1          
+   170  017d  dda4               and ixh                        ; DD A4
+   171  017f  dda5               and ixl                        ; DD A5
+   172  0181  f5fd7ca0fd67fd7d   and iy, bc                     ; F5 FD 7C A0 FD 67 FD 7D A1 FD 6F F1
+              a1fd6ff1          
+   173  018d  f5fd7ca2fd67fd7d   and iy, de                     ; F5 FD 7C A2 FD 67 FD 7D A3 FD 6F F1
+              a3fd6ff1          
+   174  0199  fda4               and iyh                        ; FD A4
+   175  019b  fda5               and iyl                        ; FD A5
+   176  019d  a5                 and l                          ; A5
+   177  019e  cb46               bit 0, (hl)                    ; CB 46
+   178  01a0  ddcb0046           bit 0, (ix)                    ; DD CB 00 46
+   179  01a4  ddcb0046           bit 0, (ix+0)                  ; DD CB 00 46
+   180  01a8  ddcb7e46           bit 0, (ix+126)                ; DD CB 7E 46
+   181  01ac  ddcb8046           bit 0, (ix-128)                ; DD CB 80 46
+   182  01b0  fdcb0046           bit 0, (iy)                    ; FD CB 00 46
+   183  01b4  fdcb0046           bit 0, (iy+0)                  ; FD CB 00 46
+   184  01b8  fdcb7e46           bit 0, (iy+126)                ; FD CB 7E 46
+   185  01bc  fdcb8046           bit 0, (iy-128)                ; FD CB 80 46
+   186  01c0  cb47               bit 0, a                       ; CB 47
+   187  01c2  cb40               bit 0, b                       ; CB 40
+   188  01c4  cb41               bit 0, c                       ; CB 41
+   189  01c6  cb42               bit 0, d                       ; CB 42
+   190  01c8  cb43               bit 0, e                       ; CB 43
+   191  01ca  cb44               bit 0, h                       ; CB 44
+   192  01cc  cb45               bit 0, l                       ; CB 45
+   193  01ce  cb4e               bit 1, (hl)                    ; CB 4E
+   194  01d0  ddcb004e           bit 1, (ix)                    ; DD CB 00 4E
+   195  01d4  ddcb004e           bit 1, (ix+0)                  ; DD CB 00 4E
+   196  01d8  ddcb7e4e           bit 1, (ix+126)                ; DD CB 7E 4E
+   197  01dc  ddcb804e           bit 1, (ix-128)                ; DD CB 80 4E
+   198  01e0  fdcb004e           bit 1, (iy)                    ; FD CB 00 4E
+   199  01e4  fdcb004e           bit 1, (iy+0)                  ; FD CB 00 4E
+   200  01e8  fdcb7e4e           bit 1, (iy+126)                ; FD CB 7E 4E
+   201  01ec  fdcb804e           bit 1, (iy-128)                ; FD CB 80 4E
+   202  01f0  cb4f               bit 1, a                       ; CB 4F
+   203  01f2  cb48               bit 1, b                       ; CB 48
+   204  01f4  cb49               bit 1, c                       ; CB 49
+   205  01f6  cb4a               bit 1, d                       ; CB 4A
+   206  01f8  cb4b               bit 1, e                       ; CB 4B
+   207  01fa  cb4c               bit 1, h                       ; CB 4C
+   208  01fc  cb4d               bit 1, l                       ; CB 4D
+   209  01fe  cb56               bit 2, (hl)                    ; CB 56
+   210  0200  ddcb0056           bit 2, (ix)                    ; DD CB 00 56
+   211  0204  ddcb0056           bit 2, (ix+0)                  ; DD CB 00 56
+   212  0208  ddcb7e56           bit 2, (ix+126)                ; DD CB 7E 56
+   213  020c  ddcb8056           bit 2, (ix-128)                ; DD CB 80 56
+   214  0210  fdcb0056           bit 2, (iy)                    ; FD CB 00 56
+   215  0214  fdcb0056           bit 2, (iy+0)                  ; FD CB 00 56
+   216  0218  fdcb7e56           bit 2, (iy+126)                ; FD CB 7E 56
+   217  021c  fdcb8056           bit 2, (iy-128)                ; FD CB 80 56
+   218  0220  cb57               bit 2, a                       ; CB 57
+   219  0222  cb50               bit 2, b                       ; CB 50
+   220  0224  cb51               bit 2, c                       ; CB 51
+   221  0226  cb52               bit 2, d                       ; CB 52
+   222  0228  cb53               bit 2, e                       ; CB 53
+   223  022a  cb54               bit 2, h                       ; CB 54
+   224  022c  cb55               bit 2, l                       ; CB 55
+   225  022e  cb5e               bit 3, (hl)                    ; CB 5E
+   226  0230  ddcb005e           bit 3, (ix)                    ; DD CB 00 5E
+   227  0234  ddcb005e           bit 3, (ix+0)                  ; DD CB 00 5E
+   228  0238  ddcb7e5e           bit 3, (ix+126)                ; DD CB 7E 5E
+   229  023c  ddcb805e           bit 3, (ix-128)                ; DD CB 80 5E
+   230  0240  fdcb005e           bit 3, (iy)                    ; FD CB 00 5E
+   231  0244  fdcb005e           bit 3, (iy+0)                  ; FD CB 00 5E
+   232  0248  fdcb7e5e           bit 3, (iy+126)                ; FD CB 7E 5E
+   233  024c  fdcb805e           bit 3, (iy-128)                ; FD CB 80 5E
+   234  0250  cb5f               bit 3, a                       ; CB 5F
+   235  0252  cb58               bit 3, b                       ; CB 58
+   236  0254  cb59               bit 3, c                       ; CB 59
+   237  0256  cb5a               bit 3, d                       ; CB 5A
+   238  0258  cb5b               bit 3, e                       ; CB 5B
+   239  025a  cb5c               bit 3, h                       ; CB 5C
+   240  025c  cb5d               bit 3, l                       ; CB 5D
+   241  025e  cb66               bit 4, (hl)                    ; CB 66
+   242  0260  ddcb0066           bit 4, (ix)                    ; DD CB 00 66
+   243  0264  ddcb0066           bit 4, (ix+0)                  ; DD CB 00 66
+   244  0268  ddcb7e66           bit 4, (ix+126)                ; DD CB 7E 66
+   245  026c  ddcb8066           bit 4, (ix-128)                ; DD CB 80 66
+   246  0270  fdcb0066           bit 4, (iy)                    ; FD CB 00 66
+   247  0274  fdcb0066           bit 4, (iy+0)                  ; FD CB 00 66
+   248  0278  fdcb7e66           bit 4, (iy+126)                ; FD CB 7E 66
+   249  027c  fdcb8066           bit 4, (iy-128)                ; FD CB 80 66
+   250  0280  cb67               bit 4, a                       ; CB 67
+   251  0282  cb60               bit 4, b                       ; CB 60
+   252  0284  cb61               bit 4, c                       ; CB 61
+   253  0286  cb62               bit 4, d                       ; CB 62
+   254  0288  cb63               bit 4, e                       ; CB 63
+   255  028a  cb64               bit 4, h                       ; CB 64
+   256  028c  cb65               bit 4, l                       ; CB 65
+   257  028e  cb6e               bit 5, (hl)                    ; CB 6E
+   258  0290  ddcb006e           bit 5, (ix)                    ; DD CB 00 6E
+   259  0294  ddcb006e           bit 5, (ix+0)                  ; DD CB 00 6E
+   260  0298  ddcb7e6e           bit 5, (ix+126)                ; DD CB 7E 6E
+   261  029c  ddcb806e           bit 5, (ix-128)                ; DD CB 80 6E
+   262  02a0  fdcb006e           bit 5, (iy)                    ; FD CB 00 6E
+   263  02a4  fdcb006e           bit 5, (iy+0)                  ; FD CB 00 6E
+   264  02a8  fdcb7e6e           bit 5, (iy+126)                ; FD CB 7E 6E
+   265  02ac  fdcb806e           bit 5, (iy-128)                ; FD CB 80 6E
+   266  02b0  cb6f               bit 5, a                       ; CB 6F
+   267  02b2  cb68               bit 5, b                       ; CB 68
+   268  02b4  cb69               bit 5, c                       ; CB 69
+   269  02b6  cb6a               bit 5, d                       ; CB 6A
+   270  02b8  cb6b               bit 5, e                       ; CB 6B
+   271  02ba  cb6c               bit 5, h                       ; CB 6C
+   272  02bc  cb6d               bit 5, l                       ; CB 6D
+   273  02be  cb76               bit 6, (hl)                    ; CB 76
+   274  02c0  ddcb0076           bit 6, (ix)                    ; DD CB 00 76
+   275  02c4  ddcb0076           bit 6, (ix+0)                  ; DD CB 00 76
+   276  02c8  ddcb7e76           bit 6, (ix+126)                ; DD CB 7E 76
+   277  02cc  ddcb8076           bit 6, (ix-128)                ; DD CB 80 76
+   278  02d0  fdcb0076           bit 6, (iy)                    ; FD CB 00 76
+   279  02d4  fdcb0076           bit 6, (iy+0)                  ; FD CB 00 76
+   280  02d8  fdcb7e76           bit 6, (iy+126)                ; FD CB 7E 76
+   281  02dc  fdcb8076           bit 6, (iy-128)                ; FD CB 80 76
+   282  02e0  cb77               bit 6, a                       ; CB 77
+   283  02e2  cb70               bit 6, b                       ; CB 70
+   284  02e4  cb71               bit 6, c                       ; CB 71
+   285  02e6  cb72               bit 6, d                       ; CB 72
+   286  02e8  cb73               bit 6, e                       ; CB 73
+   287  02ea  cb74               bit 6, h                       ; CB 74
+   288  02ec  cb75               bit 6, l                       ; CB 75
+   289  02ee  cb7e               bit 7, (hl)                    ; CB 7E
+   290  02f0  ddcb007e           bit 7, (ix)                    ; DD CB 00 7E
+   291  02f4  ddcb007e           bit 7, (ix+0)                  ; DD CB 00 7E
+   292  02f8  ddcb7e7e           bit 7, (ix+126)                ; DD CB 7E 7E
+   293  02fc  ddcb807e           bit 7, (ix-128)                ; DD CB 80 7E
+   294  0300  fdcb007e           bit 7, (iy)                    ; FD CB 00 7E
+   295  0304  fdcb007e           bit 7, (iy+0)                  ; FD CB 00 7E
+   296  0308  fdcb7e7e           bit 7, (iy+126)                ; FD CB 7E 7E
+   297  030c  fdcb807e           bit 7, (iy-128)                ; FD CB 80 7E
+   298  0310  cb7f               bit 7, a                       ; CB 7F
+   299  0312  cb78               bit 7, b                       ; CB 78
+   300  0314  cb79               bit 7, c                       ; CB 79
+   301  0316  cb7a               bit 7, d                       ; CB 7A
+   302  0318  cb7b               bit 7, e                       ; CB 7B
+   303  031a  cb7c               bit 7, h                       ; CB 7C
+   304  031c  cb7d               bit 7, l                       ; CB 7D
+   305  031e  f57cb52803210100   bool hl                        ; F5 7C B5 28 03 21 01 00 F1
+              f1                
+   306  0327  f5dd7cddb52804dd   bool ix                        ; F5 DD 7C DD B5 28 04 DD 21 01 00 F1
+              210100f1          
+   307  0333  f5fd7cfdb52804fd   bool iy                        ; F5 FD 7C FD B5 28 04 FD 21 01 00 F1
+              210100f1          
+   308  033f  cd3412             call 0x1234                    ; CD 34 12
+   309  0342  dc3412             call c, 0x1234                 ; DC 34 12
+   310  0345  cc3412             call eq, 0x1234                ; CC 34 12
+   311  0348  d43412             call geu, 0x1234               ; D4 34 12
+   312  034b  2803d43412         call gtu, 0x1234               ; 28 03 D4 34 12
+   313  0350  28023003cd3412     call leu, 0x1234               ; 28 02 30 03 CD 34 12
+   314  0357  dc3412             call ltu, 0x1234               ; DC 34 12
+   315  035a  fc3412             call m, 0x1234                 ; FC 34 12
+   316  035d  d43412             call nc, 0x1234                ; D4 34 12
+   317  0360  c43412             call ne, 0x1234                ; C4 34 12
+   318  0363  e43412             call nv, 0x1234                ; E4 34 12
+   319  0366  c43412             call nz, 0x1234                ; C4 34 12
+   320  0369  f43412             call p, 0x1234                 ; F4 34 12
+   321  036c  ec3412             call pe, 0x1234                ; EC 34 12
+   322  036f  e43412             call po, 0x1234                ; E4 34 12
+   323  0372  ec3412             call v, 0x1234                 ; EC 34 12
+   324  0375  cc3412             call z, 0x1234                 ; CC 34 12
+   325  0378  3f                 ccf                            ; 3F
+   326  0379  3600               clr (hl)                       ; 36 00
+   327  037b  dd360000           clr (ix)                       ; DD 36 00 00
+   328  037f  dd360000           clr (ix+0)                     ; DD 36 00 00
+   329  0383  dd367e00           clr (ix+126)                   ; DD 36 7E 00
+   330  0387  dd368000           clr (ix-128)                   ; DD 36 80 00
+   331  038b  fd360000           clr (iy)                       ; FD 36 00 00
+   332  038f  fd360000           clr (iy+0)                     ; FD 36 00 00
+   333  0393  fd367e00           clr (iy+126)                   ; FD 36 7E 00
+   334  0397  fd368000           clr (iy-128)                   ; FD 36 80 00
+   335  039b  3e00               clr a                          ; 3E 00
+   336  039d  0600               clr b                          ; 06 00
+   337  039f  010000             clr bc                         ; 01 00 00
+   338  03a2  0e00               clr c                          ; 0E 00
+   339  03a4  1600               clr d                          ; 16 00
+   340  03a6  110000             clr de                         ; 11 00 00
+   341  03a9  1e00               clr e                          ; 1E 00
+   342  03ab  2600               clr h                          ; 26 00
+   343  03ad  210000             clr hl                         ; 21 00 00
+   344  03b0  dd210000           clr ix                         ; DD 21 00 00
+   345  03b4  dd2600             clr ixh                        ; DD 26 00
+   346  03b7  dd2e00             clr ixl                        ; DD 2E 00
+   347  03ba  fd210000           clr iy                         ; FD 21 00 00
+   348  03be  fd2600             clr iyh                        ; FD 26 00
+   349  03c1  fd2e00             clr iyl                        ; FD 2E 00
+   350  03c4  2e00               clr l                          ; 2E 00
+   351  03c6  be                 cp (hl)                        ; BE
+   352  03c7  be23               cp (hl+)                       ; BE 23
+   353  03c9  be2b               cp (hl-)                       ; BE 2B
+   354  03cb  ddbe00             cp (ix)                        ; DD BE 00
+   355  03ce  ddbe00             cp (ix+0)                      ; DD BE 00
+   356  03d1  ddbe7e             cp (ix+126)                    ; DD BE 7E
+   357  03d4  ddbe80             cp (ix-128)                    ; DD BE 80
+   358  03d7  fdbe00             cp (iy)                        ; FD BE 00
+   359  03da  fdbe00             cp (iy+0)                      ; FD BE 00
+   360  03dd  fdbe7e             cp (iy+126)                    ; FD BE 7E
+   361  03e0  fdbe80             cp (iy-128)                    ; FD BE 80
+   362  03e3  fe00               cp 0                           ; FE 00
+   363  03e5  fe7f               cp 127                         ; FE 7F
+   364  03e7  feff               cp 255                         ; FE FF
+   365  03e9  bf                 cp a                           ; BF
+   366  03ea  be                 cp a, (hl)                     ; BE
+   367  03eb  be23               cp a, (hl+)                    ; BE 23
+   368  03ed  be2b               cp a, (hl-)                    ; BE 2B
+   369  03ef  ddbe00             cp a, (ix)                     ; DD BE 00
+   370  03f2  ddbe00             cp a, (ix+0)                   ; DD BE 00
+   371  03f5  ddbe7e             cp a, (ix+126)                 ; DD BE 7E
+   372  03f8  ddbe80             cp a, (ix-128)                 ; DD BE 80
+   373  03fb  fdbe00             cp a, (iy)                     ; FD BE 00
+   374  03fe  fdbe00             cp a, (iy+0)                   ; FD BE 00
+   375  0401  fdbe7e             cp a, (iy+126)                 ; FD BE 7E
+   376  0404  fdbe80             cp a, (iy-128)                 ; FD BE 80
+   377  0407  fe00               cp a, 0                        ; FE 00
+   378  0409  fe7f               cp a, 127                      ; FE 7F
+   379  040b  feff               cp a, 255                      ; FE FF
+   380  040d  bf                 cp a, a                        ; BF
+   381  040e  b8                 cp a, b                        ; B8
+   382  040f  b9                 cp a, c                        ; B9
+   383  0410  ba                 cp a, d                        ; BA
+   384  0411  bb                 cp a, e                        ; BB
+   385  0412  bc                 cp a, h                        ; BC
+   386  0413  ddbc               cp a, ixh                      ; DD BC
+   387  0415  ddbd               cp a, ixl                      ; DD BD
+   388  0417  fdbc               cp a, iyh                      ; FD BC
+   389  0419  fdbd               cp a, iyl                      ; FD BD
+   390  041b  bd                 cp a, l                        ; BD
+   391  041c  b8                 cp b                           ; B8
+   392  041d  b9                 cp c                           ; B9
+   393  041e  ba                 cp d                           ; BA
+   394  041f  bb                 cp e                           ; BB
+   395  0420  bc                 cp h                           ; BC
+   396  0421  ddbc               cp ixh                         ; DD BC
+   397  0423  ddbd               cp ixl                         ; DD BD
+   398  0425  fdbc               cp iyh                         ; FD BC
+   399  0427  fdbd               cp iyl                         ; FD BD
+   400  0429  bd                 cp l                           ; BD
+   401  042a  eda9               cpd                            ; ED A9
+   402  042c  edb9               cpdr                           ; ED B9
+   403  042e  eda1               cpi                            ; ED A1
+   404  0430  edb1               cpir                           ; ED B1
+   405  0432  2f                 cpl                            ; 2F
+   406  0433  27                 daa                            ; 27
+   407  0434  35                 dec (hl)                       ; 35
+   408  0435  3523               dec (hl+)                      ; 35 23
+   409  0437  352b               dec (hl-)                      ; 35 2B
+   410  0439  dd3500             dec (ix)                       ; DD 35 00
+   411  043c  dd3500             dec (ix+0)                     ; DD 35 00
+   412  043f  dd357e             dec (ix+126)                   ; DD 35 7E
+   413  0442  dd3580             dec (ix-128)                   ; DD 35 80
+   414  0445  fd3500             dec (iy)                       ; FD 35 00
+   415  0448  fd3500             dec (iy+0)                     ; FD 35 00
+   416  044b  fd357e             dec (iy+126)                   ; FD 35 7E
+   417  044e  fd3580             dec (iy-128)                   ; FD 35 80
+   418  0451  3d                 dec a                          ; 3D
+   419  0452  05                 dec b                          ; 05
+   420  0453  0b                 dec bc                         ; 0B
+   421  0454  0d                 dec c                          ; 0D
+   422  0455  15                 dec d                          ; 15
+   423  0456  1b                 dec de                         ; 1B
+   424  0457  1d                 dec e                          ; 1D
+   425  0458  25                 dec h                          ; 25
+   426  0459  2b                 dec hl                         ; 2B
+   427  045a  dd2b               dec ix                         ; DD 2B
+   428  045c  dd25               dec ixh                        ; DD 25
+   429  045e  dd2d               dec ixl                        ; DD 2D
+   430  0460  fd2b               dec iy                         ; FD 2B
+   431  0462  fd25               dec iyh                        ; FD 25
+   432  0464  fd2d               dec iyl                        ; FD 2D
+   433  0466  2d                 dec l                          ; 2D
+   434  0467  3b                 dec sp                         ; 3B
+   435  0468  f3                 di                             ; F3
+   436  0469  10fe               djnz ASMPC                     ; 10 FE
+   437  046b  fb                 ei                             ; FB
+   438  046c  e3                 ex (sp), hl                    ; E3
+   439  046d  dde3               ex (sp), ix                    ; DD E3
+   440  046f  fde3               ex (sp), iy                    ; FD E3
+   441  0471  08                 ex af', af                     ; 08
+   442  0472  08                 ex af, af                      ; 08
+   443  0473  08                 ex af, af'                     ; 08
+   444  0474  e5c5e1c1           ex bc, hl                      ; E5 C5 E1 C1
+   445  0478  eb                 ex de, hl                      ; EB
+   446  0479  e5c5e1c1           ex hl, bc                      ; E5 C5 E1 C1
+   447  047d  eb                 ex hl, de                      ; EB
+   448  047e  d9                 exx                            ; D9
+   449  047f  76                 halt                           ; 76
+   450  0480  ed46               im 0                           ; ED 46
+   451  0482  ed56               im 1                           ; ED 56
+   452  0484  ed5e               im 2                           ; ED 5E
+   453  0486  db00               in a, (0)                      ; DB 00
+   454  0488  db7f               in a, (127)                    ; DB 7F
+   455  048a  dbff               in a, (255)                    ; DB FF
+   456  048c  ed78               in a, (c)                      ; ED 78
+   457  048e  ed40               in b, (c)                      ; ED 40
+   458  0490  ed48               in c, (c)                      ; ED 48
+   459  0492  ed50               in d, (c)                      ; ED 50
+   460  0494  ed58               in e, (c)                      ; ED 58
+   461  0496  ed60               in h, (c)                      ; ED 60
+   462  0498  ed68               in l, (c)                      ; ED 68
+   463  049a  34                 inc (hl)                       ; 34
+   464  049b  3423               inc (hl+)                      ; 34 23
+   465  049d  342b               inc (hl-)                      ; 34 2B
+   466  049f  dd3400             inc (ix)                       ; DD 34 00
+   467  04a2  dd3400             inc (ix+0)                     ; DD 34 00
+   468  04a5  dd347e             inc (ix+126)                   ; DD 34 7E
+   469  04a8  dd3480             inc (ix-128)                   ; DD 34 80
+   470  04ab  fd3400             inc (iy)                       ; FD 34 00
+   471  04ae  fd3400             inc (iy+0)                     ; FD 34 00
+   472  04b1  fd347e             inc (iy+126)                   ; FD 34 7E
+   473  04b4  fd3480             inc (iy-128)                   ; FD 34 80
+   474  04b7  3c                 inc a                          ; 3C
+   475  04b8  04                 inc b                          ; 04
+   476  04b9  03                 inc bc                         ; 03
+   477  04ba  0c                 inc c                          ; 0C
+   478  04bb  14                 inc d                          ; 14
+   479  04bc  13                 inc de                         ; 13
+   480  04bd  1c                 inc e                          ; 1C
+   481  04be  24                 inc h                          ; 24
+   482  04bf  23                 inc hl                         ; 23
+   483  04c0  dd23               inc ix                         ; DD 23
+   484  04c2  dd24               inc ixh                        ; DD 24
+   485  04c4  dd2c               inc ixl                        ; DD 2C
+   486  04c6  fd23               inc iy                         ; FD 23
+   487  04c8  fd24               inc iyh                        ; FD 24
+   488  04ca  fd2c               inc iyl                        ; FD 2C
+   489  04cc  2c                 inc l                          ; 2C
+   490  04cd  33                 inc sp                         ; 33
+   491  04ce  edaa               ind                            ; ED AA
+   492  04d0  edba               indr                           ; ED BA
+   493  04d2  eda2               ini                            ; ED A2
+   494  04d4  edb2               inir                           ; ED B2
+   495  04d6  c5c9               jp (bc)                        ; C5 C9
+   496  04d8  d5c9               jp (de)                        ; D5 C9
+   497  04da  e9                 jp (hl)                        ; E9
+   498  04db  dde9               jp (ix)                        ; DD E9
+   499  04dd  fde9               jp (iy)                        ; FD E9
+   500  04df  c33412             jp 0x1234                      ; C3 34 12
+   501  04e2  da3412             jp c, 0x1234                   ; DA 34 12
+   502  04e5  ca3412             jp eq, 0x1234                  ; CA 34 12
+   503  04e8  d23412             jp geu, 0x1234                 ; D2 34 12
+   504  04eb  2803d23412         jp gtu, 0x1234                 ; 28 03 D2 34 12
+   505  04f0  ca3412da3412       jp leu, 0x1234                 ; CA 34 12 DA 34 12
+   506  04f6  da3412             jp ltu, 0x1234                 ; DA 34 12
+   507  04f9  fa3412             jp m, 0x1234                   ; FA 34 12
+   508  04fc  d23412             jp nc, 0x1234                  ; D2 34 12
+   509  04ff  c23412             jp ne, 0x1234                  ; C2 34 12
+   510  0502  e23412             jp nv, 0x1234                  ; E2 34 12
+   511  0505  c23412             jp nz, 0x1234                  ; C2 34 12
+   512  0508  f23412             jp p, 0x1234                   ; F2 34 12
+   513  050b  ea3412             jp pe, 0x1234                  ; EA 34 12
+   514  050e  e23412             jp po, 0x1234                  ; E2 34 12
+   515  0511  ea3412             jp v, 0x1234                   ; EA 34 12
+   516  0514  ca3412             jp z, 0x1234                   ; CA 34 12
+   517  0517  18fe               jr ASMPC                       ; 18 FE
+   518  0519  38fe               jr c, ASMPC                    ; 38 FE
+   519  051b  28fe               jr eq, ASMPC                   ; 28 FE
+   520  051d  30fe               jr geu, ASMPC                  ; 30 FE
+   521  051f  280230fc           jr gtu, ASMPC                  ; 28 02 30 FC
+   522  0523  28fe38fc           jr leu, ASMPC                  ; 28 FE 38 FC
+   523  0527  38fe               jr ltu, ASMPC                  ; 38 FE
+   524  0529  30fe               jr nc, ASMPC                   ; 30 FE
+   525  052b  20fe               jr ne, ASMPC                   ; 20 FE
+   526  052d  20fe               jr nz, ASMPC                   ; 20 FE
+   527  052f  28fe               jr z, ASMPC                    ; 28 FE
+   528  0531  323412             ld (0x1234), a                 ; 32 34 12
+   529  0534  ed433412           ld (0x1234), bc                ; ED 43 34 12
+   530  0538  ed533412           ld (0x1234), de                ; ED 53 34 12
+   531  053c  223412             ld (0x1234), hl                ; 22 34 12
+   532  053f  dd223412           ld (0x1234), ix                ; DD 22 34 12
+   533  0543  fd223412           ld (0x1234), iy                ; FD 22 34 12
+   534  0547  ed733412           ld (0x1234), sp                ; ED 73 34 12
+   535  054b  02                 ld (bc), a                     ; 02
+   536  054c  0203               ld (bc+), a                    ; 02 03
+   537  054e  020b               ld (bc-), a                    ; 02 0B
+   538  0550  eb3600eb           ld (de), 0                     ; EB 36 00 EB
+   539  0554  eb367feb           ld (de), 127                   ; EB 36 7F EB
+   540  0558  eb36ffeb           ld (de), 255                   ; EB 36 FF EB
+   541  055c  12                 ld (de), a                     ; 12
+   542  055d  eb70eb             ld (de), b                     ; EB 70 EB
+   543  0560  eb71eb             ld (de), c                     ; EB 71 EB
+   544  0563  eb74eb             ld (de), d                     ; EB 74 EB
+   545  0566  eb75eb             ld (de), e                     ; EB 75 EB
+   546  0569  eb72eb             ld (de), h                     ; EB 72 EB
+   547  056c  eb7323722beb       ld (de), hl                    ; EB 73 23 72 2B EB
+   548  0572  eb73eb             ld (de), l                     ; EB 73 EB
+   549  0575  eb3600eb13         ld (de+), 0                    ; EB 36 00 EB 13
+   550  057a  eb367feb13         ld (de+), 127                  ; EB 36 7F EB 13
+   551  057f  eb36ffeb13         ld (de+), 255                  ; EB 36 FF EB 13
+   552  0584  1213               ld (de+), a                    ; 12 13
+   553  0586  eb70eb13           ld (de+), b                    ; EB 70 EB 13
+   554  058a  eb71eb13           ld (de+), c                    ; EB 71 EB 13
+   555  058e  eb74eb13           ld (de+), d                    ; EB 74 EB 13
+   556  0592  eb75eb13           ld (de+), e                    ; EB 75 EB 13
+   557  0596  eb72eb13           ld (de+), h                    ; EB 72 EB 13
+   558  059a  eb73eb13           ld (de+), l                    ; EB 73 EB 13
+   559  059e  eb3600eb1b         ld (de-), 0                    ; EB 36 00 EB 1B
+   560  05a3  eb367feb1b         ld (de-), 127                  ; EB 36 7F EB 1B
+   561  05a8  eb36ffeb1b         ld (de-), 255                  ; EB 36 FF EB 1B
+   562  05ad  121b               ld (de-), a                    ; 12 1B
+   563  05af  eb70eb1b           ld (de-), b                    ; EB 70 EB 1B
+   564  05b3  eb71eb1b           ld (de-), c                    ; EB 71 EB 1B
+   565  05b7  eb74eb1b           ld (de-), d                    ; EB 74 EB 1B
+   566  05bb  eb75eb1b           ld (de-), e                    ; EB 75 EB 1B
+   567  05bf  eb72eb1b           ld (de-), h                    ; EB 72 EB 1B
+   568  05c3  eb73eb1b           ld (de-), l                    ; EB 73 EB 1B
+   569  05c7  3600               ld (hl), 0                     ; 36 00
+   570  05c9  367f               ld (hl), 127                   ; 36 7F
+   571  05cb  36ff               ld (hl), 255                   ; 36 FF
+   572  05cd  77                 ld (hl), a                     ; 77
+   573  05ce  70                 ld (hl), b                     ; 70
+   574  05cf  7123702b           ld (hl), bc                    ; 71 23 70 2B
+   575  05d3  71                 ld (hl), c                     ; 71
+   576  05d4  72                 ld (hl), d                     ; 72
+   577  05d5  7323722b           ld (hl), de                    ; 73 23 72 2B
+   578  05d9  73                 ld (hl), e                     ; 73
+   579  05da  74                 ld (hl), h                     ; 74
+   580  05db  f57c752377f12b     ld (hl), hl                    ; F5 7C 75 23 77 F1 2B
+   581  05e2  d5dde5d17323722b   ld (hl), ix                    ; D5 DD E5 D1 73 23 72 2B D1
+              d1                
+   582  05eb  d5fde5d17323722b   ld (hl), iy                    ; D5 FD E5 D1 73 23 72 2B D1
+              d1                
+   583  05f4  75                 ld (hl), l                     ; 75
+   584  05f5  360023             ld (hl+), 0                    ; 36 00 23
+   585  05f8  367f23             ld (hl+), 127                  ; 36 7F 23
+   586  05fb  36ff23             ld (hl+), 255                  ; 36 FF 23
+   587  05fe  7723               ld (hl+), a                    ; 77 23
+   588  0600  7023               ld (hl+), b                    ; 70 23
+   589  0602  71237023           ld (hl+), bc                   ; 71 23 70 23
+   590  0606  7123               ld (hl+), c                    ; 71 23
+   591  0608  7223               ld (hl+), d                    ; 72 23
+   592  060a  73237223           ld (hl+), de                   ; 73 23 72 23
+   593  060e  7323               ld (hl+), e                    ; 73 23
+   594  0610  7423               ld (hl+), h                    ; 74 23
+   595  0612  f57c752377f123     ld (hl+), hl                   ; F5 7C 75 23 77 F1 23
+   596  0619  d5dde5d173237223   ld (hl+), ix                   ; D5 DD E5 D1 73 23 72 23 D1
+              d1                
+   597  0622  d5fde5d173237223   ld (hl+), iy                   ; D5 FD E5 D1 73 23 72 23 D1
+              d1                
+   598  062b  7523               ld (hl+), l                    ; 75 23
+   599  062d  36002b             ld (hl-), 0                    ; 36 00 2B
+   600  0630  367f2b             ld (hl-), 127                  ; 36 7F 2B
+   601  0633  36ff2b             ld (hl-), 255                  ; 36 FF 2B
+   602  0636  772b               ld (hl-), a                    ; 77 2B
+   603  0638  702b               ld (hl-), b                    ; 70 2B
+   604  063a  712b               ld (hl-), c                    ; 71 2B
+   605  063c  722b               ld (hl-), d                    ; 72 2B
+   606  063e  732b               ld (hl-), e                    ; 73 2B
+   607  0640  742b               ld (hl-), h                    ; 74 2B
+   608  0642  752b               ld (hl-), l                    ; 75 2B
+   609  0644  dd360000           ld (ix), 0                     ; DD 36 00 00
+   610  0648  dd36007f           ld (ix), 127                   ; DD 36 00 7F
+   611  064c  dd3600ff           ld (ix), 255                   ; DD 36 00 FF
+   612  0650  dd7700             ld (ix), a                     ; DD 77 00
+   613  0653  dd7000             ld (ix), b                     ; DD 70 00
+   614  0656  dd7100dd7001       ld (ix), bc                    ; DD 71 00 DD 70 01
+   615  065c  dd7100             ld (ix), c                     ; DD 71 00
+   616  065f  dd7200             ld (ix), d                     ; DD 72 00
+   617  0662  dd7300dd7201       ld (ix), de                    ; DD 73 00 DD 72 01
+   618  0668  dd7300             ld (ix), e                     ; DD 73 00
+   619  066b  dd7400             ld (ix), h                     ; DD 74 00
+   620  066e  dd7500dd7401       ld (ix), hl                    ; DD 75 00 DD 74 01
+   621  0674  dde5e3dd7500dd74   ld (ix), ix                    ; DD E5 E3 DD 75 00 DD 74 01 E3 DD E1
+              01e3dde1          
+   622  0680  fde5e3dd7500dd74   ld (ix), iy                    ; FD E5 E3 DD 75 00 DD 74 01 E3 FD E1
+              01e3fde1          
+   623  068c  dd7500             ld (ix), l                     ; DD 75 00
+   624  068f  dd360000           ld (ix+0), 0                   ; DD 36 00 00
+   625  0693  dd36007f           ld (ix+0), 127                 ; DD 36 00 7F
+   626  0697  dd3600ff           ld (ix+0), 255                 ; DD 36 00 FF
+   627  069b  dd7700             ld (ix+0), a                   ; DD 77 00
+   628  069e  dd7000             ld (ix+0), b                   ; DD 70 00
+   629  06a1  dd7100dd7001       ld (ix+0), bc                  ; DD 71 00 DD 70 01
+   630  06a7  dd7100             ld (ix+0), c                   ; DD 71 00
+   631  06aa  dd7200             ld (ix+0), d                   ; DD 72 00
+   632  06ad  dd7300dd7201       ld (ix+0), de                  ; DD 73 00 DD 72 01
+   633  06b3  dd7300             ld (ix+0), e                   ; DD 73 00
+   634  06b6  dd7400             ld (ix+0), h                   ; DD 74 00
+   635  06b9  dd7500dd7401       ld (ix+0), hl                  ; DD 75 00 DD 74 01
+   636  06bf  dde5e3dd7500dd74   ld (ix+0), ix                  ; DD E5 E3 DD 75 00 DD 74 01 E3 DD E1
+              01e3dde1          
+   637  06cb  fde5e3dd7500dd74   ld (ix+0), iy                  ; FD E5 E3 DD 75 00 DD 74 01 E3 FD E1
+              01e3fde1          
+   638  06d7  dd7500             ld (ix+0), l                   ; DD 75 00
+   639  06da  dd367e00           ld (ix+126), 0                 ; DD 36 7E 00
+   640  06de  dd367e7f           ld (ix+126), 127               ; DD 36 7E 7F
+   641  06e2  dd367eff           ld (ix+126), 255               ; DD 36 7E FF
+   642  06e6  dd777e             ld (ix+126), a                 ; DD 77 7E
+   643  06e9  dd707e             ld (ix+126), b                 ; DD 70 7E
+   644  06ec  dd717edd707f       ld (ix+126), bc                ; DD 71 7E DD 70 7F
+   645  06f2  dd717e             ld (ix+126), c                 ; DD 71 7E
+   646  06f5  dd727e             ld (ix+126), d                 ; DD 72 7E
+   647  06f8  dd737edd727f       ld (ix+126), de                ; DD 73 7E DD 72 7F
+   648  06fe  dd737e             ld (ix+126), e                 ; DD 73 7E
+   649  0701  dd747e             ld (ix+126), h                 ; DD 74 7E
+   650  0704  dd757edd747f       ld (ix+126), hl                ; DD 75 7E DD 74 7F
+   651  070a  dde5e3dd757edd74   ld (ix+126), ix                ; DD E5 E3 DD 75 7E DD 74 7F E3 DD E1
+              7fe3dde1          
+   652  0716  fde5e3dd757edd74   ld (ix+126), iy                ; FD E5 E3 DD 75 7E DD 74 7F E3 FD E1
+              7fe3fde1          
+   653  0722  dd757e             ld (ix+126), l                 ; DD 75 7E
+   654  0725  dd368000           ld (ix-128), 0                 ; DD 36 80 00
+   655  0729  dd36807f           ld (ix-128), 127               ; DD 36 80 7F
+   656  072d  dd3680ff           ld (ix-128), 255               ; DD 36 80 FF
+   657  0731  dd7780             ld (ix-128), a                 ; DD 77 80
+   658  0734  dd7080             ld (ix-128), b                 ; DD 70 80
+   659  0737  dd7180dd7081       ld (ix-128), bc                ; DD 71 80 DD 70 81
+   660  073d  dd7180             ld (ix-128), c                 ; DD 71 80
+   661  0740  dd7280             ld (ix-128), d                 ; DD 72 80
+   662  0743  dd7380dd7281       ld (ix-128), de                ; DD 73 80 DD 72 81
+   663  0749  dd7380             ld (ix-128), e                 ; DD 73 80
+   664  074c  dd7480             ld (ix-128), h                 ; DD 74 80
+   665  074f  dd7580dd7481       ld (ix-128), hl                ; DD 75 80 DD 74 81
+   666  0755  dde5e3dd7580dd74   ld (ix-128), ix                ; DD E5 E3 DD 75 80 DD 74 81 E3 DD E1
+              81e3dde1          
+   667  0761  fde5e3dd7580dd74   ld (ix-128), iy                ; FD E5 E3 DD 75 80 DD 74 81 E3 FD E1
+              81e3fde1          
+   668  076d  dd7580             ld (ix-128), l                 ; DD 75 80
+   669  0770  fd360000           ld (iy), 0                     ; FD 36 00 00
+   670  0774  fd36007f           ld (iy), 127                   ; FD 36 00 7F
+   671  0778  fd3600ff           ld (iy), 255                   ; FD 36 00 FF
+   672  077c  fd7700             ld (iy), a                     ; FD 77 00
+   673  077f  fd7000             ld (iy), b                     ; FD 70 00
+   674  0782  fd7100fd7001       ld (iy), bc                    ; FD 71 00 FD 70 01
+   675  0788  fd7100             ld (iy), c                     ; FD 71 00
+   676  078b  fd7200             ld (iy), d                     ; FD 72 00
+   677  078e  fd7300fd7201       ld (iy), de                    ; FD 73 00 FD 72 01
+   678  0794  fd7300             ld (iy), e                     ; FD 73 00
+   679  0797  fd7400             ld (iy), h                     ; FD 74 00
+   680  079a  fd7500fd7401       ld (iy), hl                    ; FD 75 00 FD 74 01
+   681  07a0  dde5e3fd7500fd74   ld (iy), ix                    ; DD E5 E3 FD 75 00 FD 74 01 E3 DD E1
+              01e3dde1          
+   682  07ac  fde5e3fd7500fd74   ld (iy), iy                    ; FD E5 E3 FD 75 00 FD 74 01 E3 FD E1
+              01e3fde1          
+   683  07b8  fd7500             ld (iy), l                     ; FD 75 00
+   684  07bb  fd360000           ld (iy+0), 0                   ; FD 36 00 00
+   685  07bf  fd36007f           ld (iy+0), 127                 ; FD 36 00 7F
+   686  07c3  fd3600ff           ld (iy+0), 255                 ; FD 36 00 FF
+   687  07c7  fd7700             ld (iy+0), a                   ; FD 77 00
+   688  07ca  fd7000             ld (iy+0), b                   ; FD 70 00
+   689  07cd  fd7100fd7001       ld (iy+0), bc                  ; FD 71 00 FD 70 01
+   690  07d3  fd7100             ld (iy+0), c                   ; FD 71 00
+   691  07d6  fd7200             ld (iy+0), d                   ; FD 72 00
+   692  07d9  fd7300fd7201       ld (iy+0), de                  ; FD 73 00 FD 72 01
+   693  07df  fd7300             ld (iy+0), e                   ; FD 73 00
+   694  07e2  fd7400             ld (iy+0), h                   ; FD 74 00
+   695  07e5  fd7500fd7401       ld (iy+0), hl                  ; FD 75 00 FD 74 01
+   696  07eb  dde5e3fd7500fd74   ld (iy+0), ix                  ; DD E5 E3 FD 75 00 FD 74 01 E3 DD E1
+              01e3dde1          
+   697  07f7  fde5e3fd7500fd74   ld (iy+0), iy                  ; FD E5 E3 FD 75 00 FD 74 01 E3 FD E1
+              01e3fde1          
+   698  0803  fd7500             ld (iy+0), l                   ; FD 75 00
+   699  0806  fd367e00           ld (iy+126), 0                 ; FD 36 7E 00
+   700  080a  fd367e7f           ld (iy+126), 127               ; FD 36 7E 7F
+   701  080e  fd367eff           ld (iy+126), 255               ; FD 36 7E FF
+   702  0812  fd777e             ld (iy+126), a                 ; FD 77 7E
+   703  0815  fd707e             ld (iy+126), b                 ; FD 70 7E
+   704  0818  fd717efd707f       ld (iy+126), bc                ; FD 71 7E FD 70 7F
+   705  081e  fd717e             ld (iy+126), c                 ; FD 71 7E
+   706  0821  fd727e             ld (iy+126), d                 ; FD 72 7E
+   707  0824  fd737efd727f       ld (iy+126), de                ; FD 73 7E FD 72 7F
+   708  082a  fd737e             ld (iy+126), e                 ; FD 73 7E
+   709  082d  fd747e             ld (iy+126), h                 ; FD 74 7E
+   710  0830  fd757efd747f       ld (iy+126), hl                ; FD 75 7E FD 74 7F
+   711  0836  dde5e3fd757efd74   ld (iy+126), ix                ; DD E5 E3 FD 75 7E FD 74 7F E3 DD E1
+              7fe3dde1          
+   712  0842  fde5e3fd757efd74   ld (iy+126), iy                ; FD E5 E3 FD 75 7E FD 74 7F E3 FD E1
+              7fe3fde1          
+   713  084e  fd757e             ld (iy+126), l                 ; FD 75 7E
+   714  0851  fd368000           ld (iy-128), 0                 ; FD 36 80 00
+   715  0855  fd36807f           ld (iy-128), 127               ; FD 36 80 7F
+   716  0859  fd3680ff           ld (iy-128), 255               ; FD 36 80 FF
+   717  085d  fd7780             ld (iy-128), a                 ; FD 77 80
+   718  0860  fd7080             ld (iy-128), b                 ; FD 70 80
+   719  0863  fd7180fd7081       ld (iy-128), bc                ; FD 71 80 FD 70 81
+   720  0869  fd7180             ld (iy-128), c                 ; FD 71 80
+   721  086c  fd7280             ld (iy-128), d                 ; FD 72 80
+   722  086f  fd7380fd7281       ld (iy-128), de                ; FD 73 80 FD 72 81
+   723  0875  fd7380             ld (iy-128), e                 ; FD 73 80
+   724  0878  fd7480             ld (iy-128), h                 ; FD 74 80
+   725  087b  fd7580fd7481       ld (iy-128), hl                ; FD 75 80 FD 74 81
+   726  0881  dde5e3fd7580fd74   ld (iy-128), ix                ; DD E5 E3 FD 75 80 FD 74 81 E3 DD E1
+              81e3dde1          
+   727  088d  fde5e3fd7580fd74   ld (iy-128), iy                ; FD E5 E3 FD 75 80 FD 74 81 E3 FD E1
+              81e3fde1          
+   728  0899  fd7580             ld (iy-128), l                 ; FD 75 80
+   729  089c  3a3412             ld a, (0x1234)                 ; 3A 34 12
+   730  089f  0a                 ld a, (bc)                     ; 0A
+   731  08a0  0a03               ld a, (bc+)                    ; 0A 03
+   732  08a2  0a0b               ld a, (bc-)                    ; 0A 0B
+   733  08a4  1a                 ld a, (de)                     ; 1A
+   734  08a5  1a13               ld a, (de+)                    ; 1A 13
+   735  08a7  1a1b               ld a, (de-)                    ; 1A 1B
+   736  08a9  7e                 ld a, (hl)                     ; 7E
+   737  08aa  7e23               ld a, (hl+)                    ; 7E 23
+   738  08ac  7e2b               ld a, (hl-)                    ; 7E 2B
+   739  08ae  dd7e00             ld a, (ix)                     ; DD 7E 00
+   740  08b1  dd7e00             ld a, (ix+0)                   ; DD 7E 00
+   741  08b4  dd7e7e             ld a, (ix+126)                 ; DD 7E 7E
+   742  08b7  dd7e80             ld a, (ix-128)                 ; DD 7E 80
+   743  08ba  fd7e00             ld a, (iy)                     ; FD 7E 00
+   744  08bd  fd7e00             ld a, (iy+0)                   ; FD 7E 00
+   745  08c0  fd7e7e             ld a, (iy+126)                 ; FD 7E 7E
+   746  08c3  fd7e80             ld a, (iy-128)                 ; FD 7E 80
+   747  08c6  3e00               ld a, 0                        ; 3E 00
+   748  08c8  3e7f               ld a, 127                      ; 3E 7F
+   749  08ca  3eff               ld a, 255                      ; 3E FF
+   750  08cc  7f                 ld a, a                        ; 7F
+   751  08cd  78                 ld a, b                        ; 78
+   752  08ce  79                 ld a, c                        ; 79
+   753  08cf  7a                 ld a, d                        ; 7A
+   754  08d0  7b                 ld a, e                        ; 7B
+   755  08d1  7c                 ld a, h                        ; 7C
+   756  08d2  ed57               ld a, i                        ; ED 57
+   757  08d4  dd7c               ld a, ixh                      ; DD 7C
+   758  08d6  dd7d               ld a, ixl                      ; DD 7D
+   759  08d8  fd7c               ld a, iyh                      ; FD 7C
+   760  08da  fd7d               ld a, iyl                      ; FD 7D
+   761  08dc  7d                 ld a, l                        ; 7D
+   762  08dd  ed5f               ld a, r                        ; ED 5F
+   763  08df  eb46eb             ld b, (de)                     ; EB 46 EB
+   764  08e2  eb46eb13           ld b, (de+)                    ; EB 46 EB 13
+   765  08e6  eb46eb1b           ld b, (de-)                    ; EB 46 EB 1B
+   766  08ea  46                 ld b, (hl)                     ; 46
+   767  08eb  4623               ld b, (hl+)                    ; 46 23
+   768  08ed  462b               ld b, (hl-)                    ; 46 2B
+   769  08ef  dd4600             ld b, (ix)                     ; DD 46 00
+   770  08f2  dd4600             ld b, (ix+0)                   ; DD 46 00
+   771  08f5  dd467e             ld b, (ix+126)                 ; DD 46 7E
+   772  08f8  dd4680             ld b, (ix-128)                 ; DD 46 80
+   773  08fb  fd4600             ld b, (iy)                     ; FD 46 00
+   774  08fe  fd4600             ld b, (iy+0)                   ; FD 46 00
+   775  0901  fd467e             ld b, (iy+126)                 ; FD 46 7E
+   776  0904  fd4680             ld b, (iy-128)                 ; FD 46 80
+   777  0907  0600               ld b, 0                        ; 06 00
+   778  0909  067f               ld b, 127                      ; 06 7F
+   779  090b  06ff               ld b, 255                      ; 06 FF
+   780  090d  47                 ld b, a                        ; 47
+   781  090e  40                 ld b, b                        ; 40
+   782  090f  41                 ld b, c                        ; 41
+   783  0910  42                 ld b, d                        ; 42
+   784  0911  43                 ld b, e                        ; 43
+   785  0912  44                 ld b, h                        ; 44
+   786  0913  dd44               ld b, ixh                      ; DD 44
+   787  0915  dd45               ld b, ixl                      ; DD 45
+   788  0917  fd44               ld b, iyh                      ; FD 44
+   789  0919  fd45               ld b, iyl                      ; FD 45
+   790  091b  45                 ld b, l                        ; 45
+   791  091c  d9424bd9           ld bc', de'                    ; D9 42 4B D9
+   792  0920  d9444dd9           ld bc', hl'                    ; D9 44 4D D9
+   793  0924  ed4b3412           ld bc, (0x1234)                ; ED 4B 34 12
+   794  0928  4e23462b           ld bc, (hl)                    ; 4E 23 46 2B
+   795  092c  4e234623           ld bc, (hl+)                   ; 4E 23 46 23
+   796  0930  dd4e00dd4601       ld bc, (ix)                    ; DD 4E 00 DD 46 01
+   797  0936  dd4e00dd4601       ld bc, (ix+0)                  ; DD 4E 00 DD 46 01
+   798  093c  dd4e7edd467f       ld bc, (ix+126)                ; DD 4E 7E DD 46 7F
+   799  0942  dd4e80dd4681       ld bc, (ix-128)                ; DD 4E 80 DD 46 81
+   800  0948  fd4e00fd4601       ld bc, (iy)                    ; FD 4E 00 FD 46 01
+   801  094e  fd4e00fd4601       ld bc, (iy+0)                  ; FD 4E 00 FD 46 01
+   802  0954  fd4e7efd467f       ld bc, (iy+126)                ; FD 4E 7E FD 46 7F
+   803  095a  fd4e80fd4681       ld bc, (iy-128)                ; FD 4E 80 FD 46 81
+   804  0960  013412             ld bc, 0x1234                  ; 01 34 12
+   805  0963  d9c5d9c1           ld bc, bc'                     ; D9 C5 D9 C1
+   806  0967  424b               ld bc, de                      ; 42 4B
+   807  0969  d9d5d9c1           ld bc, de'                     ; D9 D5 D9 C1
+   808  096d  444d               ld bc, hl                      ; 44 4D
+   809  096f  d9e5d9c1           ld bc, hl'                     ; D9 E5 D9 C1
+   810  0973  dd44dd4d           ld bc, ix                      ; DD 44 DD 4D
+   811  0977  fd44fd4d           ld bc, iy                      ; FD 44 FD 4D
+   812  097b  eb4eeb             ld c, (de)                     ; EB 4E EB
+   813  097e  eb4eeb13           ld c, (de+)                    ; EB 4E EB 13
+   814  0982  eb4eeb1b           ld c, (de-)                    ; EB 4E EB 1B
+   815  0986  4e                 ld c, (hl)                     ; 4E
+   816  0987  4e23               ld c, (hl+)                    ; 4E 23
+   817  0989  4e2b               ld c, (hl-)                    ; 4E 2B
+   818  098b  dd4e00             ld c, (ix)                     ; DD 4E 00
+   819  098e  dd4e00             ld c, (ix+0)                   ; DD 4E 00
+   820  0991  dd4e7e             ld c, (ix+126)                 ; DD 4E 7E
+   821  0994  dd4e80             ld c, (ix-128)                 ; DD 4E 80
+   822  0997  fd4e00             ld c, (iy)                     ; FD 4E 00
+   823  099a  fd4e00             ld c, (iy+0)                   ; FD 4E 00
+   824  099d  fd4e7e             ld c, (iy+126)                 ; FD 4E 7E
+   825  09a0  fd4e80             ld c, (iy-128)                 ; FD 4E 80
+   826  09a3  0e00               ld c, 0                        ; 0E 00
+   827  09a5  0e7f               ld c, 127                      ; 0E 7F
+   828  09a7  0eff               ld c, 255                      ; 0E FF
+   829  09a9  4f                 ld c, a                        ; 4F
+   830  09aa  48                 ld c, b                        ; 48
+   831  09ab  49                 ld c, c                        ; 49
+   832  09ac  4a                 ld c, d                        ; 4A
+   833  09ad  4b                 ld c, e                        ; 4B
+   834  09ae  4c                 ld c, h                        ; 4C
+   835  09af  dd4c               ld c, ixh                      ; DD 4C
+   836  09b1  dd4d               ld c, ixl                      ; DD 4D
+   837  09b3  fd4c               ld c, iyh                      ; FD 4C
+   838  09b5  fd4d               ld c, iyl                      ; FD 4D
+   839  09b7  4d                 ld c, l                        ; 4D
+   840  09b8  eb66eb             ld d, (de)                     ; EB 66 EB
+   841  09bb  eb66eb13           ld d, (de+)                    ; EB 66 EB 13
+   842  09bf  eb66eb1b           ld d, (de-)                    ; EB 66 EB 1B
+   843  09c3  56                 ld d, (hl)                     ; 56
+   844  09c4  5623               ld d, (hl+)                    ; 56 23
+   845  09c6  562b               ld d, (hl-)                    ; 56 2B
+   846  09c8  dd5600             ld d, (ix)                     ; DD 56 00
+   847  09cb  dd5600             ld d, (ix+0)                   ; DD 56 00
+   848  09ce  dd567e             ld d, (ix+126)                 ; DD 56 7E
+   849  09d1  dd5680             ld d, (ix-128)                 ; DD 56 80
+   850  09d4  fd5600             ld d, (iy)                     ; FD 56 00
+   851  09d7  fd5600             ld d, (iy+0)                   ; FD 56 00
+   852  09da  fd567e             ld d, (iy+126)                 ; FD 56 7E
+   853  09dd  fd5680             ld d, (iy-128)                 ; FD 56 80
+   854  09e0  1600               ld d, 0                        ; 16 00
+   855  09e2  167f               ld d, 127                      ; 16 7F
+   856  09e4  16ff               ld d, 255                      ; 16 FF
+   857  09e6  57                 ld d, a                        ; 57
+   858  09e7  50                 ld d, b                        ; 50
+   859  09e8  51                 ld d, c                        ; 51
+   860  09e9  52                 ld d, d                        ; 52
+   861  09ea  53                 ld d, e                        ; 53
+   862  09eb  54                 ld d, h                        ; 54
+   863  09ec  dd54               ld d, ixh                      ; DD 54
+   864  09ee  dd55               ld d, ixl                      ; DD 55
+   865  09f0  fd54               ld d, iyh                      ; FD 54
+   866  09f2  fd55               ld d, iyl                      ; FD 55
+   867  09f4  55                 ld d, l                        ; 55
+   868  09f5  d95059d9           ld de', bc'                    ; D9 50 59 D9
+   869  09f9  d9545dd9           ld de', hl'                    ; D9 54 5D D9
+   870  09fd  ed5b3412           ld de, (0x1234)                ; ED 5B 34 12
+   871  0a01  5e23562b           ld de, (hl)                    ; 5E 23 56 2B
+   872  0a05  5e235623           ld de, (hl+)                   ; 5E 23 56 23
+   873  0a09  dd5e00dd5601       ld de, (ix)                    ; DD 5E 00 DD 56 01
+   874  0a0f  dd5e00dd5601       ld de, (ix+0)                  ; DD 5E 00 DD 56 01
+   875  0a15  dd5e7edd567f       ld de, (ix+126)                ; DD 5E 7E DD 56 7F
+   876  0a1b  dd5e80dd5681       ld de, (ix-128)                ; DD 5E 80 DD 56 81
+   877  0a21  fd5e00fd5601       ld de, (iy)                    ; FD 5E 00 FD 56 01
+   878  0a27  fd5e00fd5601       ld de, (iy+0)                  ; FD 5E 00 FD 56 01
+   879  0a2d  fd5e7efd567f       ld de, (iy+126)                ; FD 5E 7E FD 56 7F
+   880  0a33  fd5e80fd5681       ld de, (iy-128)                ; FD 5E 80 FD 56 81
+   881  0a39  113412             ld de, 0x1234                  ; 11 34 12
+   882  0a3c  5059               ld de, bc                      ; 50 59
+   883  0a3e  d9c5d9d1           ld de, bc'                     ; D9 C5 D9 D1
+   884  0a42  d9d5d9d1           ld de, de'                     ; D9 D5 D9 D1
+   885  0a46  545d               ld de, hl                      ; 54 5D
+   886  0a48  d9e5d9d1           ld de, hl'                     ; D9 E5 D9 D1
+   887  0a4c  e511000019ebe1     ld de, hl+0                    ; E5 11 00 00 19 EB E1
+   888  0a53  e5117f0019ebe1     ld de, hl+127                  ; E5 11 7F 00 19 EB E1
+   889  0a5a  e511ff0019ebe1     ld de, hl+255                  ; E5 11 FF 00 19 EB E1
+   890  0a61  dd54dd5d           ld de, ix                      ; DD 54 DD 5D
+   891  0a65  fd54fd5d           ld de, iy                      ; FD 54 FD 5D
+   892  0a69  eb21000039eb       ld de, sp                      ; EB 21 00 00 39 EB
+   893  0a6f  eb21000039eb       ld de, sp+0                    ; EB 21 00 00 39 EB
+   894  0a75  eb217f0039eb       ld de, sp+127                  ; EB 21 7F 00 39 EB
+   895  0a7b  eb21ff0039eb       ld de, sp+255                  ; EB 21 FF 00 39 EB
+   896  0a81  eb6eeb             ld e, (de)                     ; EB 6E EB
+   897  0a84  eb6eeb13           ld e, (de+)                    ; EB 6E EB 13
+   898  0a88  eb6eeb1b           ld e, (de-)                    ; EB 6E EB 1B
+   899  0a8c  5e                 ld e, (hl)                     ; 5E
+   900  0a8d  5e23               ld e, (hl+)                    ; 5E 23
+   901  0a8f  5e2b               ld e, (hl-)                    ; 5E 2B
+   902  0a91  dd5e00             ld e, (ix)                     ; DD 5E 00
+   903  0a94  dd5e00             ld e, (ix+0)                   ; DD 5E 00
+   904  0a97  dd5e7e             ld e, (ix+126)                 ; DD 5E 7E
+   905  0a9a  dd5e80             ld e, (ix-128)                 ; DD 5E 80
+   906  0a9d  fd5e00             ld e, (iy)                     ; FD 5E 00
+   907  0aa0  fd5e00             ld e, (iy+0)                   ; FD 5E 00
+   908  0aa3  fd5e7e             ld e, (iy+126)                 ; FD 5E 7E
+   909  0aa6  fd5e80             ld e, (iy-128)                 ; FD 5E 80
+   910  0aa9  1e00               ld e, 0                        ; 1E 00
+   911  0aab  1e7f               ld e, 127                      ; 1E 7F
+   912  0aad  1eff               ld e, 255                      ; 1E FF
+   913  0aaf  5f                 ld e, a                        ; 5F
+   914  0ab0  58                 ld e, b                        ; 58
+   915  0ab1  59                 ld e, c                        ; 59
+   916  0ab2  5a                 ld e, d                        ; 5A
+   917  0ab3  5b                 ld e, e                        ; 5B
+   918  0ab4  5c                 ld e, h                        ; 5C
+   919  0ab5  dd5c               ld e, ixh                      ; DD 5C
+   920  0ab7  dd5d               ld e, ixl                      ; DD 5D
+   921  0ab9  fd5c               ld e, iyh                      ; FD 5C
+   922  0abb  fd5d               ld e, iyl                      ; FD 5D
+   923  0abd  5d                 ld e, l                        ; 5D
+   924  0abe  eb56eb             ld h, (de)                     ; EB 56 EB
+   925  0ac1  eb56eb13           ld h, (de+)                    ; EB 56 EB 13
+   926  0ac5  eb56eb1b           ld h, (de-)                    ; EB 56 EB 1B
+   927  0ac9  66                 ld h, (hl)                     ; 66
+   928  0aca  6623               ld h, (hl+)                    ; 66 23
+   929  0acc  662b               ld h, (hl-)                    ; 66 2B
+   930  0ace  dd6600             ld h, (ix)                     ; DD 66 00
+   931  0ad1  dd6600             ld h, (ix+0)                   ; DD 66 00
+   932  0ad4  dd667e             ld h, (ix+126)                 ; DD 66 7E
+   933  0ad7  dd6680             ld h, (ix-128)                 ; DD 66 80
+   934  0ada  fd6600             ld h, (iy)                     ; FD 66 00
+   935  0add  fd6600             ld h, (iy+0)                   ; FD 66 00
+   936  0ae0  fd667e             ld h, (iy+126)                 ; FD 66 7E
+   937  0ae3  fd6680             ld h, (iy-128)                 ; FD 66 80
+   938  0ae6  2600               ld h, 0                        ; 26 00
+   939  0ae8  267f               ld h, 127                      ; 26 7F
+   940  0aea  26ff               ld h, 255                      ; 26 FF
+   941  0aec  67                 ld h, a                        ; 67
+   942  0aed  60                 ld h, b                        ; 60
+   943  0aee  61                 ld h, c                        ; 61
+   944  0aef  62                 ld h, d                        ; 62
+   945  0af0  63                 ld h, e                        ; 63
+   946  0af1  64                 ld h, h                        ; 64
+   947  0af2  65                 ld h, l                        ; 65
+   948  0af3  d96069d9           ld hl', bc'                    ; D9 60 69 D9
+   949  0af7  d9626bd9           ld hl', de'                    ; D9 62 6B D9
+   950  0afb  2a3412             ld hl, (0x1234)                ; 2A 34 12
+   951  0afe  eb5e23562beb       ld hl, (de)                    ; EB 5E 23 56 2B EB
+   952  0b04  f57e23666ff1       ld hl, (hl)                    ; F5 7E 23 66 6F F1
+   953  0b0a  dd6e00dd6601       ld hl, (ix)                    ; DD 6E 00 DD 66 01
+   954  0b10  dd6e00dd6601       ld hl, (ix+0)                  ; DD 6E 00 DD 66 01
+   955  0b16  dd6e7edd667f       ld hl, (ix+126)                ; DD 6E 7E DD 66 7F
+   956  0b1c  dd6e80dd6681       ld hl, (ix-128)                ; DD 6E 80 DD 66 81
+   957  0b22  fd6e00fd6601       ld hl, (iy)                    ; FD 6E 00 FD 66 01
+   958  0b28  fd6e00fd6601       ld hl, (iy+0)                  ; FD 6E 00 FD 66 01
+   959  0b2e  fd6e7efd667f       ld hl, (iy+126)                ; FD 6E 7E FD 66 7F
+   960  0b34  fd6e80fd6681       ld hl, (iy-128)                ; FD 6E 80 FD 66 81
+   961  0b3a  213412             ld hl, 0x1234                  ; 21 34 12
+   962  0b3d  6069               ld hl, bc                      ; 60 69
+   963  0b3f  d9c5d9e1           ld hl, bc'                     ; D9 C5 D9 E1
+   964  0b43  626b               ld hl, de                      ; 62 6B
+   965  0b45  d9d5d9e1           ld hl, de'                     ; D9 D5 D9 E1
+   966  0b49  d9e5d9e1           ld hl, hl'                     ; D9 E5 D9 E1
+   967  0b4d  dde5e1             ld hl, ix                      ; DD E5 E1
+   968  0b50  fde5e1             ld hl, iy                      ; FD E5 E1
+   969  0b53  21000039           ld hl, sp                      ; 21 00 00 39
+   970  0b57  21000039           ld hl, sp+0                    ; 21 00 00 39
+   971  0b5b  217e0039           ld hl, sp+126                  ; 21 7E 00 39
+   972  0b5f  2180ff39           ld hl, sp-128                  ; 21 80 FF 39
+   973  0b63  ed47               ld i, a                        ; ED 47
+   974  0b65  dd2a3412           ld ix, (0x1234)                ; DD 2A 34 12
+   975  0b69  d55e23562bd5dde1   ld ix, (hl)                    ; D5 5E 23 56 2B D5 DD E1 D1
+              d1                
+   976  0b72  d55e235623d5dde1   ld ix, (hl+)                   ; D5 5E 23 56 23 D5 DD E1 D1
+              d1                
+   977  0b7b  dde5e3dd6e00dd66   ld ix, (ix)                    ; DD E5 E3 DD 6E 00 DD 66 01 E3 DD E1
+              01e3dde1          
+   978  0b87  dde5e3dd6e00dd66   ld ix, (ix+0)                  ; DD E5 E3 DD 6E 00 DD 66 01 E3 DD E1
+              01e3dde1          
+   979  0b93  dde5e3dd6e7edd66   ld ix, (ix+126)                ; DD E5 E3 DD 6E 7E DD 66 7F E3 DD E1
+              7fe3dde1          
+   980  0b9f  dde5e3dd6e80dd66   ld ix, (ix-128)                ; DD E5 E3 DD 6E 80 DD 66 81 E3 DD E1
+              81e3dde1          
+   981  0bab  dde5e3fd6e00fd66   ld ix, (iy)                    ; DD E5 E3 FD 6E 00 FD 66 01 E3 DD E1
+              01e3dde1          
+   982  0bb7  dde5e3fd6e00fd66   ld ix, (iy+0)                  ; DD E5 E3 FD 6E 00 FD 66 01 E3 DD E1
+              01e3dde1          
+   983  0bc3  dde5e3fd6e7efd66   ld ix, (iy+126)                ; DD E5 E3 FD 6E 7E FD 66 7F E3 DD E1
+              7fe3dde1          
+   984  0bcf  dde5e3fd6e80fd66   ld ix, (iy-128)                ; DD E5 E3 FD 6E 80 FD 66 81 E3 DD E1
+              81e3dde1          
+   985  0bdb  dd213412           ld ix, 0x1234                  ; DD 21 34 12
+   986  0bdf  dd60dd69           ld ix, bc                      ; DD 60 DD 69
+   987  0be3  d9c5d9dde1         ld ix, bc'                     ; D9 C5 D9 DD E1
+   988  0be8  dd62dd6b           ld ix, de                      ; DD 62 DD 6B
+   989  0bec  d9d5d9dde1         ld ix, de'                     ; D9 D5 D9 DD E1
+   990  0bf1  e5dde1             ld ix, hl                      ; E5 DD E1
+   991  0bf4  d9e5d9dde1         ld ix, hl'                     ; D9 E5 D9 DD E1
+   992  0bf9  fde5dde1           ld ix, iy                      ; FD E5 DD E1
+   993  0bfd  dd2600             ld ixh, 0                      ; DD 26 00
+   994  0c00  dd267f             ld ixh, 127                    ; DD 26 7F
+   995  0c03  dd26ff             ld ixh, 255                    ; DD 26 FF
+   996  0c06  dd67               ld ixh, a                      ; DD 67
+   997  0c08  dd60               ld ixh, b                      ; DD 60
+   998  0c0a  dd61               ld ixh, c                      ; DD 61
+   999  0c0c  dd62               ld ixh, d                      ; DD 62
+  1000  0c0e  dd63               ld ixh, e                      ; DD 63
+  1001  0c10  dd64               ld ixh, ixh                    ; DD 64
+  1002  0c12  dd65               ld ixh, ixl                    ; DD 65
+  1003  0c14  dd2e00             ld ixl, 0                      ; DD 2E 00
+  1004  0c17  dd2e7f             ld ixl, 127                    ; DD 2E 7F
+  1005  0c1a  dd2eff             ld ixl, 255                    ; DD 2E FF
+  1006  0c1d  dd6f               ld ixl, a                      ; DD 6F
+  1007  0c1f  dd68               ld ixl, b                      ; DD 68
+  1008  0c21  dd69               ld ixl, c                      ; DD 69
+  1009  0c23  dd6a               ld ixl, d                      ; DD 6A
+  1010  0c25  dd6b               ld ixl, e                      ; DD 6B
+  1011  0c27  dd6c               ld ixl, ixh                    ; DD 6C
+  1012  0c29  dd6d               ld ixl, ixl                    ; DD 6D
+  1013  0c2b  fd2a3412           ld iy, (0x1234)                ; FD 2A 34 12
+  1014  0c2f  d55e23562bd5fde1   ld iy, (hl)                    ; D5 5E 23 56 2B D5 FD E1 D1
+              d1                
+  1015  0c38  d55e235623d5fde1   ld iy, (hl+)                   ; D5 5E 23 56 23 D5 FD E1 D1
+              d1                
+  1016  0c41  fde5e3dd6e00dd66   ld iy, (ix)                    ; FD E5 E3 DD 6E 00 DD 66 01 E3 FD E1
+              01e3fde1          
+  1017  0c4d  fde5e3dd6e00dd66   ld iy, (ix+0)                  ; FD E5 E3 DD 6E 00 DD 66 01 E3 FD E1
+              01e3fde1          
+  1018  0c59  fde5e3dd6e7edd66   ld iy, (ix+126)                ; FD E5 E3 DD 6E 7E DD 66 7F E3 FD E1
+              7fe3fde1          
+  1019  0c65  fde5e3dd6e80dd66   ld iy, (ix-128)                ; FD E5 E3 DD 6E 80 DD 66 81 E3 FD E1
+              81e3fde1          
+  1020  0c71  fde5e3fd6e00fd66   ld iy, (iy)                    ; FD E5 E3 FD 6E 00 FD 66 01 E3 FD E1
+              01e3fde1          
+  1021  0c7d  fde5e3fd6e00fd66   ld iy, (iy+0)                  ; FD E5 E3 FD 6E 00 FD 66 01 E3 FD E1
+              01e3fde1          
+  1022  0c89  fde5e3fd6e7efd66   ld iy, (iy+126)                ; FD E5 E3 FD 6E 7E FD 66 7F E3 FD E1
+              7fe3fde1          
+  1023  0c95  fde5e3fd6e80fd66   ld iy, (iy-128)                ; FD E5 E3 FD 6E 80 FD 66 81 E3 FD E1
+              81e3fde1          
+  1024  0ca1  fd213412           ld iy, 0x1234                  ; FD 21 34 12
+  1025  0ca5  fd60fd69           ld iy, bc                      ; FD 60 FD 69
+  1026  0ca9  d9c5d9fde1         ld iy, bc'                     ; D9 C5 D9 FD E1
+  1027  0cae  fd62fd6b           ld iy, de                      ; FD 62 FD 6B
+  1028  0cb2  d9d5d9fde1         ld iy, de'                     ; D9 D5 D9 FD E1
+  1029  0cb7  e5fde1             ld iy, hl                      ; E5 FD E1
+  1030  0cba  d9e5d9fde1         ld iy, hl'                     ; D9 E5 D9 FD E1
+  1031  0cbf  dde5fde1           ld iy, ix                      ; DD E5 FD E1
+  1032  0cc3  fd2600             ld iyh, 0                      ; FD 26 00
+  1033  0cc6  fd267f             ld iyh, 127                    ; FD 26 7F
+  1034  0cc9  fd26ff             ld iyh, 255                    ; FD 26 FF
+  1035  0ccc  fd67               ld iyh, a                      ; FD 67
+  1036  0cce  fd60               ld iyh, b                      ; FD 60
+  1037  0cd0  fd61               ld iyh, c                      ; FD 61
+  1038  0cd2  fd62               ld iyh, d                      ; FD 62
+  1039  0cd4  fd63               ld iyh, e                      ; FD 63
+  1040  0cd6  fd64               ld iyh, iyh                    ; FD 64
+  1041  0cd8  fd65               ld iyh, iyl                    ; FD 65
+  1042  0cda  fd2e00             ld iyl, 0                      ; FD 2E 00
+  1043  0cdd  fd2e7f             ld iyl, 127                    ; FD 2E 7F
+  1044  0ce0  fd2eff             ld iyl, 255                    ; FD 2E FF
+  1045  0ce3  fd6f               ld iyl, a                      ; FD 6F
+  1046  0ce5  fd68               ld iyl, b                      ; FD 68
+  1047  0ce7  fd69               ld iyl, c                      ; FD 69
+  1048  0ce9  fd6a               ld iyl, d                      ; FD 6A
+  1049  0ceb  fd6b               ld iyl, e                      ; FD 6B
+  1050  0ced  fd6c               ld iyl, iyh                    ; FD 6C
+  1051  0cef  fd6d               ld iyl, iyl                    ; FD 6D
+  1052  0cf1  eb5eeb             ld l, (de)                     ; EB 5E EB
+  1053  0cf4  eb5eeb13           ld l, (de+)                    ; EB 5E EB 13
+  1054  0cf8  eb5eeb1b           ld l, (de-)                    ; EB 5E EB 1B
+  1055  0cfc  6e                 ld l, (hl)                     ; 6E
+  1056  0cfd  6e23               ld l, (hl+)                    ; 6E 23
+  1057  0cff  6e2b               ld l, (hl-)                    ; 6E 2B
+  1058  0d01  dd6e00             ld l, (ix)                     ; DD 6E 00
+  1059  0d04  dd6e00             ld l, (ix+0)                   ; DD 6E 00
+  1060  0d07  dd6e7e             ld l, (ix+126)                 ; DD 6E 7E
+  1061  0d0a  dd6e80             ld l, (ix-128)                 ; DD 6E 80
+  1062  0d0d  fd6e00             ld l, (iy)                     ; FD 6E 00
+  1063  0d10  fd6e00             ld l, (iy+0)                   ; FD 6E 00
+  1064  0d13  fd6e7e             ld l, (iy+126)                 ; FD 6E 7E
+  1065  0d16  fd6e80             ld l, (iy-128)                 ; FD 6E 80
+  1066  0d19  2e00               ld l, 0                        ; 2E 00
+  1067  0d1b  2e7f               ld l, 127                      ; 2E 7F
+  1068  0d1d  2eff               ld l, 255                      ; 2E FF
+  1069  0d1f  6f                 ld l, a                        ; 6F
+  1070  0d20  68                 ld l, b                        ; 68
+  1071  0d21  69                 ld l, c                        ; 69
+  1072  0d22  6a                 ld l, d                        ; 6A
+  1073  0d23  6b                 ld l, e                        ; 6B
+  1074  0d24  6c                 ld l, h                        ; 6C
+  1075  0d25  6d                 ld l, l                        ; 6D
+  1076  0d26  ed4f               ld r, a                        ; ED 4F
+  1077  0d28  ed7b3412           ld sp, (0x1234)                ; ED 7B 34 12
+  1078  0d2c  313412             ld sp, 0x1234                  ; 31 34 12
+  1079  0d2f  f9                 ld sp, hl                      ; F9
+  1080  0d30  ddf9               ld sp, ix                      ; DD F9
+  1081  0d32  fdf9               ld sp, iy                      ; FD F9
+  1082  0d34  eda8               ldd                            ; ED A8
+  1083  0d36  020b               ldd (bc), a                    ; 02 0B
+  1084  0d38  eb3600eb1b         ldd (de), 0                    ; EB 36 00 EB 1B
+  1085  0d3d  eb367feb1b         ldd (de), 127                  ; EB 36 7F EB 1B
+  1086  0d42  eb36ffeb1b         ldd (de), 255                  ; EB 36 FF EB 1B
+  1087  0d47  121b               ldd (de), a                    ; 12 1B
+  1088  0d49  eb70eb1b           ldd (de), b                    ; EB 70 EB 1B
+  1089  0d4d  eb71eb1b           ldd (de), c                    ; EB 71 EB 1B
+  1090  0d51  eb74eb1b           ldd (de), d                    ; EB 74 EB 1B
+  1091  0d55  eb75eb1b           ldd (de), e                    ; EB 75 EB 1B
+  1092  0d59  eb72eb1b           ldd (de), h                    ; EB 72 EB 1B
+  1093  0d5d  eb73eb1b           ldd (de), l                    ; EB 73 EB 1B
+  1094  0d61  36002b             ldd (hl), 0                    ; 36 00 2B
+  1095  0d64  367f2b             ldd (hl), 127                  ; 36 7F 2B
+  1096  0d67  36ff2b             ldd (hl), 255                  ; 36 FF 2B
+  1097  0d6a  772b               ldd (hl), a                    ; 77 2B
+  1098  0d6c  702b               ldd (hl), b                    ; 70 2B
+  1099  0d6e  712b               ldd (hl), c                    ; 71 2B
+  1100  0d70  722b               ldd (hl), d                    ; 72 2B
+  1101  0d72  732b               ldd (hl), e                    ; 73 2B
+  1102  0d74  742b               ldd (hl), h                    ; 74 2B
+  1103  0d76  752b               ldd (hl), l                    ; 75 2B
+  1104  0d78  0a0b               ldd a, (bc)                    ; 0A 0B
+  1105  0d7a  1a1b               ldd a, (de)                    ; 1A 1B
+  1106  0d7c  7e2b               ldd a, (hl)                    ; 7E 2B
+  1107  0d7e  eb46eb1b           ldd b, (de)                    ; EB 46 EB 1B
+  1108  0d82  462b               ldd b, (hl)                    ; 46 2B
+  1109  0d84  eb4eeb1b           ldd c, (de)                    ; EB 4E EB 1B
+  1110  0d88  4e2b               ldd c, (hl)                    ; 4E 2B
+  1111  0d8a  eb66eb1b           ldd d, (de)                    ; EB 66 EB 1B
+  1112  0d8e  562b               ldd d, (hl)                    ; 56 2B
+  1113  0d90  eb6eeb1b           ldd e, (de)                    ; EB 6E EB 1B
+  1114  0d94  5e2b               ldd e, (hl)                    ; 5E 2B
+  1115  0d96  eb56eb1b           ldd h, (de)                    ; EB 56 EB 1B
+  1116  0d9a  662b               ldd h, (hl)                    ; 66 2B
+  1117  0d9c  eb5eeb1b           ldd l, (de)                    ; EB 5E EB 1B
+  1118  0da0  6e2b               ldd l, (hl)                    ; 6E 2B
+  1119  0da2  edb8               lddr                           ; ED B8
+  1120  0da4  eda0               ldi                            ; ED A0
+  1121  0da6  0203               ldi (bc), a                    ; 02 03
+  1122  0da8  eb3600eb13         ldi (de), 0                    ; EB 36 00 EB 13
+  1123  0dad  eb367feb13         ldi (de), 127                  ; EB 36 7F EB 13
+  1124  0db2  eb36ffeb13         ldi (de), 255                  ; EB 36 FF EB 13
+  1125  0db7  1213               ldi (de), a                    ; 12 13
+  1126  0db9  eb70eb13           ldi (de), b                    ; EB 70 EB 13
+  1127  0dbd  eb71eb13           ldi (de), c                    ; EB 71 EB 13
+  1128  0dc1  eb74eb13           ldi (de), d                    ; EB 74 EB 13
+  1129  0dc5  eb75eb13           ldi (de), e                    ; EB 75 EB 13
+  1130  0dc9  eb72eb13           ldi (de), h                    ; EB 72 EB 13
+  1131  0dcd  eb73eb13           ldi (de), l                    ; EB 73 EB 13
+  1132  0dd1  360023             ldi (hl), 0                    ; 36 00 23
+  1133  0dd4  367f23             ldi (hl), 127                  ; 36 7F 23
+  1134  0dd7  36ff23             ldi (hl), 255                  ; 36 FF 23
+  1135  0dda  7723               ldi (hl), a                    ; 77 23
+  1136  0ddc  7023               ldi (hl), b                    ; 70 23
+  1137  0dde  71237023           ldi (hl), bc                   ; 71 23 70 23
+  1138  0de2  7123               ldi (hl), c                    ; 71 23
+  1139  0de4  7223               ldi (hl), d                    ; 72 23
+  1140  0de6  73237223           ldi (hl), de                   ; 73 23 72 23
+  1141  0dea  7323               ldi (hl), e                    ; 73 23
+  1142  0dec  7423               ldi (hl), h                    ; 74 23
+  1143  0dee  f57c752377f123     ldi (hl), hl                   ; F5 7C 75 23 77 F1 23
+  1144  0df5  d5dde5d173237223   ldi (hl), ix                   ; D5 DD E5 D1 73 23 72 23 D1
+              d1                
+  1145  0dfe  d5fde5d173237223   ldi (hl), iy                   ; D5 FD E5 D1 73 23 72 23 D1
+              d1                
+  1146  0e07  7523               ldi (hl), l                    ; 75 23
+  1147  0e09  0a03               ldi a, (bc)                    ; 0A 03
+  1148  0e0b  1a13               ldi a, (de)                    ; 1A 13
+  1149  0e0d  7e23               ldi a, (hl)                    ; 7E 23
+  1150  0e0f  eb46eb13           ldi b, (de)                    ; EB 46 EB 13
+  1151  0e13  4623               ldi b, (hl)                    ; 46 23
+  1152  0e15  4e234623           ldi bc, (hl)                   ; 4E 23 46 23
+  1153  0e19  eb4eeb13           ldi c, (de)                    ; EB 4E EB 13
+  1154  0e1d  4e23               ldi c, (hl)                    ; 4E 23
+  1155  0e1f  eb66eb13           ldi d, (de)                    ; EB 66 EB 13
+  1156  0e23  5623               ldi d, (hl)                    ; 56 23
+  1157  0e25  5e235623           ldi de, (hl)                   ; 5E 23 56 23
+  1158  0e29  eb6eeb13           ldi e, (de)                    ; EB 6E EB 13
+  1159  0e2d  5e23               ldi e, (hl)                    ; 5E 23
+  1160  0e2f  eb56eb13           ldi h, (de)                    ; EB 56 EB 13
+  1161  0e33  6623               ldi h, (hl)                    ; 66 23
+  1162  0e35  d55e235623d5dde1   ldi ix, (hl)                   ; D5 5E 23 56 23 D5 DD E1 D1
+              d1                
+  1163  0e3e  d55e235623d5fde1   ldi iy, (hl)                   ; D5 5E 23 56 23 D5 FD E1 D1
+              d1                
+  1164  0e47  eb5eeb13           ldi l, (de)                    ; EB 5E EB 13
+  1165  0e4b  6e23               ldi l, (hl)                    ; 6E 23
+  1166  0e4d  edb0               ldir                           ; ED B0
+  1167  0e4f  ed44               neg                            ; ED 44
+  1168  0e51  ed44               neg a                          ; ED 44
+  1169  0e53  f5782f4704f1       neg b                          ; F5 78 2F 47 04 F1
+  1170  0e59  f5782f47792f4f03   neg bc                         ; F5 78 2F 47 79 2F 4F 03 F1
+              f1                
+  1171  0e62  f5792f4f0cf1       neg c                          ; F5 79 2F 4F 0C F1
+  1172  0e68  f57a2f5714f1       neg d                          ; F5 7A 2F 57 14 F1
+  1173  0e6e  f57a2f577b2f5f13   neg de                         ; F5 7A 2F 57 7B 2F 5F 13 F1
+              f1                
+  1174  0e77  f57b2f5f1cf1       neg e                          ; F5 7B 2F 5F 1C F1
+  1175  0e7d  f57c2f6724f1       neg h                          ; F5 7C 2F 67 24 F1
+  1176  0e83  f57c2f677d2f6f23   neg hl                         ; F5 7C 2F 67 7D 2F 6F 23 F1
+              f1                
+  1177  0e8c  f5dd7c2fdd67dd7d   neg ix                         ; F5 DD 7C 2F DD 67 DD 7D 2F DD 6F DD 23 F1
+              2fdd6fdd23f1      
+  1178  0e9a  f5fd7c2ffd67fd7d   neg iy                         ; F5 FD 7C 2F FD 67 FD 7D 2F FD 6F FD 23 F1
+              2ffd6ffd23f1      
+  1179  0ea8  f57d2f6f2cf1       neg l                          ; F5 7D 2F 6F 2C F1
+  1180  0eae  00                 nop                            ; 00
+  1181  0eaf  b6                 or (hl)                        ; B6
+  1182  0eb0  b623               or (hl+)                       ; B6 23
+  1183  0eb2  b62b               or (hl-)                       ; B6 2B
+  1184  0eb4  ddb600             or (ix)                        ; DD B6 00
+  1185  0eb7  ddb600             or (ix+0)                      ; DD B6 00
+  1186  0eba  ddb67e             or (ix+126)                    ; DD B6 7E
+  1187  0ebd  ddb680             or (ix-128)                    ; DD B6 80
+  1188  0ec0  fdb600             or (iy)                        ; FD B6 00
+  1189  0ec3  fdb600             or (iy+0)                      ; FD B6 00
+  1190  0ec6  fdb67e             or (iy+126)                    ; FD B6 7E
+  1191  0ec9  fdb680             or (iy-128)                    ; FD B6 80
+  1192  0ecc  f600               or 0                           ; F6 00
+  1193  0ece  f67f               or 127                         ; F6 7F
+  1194  0ed0  f6ff               or 255                         ; F6 FF
+  1195  0ed2  b7                 or a                           ; B7
+  1196  0ed3  b6                 or a, (hl)                     ; B6
+  1197  0ed4  b623               or a, (hl+)                    ; B6 23
+  1198  0ed6  b62b               or a, (hl-)                    ; B6 2B
+  1199  0ed8  ddb600             or a, (ix)                     ; DD B6 00
+  1200  0edb  ddb600             or a, (ix+0)                   ; DD B6 00
+  1201  0ede  ddb67e             or a, (ix+126)                 ; DD B6 7E
+  1202  0ee1  ddb680             or a, (ix-128)                 ; DD B6 80
+  1203  0ee4  fdb600             or a, (iy)                     ; FD B6 00
+  1204  0ee7  fdb600             or a, (iy+0)                   ; FD B6 00
+  1205  0eea  fdb67e             or a, (iy+126)                 ; FD B6 7E
+  1206  0eed  fdb680             or a, (iy-128)                 ; FD B6 80
+  1207  0ef0  f600               or a, 0                        ; F6 00
+  1208  0ef2  f67f               or a, 127                      ; F6 7F
+  1209  0ef4  f6ff               or a, 255                      ; F6 FF
+  1210  0ef6  b7                 or a, a                        ; B7
+  1211  0ef7  b0                 or a, b                        ; B0
+  1212  0ef8  b1                 or a, c                        ; B1
+  1213  0ef9  b2                 or a, d                        ; B2
+  1214  0efa  b3                 or a, e                        ; B3
+  1215  0efb  b4                 or a, h                        ; B4
+  1216  0efc  ddb4               or a, ixh                      ; DD B4
+  1217  0efe  ddb5               or a, ixl                      ; DD B5
+  1218  0f00  fdb4               or a, iyh                      ; FD B4
+  1219  0f02  fdb5               or a, iyl                      ; FD B5
+  1220  0f04  b5                 or a, l                        ; B5
+  1221  0f05  b0                 or b                           ; B0
+  1222  0f06  b1                 or c                           ; B1
+  1223  0f07  b2                 or d                           ; B2
+  1224  0f08  b3                 or e                           ; B3
+  1225  0f09  b4                 or h                           ; B4
+  1226  0f0a  f57cb0677db16ff1   or hl, bc                      ; F5 7C B0 67 7D B1 6F F1
+  1227  0f12  f57cb2677db36ff1   or hl, de                      ; F5 7C B2 67 7D B3 6F F1
+  1228  0f1a  f5dd7cb0dd67dd7d   or ix, bc                      ; F5 DD 7C B0 DD 67 DD 7D B1 DD 6F F1
+              b1dd6ff1          
+  1229  0f26  f5dd7cb2dd67dd7d   or ix, de                      ; F5 DD 7C B2 DD 67 DD 7D B3 DD 6F F1
+              b3dd6ff1          
+  1230  0f32  ddb4               or ixh                         ; DD B4
+  1231  0f34  ddb5               or ixl                         ; DD B5
+  1232  0f36  f5fd7cb0fd67fd7d   or iy, bc                      ; F5 FD 7C B0 FD 67 FD 7D B1 FD 6F F1
+              b1fd6ff1          
+  1233  0f42  f5fd7cb2fd67fd7d   or iy, de                      ; F5 FD 7C B2 FD 67 FD 7D B3 FD 6F F1
+              b3fd6ff1          
+  1234  0f4e  fdb4               or iyh                         ; FD B4
+  1235  0f50  fdb5               or iyl                         ; FD B5
+  1236  0f52  b5                 or l                           ; B5
+  1237  0f53  edbb               otdr                           ; ED BB
+  1238  0f55  edb3               otir                           ; ED B3
+  1239  0f57  d300               out (0), a                     ; D3 00
+  1240  0f59  d37f               out (127), a                   ; D3 7F
+  1241  0f5b  d3ff               out (255), a                   ; D3 FF
+  1242  0f5d  ed79               out (c), a                     ; ED 79
+  1243  0f5f  ed41               out (c), b                     ; ED 41
+  1244  0f61  ed49               out (c), c                     ; ED 49
+  1245  0f63  ed51               out (c), d                     ; ED 51
+  1246  0f65  ed59               out (c), e                     ; ED 59
+  1247  0f67  ed61               out (c), h                     ; ED 61
+  1248  0f69  ed69               out (c), l                     ; ED 69
+  1249  0f6b  edab               outd                           ; ED AB
+  1250  0f6d  eda3               outi                           ; ED A3
+  1251  0f6f  f1                 pop af                         ; F1
+  1252  0f70  c1                 pop bc                         ; C1
+  1253  0f71  d1                 pop de                         ; D1
+  1254  0f72  e1                 pop hl                         ; E1
+  1255  0f73  dde1               pop ix                         ; DD E1
+  1256  0f75  fde1               pop iy                         ; FD E1
+  1257  0f77  f5                 push af                        ; F5
+  1258  0f78  c5                 push bc                        ; C5
+  1259  0f79  d9c5d9             push bc'                       ; D9 C5 D9
+  1260  0f7c  d5                 push de                        ; D5
+  1261  0f7d  d9d5d9             push de'                       ; D9 D5 D9
+  1262  0f80  e5                 push hl                        ; E5
+  1263  0f81  d9e5d9             push hl'                       ; D9 E5 D9
+  1264  0f84  dde5               push ix                        ; DD E5
+  1265  0f86  fde5               push iy                        ; FD E5
+  1266  0f88  cb86               res 0, (hl)                    ; CB 86
+  1267  0f8a  ddcb0086           res 0, (ix)                    ; DD CB 00 86
+  1268  0f8e  ddcb0086           res 0, (ix+0)                  ; DD CB 00 86
+  1269  0f92  ddcb7e86           res 0, (ix+126)                ; DD CB 7E 86
+  1270  0f96  ddcb8086           res 0, (ix-128)                ; DD CB 80 86
+  1271  0f9a  fdcb0086           res 0, (iy)                    ; FD CB 00 86
+  1272  0f9e  fdcb0086           res 0, (iy+0)                  ; FD CB 00 86
+  1273  0fa2  fdcb7e86           res 0, (iy+126)                ; FD CB 7E 86
+  1274  0fa6  fdcb8086           res 0, (iy-128)                ; FD CB 80 86
+  1275  0faa  cb87               res 0, a                       ; CB 87
+  1276  0fac  cb80               res 0, b                       ; CB 80
+  1277  0fae  cb81               res 0, c                       ; CB 81
+  1278  0fb0  cb82               res 0, d                       ; CB 82
+  1279  0fb2  cb83               res 0, e                       ; CB 83
+  1280  0fb4  cb84               res 0, h                       ; CB 84
+  1281  0fb6  cb85               res 0, l                       ; CB 85
+  1282  0fb8  cb8e               res 1, (hl)                    ; CB 8E
+  1283  0fba  ddcb008e           res 1, (ix)                    ; DD CB 00 8E
+  1284  0fbe  ddcb008e           res 1, (ix+0)                  ; DD CB 00 8E
+  1285  0fc2  ddcb7e8e           res 1, (ix+126)                ; DD CB 7E 8E
+  1286  0fc6  ddcb808e           res 1, (ix-128)                ; DD CB 80 8E
+  1287  0fca  fdcb008e           res 1, (iy)                    ; FD CB 00 8E
+  1288  0fce  fdcb008e           res 1, (iy+0)                  ; FD CB 00 8E
+  1289  0fd2  fdcb7e8e           res 1, (iy+126)                ; FD CB 7E 8E
+  1290  0fd6  fdcb808e           res 1, (iy-128)                ; FD CB 80 8E
+  1291  0fda  cb8f               res 1, a                       ; CB 8F
+  1292  0fdc  cb88               res 1, b                       ; CB 88
+  1293  0fde  cb89               res 1, c                       ; CB 89
+  1294  0fe0  cb8a               res 1, d                       ; CB 8A
+  1295  0fe2  cb8b               res 1, e                       ; CB 8B
+  1296  0fe4  cb8c               res 1, h                       ; CB 8C
+  1297  0fe6  cb8d               res 1, l                       ; CB 8D
+  1298  0fe8  cb96               res 2, (hl)                    ; CB 96
+  1299  0fea  ddcb0096           res 2, (ix)                    ; DD CB 00 96
+  1300  0fee  ddcb0096           res 2, (ix+0)                  ; DD CB 00 96
+  1301  0ff2  ddcb7e96           res 2, (ix+126)                ; DD CB 7E 96
+  1302  0ff6  ddcb8096           res 2, (ix-128)                ; DD CB 80 96
+  1303  0ffa  fdcb0096           res 2, (iy)                    ; FD CB 00 96
+  1304  0ffe  fdcb0096           res 2, (iy+0)                  ; FD CB 00 96
+  1305  1002  fdcb7e96           res 2, (iy+126)                ; FD CB 7E 96
+  1306  1006  fdcb8096           res 2, (iy-128)                ; FD CB 80 96
+  1307  100a  cb97               res 2, a                       ; CB 97
+  1308  100c  cb90               res 2, b                       ; CB 90
+  1309  100e  cb91               res 2, c                       ; CB 91
+  1310  1010  cb92               res 2, d                       ; CB 92
+  1311  1012  cb93               res 2, e                       ; CB 93
+  1312  1014  cb94               res 2, h                       ; CB 94
+  1313  1016  cb95               res 2, l                       ; CB 95
+  1314  1018  cb9e               res 3, (hl)                    ; CB 9E
+  1315  101a  ddcb009e           res 3, (ix)                    ; DD CB 00 9E
+  1316  101e  ddcb009e           res 3, (ix+0)                  ; DD CB 00 9E
+  1317  1022  ddcb7e9e           res 3, (ix+126)                ; DD CB 7E 9E
+  1318  1026  ddcb809e           res 3, (ix-128)                ; DD CB 80 9E
+  1319  102a  fdcb009e           res 3, (iy)                    ; FD CB 00 9E
+  1320  102e  fdcb009e           res 3, (iy+0)                  ; FD CB 00 9E
+  1321  1032  fdcb7e9e           res 3, (iy+126)                ; FD CB 7E 9E
+  1322  1036  fdcb809e           res 3, (iy-128)                ; FD CB 80 9E
+  1323  103a  cb9f               res 3, a                       ; CB 9F
+  1324  103c  cb98               res 3, b                       ; CB 98
+  1325  103e  cb99               res 3, c                       ; CB 99
+  1326  1040  cb9a               res 3, d                       ; CB 9A
+  1327  1042  cb9b               res 3, e                       ; CB 9B
+  1328  1044  cb9c               res 3, h                       ; CB 9C
+  1329  1046  cb9d               res 3, l                       ; CB 9D
+  1330  1048  cba6               res 4, (hl)                    ; CB A6
+  1331  104a  ddcb00a6           res 4, (ix)                    ; DD CB 00 A6
+  1332  104e  ddcb00a6           res 4, (ix+0)                  ; DD CB 00 A6
+  1333  1052  ddcb7ea6           res 4, (ix+126)                ; DD CB 7E A6
+  1334  1056  ddcb80a6           res 4, (ix-128)                ; DD CB 80 A6
+  1335  105a  fdcb00a6           res 4, (iy)                    ; FD CB 00 A6
+  1336  105e  fdcb00a6           res 4, (iy+0)                  ; FD CB 00 A6
+  1337  1062  fdcb7ea6           res 4, (iy+126)                ; FD CB 7E A6
+  1338  1066  fdcb80a6           res 4, (iy-128)                ; FD CB 80 A6
+  1339  106a  cba7               res 4, a                       ; CB A7
+  1340  106c  cba0               res 4, b                       ; CB A0
+  1341  106e  cba1               res 4, c                       ; CB A1
+  1342  1070  cba2               res 4, d                       ; CB A2
+  1343  1072  cba3               res 4, e                       ; CB A3
+  1344  1074  cba4               res 4, h                       ; CB A4
+  1345  1076  cba5               res 4, l                       ; CB A5
+  1346  1078  cbae               res 5, (hl)                    ; CB AE
+  1347  107a  ddcb00ae           res 5, (ix)                    ; DD CB 00 AE
+  1348  107e  ddcb00ae           res 5, (ix+0)                  ; DD CB 00 AE
+  1349  1082  ddcb7eae           res 5, (ix+126)                ; DD CB 7E AE
+  1350  1086  ddcb80ae           res 5, (ix-128)                ; DD CB 80 AE
+  1351  108a  fdcb00ae           res 5, (iy)                    ; FD CB 00 AE
+  1352  108e  fdcb00ae           res 5, (iy+0)                  ; FD CB 00 AE
+  1353  1092  fdcb7eae           res 5, (iy+126)                ; FD CB 7E AE
+  1354  1096  fdcb80ae           res 5, (iy-128)                ; FD CB 80 AE
+  1355  109a  cbaf               res 5, a                       ; CB AF
+  1356  109c  cba8               res 5, b                       ; CB A8
+  1357  109e  cba9               res 5, c                       ; CB A9
+  1358  10a0  cbaa               res 5, d                       ; CB AA
+  1359  10a2  cbab               res 5, e                       ; CB AB
+  1360  10a4  cbac               res 5, h                       ; CB AC
+  1361  10a6  cbad               res 5, l                       ; CB AD
+  1362  10a8  cbb6               res 6, (hl)                    ; CB B6
+  1363  10aa  ddcb00b6           res 6, (ix)                    ; DD CB 00 B6
+  1364  10ae  ddcb00b6           res 6, (ix+0)                  ; DD CB 00 B6
+  1365  10b2  ddcb7eb6           res 6, (ix+126)                ; DD CB 7E B6
+  1366  10b6  ddcb80b6           res 6, (ix-128)                ; DD CB 80 B6
+  1367  10ba  fdcb00b6           res 6, (iy)                    ; FD CB 00 B6
+  1368  10be  fdcb00b6           res 6, (iy+0)                  ; FD CB 00 B6
+  1369  10c2  fdcb7eb6           res 6, (iy+126)                ; FD CB 7E B6
+  1370  10c6  fdcb80b6           res 6, (iy-128)                ; FD CB 80 B6
+  1371  10ca  cbb7               res 6, a                       ; CB B7
+  1372  10cc  cbb0               res 6, b                       ; CB B0
+  1373  10ce  cbb1               res 6, c                       ; CB B1
+  1374  10d0  cbb2               res 6, d                       ; CB B2
+  1375  10d2  cbb3               res 6, e                       ; CB B3
+  1376  10d4  cbb4               res 6, h                       ; CB B4
+  1377  10d6  cbb5               res 6, l                       ; CB B5
+  1378  10d8  cbbe               res 7, (hl)                    ; CB BE
+  1379  10da  ddcb00be           res 7, (ix)                    ; DD CB 00 BE
+  1380  10de  ddcb00be           res 7, (ix+0)                  ; DD CB 00 BE
+  1381  10e2  ddcb7ebe           res 7, (ix+126)                ; DD CB 7E BE
+  1382  10e6  ddcb80be           res 7, (ix-128)                ; DD CB 80 BE
+  1383  10ea  fdcb00be           res 7, (iy)                    ; FD CB 00 BE
+  1384  10ee  fdcb00be           res 7, (iy+0)                  ; FD CB 00 BE
+  1385  10f2  fdcb7ebe           res 7, (iy+126)                ; FD CB 7E BE
+  1386  10f6  fdcb80be           res 7, (iy-128)                ; FD CB 80 BE
+  1387  10fa  cbbf               res 7, a                       ; CB BF
+  1388  10fc  cbb8               res 7, b                       ; CB B8
+  1389  10fe  cbb9               res 7, c                       ; CB B9
+  1390  1100  cbba               res 7, d                       ; CB BA
+  1391  1102  cbbb               res 7, e                       ; CB BB
+  1392  1104  cbbc               res 7, h                       ; CB BC
+  1393  1106  cbbd               res 7, l                       ; CB BD
+  1394  1108  c9                 ret                            ; C9
+  1395  1109  d8                 ret c                          ; D8
+  1396  110a  c8                 ret eq                         ; C8
+  1397  110b  d0                 ret geu                        ; D0
+  1398  110c  2801d0             ret gtu                        ; 28 01 D0
+  1399  110f  c8d8               ret leu                        ; C8 D8
+  1400  1111  d8                 ret ltu                        ; D8
+  1401  1112  f8                 ret m                          ; F8
+  1402  1113  d0                 ret nc                         ; D0
+  1403  1114  c0                 ret ne                         ; C0
+  1404  1115  e0                 ret nv                         ; E0
+  1405  1116  c0                 ret nz                         ; C0
+  1406  1117  f0                 ret p                          ; F0
+  1407  1118  e8                 ret pe                         ; E8
+  1408  1119  e0                 ret po                         ; E0
+  1409  111a  e8                 ret v                          ; E8
+  1410  111b  c8                 ret z                          ; C8
+  1411  111c  ed4d               reti                           ; ED 4D
+  1412  111e  ed45               retn                           ; ED 45
+  1413  1120  cb16               rl (hl)                        ; CB 16
+  1414  1122  ddcb0016           rl (ix)                        ; DD CB 00 16
+  1415  1126  ddcb0016           rl (ix+0)                      ; DD CB 00 16
+  1416  112a  ddcb7e16           rl (ix+126)                    ; DD CB 7E 16
+  1417  112e  ddcb8016           rl (ix-128)                    ; DD CB 80 16
+  1418  1132  fdcb0016           rl (iy)                        ; FD CB 00 16
+  1419  1136  fdcb0016           rl (iy+0)                      ; FD CB 00 16
+  1420  113a  fdcb7e16           rl (iy+126)                    ; FD CB 7E 16
+  1421  113e  fdcb8016           rl (iy-128)                    ; FD CB 80 16
+  1422  1142  cb17               rl a                           ; CB 17
+  1423  1144  cb10               rl b                           ; CB 10
+  1424  1146  cb11cb10           rl bc                          ; CB 11 CB 10
+  1425  114a  cb11               rl c                           ; CB 11
+  1426  114c  cb12               rl d                           ; CB 12
+  1427  114e  cb13cb12           rl de                          ; CB 13 CB 12
+  1428  1152  cb13               rl e                           ; CB 13
+  1429  1154  cb14               rl h                           ; CB 14
+  1430  1156  cb15cb14           rl hl                          ; CB 15 CB 14
+  1431  115a  cb15               rl l                           ; CB 15
+  1432  115c  17                 rla                            ; 17
+  1433  115d  cb06               rlc (hl)                       ; CB 06
+  1434  115f  ddcb0006           rlc (ix)                       ; DD CB 00 06
+  1435  1163  ddcb0006           rlc (ix+0)                     ; DD CB 00 06
+  1436  1167  ddcb7e06           rlc (ix+126)                   ; DD CB 7E 06
+  1437  116b  ddcb8006           rlc (ix-128)                   ; DD CB 80 06
+  1438  116f  fdcb0006           rlc (iy)                       ; FD CB 00 06
+  1439  1173  fdcb0006           rlc (iy+0)                     ; FD CB 00 06
+  1440  1177  fdcb7e06           rlc (iy+126)                   ; FD CB 7E 06
+  1441  117b  fdcb8006           rlc (iy-128)                   ; FD CB 80 06
+  1442  117f  cb07               rlc a                          ; CB 07
+  1443  1181  cb00               rlc b                          ; CB 00
+  1444  1183  cb01               rlc c                          ; CB 01
+  1445  1185  cb02               rlc d                          ; CB 02
+  1446  1187  cb03               rlc e                          ; CB 03
+  1447  1189  cb04               rlc h                          ; CB 04
+  1448  118b  cb05               rlc l                          ; CB 05
+  1449  118d  07                 rlca                           ; 07
+  1450  118e  ed6f               rld                            ; ED 6F
+  1451  1190  cb1e               rr (hl)                        ; CB 1E
+  1452  1192  ddcb001e           rr (ix)                        ; DD CB 00 1E
+  1453  1196  ddcb001e           rr (ix+0)                      ; DD CB 00 1E
+  1454  119a  ddcb7e1e           rr (ix+126)                    ; DD CB 7E 1E
+  1455  119e  ddcb801e           rr (ix-128)                    ; DD CB 80 1E
+  1456  11a2  fdcb001e           rr (iy)                        ; FD CB 00 1E
+  1457  11a6  fdcb001e           rr (iy+0)                      ; FD CB 00 1E
+  1458  11aa  fdcb7e1e           rr (iy+126)                    ; FD CB 7E 1E
+  1459  11ae  fdcb801e           rr (iy-128)                    ; FD CB 80 1E
+  1460  11b2  cb1f               rr a                           ; CB 1F
+  1461  11b4  cb18               rr b                           ; CB 18
+  1462  11b6  cb18cb19           rr bc                          ; CB 18 CB 19
+  1463  11ba  cb19               rr c                           ; CB 19
+  1464  11bc  cb1a               rr d                           ; CB 1A
+  1465  11be  cb1acb1b           rr de                          ; CB 1A CB 1B
+  1466  11c2  cb1b               rr e                           ; CB 1B
+  1467  11c4  cb1c               rr h                           ; CB 1C
+  1468  11c6  cb1ccb1d           rr hl                          ; CB 1C CB 1D
+  1469  11ca  cb1d               rr l                           ; CB 1D
+  1470  11cc  1f                 rra                            ; 1F
+  1471  11cd  cb0e               rrc (hl)                       ; CB 0E
+  1472  11cf  ddcb000e           rrc (ix)                       ; DD CB 00 0E
+  1473  11d3  ddcb000e           rrc (ix+0)                     ; DD CB 00 0E
+  1474  11d7  ddcb7e0e           rrc (ix+126)                   ; DD CB 7E 0E
+  1475  11db  ddcb800e           rrc (ix-128)                   ; DD CB 80 0E
+  1476  11df  fdcb000e           rrc (iy)                       ; FD CB 00 0E
+  1477  11e3  fdcb000e           rrc (iy+0)                     ; FD CB 00 0E
+  1478  11e7  fdcb7e0e           rrc (iy+126)                   ; FD CB 7E 0E
+  1479  11eb  fdcb800e           rrc (iy-128)                   ; FD CB 80 0E
+  1480  11ef  cb0f               rrc a                          ; CB 0F
+  1481  11f1  cb08               rrc b                          ; CB 08
+  1482  11f3  cb09               rrc c                          ; CB 09
+  1483  11f5  cb0a               rrc d                          ; CB 0A
+  1484  11f7  cb0b               rrc e                          ; CB 0B
+  1485  11f9  cb0c               rrc h                          ; CB 0C
+  1486  11fb  cb0d               rrc l                          ; CB 0D
+  1487  11fd  0f                 rrca                           ; 0F
+  1488  11fe  ed67               rrd                            ; ED 67
+  1489  1200  c7                 rst 0                          ; C7
+  1490  1201  d7                 rst 16                         ; D7
+  1491  1202  df                 rst 24                         ; DF
+  1492  1203  e7                 rst 32                         ; E7
+  1493  1204  ef                 rst 40                         ; EF
+  1494  1205  f7                 rst 48                         ; F7
+  1495  1206  ff                 rst 56                         ; FF
+  1496  1207  cf                 rst 8                          ; CF
+  1497  1208  9e                 sbc (hl)                       ; 9E
+  1498  1209  9e23               sbc (hl+)                      ; 9E 23
+  1499  120b  9e2b               sbc (hl-)                      ; 9E 2B
+  1500  120d  dd9e00             sbc (ix)                       ; DD 9E 00
+  1501  1210  dd9e00             sbc (ix+0)                     ; DD 9E 00
+  1502  1213  dd9e7e             sbc (ix+126)                   ; DD 9E 7E
+  1503  1216  dd9e80             sbc (ix-128)                   ; DD 9E 80
+  1504  1219  fd9e00             sbc (iy)                       ; FD 9E 00
+  1505  121c  fd9e00             sbc (iy+0)                     ; FD 9E 00
+  1506  121f  fd9e7e             sbc (iy+126)                   ; FD 9E 7E
+  1507  1222  fd9e80             sbc (iy-128)                   ; FD 9E 80
+  1508  1225  de00               sbc 0                          ; DE 00
+  1509  1227  de7f               sbc 127                        ; DE 7F
+  1510  1229  deff               sbc 255                        ; DE FF
+  1511  122b  9f                 sbc a                          ; 9F
+  1512  122c  9e                 sbc a, (hl)                    ; 9E
+  1513  122d  9e23               sbc a, (hl+)                   ; 9E 23
+  1514  122f  9e2b               sbc a, (hl-)                   ; 9E 2B
+  1515  1231  dd9e00             sbc a, (ix)                    ; DD 9E 00
+  1516  1234  dd9e00             sbc a, (ix+0)                  ; DD 9E 00
+  1517  1237  dd9e7e             sbc a, (ix+126)                ; DD 9E 7E
+  1518  123a  dd9e80             sbc a, (ix-128)                ; DD 9E 80
+  1519  123d  fd9e00             sbc a, (iy)                    ; FD 9E 00
+  1520  1240  fd9e00             sbc a, (iy+0)                  ; FD 9E 00
+  1521  1243  fd9e7e             sbc a, (iy+126)                ; FD 9E 7E
+  1522  1246  fd9e80             sbc a, (iy-128)                ; FD 9E 80
+  1523  1249  de00               sbc a, 0                       ; DE 00
+  1524  124b  de7f               sbc a, 127                     ; DE 7F
+  1525  124d  deff               sbc a, 255                     ; DE FF
+  1526  124f  9f                 sbc a, a                       ; 9F
+  1527  1250  98                 sbc a, b                       ; 98
+  1528  1251  99                 sbc a, c                       ; 99
+  1529  1252  9a                 sbc a, d                       ; 9A
+  1530  1253  9b                 sbc a, e                       ; 9B
+  1531  1254  9c                 sbc a, h                       ; 9C
+  1532  1255  dd9c               sbc a, ixh                     ; DD 9C
+  1533  1257  dd9d               sbc a, ixl                     ; DD 9D
+  1534  1259  fd9c               sbc a, iyh                     ; FD 9C
+  1535  125b  fd9d               sbc a, iyl                     ; FD 9D
+  1536  125d  9d                 sbc a, l                       ; 9D
+  1537  125e  98                 sbc b                          ; 98
+  1538  125f  99                 sbc c                          ; 99
+  1539  1260  9a                 sbc d                          ; 9A
+  1540  1261  9b                 sbc e                          ; 9B
+  1541  1262  9c                 sbc h                          ; 9C
+  1542  1263  ed42               sbc hl, bc                     ; ED 42
+  1543  1265  ed52               sbc hl, de                     ; ED 52
+  1544  1267  ed62               sbc hl, hl                     ; ED 62
+  1545  1269  ed72               sbc hl, sp                     ; ED 72
+  1546  126b  dd9c               sbc ixh                        ; DD 9C
+  1547  126d  dd9d               sbc ixl                        ; DD 9D
+  1548  126f  fd9c               sbc iyh                        ; FD 9C
+  1549  1271  fd9d               sbc iyl                        ; FD 9D
+  1550  1273  9d                 sbc l                          ; 9D
+  1551  1274  37                 scf                            ; 37
+  1552  1275  cbc6               set 0, (hl)                    ; CB C6
+  1553  1277  ddcb00c6           set 0, (ix)                    ; DD CB 00 C6
+  1554  127b  ddcb00c6           set 0, (ix+0)                  ; DD CB 00 C6
+  1555  127f  ddcb7ec6           set 0, (ix+126)                ; DD CB 7E C6
+  1556  1283  ddcb80c6           set 0, (ix-128)                ; DD CB 80 C6
+  1557  1287  fdcb00c6           set 0, (iy)                    ; FD CB 00 C6
+  1558  128b  fdcb00c6           set 0, (iy+0)                  ; FD CB 00 C6
+  1559  128f  fdcb7ec6           set 0, (iy+126)                ; FD CB 7E C6
+  1560  1293  fdcb80c6           set 0, (iy-128)                ; FD CB 80 C6
+  1561  1297  cbc7               set 0, a                       ; CB C7
+  1562  1299  cbc0               set 0, b                       ; CB C0
+  1563  129b  cbc1               set 0, c                       ; CB C1
+  1564  129d  cbc2               set 0, d                       ; CB C2
+  1565  129f  cbc3               set 0, e                       ; CB C3
+  1566  12a1  cbc4               set 0, h                       ; CB C4
+  1567  12a3  cbc5               set 0, l                       ; CB C5
+  1568  12a5  cbce               set 1, (hl)                    ; CB CE
+  1569  12a7  ddcb00ce           set 1, (ix)                    ; DD CB 00 CE
+  1570  12ab  ddcb00ce           set 1, (ix+0)                  ; DD CB 00 CE
+  1571  12af  ddcb7ece           set 1, (ix+126)                ; DD CB 7E CE
+  1572  12b3  ddcb80ce           set 1, (ix-128)                ; DD CB 80 CE
+  1573  12b7  fdcb00ce           set 1, (iy)                    ; FD CB 00 CE
+  1574  12bb  fdcb00ce           set 1, (iy+0)                  ; FD CB 00 CE
+  1575  12bf  fdcb7ece           set 1, (iy+126)                ; FD CB 7E CE
+  1576  12c3  fdcb80ce           set 1, (iy-128)                ; FD CB 80 CE
+  1577  12c7  cbcf               set 1, a                       ; CB CF
+  1578  12c9  cbc8               set 1, b                       ; CB C8
+  1579  12cb  cbc9               set 1, c                       ; CB C9
+  1580  12cd  cbca               set 1, d                       ; CB CA
+  1581  12cf  cbcb               set 1, e                       ; CB CB
+  1582  12d1  cbcc               set 1, h                       ; CB CC
+  1583  12d3  cbcd               set 1, l                       ; CB CD
+  1584  12d5  cbd6               set 2, (hl)                    ; CB D6
+  1585  12d7  ddcb00d6           set 2, (ix)                    ; DD CB 00 D6
+  1586  12db  ddcb00d6           set 2, (ix+0)                  ; DD CB 00 D6
+  1587  12df  ddcb7ed6           set 2, (ix+126)                ; DD CB 7E D6
+  1588  12e3  ddcb80d6           set 2, (ix-128)                ; DD CB 80 D6
+  1589  12e7  fdcb00d6           set 2, (iy)                    ; FD CB 00 D6
+  1590  12eb  fdcb00d6           set 2, (iy+0)                  ; FD CB 00 D6
+  1591  12ef  fdcb7ed6           set 2, (iy+126)                ; FD CB 7E D6
+  1592  12f3  fdcb80d6           set 2, (iy-128)                ; FD CB 80 D6
+  1593  12f7  cbd7               set 2, a                       ; CB D7
+  1594  12f9  cbd0               set 2, b                       ; CB D0
+  1595  12fb  cbd1               set 2, c                       ; CB D1
+  1596  12fd  cbd2               set 2, d                       ; CB D2
+  1597  12ff  cbd3               set 2, e                       ; CB D3
+  1598  1301  cbd4               set 2, h                       ; CB D4
+  1599  1303  cbd5               set 2, l                       ; CB D5
+  1600  1305  cbde               set 3, (hl)                    ; CB DE
+  1601  1307  ddcb00de           set 3, (ix)                    ; DD CB 00 DE
+  1602  130b  ddcb00de           set 3, (ix+0)                  ; DD CB 00 DE
+  1603  130f  ddcb7ede           set 3, (ix+126)                ; DD CB 7E DE
+  1604  1313  ddcb80de           set 3, (ix-128)                ; DD CB 80 DE
+  1605  1317  fdcb00de           set 3, (iy)                    ; FD CB 00 DE
+  1606  131b  fdcb00de           set 3, (iy+0)                  ; FD CB 00 DE
+  1607  131f  fdcb7ede           set 3, (iy+126)                ; FD CB 7E DE
+  1608  1323  fdcb80de           set 3, (iy-128)                ; FD CB 80 DE
+  1609  1327  cbdf               set 3, a                       ; CB DF
+  1610  1329  cbd8               set 3, b                       ; CB D8
+  1611  132b  cbd9               set 3, c                       ; CB D9
+  1612  132d  cbda               set 3, d                       ; CB DA
+  1613  132f  cbdb               set 3, e                       ; CB DB
+  1614  1331  cbdc               set 3, h                       ; CB DC
+  1615  1333  cbdd               set 3, l                       ; CB DD
+  1616  1335  cbe6               set 4, (hl)                    ; CB E6
+  1617  1337  ddcb00e6           set 4, (ix)                    ; DD CB 00 E6
+  1618  133b  ddcb00e6           set 4, (ix+0)                  ; DD CB 00 E6
+  1619  133f  ddcb7ee6           set 4, (ix+126)                ; DD CB 7E E6
+  1620  1343  ddcb80e6           set 4, (ix-128)                ; DD CB 80 E6
+  1621  1347  fdcb00e6           set 4, (iy)                    ; FD CB 00 E6
+  1622  134b  fdcb00e6           set 4, (iy+0)                  ; FD CB 00 E6
+  1623  134f  fdcb7ee6           set 4, (iy+126)                ; FD CB 7E E6
+  1624  1353  fdcb80e6           set 4, (iy-128)                ; FD CB 80 E6
+  1625  1357  cbe7               set 4, a                       ; CB E7
+  1626  1359  cbe0               set 4, b                       ; CB E0
+  1627  135b  cbe1               set 4, c                       ; CB E1
+  1628  135d  cbe2               set 4, d                       ; CB E2
+  1629  135f  cbe3               set 4, e                       ; CB E3
+  1630  1361  cbe4               set 4, h                       ; CB E4
+  1631  1363  cbe5               set 4, l                       ; CB E5
+  1632  1365  cbee               set 5, (hl)                    ; CB EE
+  1633  1367  ddcb00ee           set 5, (ix)                    ; DD CB 00 EE
+  1634  136b  ddcb00ee           set 5, (ix+0)                  ; DD CB 00 EE
+  1635  136f  ddcb7eee           set 5, (ix+126)                ; DD CB 7E EE
+  1636  1373  ddcb80ee           set 5, (ix-128)                ; DD CB 80 EE
+  1637  1377  fdcb00ee           set 5, (iy)                    ; FD CB 00 EE
+  1638  137b  fdcb00ee           set 5, (iy+0)                  ; FD CB 00 EE
+  1639  137f  fdcb7eee           set 5, (iy+126)                ; FD CB 7E EE
+  1640  1383  fdcb80ee           set 5, (iy-128)                ; FD CB 80 EE
+  1641  1387  cbef               set 5, a                       ; CB EF
+  1642  1389  cbe8               set 5, b                       ; CB E8
+  1643  138b  cbe9               set 5, c                       ; CB E9
+  1644  138d  cbea               set 5, d                       ; CB EA
+  1645  138f  cbeb               set 5, e                       ; CB EB
+  1646  1391  cbec               set 5, h                       ; CB EC
+  1647  1393  cbed               set 5, l                       ; CB ED
+  1648  1395  cbf6               set 6, (hl)                    ; CB F6
+  1649  1397  ddcb00f6           set 6, (ix)                    ; DD CB 00 F6
+  1650  139b  ddcb00f6           set 6, (ix+0)                  ; DD CB 00 F6
+  1651  139f  ddcb7ef6           set 6, (ix+126)                ; DD CB 7E F6
+  1652  13a3  ddcb80f6           set 6, (ix-128)                ; DD CB 80 F6
+  1653  13a7  fdcb00f6           set 6, (iy)                    ; FD CB 00 F6
+  1654  13ab  fdcb00f6           set 6, (iy+0)                  ; FD CB 00 F6
+  1655  13af  fdcb7ef6           set 6, (iy+126)                ; FD CB 7E F6
+  1656  13b3  fdcb80f6           set 6, (iy-128)                ; FD CB 80 F6
+  1657  13b7  cbf7               set 6, a                       ; CB F7
+  1658  13b9  cbf0               set 6, b                       ; CB F0
+  1659  13bb  cbf1               set 6, c                       ; CB F1
+  1660  13bd  cbf2               set 6, d                       ; CB F2
+  1661  13bf  cbf3               set 6, e                       ; CB F3
+  1662  13c1  cbf4               set 6, h                       ; CB F4
+  1663  13c3  cbf5               set 6, l                       ; CB F5
+  1664  13c5  cbfe               set 7, (hl)                    ; CB FE
+  1665  13c7  ddcb00fe           set 7, (ix)                    ; DD CB 00 FE
+  1666  13cb  ddcb00fe           set 7, (ix+0)                  ; DD CB 00 FE
+  1667  13cf  ddcb7efe           set 7, (ix+126)                ; DD CB 7E FE
+  1668  13d3  ddcb80fe           set 7, (ix-128)                ; DD CB 80 FE
+  1669  13d7  fdcb00fe           set 7, (iy)                    ; FD CB 00 FE
+  1670  13db  fdcb00fe           set 7, (iy+0)                  ; FD CB 00 FE
+  1671  13df  fdcb7efe           set 7, (iy+126)                ; FD CB 7E FE
+  1672  13e3  fdcb80fe           set 7, (iy-128)                ; FD CB 80 FE
+  1673  13e7  cbff               set 7, a                       ; CB FF
+  1674  13e9  cbf8               set 7, b                       ; CB F8
+  1675  13eb  cbf9               set 7, c                       ; CB F9
+  1676  13ed  cbfa               set 7, d                       ; CB FA
+  1677  13ef  cbfb               set 7, e                       ; CB FB
+  1678  13f1  cbfc               set 7, h                       ; CB FC
+  1679  13f3  cbfd               set 7, l                       ; CB FD
+  1680  13f5  cb26               sla (hl)                       ; CB 26
+  1681  13f7  ddcb0026           sla (ix)                       ; DD CB 00 26
+  1682  13fb  ddcb0026           sla (ix+0)                     ; DD CB 00 26
+  1683  13ff  ddcb7e26           sla (ix+126)                   ; DD CB 7E 26
+  1684  1403  ddcb8026           sla (ix-128)                   ; DD CB 80 26
+  1685  1407  fdcb0026           sla (iy)                       ; FD CB 00 26
+  1686  140b  fdcb0026           sla (iy+0)                     ; FD CB 00 26
+  1687  140f  fdcb7e26           sla (iy+126)                   ; FD CB 7E 26
+  1688  1413  fdcb8026           sla (iy-128)                   ; FD CB 80 26
+  1689  1417  cb27               sla a                          ; CB 27
+  1690  1419  cb20               sla b                          ; CB 20
+  1691  141b  cb21               sla c                          ; CB 21
+  1692  141d  cb22               sla d                          ; CB 22
+  1693  141f  cb23               sla e                          ; CB 23
+  1694  1421  cb24               sla h                          ; CB 24
+  1695  1423  cb25               sla l                          ; CB 25
+  1696  1425  cb36               sli (hl)                       ; CB 36
+  1697  1427  ddcb0036           sli (ix)                       ; DD CB 00 36
+  1698  142b  ddcb0036           sli (ix+0)                     ; DD CB 00 36
+  1699  142f  ddcb7e36           sli (ix+126)                   ; DD CB 7E 36
+  1700  1433  ddcb8036           sli (ix-128)                   ; DD CB 80 36
+  1701  1437  fdcb0036           sli (iy)                       ; FD CB 00 36
+  1702  143b  fdcb0036           sli (iy+0)                     ; FD CB 00 36
+  1703  143f  fdcb7e36           sli (iy+126)                   ; FD CB 7E 36
+  1704  1443  fdcb8036           sli (iy-128)                   ; FD CB 80 36
+  1705  1447  cb37               sli a                          ; CB 37
+  1706  1449  cb30               sli b                          ; CB 30
+  1707  144b  cb31               sli c                          ; CB 31
+  1708  144d  cb32               sli d                          ; CB 32
+  1709  144f  cb33               sli e                          ; CB 33
+  1710  1451  cb34               sli h                          ; CB 34
+  1711  1453  cb35               sli l                          ; CB 35
+  1712  1455  cb36               sll (hl)                       ; CB 36
+  1713  1457  ddcb0036           sll (ix)                       ; DD CB 00 36
+  1714  145b  ddcb0036           sll (ix+0)                     ; DD CB 00 36
+  1715  145f  ddcb7e36           sll (ix+126)                   ; DD CB 7E 36
+  1716  1463  ddcb8036           sll (ix-128)                   ; DD CB 80 36
+  1717  1467  fdcb0036           sll (iy)                       ; FD CB 00 36
+  1718  146b  fdcb0036           sll (iy+0)                     ; FD CB 00 36
+  1719  146f  fdcb7e36           sll (iy+126)                   ; FD CB 7E 36
+  1720  1473  fdcb8036           sll (iy-128)                   ; FD CB 80 36
+  1721  1477  cb37               sll a                          ; CB 37
+  1722  1479  cb30               sll b                          ; CB 30
+  1723  147b  cb31               sll c                          ; CB 31
+  1724  147d  cb32               sll d                          ; CB 32
+  1725  147f  cb33               sll e                          ; CB 33
+  1726  1481  cb34               sll h                          ; CB 34
+  1727  1483  cb35               sll l                          ; CB 35
+  1728  1485  cb36               sls (hl)                       ; CB 36
+  1729  1487  ddcb0036           sls (ix)                       ; DD CB 00 36
+  1730  148b  ddcb0036           sls (ix+0)                     ; DD CB 00 36
+  1731  148f  ddcb7e36           sls (ix+126)                   ; DD CB 7E 36
+  1732  1493  ddcb8036           sls (ix-128)                   ; DD CB 80 36
+  1733  1497  fdcb0036           sls (iy)                       ; FD CB 00 36
+  1734  149b  fdcb0036           sls (iy+0)                     ; FD CB 00 36
+  1735  149f  fdcb7e36           sls (iy+126)                   ; FD CB 7E 36
+  1736  14a3  fdcb8036           sls (iy-128)                   ; FD CB 80 36
+  1737  14a7  cb37               sls a                          ; CB 37
+  1738  14a9  cb30               sls b                          ; CB 30
+  1739  14ab  cb31               sls c                          ; CB 31
+  1740  14ad  cb32               sls d                          ; CB 32
+  1741  14af  cb33               sls e                          ; CB 33
+  1742  14b1  cb34               sls h                          ; CB 34
+  1743  14b3  cb35               sls l                          ; CB 35
+  1744  14b5  cb2e               sra (hl)                       ; CB 2E
+  1745  14b7  ddcb002e           sra (ix)                       ; DD CB 00 2E
+  1746  14bb  ddcb002e           sra (ix+0)                     ; DD CB 00 2E
+  1747  14bf  ddcb7e2e           sra (ix+126)                   ; DD CB 7E 2E
+  1748  14c3  ddcb802e           sra (ix-128)                   ; DD CB 80 2E
+  1749  14c7  fdcb002e           sra (iy)                       ; FD CB 00 2E
+  1750  14cb  fdcb002e           sra (iy+0)                     ; FD CB 00 2E
+  1751  14cf  fdcb7e2e           sra (iy+126)                   ; FD CB 7E 2E
+  1752  14d3  fdcb802e           sra (iy-128)                   ; FD CB 80 2E
+  1753  14d7  cb2f               sra a                          ; CB 2F
+  1754  14d9  cb28               sra b                          ; CB 28
+  1755  14db  cb28cb19           sra bc                         ; CB 28 CB 19
+  1756  14df  cb29               sra c                          ; CB 29
+  1757  14e1  cb2a               sra d                          ; CB 2A
+  1758  14e3  cb2acb1b           sra de                         ; CB 2A CB 1B
+  1759  14e7  cb2b               sra e                          ; CB 2B
+  1760  14e9  cb2c               sra h                          ; CB 2C
+  1761  14eb  cb2ccb1d           sra hl                         ; CB 2C CB 1D
+  1762  14ef  cb2d               sra l                          ; CB 2D
+  1763  14f1  cb3e               srl (hl)                       ; CB 3E
+  1764  14f3  ddcb003e           srl (ix)                       ; DD CB 00 3E
+  1765  14f7  ddcb003e           srl (ix+0)                     ; DD CB 00 3E
+  1766  14fb  ddcb7e3e           srl (ix+126)                   ; DD CB 7E 3E
+  1767  14ff  ddcb803e           srl (ix-128)                   ; DD CB 80 3E
+  1768  1503  fdcb003e           srl (iy)                       ; FD CB 00 3E
+  1769  1507  fdcb003e           srl (iy+0)                     ; FD CB 00 3E
+  1770  150b  fdcb7e3e           srl (iy+126)                   ; FD CB 7E 3E
+  1771  150f  fdcb803e           srl (iy-128)                   ; FD CB 80 3E
+  1772  1513  cb3f               srl a                          ; CB 3F
+  1773  1515  cb38               srl b                          ; CB 38
+  1774  1517  cb39               srl c                          ; CB 39
+  1775  1519  cb3a               srl d                          ; CB 3A
+  1776  151b  cb3b               srl e                          ; CB 3B
+  1777  151d  cb3c               srl h                          ; CB 3C
+  1778  151f  cb3d               srl l                          ; CB 3D
+  1779  1521  96                 sub (hl)                       ; 96
+  1780  1522  9623               sub (hl+)                      ; 96 23
+  1781  1524  962b               sub (hl-)                      ; 96 2B
+  1782  1526  dd9600             sub (ix)                       ; DD 96 00
+  1783  1529  dd9600             sub (ix+0)                     ; DD 96 00
+  1784  152c  dd967e             sub (ix+126)                   ; DD 96 7E
+  1785  152f  dd9680             sub (ix-128)                   ; DD 96 80
+  1786  1532  fd9600             sub (iy)                       ; FD 96 00
+  1787  1535  fd9600             sub (iy+0)                     ; FD 96 00
+  1788  1538  fd967e             sub (iy+126)                   ; FD 96 7E
+  1789  153b  fd9680             sub (iy-128)                   ; FD 96 80
+  1790  153e  d600               sub 0                          ; D6 00
+  1791  1540  d67f               sub 127                        ; D6 7F
+  1792  1542  d6ff               sub 255                        ; D6 FF
+  1793  1544  97                 sub a                          ; 97
+  1794  1545  96                 sub a, (hl)                    ; 96
+  1795  1546  9623               sub a, (hl+)                   ; 96 23
+  1796  1548  962b               sub a, (hl-)                   ; 96 2B
+  1797  154a  dd9600             sub a, (ix)                    ; DD 96 00
+  1798  154d  dd9600             sub a, (ix+0)                  ; DD 96 00
+  1799  1550  dd967e             sub a, (ix+126)                ; DD 96 7E
+  1800  1553  dd9680             sub a, (ix-128)                ; DD 96 80
+  1801  1556  fd9600             sub a, (iy)                    ; FD 96 00
+  1802  1559  fd9600             sub a, (iy+0)                  ; FD 96 00
+  1803  155c  fd967e             sub a, (iy+126)                ; FD 96 7E
+  1804  155f  fd9680             sub a, (iy-128)                ; FD 96 80
+  1805  1562  d600               sub a, 0                       ; D6 00
+  1806  1564  d67f               sub a, 127                     ; D6 7F
+  1807  1566  d6ff               sub a, 255                     ; D6 FF
+  1808  1568  97                 sub a, a                       ; 97
+  1809  1569  90                 sub a, b                       ; 90
+  1810  156a  91                 sub a, c                       ; 91
+  1811  156b  92                 sub a, d                       ; 92
+  1812  156c  93                 sub a, e                       ; 93
+  1813  156d  94                 sub a, h                       ; 94
+  1814  156e  dd94               sub a, ixh                     ; DD 94
+  1815  1570  dd95               sub a, ixl                     ; DD 95
+  1816  1572  fd94               sub a, iyh                     ; FD 94
+  1817  1574  fd95               sub a, iyl                     ; FD 95
+  1818  1576  95                 sub a, l                       ; 95
+  1819  1577  90                 sub b                          ; 90
+  1820  1578  91                 sub c                          ; 91
+  1821  1579  92                 sub d                          ; 92
+  1822  157a  93                 sub e                          ; 93
+  1823  157b  94                 sub h                          ; 94
+  1824  157c  dd94               sub ixh                        ; DD 94
+  1825  157e  dd95               sub ixl                        ; DD 95
+  1826  1580  fd94               sub iyh                        ; FD 94
+  1827  1582  fd95               sub iyl                        ; FD 95
+  1828  1584  95                 sub l                          ; 95
+  1829  1585  ae                 xor (hl)                       ; AE
+  1830  1586  ae23               xor (hl+)                      ; AE 23
+  1831  1588  ae2b               xor (hl-)                      ; AE 2B
+  1832  158a  ddae00             xor (ix)                       ; DD AE 00
+  1833  158d  ddae00             xor (ix+0)                     ; DD AE 00
+  1834  1590  ddae7e             xor (ix+126)                   ; DD AE 7E
+  1835  1593  ddae80             xor (ix-128)                   ; DD AE 80
+  1836  1596  fdae00             xor (iy)                       ; FD AE 00
+  1837  1599  fdae00             xor (iy+0)                     ; FD AE 00
+  1838  159c  fdae7e             xor (iy+126)                   ; FD AE 7E
+  1839  159f  fdae80             xor (iy-128)                   ; FD AE 80
+  1840  15a2  ee00               xor 0                          ; EE 00
+  1841  15a4  ee7f               xor 127                        ; EE 7F
+  1842  15a6  eeff               xor 255                        ; EE FF
+  1843  15a8  af                 xor a                          ; AF
+  1844  15a9  ae                 xor a, (hl)                    ; AE
+  1845  15aa  ae23               xor a, (hl+)                   ; AE 23
+  1846  15ac  ae2b               xor a, (hl-)                   ; AE 2B
+  1847  15ae  ddae00             xor a, (ix)                    ; DD AE 00
+  1848  15b1  ddae00             xor a, (ix+0)                  ; DD AE 00
+  1849  15b4  ddae7e             xor a, (ix+126)                ; DD AE 7E
+  1850  15b7  ddae80             xor a, (ix-128)                ; DD AE 80
+  1851  15ba  fdae00             xor a, (iy)                    ; FD AE 00
+  1852  15bd  fdae00             xor a, (iy+0)                  ; FD AE 00
+  1853  15c0  fdae7e             xor a, (iy+126)                ; FD AE 7E
+  1854  15c3  fdae80             xor a, (iy-128)                ; FD AE 80
+  1855  15c6  ee00               xor a, 0                       ; EE 00
+  1856  15c8  ee7f               xor a, 127                     ; EE 7F
+  1857  15ca  eeff               xor a, 255                     ; EE FF
+  1858  15cc  af                 xor a, a                       ; AF
+  1859  15cd  a8                 xor a, b                       ; A8
+  1860  15ce  a9                 xor a, c                       ; A9
+  1861  15cf  aa                 xor a, d                       ; AA
+  1862  15d0  ab                 xor a, e                       ; AB
+  1863  15d1  ac                 xor a, h                       ; AC
+  1864  15d2  ddac               xor a, ixh                     ; DD AC
+  1865  15d4  ddad               xor a, ixl                     ; DD AD
+  1866  15d6  fdac               xor a, iyh                     ; FD AC
+  1867  15d8  fdad               xor a, iyl                     ; FD AD
+  1868  15da  ad                 xor a, l                       ; AD
+  1869  15db  a8                 xor b                          ; A8
+  1870  15dc  a9                 xor c                          ; A9
+  1871  15dd  aa                 xor d                          ; AA
+  1872  15de  ab                 xor e                          ; AB
+  1873  15df  ac                 xor h                          ; AC
+  1874  15e0  f57ca8677da96ff1   xor hl, bc                     ; F5 7C A8 67 7D A9 6F F1
+  1875  15e8  f57caa677dab6ff1   xor hl, de                     ; F5 7C AA 67 7D AB 6F F1
+  1876  15f0  f5dd7ca8dd67dd7d   xor ix, bc                     ; F5 DD 7C A8 DD 67 DD 7D A9 DD 6F F1
+              a9dd6ff1          
+  1877  15fc  f5dd7caadd67dd7d   xor ix, de                     ; F5 DD 7C AA DD 67 DD 7D AB DD 6F F1
+              abdd6ff1          
+  1878  1608  ddac               xor ixh                        ; DD AC
+  1879  160a  ddad               xor ixl                        ; DD AD
+  1880  160c  f5fd7ca8fd67fd7d   xor iy, bc                     ; F5 FD 7C A8 FD 67 FD 7D A9 FD 6F F1
+              a9fd6ff1          
+  1881  1618  f5fd7caafd67fd7d   xor iy, de                     ; F5 FD 7C AA FD 67 FD 7D AB FD 6F F1
+              abfd6ff1          
+  1882  1624  fdac               xor iyh                        ; FD AC
+  1883  1626  fdad               xor iyl                        ; FD AD
+  1884  1628  ad                 xor l                          ; AD
+  1885                          

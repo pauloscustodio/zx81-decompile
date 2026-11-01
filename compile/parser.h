@@ -13,8 +13,30 @@
 #include "types.h"
 #include <string>
 
-class Parser {
+class Parser : private Scanner {
 public:
+    enum {
+        FLAG_NZ = 0,
+        FLAG_Z = 1,
+        FLAG_NC = 2,
+        FLAG_C = 3,
+        FLAG_PO = 4,
+        FLAG_PE = 5,
+        FLAG_P = 6,
+        FLAG_M = 7,
+        FLAG_NE = FLAG_NZ,
+        FLAG_EQ = FLAG_Z,
+        FLAG_GEU = FLAG_NC,
+        FLAG_LTU = FLAG_C,
+        FLAG_NV = FLAG_PO,
+        FLAG_V = FLAG_PE,
+
+        JR_NZ = 0x20,
+        JR_Z = 0x28,
+        JR_NC = 0x30,
+        JR_C = 0x38,
+    };
+
     explicit Parser(Basic* basic_)
         : basic(basic_) {};
 
@@ -23,7 +45,6 @@ public:
 private:
     Basic* basic = nullptr;
     bool in_asm = false;
-    Scanner scan;
     SourceLoc loc;
     int last_line_num = -1;
 
@@ -65,13 +86,14 @@ private:
     bool parse_defb(AsmLine& asm__line);
     bool parse_defw(AsmLine& asm__line);
     bool parse_defs(AsmLine& asm__line);
+
     bool parse_z80_opcode(AsmLine& asm__line);
     bool parse_single_opcode(AsmLine& asm_line);
     bool parse_ld(AsmLine& asm_line);
     bool parse_alu(AsmLine& asm_line);
     bool parse_ex(AsmLine& asm_line);
     bool parse_bit(AsmLine& asm_line);
-    bool parse_call_jp(AsmLine& asm_line);
+    bool parse_jp_call(AsmLine& asm_line);
     bool parse_rst(AsmLine& asm_line);
     bool parse_ret(AsmLine& asm_line);
     bool parse_jr(AsmLine& asm_line);
@@ -81,14 +103,22 @@ private:
     bool parse_im(AsmLine& asm_line);
     bool parse_push_pop(AsmLine& asm_line);
     bool parse_rotate(AsmLine& asm_line);
+    bool parse_bool(AsmLine& asm_line);
+    bool parse_clr(AsmLine& asm_line);
+    bool parse_ldi(AsmLine& asm_line);
+    bool parse_ldd(AsmLine& asm_line);
+    bool parse_neg(AsmLine& asm_line);
+
     bool parse_dd_sp(int& n);
     bool parse_dd_af(int& n);
     bool parse_bc_de(int& n);
     bool parse_hl_ix_iy(int& pfx);
     bool parse_r1(int& n);
+    bool parse_x8(int& pfx, int& n);
     bool parse_flags_jr(int& n);
     bool parse_flags_jp(int& n);
     bool parse_x_plus_ind(int& pfx, Expr& offset);
+
     void add_sbyte_patch(AsmLine& asm_line, const Expr& expr);
     void add_byte_patch(AsmLine& asm_line, const Expr& expr);
     void add_word_patch(AsmLine& asm_line, const Expr& expr);
