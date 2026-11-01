@@ -724,7 +724,7 @@ bool Parser::parse_primary_expr(Expr& expr) {
 
     // subexpression
     scan.set_pos(p0);
-    if (scan.match("(") && parse_expr(expr) && scan.match(")")) {
+    if (scan.match("(") && parse_conditional_expr(expr) && scan.match(")")) {
         return true;
     }
 
@@ -1039,6 +1039,7 @@ bool Parser::parse_conditional_expr(Expr& expr) {
 }
 
 bool Parser::parse_expr(Expr& expr) {
+    expr.rpn.clear();
     return parse_conditional_expr(expr);
 }
 
