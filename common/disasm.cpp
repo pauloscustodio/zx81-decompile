@@ -81,6 +81,14 @@ void DisasmCode::add_label(const std::string& name, int addr) {
     labels.add(name, addr);
 }
 
+bool DisasmCode::find_label(const std::string& name, int& addr) const {
+    return labels.find(name, addr);
+}
+
+bool DisasmCode::find_label(int addr, std::string& name) const {
+    return labels.find(addr, name);
+}
+
 std::string DisasmCode::get_line_num_label(int line_num) {
     std::string label;
     if (labels.find(line_num, label)) {
@@ -111,7 +119,8 @@ MemType DisasmCode::get_mem_type(int addr) const {
 
 void DisasmCode::set_mem_type(int addr, MemType type, int count) {
     for (int i = 0; i < count; ++i) {
-        if (mem_map[(addr + i) & 0xffff] != MemType::Unknown) {
+        if (mem_map[(addr + i) & 0xffff] != MemType::Unknown &&
+                mem_map[(addr + i) & 0xffff] != type) {
             error("memory overlap at address " + fmt_hex(addr + i, 4));
         }
         mem_map[(addr + i) & 0xffff] = type;
@@ -138,5 +147,5 @@ void DisasmCode::set_code(int addr) {
     // disassemble instruction
     addr++;
 
-    set_mem_type(addr, MemType::Asm, addr - addr0);
+    set_mem_type(addr0, MemType::Asm, addr - addr0);
 }

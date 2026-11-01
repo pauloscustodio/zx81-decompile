@@ -68,6 +68,8 @@ public:
     AsmLabels& get_labels();
     const AsmLabels& get_labels() const;
     void add_label(const std::string& name, int addr);
+    bool find_label(const std::string& name, int& addr) const;
+    bool find_label(int addr, std::string& name) const;
     std::string get_line_num_label(int line_num) ;
     std::string get_asm_label(int addr) ;
 

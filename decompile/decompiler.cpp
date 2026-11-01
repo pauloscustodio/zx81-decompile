@@ -30,7 +30,8 @@ void Decompiler::decompile() {
 
     map_source_lines();
     analyse_ctl_file();
-    analyse_gotos();
+    analyse_goto();
+    analyse_usr();
 }
 
 void Decompiler::decompile_sysvars() {
@@ -560,7 +561,7 @@ void Decompiler::analyse_ctl_file() {
     }
 }
 
-void Decompiler::analyse_gotos() {
+void Decompiler::analyse_goto() {
     // search for GOTO, GOSUB, RUN and line number references
     for (auto& line : basic->source_lines) {
         if (line.type == SourceLine::Type::Basic) {
@@ -585,6 +586,40 @@ void Decompiler::analyse_gotos() {
                                 // replace token with label
                                 next_token.code = T_line_num_ref;
                                 next_token.ident = label;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Decompiler::analyse_usr() {
+    // search for USR and routine addresses
+    for (auto& line : basic->source_lines) {
+        if (line.type == SourceLine::Type::Basic) {
+            for (auto& token : line.tokens) {
+                if (token.code == C_USR) {
+                    size_t index = &token - &line.tokens[0];
+                    if (index + 1 < line.tokens.size()) {
+                        auto& next_token = line.tokens[index + 1];
+                        if (next_token.code == T_float) {
+                            int target_addr = static_cast<int>(next_token.fvalue);
+                            if (target_addr < RAM_ADDR || target_addr >= mem->dpeek(E_LINE)) {
+                                std::cerr << "invalid USR address: " + fmt_hex(target_addr, 4)
+                                          << std::endl;
+                            }
+                            else {
+                                // create new label/use existing one
+                                std::string label = basic->disasm_code.get_asm_label(target_addr);
+
+                                // replace token with label
+                                next_token.code = T_line_addr_ref;
+                                next_token.ident = label;
+
+                                // mark address as Asm code
+                                basic->disasm_code.set_code(target_addr);
                             }
                         }
                     }

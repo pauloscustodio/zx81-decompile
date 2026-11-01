@@ -194,9 +194,7 @@ void Basic::write_source_lines(std::ostream& os) const {
                     os << token.ident;
                     break;
                 case T_rem_code:
-                    for (auto byte : token.bytes) {
-                        os << fmt_hex(byte, 2, "\\");
-                    }
+                    write_asm_lines(os, line.addr + 5, token.bytes);
                     break;
                 case T_line_addr_ref:
                     os << "&" << token.ident;
@@ -226,6 +224,38 @@ void Basic::write_source_lines(std::ostream& os) const {
     if (!source_lines.empty()) {
         os << std::endl;
     }
+}
+
+void Basic::write_asm_lines(std::ostream& os, int addr,
+                            const Bytes& bytes) const {
+    os << std::endl << "#ASM [" << fmt_hex(addr, 4) << "]" << std::endl;
+    for (int i = 0; i < INT(bytes.size()); i++) {
+        int addr1 = addr + i;
+
+        // output label
+        std::string label;
+        if (disasm_code.find_label(addr1, label)) {
+            os << std::endl << label << ":" << std::endl;
+        }
+
+        // output string of unknown bytes
+        if (disasm_code.get_mem_type(addr1) == MemType::Unknown) {
+            os << std::string(16, ' ') << "defb    " << fmt_hex(bytes[i], 2);
+            while (i + 1 < INT(bytes.size()) &&
+                    !disasm_code.find_label(addr + i + 1, label) &&
+                    disasm_code.get_mem_type(addr + i + 1) == MemType::Unknown) {
+                i++;
+                os << "," << fmt_hex(bytes[i], 2);
+            }
+            os << " ; " << static_cast<char>(disasm_code.get_mem_type(addr1)) << std::endl;
+            continue;
+        }
+
+        // fall back to output single byte
+        os << std::string(16, ' ') << "defb    " << fmt_hex(bytes[i], 2) << " ; "
+           << static_cast<char>(disasm_code.get_mem_type(addr1)) << std::endl;
+    }
+    os << "#ENDASM [" << fmt_hex(addr + INT(bytes.size()), 4) << "]" << std::endl;
 }
 
 bool Basic::has_asm_code() const {

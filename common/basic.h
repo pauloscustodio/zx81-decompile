@@ -88,6 +88,7 @@ private:
     void write_dfile(std::ostream& os) const;
     void write_vars(std::ostream& os) const;
     void write_source_lines(std::ostream& os) const;
+    void write_asm_lines(std::ostream& os, int addr, const Bytes& bytes) const;
     bool has_asm_code() const;
     void write_mem_map(std::ostream& os) const;
     void write_labels(std::ostream& os) const;

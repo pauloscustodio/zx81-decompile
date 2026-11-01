@@ -40,5 +40,6 @@ private:
     void init_ctl_mem();
     void map_source_lines();
     void analyse_ctl_file();
-    void analyse_gotos();
+    void analyse_goto();
+    void analyse_usr();
 };
