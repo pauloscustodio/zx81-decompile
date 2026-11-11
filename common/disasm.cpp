@@ -22,18 +22,46 @@
 // labels
 //-----------------------------------------------------------------------------
 
-void Labels::add(const std::string& name, int value) {
-    auto it = by_name.find(name);
-    if (it != by_name.end()) {
-        if (it->second == value) {
-            return;     // nothing to do
+void Labels::add(const std::string& name, int value, bool auto_gen) {
+    // search by name
+    auto it1 = by_name.find(name);
+    if (it1 != by_name.end()) {  // found
+        if (it1->second->value == value) {
+            return; // nothing to do
         }
-        error("label redefinition: " + name + " = " +
-              fmt_hex(value, 4) + " != " + fmt_hex(it->second, 4));
+        else {
+            error("label redefinition: " + name + " = " +
+                  fmt_hex(value, 4) + " != " + fmt_hex(it1->second->value, 4));
+            return;
+        }
     }
 
-    by_name[name] = value;
-    by_value[value] = name;		// overwrite if tow labels with same value
+    // search by value
+    auto it2 = by_value.find(value);
+    if (it2 != by_value.end()) {    // found
+        if (it2->second->auto_generated) {  // create new
+            int old_value = it2->second->value;
+            by_name.erase(it2->second->name);
+            by_value.erase(old_value);
+            add(name, value, auto_gen);     // recurse
+            return;
+        }
+        else {
+            error("label redefinition: " +
+                  name + ", " + it2->second->name + " = " +
+                  fmt_hex(value, 4));
+            return;
+        }
+    }
+
+    // create new entry
+    auto label = std::make_unique<Label>();
+    label->name = name;
+    label->value = value;
+    label->auto_generated = auto_gen;
+
+    by_name[name] = std::move(label);
+    by_value[value] = by_name[name].get();
 }
 
 int Labels::get(const std::string& name) const {
@@ -52,7 +80,7 @@ bool Labels::find(const std::string& name, int& value) const {
         return false;
     }
 
-    value = it->second;
+    value = it->second->value;
     return true;
 }
 
@@ -62,7 +90,7 @@ bool Labels::find(int value, std::string& name) const {
         return false;
     }
 
-    name = it->second;
+    name = it->second->name;
     return true;
 }
 
@@ -72,7 +100,15 @@ void Labels::clear() {
     init();
 }
 
-std::string BasicLabels::add_or_get_from_value(int line_num) {
+std::vector<std::string> Labels::get_names() const {
+    std::vector<std::string> names;
+    for (auto& it : by_name) {
+        names.push_back(it.first);
+    }
+    return names;
+}
+
+std::string BasicLabels::add_auto_gen(int line_num) {
     std::string label;
     if (find(line_num, label)) {
         return label;
@@ -81,7 +117,7 @@ std::string BasicLabels::add_or_get_from_value(int line_num) {
     std::ostringstream oss;
     oss << "Line" << std::setw(5) << std::setfill('_') << line_num;
     label = oss.str();
-    add(label, line_num);
+    add(label, line_num, true);
     return label;
 }
 
@@ -95,14 +131,14 @@ void AsmLabels::init() {
 #undef X
 }
 
-std::string AsmLabels::add_or_get_from_value(int addr) {
+std::string AsmLabels::add_auto_gen(int addr) {
     std::string label;
     if (find(addr, label)) {
         return label;
     }
 
     label = fmt_hex(addr, 4, "L");
-    add(label, addr);
+    add(label, addr, true);
     return label;
 }
 
@@ -155,7 +191,7 @@ std::string Opcode::decode_opcode(const AsmLabels& labels) const {
     }
 
     // get arguments
-    if (args.find("+DIS") != std::string::npos) {
+    if (args.find("+<DIS>") != std::string::npos) {
         std::string s;
         if (dis > 0) {
             s = std::string("+") + std::to_string(dis);
@@ -166,10 +202,10 @@ std::string Opcode::decode_opcode(const AsmLabels& labels) const {
         else {
             s = "";
         }
-        args = str_replace_all(args, "+DIS", s);
+        args = str_replace_all(args, "+<DIS>", s);
     }
 
-    if (args.find("NN") != std::string::npos) {
+    if (args.find("<NN>") != std::string::npos) {
         std::string s;
         int value = 0;
         std::string label;
@@ -189,12 +225,12 @@ std::string Opcode::decode_opcode(const AsmLabels& labels) const {
             s = decode_label(labels, nn);
         }
 
-        args = str_replace_all(args, "NN", s);
+        args = str_replace_all(args, "<NN>", s);
     }
 
-    if (args.find("N") != std::string::npos) {
+    if (args.find("<N>") != std::string::npos) {
         std::string s = fmt_hex(n, 2);
-        args = str_replace_all(args, "N", s);
+        args = str_replace_all(args, "<N>", s);
     }
 
     // result
@@ -302,8 +338,8 @@ std::string Disasm::dd2(int n, int x) {
 std::string Disasm::r1(int n, int x) {
     static const char* n_lut[3][8] = {
         { "b", "c", "d", "e", "h", "l", "(hl)", "a" },
-        { "b", "c", "d", "e", "ixh", "ixl", "(ix+DIS)", "a" },
-        { "b", "c", "d", "e", "iyh", "iyl", "(iy+DIS)", "a" }
+        { "b", "c", "d", "e", "ixh", "ixl", "(ix+<DIS>)", "a" },
+        { "b", "c", "d", "e", "iyh", "iyl", "(iy+<DIS>)", "a" }
     };
     n &= 0x07;
     return n_lut[x][n];
@@ -388,7 +424,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
         case 0x11:
         case 0x21:
         case 0x31:
-            opcode.opcode = "ld " + dd1(b >> 4, x) + ", NN";
+            opcode.opcode = "ld " + dd1(b >> 4, x) + ", <NN>";
             collect_nn(opcode);
             break;
         case 0x02:
@@ -438,7 +474,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
             if (b == 0x36 && x != 0) {
                 collect_dis(opcode);
             }
-            opcode.opcode = "ld " + r1(b >> 3, x) + ", N";
+            opcode.opcode = "ld " + r1(b >> 3, x) + ", <N>";
             collect_n(opcode);
             break;
         case 0x07:
@@ -467,7 +503,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
             opcode.opcode = "rrca";
             break;
         case 0x10:
-            opcode.opcode = "djnz NN";
+            opcode.opcode = "djnz <NN>";
             collect_jr(opcode);
             opcode.is_jump = true;
             break;
@@ -475,7 +511,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
             opcode.opcode = "rla";
             break;
         case 0x18:
-            opcode.opcode = "jr NN";
+            opcode.opcode = "jr <NN>";
             collect_jr(opcode);
             opcode.is_jump = true;
             opcode.ends_flow = true;
@@ -487,33 +523,33 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
         case 0x28:
         case 0x30:
         case 0x38:
-            opcode.opcode = "jr " + flags2(b >> 3) + ", NN";
+            opcode.opcode = "jr " + flags2(b >> 3) + ", <NN>";
             collect_jr(opcode);
             opcode.is_jump = true;
             break;
         case 0x22:
-            opcode.opcode = "ld (NN), " + x1(x);
+            opcode.opcode = "ld (<NN>), " + x1(x);
             collect_nn(opcode);
             break;
         case 0x27:
             opcode.opcode = "daa";
             break;
         case 0x2a:
-            opcode.opcode = "ld " + x1(x) + ", (NN)";
+            opcode.opcode = "ld " + x1(x) + ", (<NN>)";
             collect_nn(opcode);
             break;
         case 0x2f:
             opcode.opcode = "cpl";
             break;
         case 0x32:
-            opcode.opcode = "ld (NN), a";
+            opcode.opcode = "ld (<NN>), a";
             collect_nn(opcode);
             break;
         case 0x37:
             opcode.opcode = "scf";
             break;
         case 0x3a:
-            opcode.opcode = "ld a, (NN)";
+            opcode.opcode = "ld a, (<NN>)";
             collect_nn(opcode);
             break;
         case 0x3f:
@@ -699,12 +735,12 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
         case 0xea:
         case 0xf2:
         case 0xfa:
-            opcode.opcode = "jp " + flags1(b >> 3) + ", NN";
+            opcode.opcode = "jp " + flags1(b >> 3) + ", <NN>";
             collect_nn(opcode);
             opcode.is_jump = true;
             break;
         case 0xc3:
-            opcode.opcode = "jp NN";
+            opcode.opcode = "jp <NN>";
             collect_nn(opcode);
             opcode.is_jump = true;
             opcode.ends_flow = true;
@@ -717,7 +753,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
         case 0xec:
         case 0xf4:
         case 0xfc:
-            opcode.opcode = "call " + flags1(b >> 3) + ", NN";
+            opcode.opcode = "call " + flags1(b >> 3) + ", <NN>";
             collect_nn(opcode);
             opcode.is_jump = true;
             break;
@@ -735,7 +771,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
         case 0xee:
         case 0xf6:
         case 0xfe:
-            opcode.opcode = alu1(b >> 3) + "N";
+            opcode.opcode = alu1(b >> 3) + "<N>";
             collect_n(opcode);
             break;
         case 0xc7:
@@ -766,19 +802,19 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
             }
             break;
         case 0xcd:
-            opcode.opcode = "call NN";
+            opcode.opcode = "call <NN>";
             collect_nn(opcode);
             opcode.is_jump = true;
             break;
         case 0xd3:
-            opcode.opcode = "out (N), a";
+            opcode.opcode = "out (<N>), a";
             collect_n(opcode);
             break;
         case 0xd9:
             opcode.opcode = "exx";
             break;
         case 0xdb:
-            opcode.opcode = "in a, (N)";
+            opcode.opcode = "in a, (<N>)";
             collect_n(opcode);
             break;
         case 0xdd:
@@ -826,7 +862,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
             case 0x53:
             case 0x63:
             case 0x73:
-                opcode.opcode = "ld (NN), " + dd1(b >> 4, 0);
+                opcode.opcode = "ld (<NN>), " + dd1(b >> 4, 0);
                 collect_nn(opcode);
                 break;
             case 0x44:
@@ -852,7 +888,7 @@ bool Disasm::disasm(int addr_, Opcode& opcode) {
             case 0x5b:
             case 0x6b:
             case 0x7b:
-                opcode.opcode = "ld " + dd1(b >> 4, 0) + ", (NN)";
+                opcode.opcode = "ld " + dd1(b >> 4, 0) + ", (<NN>)";
                 collect_nn(opcode);
                 break;
             case 0x4d:
@@ -1225,7 +1261,7 @@ void DisasmCode::set_code(int addr) {
 
         // define label
         if (first) {
-            asm_labels.add_or_get_from_value(addr);
+            asm_labels.add_auto_gen(addr);
             first = false;
         }
 

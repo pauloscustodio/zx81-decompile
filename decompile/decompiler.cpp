@@ -534,7 +534,7 @@ void Decompiler::analyse_ctl_file() {
             }
             else {
                 // get created label or automatically generated label
-                std::string label = basic_labels.add_or_get_from_value(elem.addr);
+                std::string label = basic_labels.add_auto_gen(elem.addr);
                 SourceLine* target_line = it->second;
                 target_line->label = label;
             }
@@ -561,14 +561,32 @@ void Decompiler::analyse_ctl_file() {
         }
         else if (elem.type == CtlElement::Type::Byte) {
             basic->has_asm_code = true;
+
+            if (!elem.label.empty()) {
+                // create new label
+                asm_labels.add(elem.label, elem.addr);
+            }
+
             disasm_code->set_byte(elem.addr, elem.count);
         }
         else if (elem.type == CtlElement::Type::Word) {
             basic->has_asm_code = true;
+
+            if (!elem.label.empty()) {
+                // create new label
+                asm_labels.add(elem.label, elem.addr);
+            }
+
             disasm_code->set_word(elem.addr, elem.count);
         }
         else if (elem.type == CtlElement::Type::Text) {
             basic->has_asm_code = true;
+
+            if (!elem.label.empty()) {
+                // create new label
+                asm_labels.add(elem.label, elem.addr);
+            }
+
             disasm_code->set_text(elem.addr, elem.count);
         }
         else if (elem.type == CtlElement::Type::Header) {
@@ -603,7 +621,7 @@ void Decompiler::analyse_goto() {
                             }
                             else {
                                 // create new label/use existing one
-                                std::string label = basic_labels.add_or_get_from_value(target_line_num);
+                                std::string label = basic_labels.add_auto_gen(target_line_num);
                                 SourceLine* target_line = it->second;
                                 target_line->label = label;
 
@@ -632,13 +650,16 @@ void Decompiler::analyse_usr() {
                         auto& next_token = line.tokens[index + 1];
                         if (next_token.code == T_float) {
                             int target_addr = static_cast<int>(next_token.fvalue);
-                            if (target_addr < RAM_ADDR || target_addr >= mem->dpeek(E_LINE)) {
-                                std::cerr << "invalid USR address: " + fmt_hex(target_addr, 4)
-                                          << std::endl;
+                            if (target_addr >= mem->dpeek(E_LINE)) {
+                                std::cerr << "invalid USR address: "
+                                          << fmt_hex(target_addr, 4) << std::endl;
+                            }
+                            else if (target_addr < RAM_ADDR) {
+                                // call into ROM
                             }
                             else {
                                 // create new label/use existing one
-                                std::string label = asm_labels.add_or_get_from_value(target_addr);
+                                std::string label = asm_labels.add_auto_gen(target_addr);
 
                                 // replace token with label
                                 next_token.code = T_line_addr_ref;

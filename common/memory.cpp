@@ -55,7 +55,7 @@ void Memory::init_basic() {
     // system variables
     dpoke(MEM, MEMBOT);
     dpoke(LAST_K, 0xffff);
-    poke(DEBOUNCE, 0x0f);
+    poke(DB_ST, 0x0f);
     poke(MARGIN, 55);
     dpoke(T_ADDR, 0x0c6b);
     dpoke(FRAMES, 0xffff);

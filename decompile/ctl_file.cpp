@@ -7,6 +7,7 @@
 #include "ctl_file.h"
 #include "errors.h"
 #include "scan.h"
+#include "zx81consts.h"
 #include <fstream>
 #include <string>
 
@@ -74,7 +75,15 @@ void CtlFile::load_ctl_file(const std::string& filename) {
                 error(loc, "invalid count for header element");
                 continue;
             }
-            text = scan.get_rest_of_line();
+            scan.skip_spaces();
+            if (addr < RAM_ADDR) {
+                // BASIC line
+                text = "#: " + scan.get_rest_of_line();
+            }
+            else {
+                // ASM line
+                text = "; " + scan.get_rest_of_line();
+            }
         }
         else if (scan.match(";")) {
             type = CtlElement::Type::Comment;
@@ -82,7 +91,8 @@ void CtlFile::load_ctl_file(const std::string& filename) {
                 error(loc, "invalid count for comment element");
                 continue;
             }
-            text = scan.get_rest_of_line();
+            scan.skip_spaces();
+            text = "; " + scan.get_rest_of_line();
         }
         else {
             error(loc, "invalid type character");

@@ -15,41 +15,32 @@
 #include <unordered_map>
 #include <vector>
 
+struct Label {
+    std::string name;
+    int value;
+    bool auto_generated = true;
+};
+
 class Labels {
 public:
     explicit Labels() = default;
     virtual ~Labels() = default;
 
     virtual void init() {}
-    virtual std::string add_or_get_from_value(int value) = 0;
 
-    void add(const std::string& name, int value);
+    void add(const std::string& name, int value, bool auto_gen = false);
+    virtual std::string add_auto_gen(int value) = 0;
     int get(const std::string& name) const;
 
     bool find(const std::string& name, int& value) const;
     bool find(int value, std::string& name) const;
 
     void clear();
-
-    auto begin() {
-        return by_name.begin();
-    }
-    auto end() {
-        return by_name.end();
-    }
-    auto begin() const {
-        return by_name.begin();
-    }
-    auto end() const {
-        return by_name.end();
-    }
-    auto size() const {
-        return by_name.size();
-    }
+    std::vector<std::string> get_names() const;
 
 private:
-    std::unordered_map<std::string, int> by_name;
-    std::unordered_map<int, std::string> by_value;
+    std::unordered_map<std::string, std::unique_ptr<Label>> by_name;
+    std::unordered_map<int, Label*> by_value;
 };
 
 class BasicLabels : public Labels {
@@ -57,7 +48,7 @@ public:
     explicit BasicLabels() = default;
     virtual ~BasicLabels() = default;
 
-    std::string add_or_get_from_value(int line_num) override;
+    std::string add_auto_gen(int line_num) override;
 };
 
 class AsmLabels : public Labels {
@@ -66,7 +57,7 @@ public:
     virtual ~AsmLabels() = default;
 
     void init() override;
-    std::string add_or_get_from_value(int addr) override;
+    std::string add_auto_gen(int addr) override;
 };
 
 enum class MemType : uint8_t {
@@ -87,7 +78,7 @@ struct Opcode {
     MemType type = MemType::Unknown;
     int addr = 0;
     int size = 0;
-    std::string opcode;			// normalized form, e.g. "jp NN"
+    std::string opcode;			// normalized form, e.g. "jp <NN>"
     std::string refer_to;		// label to refer to instead of nn
     int n = 0;                  // for ld a, n
     int nn = 0;                 // for jp nn, call nn, defb nn, defw nn

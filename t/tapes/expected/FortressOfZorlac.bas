@@ -13,173 +13,233 @@
 
     1  REM 
 #ASM [$4082]
-        defb    $00,$00,$80,$80,$00,$80,$80,$80,$00,$00,$80,$80,$00,$80,$00,$00,$00,$00,$00,$00,$80,$00,$80,$80,$80,$80,$80,$00,$80,$80,$00,$80,$00,$80,$80,$80,$80,$00,$00,$00,$00,$80,$80,$80,$80,$00,$80,$80,$00,$80,$80,$00,$00,$80,$80,$00,$00,$80,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$00,$00,$08,$08,$08,$08,$00,$08,$00,$08,$08,$08,$08,$08,$08,$08,$08,$00,$08,$08,$08,$08,$08,$08,$08,$08,$08,$00,$08,$08,$00,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$EE,$40,$17,$41,$13,$02,$10,$05,$29,$00,$00,$00,$00,$00 ; -
+
+; --------------------------------------------------------------------------------
+; Fortress drawing
+; --------------------------------------------------------------------------------
+
+
+FORTRESS1:
+        defm    "  \::\:: \::\::\::  \::\:: \::  "
+        defm    "    \:: \::\::\::\::\:: \::\:: \::"
+        defm    " \::\::\::\::    \::\::\::\:: \::\::"
+        defm    " \::\::  \::\::  "
+
+SAVE_FORTRESS1:
+        defm    "\::"
+
+FORTRESS2:
+        defm    "\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##"
+        defm    "\##\##\##  \##\##\##\## \## \##\##\##\##"
+        defm    "\##\##\##\## \##\##\##\##\##\##\##\##\## \##"
+        defm    "\## \::\::\::\::\::\::\::\::\::\::\::\::\::\::"
+        defm    "\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::"
+        defm    "\::\::\::\::\::\::\::\::\::\::\::\::"
+
+addr_fortress:
+        defw    $40EE
+
+addr_fortress_save:
+        defw    $4117
+
+fortress_col:
+        defb    $13
+
+fortress_row:
+        defb    $02
+
+fortress_rows:
+        defb    $10
+
+fortress_cols:
+        defb    $05
+
+fortress_blocks:
+        defb    $29
+
+        defb    $00,$00,$00,$00,$00 ; -
+
 #ENDASM [$4126]
 
     2  REM 
 #ASM [$412C]
 
-L412C:
-        ld      hl, $40BB
-        ld      ($411A), hl
-        ld      hl, $4082
-        ld      ($4118), hl
-        ld      a, $14
-        ld      ($411E), a
-        ld      a, $09
-        ld      ($411F), a
-        ld      a, $39
-        ld      ($4120), a
-        call    L4191
-        call    L415B
-        call    L415B
-        dec     b
-        dec     b
-        dec     c
-        dec     c
-        ld      ($411C), bc
-        jp      L418A
+; --------------------------------------------------------------------------------
+; Draw fortress at fortress_row/fortress_col
+; --------------------------------------------------------------------------------
 
-L415B:
+
+DRAW_FORTRESS:
+        ld      hl, SAVE_FORTRESS1
+        ld      (addr_fortress_save), hl
+        ld      hl, FORTRESS1
+        ld      (addr_fortress), hl
+        ld      a, $14                  ; 20 rows
+        ld      (fortress_rows), a
+        ld      a, $09                  ; 9 columns
+        ld      (fortress_cols), a
+        ld      a, $39                  ; 57 blocks
+        ld      (fortress_blocks), a
+        call    rotate_outer_layer
+        call    rotate_inner_layer
+        call    rotate_inner_layer
+        dec     b
+        dec     b
+        dec     c
+        dec     c
+        ld      (fortress_col), bc
+        jp      return
+
+rotate_inner_layer:
         inc     b
         inc     c
-        ld      ($411C), bc
-        ld      ($4118), de
-        ld      a, ($4120)
+        ld      (fortress_col), bc
+        ld      (addr_fortress), de
+        ld      a, (fortress_blocks)
         sub     $08
-        ld      ($4120), a
+        ld      (fortress_blocks), a
         ld      h, $00
         ld      l, a
         add     hl, de
-        ld      ($411A), hl
-        ld      a, ($411E)
+        ld      (addr_fortress_save), hl
+        ld      a, (fortress_rows)
         sub     $02
-        ld      ($411E), a
-        ld      a, ($411F)
+        ld      (fortress_rows), a
+        ld      a, (fortress_cols)
         sub     $02
-        ld      ($411F), a
+        ld      (fortress_cols), a
         nop
         nop
         nop
-        call    L4191
+        call    rotate_outer_layer
 
-L418A:
+return:
         ret
 #ENDASM [$418B]
 
     3  REM 
 #ASM [$4191]
 
-L4191:
-        ld      de, ($411A)
-        ld      a, (de)
-        ld      hl, ($411A)
-        dec     hl
-        ld      b, $00
-        push    af
-        ld      a, ($4120)
-        ld      c, a
-        pop     af
-        lddr
-        ld      hl, ($4118)
-        ld      (hl), a
-        push    hl
-        ld      bc, ($411C)
-        call    L4212
-        ex      de, hl
-        pop     hl
-        push    bc
-        ld      a, ($411E)
-        ld      bc, $0020
+rotate_outer_layer:
+        ld      de, (addr_fortress_save); point to save block
+        ld      a, (de)                 ; get block to be saved to A
+        ld      hl, (addr_fortress_save); get address of save
+        dec     hl                      ; minus 1=last block
+        ld      b, $00                  ; BC will be number of blocks
+        push    af                      ; save end block
+        ld      a, (fortress_blocks)    ; get number of blocks
+        ld      c, a                    ; to BC
+        pop     af                      ; A is block to be saved from end
+        lddr                            ; move all blocks 1 step
+        ld      hl, (addr_fortress)     ; get first address
+        ld      (hl), a                 ; and store saved char
+        push    hl                      ; save address of fortress
+        ld      bc, (fortress_col)      ; coords of fortress to BC
+        call    SCR_POS                 ; screen address to HL
+        ex      de, hl                  ; screen address to DE
+        pop     hl                      ; HL=blocks address
+        push    bc                      ; save coords
+        ld      a, (fortress_rows)      ; A=number of rows
+        ld      bc, $0020               ; distance between rows
 
-L41B9:
-        ldi
-        inc     bc
-        dec     a
+rot_blocks_left_column:
+        ldi                             ; copy one
+        inc     bc                      ; restore BC
+        dec     a                       ; count rows
         cp      $00
-        jr      z, L41C6
+        jr      z, rot_block_next1      ; jump forward if end of rows
         ex      de, hl
-        add     hl, bc
+        add     hl, bc                  ; move to next row
         ex      de, hl
-        jr      L41B9
+        jr      rot_blocks_left_column
 
-L41C6:
-        ld      bc, ($411F)
-        ld      b, $00
-        ldir
-        ld      a, ($411E)
+rot_block_next1:
+        ld      bc, (fortress_cols)
+        ld      b, $00                  ; BC = number of cols
+        ldir                            ; copy bottom row
+        ld      a, (fortress_rows)      ; A = number of rows
         ld      bc, $0022
 
-L41D4:
-        ldi
-        inc     bc
-        dec     a
+rot_blocks_right_column:
+        ldi                             ; copy block
+        inc     bc                      ; restore BC
+        dec     a                       ; count rows
         cp      $00
-        jr      z, L41E3
+        jr      z, rot_block_next2      ; jump forward if finished
         ex      de, hl
         and     a
-        sbc     hl, bc
+        sbc     hl, bc                  ; move to previous row
         ex      de, hl
-        jr      L41D4
+        jr      rot_blocks_right_column
 
-L41E3:
-        ld      a, ($411F)
+rot_block_next2:
+        ld      a, (fortress_cols)      ; A = number of columns
 
-L41E6:
+rot_blocks_top_row:
         dec     de
         dec     de
-        ldi
+        ldi                             ; copy one block
         dec     a
         cp      $00
-        jr      nz, L41E6
+        jr      nz, rot_blocks_top_row  ; jump back if not finished
         pop     bc
-        ex      de, hl
+        ex      de, hl                  ; DE=blocks, HL=screen
         ret
+
         defb    $3E,$F7,$BC,$28,$0D,$3E,$EF,$BC,$28,$08,$3E,$DF,$BC,$28,$03,$C3,$F5,$43,$AF,$B9,$CA,$F5,$43,$C3,$EA,$43 ; -
+
 #ENDASM [$420C]
 
     4  REM 
 #ASM [$4212]
 
-L4212:
-        push    de
+; --------------------------------------------------------------------------------
+; Compute screen position of row-col in BC to HL 
+; Preserves all other registers
+; --------------------------------------------------------------------------------
+
+
+SCR_POS:
+        push    de                      ; save registers
         push    af
         ld      hl, (D_FILE)
         inc     hl
         xor     a
         ld      de, $0021
 
-L421C:
+SCR_POS_next_row:
         cp      b
-        jr      z, L4223
+        jr      z, SCR_POS_row_found
         add     hl, de
         inc     a
-        jr      L421C
+        jr      SCR_POS_next_row
 
-L4223:
+SCR_POS_row_found:
         ld      a, c
         ld      e, $00
 
-L4226:
+SCR_POS_next_col:
         cp      e
-        jr      z, L422D
+        jr      z, SCR_POS_col_found
         inc     e
         inc     hl
-        jr      L4226
+        jr      SCR_POS_next_col
 
-L422D:
+SCR_POS_col_found:
         pop     af
         pop     de
         ret
+
         defb    $00,$00 ; -
+
 #ENDASM [$4232]
 
     5  REM 
 #ASM [$4238]
 
-L4238:
-        ld      hl, $4082
-        ld      de, ($411C)
+erase_hit_block_from_fortress:
+        ld      hl, FORTRESS1
+        ld      de, (fortress_col)
         push    de
         ld      a, b
         sub     d
@@ -214,324 +274,476 @@ L425C:
         add     hl, de
         ld      (hl), $00
         ret
+
         defb    $00,$00,$00,$00,$00 ; -
+
 #ENDASM [$426E]
 
     6  REM 
 #ASM [$4274]
-        defb    $16,$08,$00,$00,$00,$00,$00,$00,$87,$07,$80,$84,$04,$00,$84,$03,$07,$00,$00,$02,$80,$01,$00,$00,$07,$80,$84,$00,$00,$87,$80,$04,$00,$00,$81,$00,$82,$00,$00,$00,$00,$00,$00 ; -
 
-L429F:
-        ld      hl, ($411C)
+alien_col:
+        defb    $16
+
+alien_row:
+        defb    $08
+
+        defb    $00 ; -
+
+
+ALIEN:
+        defm    "     "
+        defm    "\ .\:'\::\':\. "
+        defm    " \':\''\:' "
+        defm    " \ '\::\'  "
+        defm    " \:'\::\': "
+        defm    " \ .\::\.  "
+        defm    " \.: \:. "
+        defm    "     "
+
+; --------------------------------------------------------------------------------
+; Draw alien at fortress_row/fortress_col
+; --------------------------------------------------------------------------------
+
+
+DRAW_ALIEN:
+        ld      hl, (fortress_col)
         ld      a, l
         add     a, $03
-        ld      ($4274), a
-        ld      bc, ($4274)
+        ld      (alien_col), a          ; fortress column+3 to alien column
+        ld      bc, (alien_col)
         push    bc
-        ld      a, ($42EF)
+        ld      a, (alien_direction)
         cp      $00
-        jr      z, L42C2
+        jr      z, alien_downwards
         dec     b
-        call    L42D1
+        call    draw_alien_at_BC
         pop     bc
         ld      a, b
         cp      $06
         ret     nz
         xor     a
 
-L42BE:
-        ld      ($42EF), a
+store_alien_pos:
+        ld      (alien_direction), a
         ret
 
-L42C2:
+alien_downwards:
         inc     b
-        call    L42D1
+        call    draw_alien_at_BC
         pop     bc
         ld      a, b
         cp      $0A
         ret     nz
         ld      a, $01
-        jr      L42BE
+        jr      store_alien_pos
+
         defb    $00,$00 ; -
 
-L42D1:
-        ld      ($4274), bc
-        call    L4212
-        ex      de, hl
-        ld      hl, $4277
-        ld      a, $08
 
-L42DE:
-        ld      bc, $0005
-        ldir
+draw_alien_at_BC:
+        ld      (alien_col), bc
+        call    SCR_POS
+        ex      de, hl                  ; DE=screen address
+        ld      hl, ALIEN               ; source of alien
+        ld      a, $08                  ; 8 rows
+
+alien_each_row:
+        ld      bc, $0005               ; 4 cols
+        ldir                            ; copy one row
         dec     a
         cp      $00
-        ret     z
+        ret     z                       ; exit afyet 8 rows
         ex      de, hl
-        ld      bc, $001C
+        ld      bc, $001C               ; advance to next row
         add     hl, bc
         ex      de, hl
-        jr      L42DE
-        defb    $01,$00,$00,$00,$00 ; -
+        jr      alien_each_row
+
+alien_direction:
+        defb    $01
+
+        defb    $00,$00,$00,$00 ; -
+
 #ENDASM [$42F4]
 
     7  REM 
 #ASM [$42FA]
-        defb    $81,$80,$80,$80,$82,$82,$82,$81,$83,$80,$00,$80,$80,$80,$00,$07,$07,$84,$03,$80,$84,$80,$80,$80,$07,$81,$80,$80,$80,$82,$82,$81,$83,$82,$81,$00,$80,$80,$80,$00,$07,$84,$03,$07,$84,$84,$80,$80,$80,$07,$81,$80,$80,$80,$82,$80,$83,$82,$81,$81,$00,$80,$80,$80,$00,$80,$03,$07,$84,$84,$84,$80,$80,$80,$07,$03,$00,$09 ; -
 
-L4348:
-        ld      bc, ($4346)
+SHIP1:
+        defm    "\.:\::\::\::\:."
+        defm    "\:.\:.\.:\..\::"
+        defm    " \::\::\:: "
+        defm    "\:'\:'\':\''\::"
+        defm    "\':\::\::\::\:'"
 
-L434C:
-        call    L4212
-        ex      de, hl
-        ld      hl, $4345
+SHIP2:
+        defm    "\.:\::\::\::\:."
+        defm    "\:.\.:\..\:.\.:"
+        defm    " \::\::\:: "
+        defm    "\:'\':\''\:'\':"
+        defm    "\':\::\::\::\:'"
+
+SHIP3:
+        defm    "\.:\::\::\::\:."
+        defm    "\::\..\:.\.:\.:"
+        defm    " \::\::\:: "
+        defm    "\::\''\:'\':\':"
+        defm    "\':\::\::\::\:'"
+
+which_ship:
+        defb    $03
+
+ship_col:
+        defb    $00
+
+ship_row:
+        defb    $09
+
+; --------------------------------------------------------------------------------
+; Draw ship at row-col ship_row/ship_col
+; --------------------------------------------------------------------------------
+
+
+DRAW_SHIP:
+        ld      bc, (ship_col)
+
+; --------------------------------------------------------------------------------
+; Draw ship at row-col BC
+; --------------------------------------------------------------------------------
+
+
+DRAW_SHIP_BC:
+        call    SCR_POS                 ; HL=screen position                                    
+        ex      de, hl                  ; DE=screen position
+        ld      hl, which_ship
         ld      a, $01
         cp      (hl)
-        jr      nz, L4361
+        jr      nz, not_ship1
         inc     a
-        ld      ($4345), a
-        ld      hl, $42FA
-        jr      L4377
+        ld      (which_ship), a
+        ld      hl, SHIP1
+        jr      draw_ship_hl
 
-L4361:
+not_ship1:
         ld      a, $02
         cp      (hl)
-        jr      nz, L436F
+        jr      nz, not_ship2
         inc     a
-        ld      ($4345), a
-        ld      hl, $4313
-        jr      L4377
+        ld      (which_ship), a
+        ld      hl, SHIP2
+        jr      draw_ship_hl
 
-L436F:
+not_ship2:
         ld      a, $01
-        ld      ($4345), a
-        ld      hl, $432C
+        ld      (which_ship), a
+        ld      hl, SHIP3
 
-L4377:
-        ld      a, $05
+; DE is screen address, HL is ship
 
-L4379:
-        ld      bc, $0005
-        ldir
+
+draw_ship_hl:
+        ld      a, $05                  ; 5 rows
+
+draw_ship_row:
+        ld      bc, $0005               ; 5 columns
+        ldir                            ; copy one row
         dec     a
         cp      $00
-        ret     z
+        ret     z                       ; return when 5 rows are printed
         ex      de, hl
-        ld      bc, $001C
+        ld      bc, $001C               ; DE+=33-5=28
         add     hl, bc
         ex      de, hl
-        jr      L4379
+        jr      draw_ship_row
+
         defb    $00,$00,$00,$00,$00 ; -
+
 #ENDASM [$438F]
 
     8  REM 
 #ASM [$4395]
+
         defb    $CD,$BB,$02,$ED,$4B,$46,$43,$3E,$FF,$BD,$28,$54,$3D,$BD,$28,$2B,$3D,$BD,$28,$27,$3D,$3D,$BD,$28,$2D,$3E,$F7,$BD,$28,$28,$3E,$EF,$BD,$28,$38,$3E,$DF,$BD,$28,$33,$3E,$F7,$94,$30,$24 ; -
 
-L43C2:
-        ld      a, ($411C)
-        sub     $08
-        cp      c
-        jr      z, L43F5
-        call    L4405
-        inc     c
-        jr      L43F5
 
-L43D0:
+; --------------------------------------------------------------------------------
+; Called in response to key, BC has ship coords
+; --------------------------------------------------------------------------------
+
+
+MOVE_SHIP_RIGHT:
+        ld      a, (fortress_col)       ; A=fortress column
+        sub     $08                     ; -8 (5 for ship + 2 for cannons + 1)
+        cp      c
+        jr      z, save_ship_pos        ; reached limit
+        call    DELETE_SHIP
+        inc     c                       ; move right
+        jr      save_ship_pos
+
+; --------------------------------------------------------------------------------
+; Called in response to key, BC has ship coords
+; --------------------------------------------------------------------------------
+
+
+MOVE_SHIP_DOWN:
         ld      a, $10
         cp      b
-        jr      z, L43F5
-        call    L4405
-        inc     b
-        jr      L43F5
+        jr      z, save_ship_pos        ; reached limit
+        call    DELETE_SHIP
+        inc     b                       ; move down
+        jr      save_ship_pos
 
-L43DB:
+; --------------------------------------------------------------------------------
+; Called in response to key, BC has ship coords
+; --------------------------------------------------------------------------------
+
+
+MOVE_SHIP_UP:
         ld      a, $03
         cp      b
-        jr      z, L43F5
-        call    L4405
-        dec     b
-        jr      L43F5
+        jr      z, save_ship_pos        ; reached limit
+        call    DELETE_SHIP
+        dec     b                       ; move up
+        jr      save_ship_pos
 
-L43E6:
+; --------------------------------------------------------------------------------
+; Called in response to key, BC has ship coords
+; --------------------------------------------------------------------------------
+
+
+MOVE_SHIP_LEFT:
         xor     a
         cp      c
-        jr      z, L43F5
-        call    L4405
-        dec     c
-        jr      L43F5
+        jr      z, save_ship_pos        ; reached limit
+        call    DELETE_SHIP
+        dec     c                       ; move right
+        jr      save_ship_pos
+
         defb    $C5,$CD,$31,$44,$C1 ; -
 
-L43F5:
-        ld      ($4346), bc
-        call    L4348
+
+save_ship_pos:
+        ld      (ship_col), bc
+        call    DRAW_SHIP
         ret
+
         defb    $00,$00 ; -
+
 #ENDASM [$43FF]
 
     9  REM 
 #ASM [$4405]
 
-L4405:
-        push    bc
-        ld      bc, ($4346)
-        call    L4212
-        ld      a, $05
-        ld      de, $001C
+; --------------------------------------------------------------------------------
+; Delete ship before moving it
+; --------------------------------------------------------------------------------
 
-L4412:
-        ld      b, $05
 
-L4414:
-        ld      (hl), $00
+DELETE_SHIP:
+        push    bc                      ; save coords
+        ld      bc, (ship_col)
+        call    SCR_POS                 ; HL=screen address
+        ld      a, $05                  ; 5 rows
+        ld      de, $001C               ; distance in screen between rows
+
+delete_row:
+        ld      b, $05                  ; 5 cols
+
+delete_col:
+        ld      (hl), $00               ; delete char
         inc     hl
-        djnz    L4414
-        add     hl, de
+        djnz    delete_col
+        add     hl, de                  ; next row
         dec     a
         cp      $00
-        jr      nz, L4412
-        pop     bc
+        jr      nz, delete_row
+        pop     bc                      ; restore coords
         ret
+
         defb    $00,$00,$00,$00,$00 ; -
+
 #ENDASM [$4426]
 
    10  REM 
 #ASM [$442C]
-        defb    $00,$11,$12,$0A,$12 ; -
 
-L4431:
-        ld      a, ($442C)
+torpedo_running:
+        defb    $00
+
+torpedo_col:
+        defb    $11
+
+torpedo_row:
+        defb    $12
+
+topedo_pos0:
+        defw    $120A
+
+; --------------------------------------------------------------------------------
+; Called in response to key, BC has ship coords
+; --------------------------------------------------------------------------------
+
+
+FIRE_TORPEDO:
+        ld      a, (torpedo_running)    ; is a torpedo on the way?
         cp      $01
-        ret     z
-        ld      hl, ($4346)
+        ret     z                       ; return if yes
+        ld      hl, (ship_col)
         inc     h
         inc     h
         inc     l
         inc     l
         inc     l
         inc     l
-        ld      ($442D), hl
-        ld      ($442F), hl
+        ld      (torpedo_col), hl       ; torpedo coord is mouth of ship
+        ld      (topedo_pos0), hl       ; make a copy of the cooords - why?
         ld      b, h
         ld      c, l
-        call    L4212
-        ld      (hl), $34
+        call    SCR_POS                 ; HL=screen position
+        ld      (hl), $34               ; draw torpedo
         ld      a, $01
-        ld      ($442C), a
+        ld      (torpedo_running), a    ; signal torpedo on the way
         ret
+
         defb    $00,$00,$00,$00,$00 ; -
+
 #ENDASM [$4458]
 
    11  REM 
 #ASM [$445E]
-        defb    $00,$00 ; -
 
-L4460:
+WALL_HIT:
+        defb    $00
+
+ALIEN_HIT:
+        defb    $00
+
+; --------------------------------------------------------------------------------
+; moves torpedo if it has been created
+; --------------------------------------------------------------------------------
+
+
+MOVE_TORPEDO:
         xor     a
-        ld      ($445E), a
-        ld      ($445F), a
-        ld      a, ($442C)
+        ld      (WALL_HIT), a
+        ld      (ALIEN_HIT), a
+        ld      a, (torpedo_running)
         cp      $00
-        ret     z
-        ld      bc, ($442D)
-        call    L4212
+        ret     z                       ; torpedo was not fired, return
+        ld      bc, (torpedo_col)
+        call    SCR_POS                 ; HL=torpedo coord
         ld      a, $34
-        cp      (hl)
-        jr      nz, L447B
-        ld      (hl), $00
+        cp      (hl)                    ; is there a torpedo?
+        jr      nz, topedo_erased       ; jump forward if not
+        ld      (hl), $00               ; erase it
 
-L447B:
-        ld      de, ($411C)
+topedo_erased:
+        ld      de, (fortress_col)
         ld      a, e
         dec     a
         sub     c
-        jr      z, L448F
-        jr      c, L448F
-        inc     hl
+        jr      z, torpedo_hit          ; torpedo col == fortress col -1
+        jr      c, torpedo_hit          ; torpedo col >  fortress col -1
+        inc     hl                      ; move torpedo
 
-L4487:
-        ld      (hl), $34
+draw_torpedo_store_pos:
+        ld      (hl), $34               ; draw it
         inc     c
-        ld      ($442D), bc
+        ld      (torpedo_col), bc       ; store new coords
         ret
 
-L448F:
+torpedo_hit:
         inc     hl
         ld      a, e
-        add     a, $04
+        add     a, $04                  ; A=fortress-col+4 (alien)
         sub     c
-        jr      z, L44B6
+        jr      z, stop_torpedo         ; inside alien - stop torpedo
         xor     a
-        cp      (hl)
-        jr      z, L4487
+        cp      (hl)                    ; hit space - continue
+        jr      z, draw_torpedo_store_pos
         ld      a, $80
-        cp      (hl)
-        jr      z, L44AB
+        cp      (hl)                    ; hit black border
+        jr      z, hit_fortress
         ld      a, $08
-        cp      (hl)
-        jr      z, L44AB
+        cp      (hl)                    ; hit gray border
+        jr      z, hit_fortress
         ld      a, $01
-        ld      ($445F), a
-        jr      L44B6
+        ld      (ALIEN_HIT), a
+        jr      stop_torpedo
 
-L44AB:
+hit_fortress:
         inc     c
-        ld      (hl), $00
-        call    L4238
+        ld      (hl), $00               ; erase block
+        call    erase_hit_block_from_fortress
         ld      a, $01
-        ld      ($445E), a
+        ld      (WALL_HIT), a
 
-L44B6:
+stop_torpedo:
         xor     a
-        ld      ($442C), a
+        ld      (torpedo_running), a
         ret
+
         defb    $00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+
 #ENDASM [$44C4]
 
    12  REM 
 #ASM [$44CA]
-        defb    $00,$80,$80,$80,$00,$00,$00 ; -
 
-L44D1:
-        ld      bc, $0301
-        call    L4212
-        ex      de, hl
-        ld      b, $0B
+BLOCK1:
+        defm    " \::\::"               ; WBB block
 
-L44DA:
-        ld      hl, $44CA
-        ldi
-        ldi
-        ldi
-        djnz    L44DA
-        ld      a, $05
+save_block1:
+        defm    "\::"
 
-L44E7:
+        defb    $00,$00,$00 ; -
+
+
+; --------------------------------------------------------------------------------
+; Draw rotating border and ship
+; --------------------------------------------------------------------------------
+
+
+INTRO_SCR:
+        ld      bc, $0301               ; row 3, col 1
+        call    SCR_POS                 ; HL=screen address
+        ex      de, hl                  ; DE=screen address
+        ld      b, $0B                  ; 10 times+1 for one LDI decrementing B
+
+draw_top_bar:
+        ld      hl, BLOCK1
+        ldi                             ; copy block to screen
+        ldi                             ; three times
+        ldi
+        djnz    draw_top_bar            ; 30 chars copied (LDI decs BC, DJNZ decs B)
+        ld      a, $05                  ; copy 5 blocks of 3 chars
+
+draw_right_bar:
         ld      b, $03
-        ld      hl, $44CA
+        ld      hl, BLOCK1
 
-L44EC:
-        push    bc
-        ld      bc, $0020
+each_right_bar_block:
+        push    bc                      ; save BC
+        ld      bc, $0020               ; add 32 to DE, LDI with add 1 more
         ex      de, hl
-        add     hl, bc
+        add     hl, bc                  ; HL+=32
         pop     bc
-        ex      de, hl
-        ldi
-        djnz    L44EC
-        dec     a
-        cp      $00
-        jr      nz, L44E7
-        ld      bc, $0020
+        ex      de, hl                  ; DE+=32
+        ldi                             ; DE+=33
+        djnz    each_right_bar_block    ; copy 3 blocks
+        dec     a                       ; times 5
+        cp      $00                     ; NOTE: not needed
+        jr      nz, draw_right_bar
+        ld      bc, $0020               ; add 32 to DE
         ex      de, hl
         add     hl, bc
-        ex      de, hl
-        ld      b, $0A
+        ex      de, hl                  ; DE+=32
+        ld      b, $0A                  ; 10 blocks of 3 = 30
 
-L4505:
-        ld      hl, $44CA
-        ld      a, (hl)
+draw_bottom_bar:
+        ld      hl, BLOCK1
+        ld      a, (hl)                 ; copy 3 chars
         ld      (de), a
         inc     hl
         dec     de
@@ -541,616 +753,786 @@ L4505:
         dec     de
         ld      a, (hl)
         ld      (de), a
-        nop
+        nop                             ; NOTE: not needed
         dec     de
-        djnz    L4505
-        ld      bc, $0020
+        djnz    draw_bottom_bar         ; repeat 10 times
+        ld      bc, $0020               ; subtract 32 from DE
         ex      de, hl
         and     a
-        sbc     hl, bc
+        sbc     hl, bc                  ; DE-=32
         ex      de, hl
-        ld      a, $05
+        ld      a, $05                  ; copy 5 blocks of 3 chars
 
-L4520:
+draw_left_bar:
         ld      b, $03
-        ld      hl, $44CA
+        ld      hl, BLOCK1
 
-L4525:
-        push    af
+each_left_bar_block:
+        push    af                      ; copy one char
         ld      a, (hl)
         ld      (de), a
         pop     af
         push    bc
-        ld      bc, $0021
+        ld      bc, $0021               ; subtract 33 from address
         ex      de, hl
         and     a
-        sbc     hl, bc
+        sbc     hl, bc                  ; DE-=33
         pop     bc
         ex      de, hl
         inc     hl
-        djnz    L4525
+        djnz    each_left_bar_block     ; copy 3 blocks
         dec     a
         cp      $00
-        jr      nz, L4520
-        ld      a, ($44CA)
-        ld      ($44CD), a
-        ld      a, ($44CB)
-        ld      ($44CA), a
-        ld      a, ($44CC)
-        ld      ($44CB), a
-        ld      a, ($44CD)
-        ld      ($44CC), a
-        ld      bc, $0B0D
-        jp      L434C
+        jr      nz, draw_left_bar       ; times 5
+
+; rotate block
+
+        ld      a, (BLOCK1)
+        ld      (save_block1), a
+        ld      a, (BLOCK1+1)
+        ld      (BLOCK1), a
+        ld      a, (BLOCK1+2)
+        ld      (BLOCK1+1), a
+        ld      a, (save_block1)
+        ld      (BLOCK1+2), a
+        ld      bc, $0B0D               ; line 11, column 13
+        jp      DRAW_SHIP_BC
 #ENDASM [$4559]
 
    13  REM 
 #ASM [$455F]
-        defb    $00,$81,$84,$07,$00,$81,$86,$07,$82,$81,$82,$07,$00,$81,$84,$07,$84,$81,$86,$07,$00,$81,$82,$07,$00,$81,$80,$00,$07,$82,$80,$81,$80,$07,$80,$80,$81,$00,$07,$80,$80,$81,$80,$07,$80,$84,$81,$00,$80,$07,$00,$84,$07,$82,$00,$82,$81,$84,$06,$82,$07,$82,$00,$84,$81,$84,$06,$82,$07,$84,$00,$84,$81,$82,$00,$81,$80,$80,$80,$82,$82,$82,$82,$82,$80,$00,$80,$00,$80,$00,$80,$84,$84,$84,$84,$84,$80,$80,$80,$07,$04 ; -
 
-L45C4:
-        ld      de, $0019
-        ld      a, ($45C3)
+ROTATED_SHIP1:
+        defm    " \.:\':\:' "
+        defm    "\.:\'.\:'\:.\.:"
+        defm    "\:.\:' \.:\':"
+        defm    "\:'\':\.:\'.\:'"
+        defm    " \.:\:.\:' "
+
+ROTATED_SHIP2:
+        defm    "\.:\:: \:'\:."
+        defm    "\::\.:\::\:'\::"
+        defm    "\::\.: \:'\::"
+        defm    "\::\.:\::\:'\::"
+        defm    "\':\.: \::\:'"
+
+ROTATED_SHIP3:
+        defm    " \':\:'\:. "
+        defm    "\:.\.:\':\.'\:."
+        defm    "\:'\:. \':\.:"
+        defm    "\':\.'\:.\:'\':"
+        defm    " \':\.:\:. "
+
+ROTATED_SHIP4:
+        defm    "\.:\::\::\::\:."
+        defm    "\:.\:.\:.\:.\::"
+        defm    " \:: \:: "
+        defm    "\::\':\':\':\':"
+        defm    "\':\::\::\::\:'"
+
+rotate_count:
+        defb    $04
+
+ROTATE_SHIP:
+        ld      de, $0019               ; 5*5=25 bytes per ship
+        ld      a, (rotate_count)       ; counts 1 to 4
         inc     a
         cp      $05
-        jr      nz, L45D1
+        jr      nz, store_count
         ld      a, $01
 
-L45D1:
-        ld      ($45C3), a
-        ld      hl, $4546
+store_count:
+        ld      (rotate_count), a
+        ld      hl, $4546               ; address of ship1-25 bytes
         ld      b, a
 
-L45D8:
+add_25:
         add     hl, de
-        djnz    L45D8
-        push    hl
-        ld      bc, ($4346)
-        call    L4212
-        ex      de, hl
-        pop     hl
-        jp      L4377
+        djnz    add_25
+        push    hl                      ; save source address of ship
+        ld      bc, (ship_col)          ; get ship position
+        call    SCR_POS                 ; HL = screen position
+        ex      de, hl                  ; DE = screen position
+        pop     hl                      ; HL = source of rotated ship
+        jp      draw_ship_hl
+
         defb    $00,$00,$00,$00,$00 ; -
+
 #ENDASM [$45ED]
 
    14  REM 
 #ASM [$45F3]
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$34,$00,$00,$00,$00,$00,$00,$00,$00,$FA,$45 ; -
 
-L4606:
-        ld      hl, ($4604)
-        dec     hl
-        ld      bc, $45F3
+torpedo_path:
+        defm    "        O        "
+
+intro_torpedo_pos:
+        defw    $45FA
+
+; --------------------------------------------------------------------------------
+; Fire intro torpedo
+; --------------------------------------------------------------------------------
+
+
+INTRO_FIRE_TORPEDO:
+        ld      hl, (intro_torpedo_pos)
+        dec     hl                      ; move back one pos
+        ld      bc, torpedo_path
         and     a
         sbc     hl, bc
-        jr      nc, L4617
-        ld      hl, $45FB
-        jr      L4618
+        jr      nc, restore_torpedo_pos
+        ld      hl, $45FB               ; reached start, go back to end
+        jr      draw_torpedo_path
 
-L4617:
+restore_torpedo_pos:
         add     hl, bc
 
-L4618:
+draw_torpedo_path:
         push    hl
-        ld      ($4604), hl
-        ld      bc, $0D12
-        call    L4212
+        ld      (intro_torpedo_pos), hl
+        ld      bc, $0D12               ; row 13, col 18
+        call    SCR_POS                 ; screen pos in HL
         pop     de
-        ex      de, hl
-        ld      bc, $0008
-        ldir
+        ex      de, hl                  ; DE=screen, HL=torpedo path
+        ld      bc, $0008               ; 1 torpedo and 7 blanks
+        ldir                            ; draw
         ret
 #ENDASM [$462A]
 
    15  REM 
 #ASM [$4630]
 
-L4630:
-        ld      a, ($411C)
-        sub     $02
+; --------------------------------------------------------------------------------
+; Draw the 4 cannons in front of the fortress
+; --------------------------------------------------------------------------------
+
+
+DRAW_CANONS:
+        ld      a, (fortress_col)
+        sub     $02                     ; fortress column - 2
         ld      c, a
-        ld      b, $05
-        call    L4647
+        ld      b, $05                  ; row 5
+        call    draw_cannon
         nop
-        call    L4647
-        call    L4647
+        call    draw_cannon
+        call    draw_cannon
         nop
-        call    L4647
+        call    draw_cannon
         ret
 
-L4647:
-        call    L4212
-        ld      (hl), $81
+draw_cannon:
+        call    SCR_POS                 ; draw cannon at roc-col BC
+        ld      (hl), $81               ; top part of cannon
         ld      de, $0021
-        add     hl, de
-        ld      (hl), $02
-        inc     b
+        add     hl, de                  ; add 33
+        ld      (hl), $02               ; bottom part of cannon
+        inc     b                       ; leave 4 rows interval
         inc     b
         inc     b
         inc     b
         ret
+
         defb    $00,$00,$00 ; -
+
 #ENDASM [$465A]
 
    16  REM 
 #ASM [$4660]
-        defb    $00,$11,$00 ; -
 
-L4663:
-        ld      a, ($4662)
+bomb_col:
+        defb    $00
+
+bomb_row:
+        defb    $11
+
+bomb_running:
+        defb    $00
+
+; --------------------------------------------------------------------------------
+; select bomb position from fortress and ship position
+; --------------------------------------------------------------------------------
+
+
+FIRE_BOMB:
+        ld      a, (bomb_running)
         cp      $01
-        ret     z
-        ld      a, ($411C)
+        ret     z                       ; exit if bomb is still running
+        ld      a, (fortress_col)
         sub     $03
-        ld      l, a
-        ld      a, ($4347)
-        ld      h, a
+        ld      l, a                    ; L=fortress-col - 3
+        ld      a, (ship_row)
+        ld      h, a                    ; H=ship row
         ld      a, $05
         sub     h
-        jr      c, L467C
-        ld      h, $05
-        jr      L4690
+        jr      c, not_cannon1
+        ld      h, $05                  ; fire from row 5
+        jr      do_fire_bomb
 
-L467C:
+not_cannon1:
         ld      a, $09
         sub     h
-        jr      c, L4685
-        ld      h, $09
-        jr      L4690
+        jr      c, not_cannon2
+        ld      h, $09                  ; fire from row 9
+        jr      do_fire_bomb
 
-L4685:
+not_cannon2:
         ld      a, $0D
         sub     h
-        jr      c, L468E
-        ld      h, $0D
-        jr      L4690
+        jr      c, not_cannon3
+        ld      h, $0D                  ; fire from row 13
+        jr      do_fire_bomb
 
-L468E:
-        ld      h, $11
+not_cannon3:
+        ld      h, $11                  ; fire from row 17
 
-L4690:
-        ld      ($4660), hl
+do_fire_bomb:
+        ld      (bomb_col), hl
         ld      a, $01
-        ld      ($4662), a
+        ld      (bomb_running), a
         ret
 #ENDASM [$4699]
 
    17  REM 
 #ASM [$469F]
-        defb    $00 ; -
 
-L46A0:
+SHIP_HIT:
+        defb    $00
+
+DRAW_BOMB:
         xor     a
-        ld      ($469F), a
-        ld      bc, ($4660)
-        call    L4212
-        ld      (hl), $00
+        ld      (SHIP_HIT), a           ; clear ship-hit
+        ld      bc, (bomb_col)          ; get position of bomb
+        call    SCR_POS                 ; HL = screen address of bomb
+        ld      (hl), $00               ; delete bomb
         xor     a
-        cp      c
-        jr      nz, L46B5
-        ld      ($4662), a
+        cp      c                       ; compare column with zero
+        jr      nz, move_bomb           ; jump forward if not at col zero
+        ld      (bomb_running), a       ; at col zero, clear bomb-running
         ret
 
-L46B5:
-        dec     c
-        dec     hl
-        cp      (hl)
-        jr      z, L46BF
+move_bomb:
+        dec     c                       ; move bomb left in column
+        dec     hl                      ; and screen address
+        cp      (hl)                    ; did we hit something?
+        jr      z, bomb_no_hit          ; jump forward if not
         ld      a, $34
-        cp      (hl)
-        jr      nz, L46C6
+        cp      (hl)                    ; did we hit the torpedo?
+        jr      nz, bomb_hit_ship       ; jump if not, we hit the ship
 
-L46BF:
-        ld      (hl), $04
-        ld      ($4660), bc
+bomb_no_hit:
+        ld      (hl), $04               ; draw bomb
+        ld      (bomb_col), bc
         ret
 
-L46C6:
-        inc     (hl)
-        ld      (L46C6), a
+bomb_hit_ship:
+        inc     (hl)                    ; show rubish on hit-point
+        ld      (bomb_hit_ship), a      ; NOTE: should not be here
+                                        ; writes a $34 on the code address, which is inc (hl)
         ld      a, $01
-        ld      ($469F), a
+        ld      (SHIP_HIT), a
         ret
+
         defb    $00,$00,$00,$00,$00 ; -
+
 #ENDASM [$46D5]
 
    18  REM 
 #ASM [$46DB]
-        defb    $61,$00 ; -
 
-L46DD:
-        ld      hl, ($46DB)
+timer_fortress_move:
+        defw    $0061                   ; count times until fortress moves
+
+; --------------------------------------------------------------------------------
+; advance timer and move fortress left if it reaches $C8
+; --------------------------------------------------------------------------------
+
+
+CHECK_FORTRESS_MOVE:
+        ld      hl, (timer_fortress_move)
         inc     hl
+
+FORTRESS_MOVE_COUNT:
         ld      de, $00C8
         and     a
         sbc     hl, de
-        jr      z, L46EE
+        jr      z, do_fortress_move
         add     hl, de
-        ld      ($46DB), hl
-        ret
+        ld      (timer_fortress_move), hl
+        ret                             ; not time yet to move
 
-L46EE:
+do_fortress_move:
         ld      hl, $0000
-        ld      ($46DB), hl
-        call    L47E1
-        ld      bc, ($411C)
+        ld      (timer_fortress_move), hl
+                                        ; reset timer
+        call    DELETE_TORPEDO
+        ld      bc, (fortress_col)
+        dec     c                       ; move fortress one position left
+        ld      (fortress_col), bc
         dec     c
-        ld      ($411C), bc
         dec     c
-        dec     c
-        call    L4212
-        ld      a, $14
+        call    SCR_POS                 ; minus 2=cannons column
+        ld      a, $14                  ; 20 lines
 
-L4707:
-        ld      bc, $000D
-        ld      d, h
+move_next_row:
+        ld      bc, $000D               ; 13 chars = fortress+cannons
+        ld      d, h                    ; destintion
         ld      e, l
-        inc     hl
-        ldir
+        inc     hl                      ; source=destination+1
+        ldir                            ; move row
         dec     hl
-        ld      (hl), $00
-        ld      bc, $0014
+        ld      (hl), $00               ; delete char to the right
+        ld      bc, $0014               ; move to next line
         add     hl, bc
         dec     a
         cp      $00
-        jr      nz, L4707
+        jr      nz, move_next_row       ; next row
         ret
 #ENDASM [$471C]
 
    19  REM 
 #ASM [$4722]
-        defb    $38,$04,$00,$1D,$1C,$24,$1C,$10,$27,$E8,$03,$64,$00,$0A,$00,$01,$00,$00,$00,$01 ; -
 
-L4736:
-        xor     a
-        ld      ($4735), a
-        ld      hl, ($4722)
-        ld      ($4733), hl
-        ld      bc, $4724
-        ld      hl, $4729
-        push    hl
+SCORE:
+        defw    $0438
 
-L4747:
+NUM_BUFFER:
+        defb    $00
+
+        defb    $1D,$1C,$24,$1C ; -
+
+
+N10000:
+        defw    $2710
+
+N1000:
+        defw    $03E8
+
+N100:
+        defw    $0064
+
+N10:
+        defw    $000A
+
+N1:
+        defw    $0001
+
+PRINT_ACC:
+        defw    $0000
+
+HAVE_DIGITS:
+        defb    $01
+
+; Note: does not work for 0, outputs all blanks
+
+
+SCORE_I2A:
         xor     a
-        pop     hl
+        ld      (HAVE_DIGITS), a
+        ld      hl, (SCORE)             ; get SCORE
+        ld      (PRINT_ACC), hl         ; put in number to print
+        ld      bc, NUM_BUFFER          ; output buffer
+        ld      hl, N10000              ; table of divisors
+        push    hl                      ; save address of table
+
+next_divisor:
+        xor     a
+        pop     hl                      ; HL=next divisor address
         ld      e, (hl)
         inc     hl
-        ld      d, (hl)
-        dec     hl
-        push    hl
+        ld      d, (hl)                 ; DE=next divisor
+        dec     hl                      ; restore HL
+        push    hl                      ; save HL
 
-L474E:
-        ld      hl, ($4733)
+subtract_divisor:
+        ld      hl, (PRINT_ACC)         ; get accumulator
         and     a
-        sbc     hl, de
-        ld      ($4733), hl
-        jr      c, L475C
-        inc     a
-        jr      L474E
+        sbc     hl, de                  ; subtract divisor
+        ld      (PRINT_ACC), hl         ; store accumulator
+        jr      c, subtraction_overflowed
+                                        ; jump forward if overflowed
+        inc     a                       ; count one more
+        jr      subtract_divisor
 
-L475C:
-        add     hl, de
+subtraction_overflowed:
+        add     hl, de                  ; restore accumulator
         cp      $00
-        jr      nz, L476A
-        ld      a, ($4735)
+        jr      nz, make_digit          ; jump forward if not zero
+        ld      a, (HAVE_DIGITS)        ; if this digit is 0 and have_digits is 0, output a space
         cp      $00
         ld      a, $00
-        jr      z, L4773
+        jr      z, output_digit
 
-L476A:
-        add     a, $1C
+make_digit:
+        add     a, $1C                  ; add '0'
         push    af
         ld      a, $01
-        ld      ($4735), a
+        ld      (HAVE_DIGITS), a
         pop     af
 
-L4773:
-        ld      ($4733), hl
-        ld      (bc), a
+output_digit:
+        ld      (PRINT_ACC), hl         ; restore accumulator
+        ld      (bc), a                 ; store digit
         inc     bc
-        pop     hl
+        pop     hl                      ; advance in divisor table
         inc     hl
         inc     hl
         push    hl
         ld      a, e
-        cp      $01
-        jr      nz, L4747
+        cp      $01                     ; check for last divisor
+        jr      nz, next_divisor
         pop     hl
         ret
+
         defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+
 #ENDASM [$478D]
 
    20  REM 
 #ASM [$4793]
 
-L4793:
-        ld      a, ($445F)
+INCR_SCORE:
+        ld      a, (ALIEN_HIT)
         cp      $01
         ret     z
-        ld      a, ($445E)
+        ld      a, (WALL_HIT)
         cp      $00
         ret     z
         xor     a
-        ld      ($445E), a
+        ld      (WALL_HIT), a
         ld      de, $0003
-        ld      hl, ($442F)
+        ld      hl, (topedo_pos0)
         ld      h, $00
         and     a
         sbc     hl, de
         ex      de, hl
-        ld      hl, ($4722)
-        add     hl, de
-        add     hl, de
-        add     hl, de
-        add     hl, de
-        add     hl, de
-        ld      ($4722), hl
-        call    L4736
-        ld      hl, (D_FILE)
-        ld      de, $0012
-        add     hl, de
-        ex      de, hl
-        ld      hl, $4724
-        ld      b, $05
+        ld      hl, (SCORE)
 
-L47CA:
+score_multiply:
+        add     hl, de
+        add     hl, de
+        add     hl, de
+        add     hl, de
+        add     hl, de
+        ld      (SCORE), hl             ; save score
+        call    SCORE_I2A               ; convert to digit sequence
+        ld      hl, (D_FILE)            ; display
+        ld      de, $0012               ; add position of score
+        add     hl, de
+        ex      de, hl                  ; to DE
+        ld      hl, NUM_BUFFER          ; HL=number buffer
+        ld      b, $05                  ; 5 digits
+
+out_digit:
         ld      a, (hl)
-        cp      $00
-        jr      z, L47D5
-        ldi
-        inc     bc
-        djnz    L47CA
+        cp      $00                     ; is it a blank?
+        jr      z, skip_blanks
+        ldi                             ; copy digit
+        inc     bc                      ; restore BC
+        djnz    out_digit               ; next digit
         ret
 
-L47D5:
+skip_blanks:
         inc     hl
-        djnz    L47CA
+        djnz    out_digit               ; next digit
         ret
+
         defb    $00,$00 ; -
+
 #ENDASM [$47DB]
 
    21  REM 
 #ASM [$47E1]
 
-L47E1:
-        ld      bc, ($442D)
-        call    L4212
-        ld      a, $34
+DELETE_TORPEDO:
+        ld      bc, (torpedo_col)
+        call    SCR_POS
+        ld      a, $34                  ; does position has a torpedo?
         cp      (hl)
-        ret     nz
-        ld      (hl), $00
+        ret     nz                      ; ret if not
+        ld      (hl), $00               ; delete torpedo
         ret
 
-L47EF:
+DELETE_BOMB:
         ldi
         ld      h, b
         ld      b, (hl)
-        call    L4212
-        ld      (hl), $00
+        call    SCR_POS
+        ld      (hl), $00               ; delete bomb
         ret
 #ENDASM [$47F9]
 
    22  REM 
 #ASM [$47FF]
 
-L47FF:
-        ld      b, $3A
-        ld      hl, $4082
+; --------------------------------------------------------------------------------
+; Init restored fortress
+; --------------------------------------------------------------------------------
 
-L4804:
+
+INIT_FORTRESS:
+        ld      b, $3A                  ; 58 chars black
+        ld      hl, FORTRESS1
+
+fortress_fill_outer_black:
         ld      (hl), $80
         inc     hl
-        djnz    L4804
-        ld      b, $32
+        djnz    fortress_fill_outer_black
+        ld      b, $32                  ; 50 chars grey
 
-L480B:
+fortress_fill_grey:
         ld      (hl), $08
         inc     hl
-        djnz    L480B
-        ld      b, $2A
+        djnz    fortress_fill_grey
+        ld      b, $2A                  ; 42 chars black
 
-L4812:
+fortress_fill_inner_black:
         ld      (hl), $80
         inc     hl
-        djnz    L4812
+        djnz    fortress_fill_inner_black
         ld      hl, $0215
-        ld      ($411C), hl
+        ld      (fortress_col), hl
         ld      hl, $0000
-        ld      ($46DB), hl
-        ld      ($445E), hl
+        ld      (timer_fortress_move), hl
+        ld      (WALL_HIT), hl
         ld      hl, $0900
-        ld      ($4346), hl
+        ld      (ship_col), hl
         ld      hl, $0100
-        ld      ($4660), hl
+        ld      (bomb_col), hl
         xor     a
-        ld      ($442C), a
-        ld      ($4662), a
-        ld      ($469F), a
+        ld      (torpedo_running), a
+        ld      (bomb_running), a
+        ld      (SHIP_HIT), a
         ret
+
         defb    $00,$00 ; -
+
 #ENDASM [$483F]
 
    23  REM 
 #ASM [$4845]
-        defb    $2D,$2E,$39,$00,$26,$33,$3E,$00,$31,$2A,$39,$39,$2A,$37,$00,$3C,$2D,$2A,$33,$00,$37,$2A,$26,$29,$3E ; -
 
-L485E:
-        ld      bc, $1703
-        call    L4212
-        ex      de, hl
-        ld      hl, $4845
+press_any_key_msg:
+        defm    "HIT ANY LETTER WHEN READY"
+
+; --------------------------------------------------------------------------------
+; Print message "Press any key"
+; --------------------------------------------------------------------------------
+
+
+PRESS_ANY_KEY:
+        ld      bc, $1703               ; row 23, col 3
+        call    SCR_POS
+        ex      de, hl                  ; DE=screen address
+        ld      hl, press_any_key_msg
         ld      bc, $0019
         ldir
         ret
+
         defb    $00,$00,$00 ; -
 
-L4871:
-        ld      bc, $1703
-        call    L4212
+
+DELETE_PRESS_ANY_KEY:
+        ld      bc, $1703               ; row 23, col 3
+        call    SCR_POS
         ld      b, $19
 
-L4879:
+put_space:
         ld      (hl), $00
         inc     hl
-        djnz    L4879
+        djnz    put_space
         ret
+
         defb    $00,$00,$00 ; -
+
 #ENDASM [$4882]
 
    24  REM 
 #ASM [$4888]
+
         defb    $00,$85,$01,$85,$00,$00,$02,$80,$03,$00,$00,$87,$80,$04,$00,$00,$81,$00,$82,$00,$00,$00,$00,$00,$00,$87,$07,$80,$84,$04,$00,$84,$03,$07,$00,$00,$02,$80,$01,$00,$00,$00,$00,$00,$00,$01 ; -
 
-L48B6:
-        ld      bc, ($411C)
-        inc     c
-        inc     c
-        inc     c
-        ld      b, $05
-        call    L4212
-        ld      de, $001C
-        ld      a, $0E
 
-L48C7:
-        push    af
-        ld      b, $05
+FLASH_ALIEN:
+        ld      bc, (fortress_col)
+        inc     c
+        inc     c
+        inc     c                       ; fortress-col+3
+        ld      b, $05                  ; row=5
+        call    SCR_POS                 ; HL=screen address
+        ld      de, $001C               ; distance between rows
+        ld      a, $0E                  ; 14 lines
 
-L48CA:
-        ld      a, (hl)
-        xor     $80
-        ld      (hl), a
+flash_next_line:
+        push    af                      ; save line counter
+        ld      b, $05                  ; 5 columns
+
+flash_next_col:
+        ld      a, (hl)                 ; get screen char
+        xor     $80                     ; invert it
+        ld      (hl), a                 ; and store
         inc     hl
-        djnz    L48CA
-        add     hl, de
-        pop     af
+        djnz    flash_next_col          ; loop for all columns
+        add     hl, de                  ; next row
+        pop     af                      ; get row count
         dec     a
         cp      $00
-        jr      nz, L48C7
+        jr      nz, flash_next_line     ; loop for next row
         ret
+
         defb    $EB,$21,$9C,$48,$C3,$77,$43,$3E,$02,$BE,$20,$1F,$3C,$32,$B5,$48,$EB,$23,$36,$05,$23,$36,$02,$23,$36,$05,$11,$1F,$00,$19,$36,$03,$23,$23,$36,$01,$11,$A3,$00,$19,$36,$80,$C9,$3E,$01,$32,$B5,$48,$EB,$23,$23,$36,$00,$23,$36,$85,$11,$21,$00,$19,$36,$03,$11,$A5,$00,$19,$36,$80,$C9,$00,$00,$00 ; -
+
 #ENDASM [$4921]
 
    25  REM 
 #ASM [$4927]
+
         defb    $ED,$4B,$1C,$41,$0C,$0C,$0C,$06,$05,$ED,$43,$46,$43,$CD,$05,$44,$06,$0E,$ED,$43,$46,$43,$CD,$05,$44,$C9,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+
 #ENDASM [$4949]
 
    26  REM 
 #ASM [$494F]
-        defb    $01,$00 ; -
 
-L4951:
-        call    L46DD
-        call    L49D1
-        call    L429F
-        call    L412C
-        call    L4460
-        call    L4793
-        ld      a, ($445F)
+LEVEL_DELAY:
+        defw    $0001
+
+; --------------------------------------------------------------------------------
+; Game loop
+; --------------------------------------------------------------------------------
+
+
+GAME:
+        call    CHECK_FORTRESS_MOVE
+        call    TEST_KEYBOARD
+        call    DRAW_ALIEN
+        call    DRAW_FORTRESS
+        call    MOVE_TORPEDO
+        call    INCR_SCORE
+        ld      a, (ALIEN_HIT)
         cp      $01
         ret     z
-        call    L4630
-        call    L46A0
-        ld      a, ($469F)
+        call    DRAW_CANONS
+        call    DRAW_BOMB
+        ld      a, (SHIP_HIT)
         cp      $01
         ret     z
-        call    L4663
-        ld      hl, ($494F)
+        call    FIRE_BOMB
+        ld      hl, (LEVEL_DELAY)
         ld      de, $0000
 
-L497E:
+game_delay:
         inc     de
         and     a
         sbc     hl, de
-        jp      z, L4951
+        jp      z, GAME
         add     hl, de
-        jr      L497E
+        jr      game_delay
+
         defb    $00,$00,$00,$00,$00,$00,$00 ; -
+
 #ENDASM [$498F]
 
    27  REM 
 #ASM [$4995]
+
         defb    $3E,$BF,$BD,$28,$06,$3E,$7F,$BD,$C2,$F0,$43,$3A,$1C,$41,$C3,$C5,$43,$00,$00,$00,$00,$00,$00,$00 ; -
+
 #ENDASM [$49AD]
 
    28  REM 
 #ASM [$49B3]
 
-L49B3:
-        ld      bc, $0200
-        call    L4212
-        ld      a, $14
+CLEAR_GAME_AREA:
+        ld      bc, $0200               ; row 2 column 0
+        call    SCR_POS                 ; HL = screen address
+        ld      a, $14                  ; 20 rows
 
-L49BB:
-        ld      b, $20
+clear_next_row:
+        ld      b, $20                  ; 32 chars
 
 L49BD:
-        ld      (hl), $00
+        ld      (hl), $00               ; clear char
         inc     hl
-        djnz    L49BD
+        djnz    L49BD                   ; loop for columns
         inc     hl
         dec     a
         cp      $00
-        jr      nz, L49BB
+        jr      nz, clear_next_row      ; loop for rows
         ret
 #ENDASM [$49C9]
 
    29  REM 
 #ASM [$49CF]
-        defb    $DF,$FB ; -
 
-L49D1:
-        call    KEYBOARD
-        ld      bc, ($4346)
-        ld      ($49CF), hl
+pressed_key:
+        defw    $FBDF
+
+; --------------------------------------------------------------------------------
+; Test keyboard and do actions
+; --------------------------------------------------------------------------------
+
+
+TEST_KEYBOARD:
+        call    KEYBOARD                ; scan keyboard, H=column, L=half-row
+
+L49D4:
+        ld      bc, (ship_col)
+        ld      (pressed_key), hl
         ld      de, $FFFF
         and     a
         sbc     hl, de
-        ret     z
-        ld      hl, ($49CF)
-        bit     4, l
-        call    z, L4431
-        ld      hl, ($49CF)
-        ld      bc, ($4346)
-        bit     5, l
-        call    z, L4431
-        ld      hl, ($49CF)
-        ld      bc, ($4346)
-        bit     3, l
-        jp      z, L43DB
-        bit     2, l
-        jp      z, L43DB
-        bit     0, l
-        jp      z, L43D0
-        bit     1, l
-        jp      z, L43D0
-        bit     6, l
-        jr      z, L4A18
-        bit     7, l
-        ret     nz
+        ret     z                       ; no key pressed, return
+        ld      hl, (pressed_key)
+        bit     4, l                    ; check top right half-row
+        call    z, FIRE_TORPEDO         ; key pressed - fire torpedo
+        ld      hl, (pressed_key)
+        ld      bc, (ship_col)
+        bit     5, l                    ; check 2nd right half-row
+        call    z, FIRE_TORPEDO         ; key pressed - fire torpedo
+        ld      hl, (pressed_key)
+        ld      bc, (ship_col)
+        bit     3, l                    ; check top left half-row
+        jp      z, MOVE_SHIP_UP         ; key pressed - move ship up
+        bit     2, l                    ; check second left half-row
+        jp      z, MOVE_SHIP_UP         ; key pressed - move ship up
+        bit     0, l                    ; check bottom left half-row
+        jp      z, MOVE_SHIP_DOWN       ; key pressed - move ship down
+        bit     1, l                    ; check third left half-row
+        jp      z, MOVE_SHIP_DOWN       ; key pressed - move ship down
+        bit     6, l                    ; check thrird right half-row
+        jr      z, check_left_right     ; key pressed - move ship left or right
+        bit     7, l                    ; check bottom right half-row
+        ret     nz                      ; not pressed - return
 
-L4A18:
+check_left_right:
         nop
         nop
         nop
         nop
         nop
-        bit     5, h
-        jp      z, L43E6
-        bit     4, h
-        jp      z, L43E6
-        bit     3, h
-        jp      z, L43E6
-        bit     2, h
-        jp      z, L43C2
-        bit     1, h
-        jp      z, L43C2
+        bit     5, h                    ; check move ship left
+        jp      z, MOVE_SHIP_LEFT
+        bit     4, h                    ; check move ship left
+        jp      z, MOVE_SHIP_LEFT
+        bit     3, h                    ; check move ship left
+        jp      z, MOVE_SHIP_LEFT
+        bit     2, h                    ; check move ship right
+        jp      z, MOVE_SHIP_RIGHT
+        bit     1, h                    ; check move ship right
+        jp      z, MOVE_SHIP_RIGHT
         ret
+
         defb    $00,$00,$00,$00,$00,$00 ; -
+
 #ENDASM [$4A3D]
 
 
-@Line___30:
+#: --------------------------------------------------------------------------------
+#: Start of Game
+#: --------------------------------------------------------------------------------
+
+
+@Line_Start:
    30  CLS 
    34  POKE 17924,252
    35  POKE 17925,69
@@ -1165,12 +1547,12 @@ L4A18:
   120  POKE 17208,128
 
 @Line__140:
-  140  LET L= USR &L44D1
-  150  LET L= USR &L4606
+  140  LET L= USR &INTRO_SCR
+  150  LET L= USR &INTRO_FIRE_TORPEDO
   155  IF  INKEY$ ="" THEN  GOTO @Line__140
   160  IF  INKEY$ ="N" THEN  GOTO @Line__190
   170  IF  INKEY$ <>"Y" THEN  GOTO @Line__140
-  180  GOSUB @Line_1000
+  180  GOSUB @Line_Instructions
 
 @Line__190:
   190  GOSUB @Line_2000
@@ -1180,7 +1562,7 @@ L4A18:
   205  POKE 18146,R
   210  POKE 18210,0
   220  POKE 18211,0
-  230  LET L= USR &L47FF
+  230  LET L= USR &INIT_FORTRESS
   250  PRINT  AT 0,10;"SCORE: 0"
 
 @Line__260:
@@ -1191,24 +1573,24 @@ L4A18:
   300  POKE 17208,W
 
 @Line__310:
-  310  LET L= USR &L4630
-  320  LET L= USR &L485E
+  310  LET L= USR &DRAW_CANONS
+  320  LET L= USR &PRESS_ANY_KEY
 
 @Line__340:
-  340  LET L= USR &L412C
-  350  LET L= USR &L429F
-  360  LET L= USR &L4348
+  340  LET L= USR &DRAW_FORTRESS
+  350  LET L= USR &DRAW_ALIEN
+  360  LET L= USR &DRAW_SHIP
   370  IF  INKEY$ ="" THEN  GOTO @Line__340
-  380  LET L= USR &L4871
-  390  LET L= USR &L4951
-  400  LET L= USR &L47E1
-  410  LET L= USR &L47EF
+  380  LET L= USR &DELETE_PRESS_ANY_KEY
+  390  LET L= USR &GAME
+  400  LET L= USR &DELETE_TORPEDO
+  410  LET L= USR &DELETE_BOMB
   420  IF  PEEK 17503=1 THEN  GOTO @Line__520
   430  FOR N=1 TO 32
-  440  LET L= USR &L45C4
+  440  LET L= USR &ROTATE_SHIP
   450  LET L=L+N
   460  NEXT N
-  470  LET L= USR &L4405
+  470  LET L= USR &DELETE_SHIP
   475  POKE 18016,0
   480  POKE 17452,0
   485  POKE 18018,0
@@ -1219,7 +1601,7 @@ L4A18:
 
 @Line__520:
   520  FOR N=1 TO 50
-  540  LET L= USR &L48B6
+  540  LET L= USR &FLASH_ALIEN
   545  LET L=L+0
   547  LET L=L+0
   550  NEXT N
@@ -1230,12 +1612,12 @@ L4A18:
   590  POKE 18210,(S-256* PEEK 18211)
   592  IF R>20 THEN  LET R=R-20
   595  POKE 18146,R
-  600  LET L= USR &L49B3
-  620  LET L= USR &L47FF
+  600  LET L= USR &CLEAR_GAME_AREA
+  620  LET L= USR &INIT_FORTRESS
   630  GOTO @Line__310
 
 @Line__640:
-  640  LET L= USR &L49B3
+  640  LET L= USR &CLEAR_GAME_AREA
   650  PRINT  AT 0,4;"FINAL";
   660  PRINT  AT 10,13;"\:'\''\''\''\''\':"
   670  PRINT  AT 11,13;"\: GAME\ :"
@@ -1248,7 +1630,7 @@ L4A18:
   730  IF  INKEY$ ="Y" THEN  GOTO @Line__190
   740  GOTO @Line__720
 
-@Line_1000:
+@Line_Instructions:
  1000  CLS 
  1010  PRINT  AT 0,10;"YOUR GOAL:"
  1020  PRINT  AT 2,0;"TO SCORE AS MANY POINTS AS YOU   CAN BY DESTROYING THE ALIEN AND BLOCKS OF HIS FORTRESS."
@@ -1293,10 +1675,15 @@ L4A18:
  2180  IF N<=V THEN  POKE A,25
  2190  NEXT N
  2200  RETURN 
- 3000  SAVE "ATTAC%K"
- 3100  GOTO @Line___30
 
-#: Line___30                =     30
+#: --------------------------------------------------------------------------------
+#: Save and autostart routine
+#: --------------------------------------------------------------------------------
+
+ 3000  SAVE "ATTAC%K"
+ 3100  GOTO @Line_Start
+
+#: Line_Start               =     30
 #: Line__140                =    140
 #: Line__190                =    190
 #: Line__260                =    260
@@ -1305,7 +1692,7 @@ L4A18:
 #: Line__520                =    520
 #: Line__640                =    640
 #: Line__720                =    720
-#: Line_1000                =   1000
+#: Line_Instructions        =   1000
 #: Line_1070                =   1070
 #: Line_1130                =   1130
 #: Line_2000                =   2000
@@ -1335,7 +1722,7 @@ L4A18:
 #: DF_SZ                    = $4022 = 16418
 #: S_TOP                    = $4023 = 16419
 #: LAST_K                   = $4025 = 16421
-#: DEBOUNCE                 = $4027 = 16423
+#: DB_ST                    = $4027 = 16423
 #: MARGIN                   = $4028 = 16424
 #: NXTLIN                   = $4029 = 16425
 #: OLDPPC                   = $402B = 16427
@@ -1354,145 +1741,200 @@ L4A18:
 #: MEMBOT                   = $405D = 16477
 #: FREE2                    = $407B = 16507
 #: PROG                     = $407D = 16509
-#: L412C                    = $412C = 16684
-#: L415B                    = $415B = 16731
-#: L418A                    = $418A = 16778
-#: L4191                    = $4191 = 16785
-#: L41B9                    = $41B9 = 16825
-#: L41C6                    = $41C6 = 16838
-#: L41D4                    = $41D4 = 16852
-#: L41E3                    = $41E3 = 16867
-#: L41E6                    = $41E6 = 16870
-#: L4212                    = $4212 = 16914
-#: L421C                    = $421C = 16924
-#: L4223                    = $4223 = 16931
-#: L4226                    = $4226 = 16934
-#: L422D                    = $422D = 16941
-#: L4238                    = $4238 = 16952
+#: FORTRESS1                = $4082 = 16514
+#: SAVE_FORTRESS1           = $40BB = 16571
+#: FORTRESS2                = $40BC = 16572
+#: addr_fortress            = $4118 = 16664
+#: addr_fortress_save       = $411A = 16666
+#: fortress_col             = $411C = 16668
+#: fortress_row             = $411D = 16669
+#: fortress_rows            = $411E = 16670
+#: fortress_cols            = $411F = 16671
+#: fortress_blocks          = $4120 = 16672
+#: DRAW_FORTRESS            = $412C = 16684
+#: rotate_inner_layer       = $415B = 16731
+#: return                   = $418A = 16778
+#: rotate_outer_layer       = $4191 = 16785
+#: rot_blocks_left_column   = $41B9 = 16825
+#: rot_block_next1          = $41C6 = 16838
+#: rot_blocks_right_column  = $41D4 = 16852
+#: rot_block_next2          = $41E3 = 16867
+#: rot_blocks_top_row       = $41E6 = 16870
+#: SCR_POS                  = $4212 = 16914
+#: SCR_POS_next_row         = $421C = 16924
+#: SCR_POS_row_found        = $4223 = 16931
+#: SCR_POS_next_col         = $4226 = 16934
+#: SCR_POS_col_found        = $422D = 16941
+#: erase_hit_block_from_fortress = $4238 = 16952
 #: L4252                    = $4252 = 16978
 #: L425C                    = $425C = 16988
-#: L429F                    = $429F = 17055
-#: L42BE                    = $42BE = 17086
-#: L42C2                    = $42C2 = 17090
-#: L42D1                    = $42D1 = 17105
-#: L42DE                    = $42DE = 17118
-#: L4348                    = $4348 = 17224
-#: L434C                    = $434C = 17228
-#: L4361                    = $4361 = 17249
-#: L436F                    = $436F = 17263
-#: L4377                    = $4377 = 17271
-#: L4379                    = $4379 = 17273
-#: L43C2                    = $43C2 = 17346
-#: L43D0                    = $43D0 = 17360
-#: L43DB                    = $43DB = 17371
-#: L43E6                    = $43E6 = 17382
-#: L43F5                    = $43F5 = 17397
-#: L4405                    = $4405 = 17413
-#: L4412                    = $4412 = 17426
-#: L4414                    = $4414 = 17428
-#: L4431                    = $4431 = 17457
-#: L4460                    = $4460 = 17504
-#: L447B                    = $447B = 17531
-#: L4487                    = $4487 = 17543
-#: L448F                    = $448F = 17551
-#: L44AB                    = $44AB = 17579
-#: L44B6                    = $44B6 = 17590
-#: L44D1                    = $44D1 = 17617
-#: L44DA                    = $44DA = 17626
-#: L44E7                    = $44E7 = 17639
-#: L44EC                    = $44EC = 17644
-#: L4505                    = $4505 = 17669
-#: L4520                    = $4520 = 17696
-#: L4525                    = $4525 = 17701
-#: L45C4                    = $45C4 = 17860
-#: L45D1                    = $45D1 = 17873
-#: L45D8                    = $45D8 = 17880
-#: L4606                    = $4606 = 17926
-#: L4617                    = $4617 = 17943
-#: L4618                    = $4618 = 17944
-#: L4630                    = $4630 = 17968
-#: L4647                    = $4647 = 17991
-#: L4663                    = $4663 = 18019
-#: L467C                    = $467C = 18044
-#: L4685                    = $4685 = 18053
-#: L468E                    = $468E = 18062
-#: L4690                    = $4690 = 18064
-#: L46A0                    = $46A0 = 18080
-#: L46B5                    = $46B5 = 18101
-#: L46BF                    = $46BF = 18111
-#: L46C6                    = $46C6 = 18118
-#: L46DD                    = $46DD = 18141
-#: L46EE                    = $46EE = 18158
-#: L4707                    = $4707 = 18183
-#: L4736                    = $4736 = 18230
-#: L4747                    = $4747 = 18247
-#: L474E                    = $474E = 18254
-#: L475C                    = $475C = 18268
-#: L476A                    = $476A = 18282
-#: L4773                    = $4773 = 18291
-#: L4793                    = $4793 = 18323
-#: L47CA                    = $47CA = 18378
-#: L47D5                    = $47D5 = 18389
-#: L47E1                    = $47E1 = 18401
-#: L47EF                    = $47EF = 18415
-#: L47FF                    = $47FF = 18431
-#: L4804                    = $4804 = 18436
-#: L480B                    = $480B = 18443
-#: L4812                    = $4812 = 18450
-#: L485E                    = $485E = 18526
-#: L4871                    = $4871 = 18545
-#: L4879                    = $4879 = 18553
-#: L48B6                    = $48B6 = 18614
-#: L48C7                    = $48C7 = 18631
-#: L48CA                    = $48CA = 18634
-#: L4951                    = $4951 = 18769
-#: L497E                    = $497E = 18814
-#: L49B3                    = $49B3 = 18867
-#: L49BB                    = $49BB = 18875
+#: alien_col                = $4274 = 17012
+#: alien_row                = $4275 = 17013
+#: ALIEN                    = $4277 = 17015
+#: DRAW_ALIEN               = $429F = 17055
+#: store_alien_pos          = $42BE = 17086
+#: alien_downwards          = $42C2 = 17090
+#: draw_alien_at_BC         = $42D1 = 17105
+#: alien_each_row           = $42DE = 17118
+#: alien_direction          = $42EF = 17135
+#: SHIP1                    = $42FA = 17146
+#: SHIP2                    = $4313 = 17171
+#: SHIP3                    = $432C = 17196
+#: which_ship               = $4345 = 17221
+#: ship_col                 = $4346 = 17222
+#: ship_row                 = $4347 = 17223
+#: DRAW_SHIP                = $4348 = 17224
+#: DRAW_SHIP_BC             = $434C = 17228
+#: not_ship1                = $4361 = 17249
+#: not_ship2                = $436F = 17263
+#: draw_ship_hl             = $4377 = 17271
+#: draw_ship_row            = $4379 = 17273
+#: MOVE_SHIP_RIGHT          = $43C2 = 17346
+#: MOVE_SHIP_DOWN           = $43D0 = 17360
+#: MOVE_SHIP_UP             = $43DB = 17371
+#: MOVE_SHIP_LEFT           = $43E6 = 17382
+#: save_ship_pos            = $43F5 = 17397
+#: DELETE_SHIP              = $4405 = 17413
+#: delete_row               = $4412 = 17426
+#: delete_col               = $4414 = 17428
+#: torpedo_running          = $442C = 17452
+#: torpedo_col              = $442D = 17453
+#: torpedo_row              = $442E = 17454
+#: topedo_pos0              = $442F = 17455
+#: FIRE_TORPEDO             = $4431 = 17457
+#: WALL_HIT                 = $445E = 17502
+#: ALIEN_HIT                = $445F = 17503
+#: MOVE_TORPEDO             = $4460 = 17504
+#: topedo_erased            = $447B = 17531
+#: draw_torpedo_store_pos   = $4487 = 17543
+#: torpedo_hit              = $448F = 17551
+#: hit_fortress             = $44AB = 17579
+#: stop_torpedo             = $44B6 = 17590
+#: BLOCK1                   = $44CA = 17610
+#: save_block1              = $44CD = 17613
+#: INTRO_SCR                = $44D1 = 17617
+#: draw_top_bar             = $44DA = 17626
+#: draw_right_bar           = $44E7 = 17639
+#: each_right_bar_block     = $44EC = 17644
+#: draw_bottom_bar          = $4505 = 17669
+#: draw_left_bar            = $4520 = 17696
+#: each_left_bar_block      = $4525 = 17701
+#: ROTATED_SHIP1            = $455F = 17759
+#: ROTATED_SHIP2            = $4578 = 17784
+#: ROTATED_SHIP3            = $4591 = 17809
+#: ROTATED_SHIP4            = $45AA = 17834
+#: rotate_count             = $45C3 = 17859
+#: ROTATE_SHIP              = $45C4 = 17860
+#: store_count              = $45D1 = 17873
+#: add_25                   = $45D8 = 17880
+#: torpedo_path             = $45F3 = 17907
+#: intro_torpedo_pos        = $4604 = 17924
+#: INTRO_FIRE_TORPEDO       = $4606 = 17926
+#: restore_torpedo_pos      = $4617 = 17943
+#: draw_torpedo_path        = $4618 = 17944
+#: DRAW_CANONS              = $4630 = 17968
+#: draw_cannon              = $4647 = 17991
+#: bomb_col                 = $4660 = 18016
+#: bomb_row                 = $4661 = 18017
+#: bomb_running             = $4662 = 18018
+#: FIRE_BOMB                = $4663 = 18019
+#: not_cannon1              = $467C = 18044
+#: not_cannon2              = $4685 = 18053
+#: not_cannon3              = $468E = 18062
+#: do_fire_bomb             = $4690 = 18064
+#: SHIP_HIT                 = $469F = 18079
+#: DRAW_BOMB                = $46A0 = 18080
+#: move_bomb                = $46B5 = 18101
+#: bomb_no_hit              = $46BF = 18111
+#: bomb_hit_ship            = $46C6 = 18118
+#: timer_fortress_move      = $46DB = 18139
+#: CHECK_FORTRESS_MOVE      = $46DD = 18141
+#: FORTRESS_MOVE_COUNT      = $46E1 = 18145
+#: do_fortress_move         = $46EE = 18158
+#: move_next_row            = $4707 = 18183
+#: SCORE                    = $4722 = 18210
+#: NUM_BUFFER               = $4724 = 18212
+#: N10000                   = $4729 = 18217
+#: N1000                    = $472B = 18219
+#: N100                     = $472D = 18221
+#: N10                      = $472F = 18223
+#: N1                       = $4731 = 18225
+#: PRINT_ACC                = $4733 = 18227
+#: HAVE_DIGITS              = $4735 = 18229
+#: SCORE_I2A                = $4736 = 18230
+#: next_divisor             = $4747 = 18247
+#: subtract_divisor         = $474E = 18254
+#: subtraction_overflowed   = $475C = 18268
+#: make_digit               = $476A = 18282
+#: output_digit             = $4773 = 18291
+#: INCR_SCORE               = $4793 = 18323
+#: score_multiply           = $47B2 = 18354
+#: out_digit                = $47CA = 18378
+#: skip_blanks              = $47D5 = 18389
+#: DELETE_TORPEDO           = $47E1 = 18401
+#: DELETE_BOMB              = $47EF = 18415
+#: INIT_FORTRESS            = $47FF = 18431
+#: fortress_fill_outer_black = $4804 = 18436
+#: fortress_fill_grey       = $480B = 18443
+#: fortress_fill_inner_black = $4812 = 18450
+#: press_any_key_msg        = $4845 = 18501
+#: PRESS_ANY_KEY            = $485E = 18526
+#: DELETE_PRESS_ANY_KEY     = $4871 = 18545
+#: put_space                = $4879 = 18553
+#: FLASH_ALIEN              = $48B6 = 18614
+#: flash_next_line          = $48C7 = 18631
+#: flash_next_col           = $48CA = 18634
+#: LEVEL_DELAY              = $494F = 18767
+#: GAME                     = $4951 = 18769
+#: game_delay               = $497E = 18814
+#: CLEAR_GAME_AREA          = $49B3 = 18867
+#: clear_next_row           = $49BB = 18875
 #: L49BD                    = $49BD = 18877
-#: L49D1                    = $49D1 = 18897
-#: L4A18                    = $4A18 = 18968
+#: pressed_key              = $49CF = 18895
+#: TEST_KEYBOARD            = $49D1 = 18897
+#: L49D4                    = $49D4 = 18900
+#: check_left_right         = $4A18 = 18968
 
 #: [$4000] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 #: [$4040] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb
-#: [$4080] bb--------------------------------------------------------------
-#: [$40C0] ----------------------------------------------------------------
-#: [$4100] --------------------------------------bbbbbbCCCCCCCCCCCCCCCCCCCC
+#: [$4080] bbTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+#: [$40C0] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+#: [$4100] TTTTTTTTTTTTTTTTTTTTTTTTWWWWBBBBB-----bbbbbbCCCCCCCCCCCCCCCCCCCC
 #: [$4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4180] CCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$41C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------------
 #: [$4200] ------------bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--bbbbbbCCCCCCCC
-#: [$4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb------------
-#: [$4280] -------------------------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$42C0] CCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb------
-#: [$4300] ----------------------------------------------------------------
-#: [$4340] --------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbbBB-TTTTTTTTT
+#: [$4280] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$42C0] CCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCB----bbbbbbTTTTTT
+#: [$4300] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+#: [$4340] TTTTTBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4380] CCCCCCCCCC-----bbbbbb-------------------------------------------
 #: [$43C0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCC--b
-#: [$4400] bbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb-----CCCCCCCCCCCCCCC
-#: [$4440] CCCCCCCCCCCCCCCCCCC-----bbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4400] bbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbbBBBWWCCCCCCCCCCCCCCC
+#: [$4440] CCCCCCCCCCCCCCCCCCC-----bbbbbbBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----
-#: [$44C0] ----bbbbbb-------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$44C0] ----bbbbbbTTTT---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4500] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4540] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbb---------------------------------
-#: [$4580] ----------------------------------------------------------------
-#: [$45C0] ----CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb-------------
-#: [$4600] ------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCC
-#: [$4640] CCCCCCCCCCCCCCCCCCCCCCC---bbbbbb---CCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4680] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbb-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$46C0] CCCCCCCCCCCCCCCC-----bbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbb--------------------CCCCCCCCCC
+#: [$4540] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+#: [$4580] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+#: [$45C0] TTTBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbbTTTTTTTTTTTTT
+#: [$4600] TTTTWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCC
+#: [$4640] CCCCCCCCCCCCCCCCCCCCCCC---bbbbbbBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4680] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$46C0] CCCCCCCCCCCCCCCC-----bbbbbbWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbWWB----WWWWWWWWWWWWBCCCCCCCCCC
 #: [$4740] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4780] CCC----------bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$47C0] CCCCCCCCCCCCCCCCCCCCCCCCC--bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbC
 #: [$4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--b
-#: [$4840] bbbbb-------------------------CCCCCCCCCCCCCCCC---CCCCCCCCCCCCCC-
+#: [$4840] bbbbbTTTTTTTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCC---CCCCCCCCCCCCCC-
 #: [$4880] --bbbbbb----------------------------------------------CCCCCCCCCC
 #: [$48C0] CCCCCCCCCCCCCCCCCCCCCCCCC---------------------------------------
 #: [$4900] ---------------------------------bbbbbb-------------------------
-#: [$4940] ---------bbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4940] ---------bbbbbbWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4980] CCCCCCCC-------bbbbbb------------------------bbbbbbCCCCCCCCCCCCC
-#: [$49C0] CCCCCCCCCbbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$49C0] CCCCCCCCCbbbbbbWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4A00] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC------bbb
 #: [$4A40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 #: [$4A80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb

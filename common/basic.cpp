@@ -256,7 +256,8 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
 
         // output string of unknown bytes
         if (disasm_code.get_mem_type(addr1) == MemType::Unknown) {
-            os << std::setw(LabelWidth) << ""
+            os << std::endl
+               << std::setw(LabelWidth) << ""
                << std::setw(OpcodeWidth) << std::left << "defb"
                << fmt_hex(bytes[i], 2);
             while (i + 1 < INT(bytes.size()) &&
@@ -265,28 +266,37 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
                 i++;
                 os << "," << fmt_hex(bytes[i], 2);
             }
-            os << " ; " << static_cast<char>(disasm_code.get_mem_type(addr1)) << std::endl;
+            os << " ; " << static_cast<char>(disasm_code.get_mem_type(addr1))
+               << std::endl << std::endl;
             continue;
         }
 
         // output opcode
         const Opcode* opcode = disasm_code.get_opcode(addr1);
         release_assert(opcode);
+        std::string opcode_str = opcode->to_string(labels);
 
         // output comments
         std::vector<std::string> comment = disasm_code.get_comment(addr1);
         if (comment.empty()) {
             os << std::setw(LabelWidth) << ""
-               << opcode->to_string(labels) << std::endl;
+               << opcode_str << std::endl;
         }
         else {
-            os << std::setw(LabelWidth) << ""
-               << std::setw(OpcodeWidth + OperandsWidth) << std::left
-               << opcode->to_string(labels)
-               << "; " << comment.front() << std::endl;
-            for (size_t i = 1; i < comment.size(); i++) {
+            if (opcode_str.size() > OpcodeWidth + OperandsWidth) {
+                os << std::setw(LabelWidth) << ""
+                   << opcode_str << std::endl;
+            }
+            else {
+                os << std::setw(LabelWidth) << ""
+                   << std::setw(OpcodeWidth + OperandsWidth) << std::left
+                   << opcode_str
+                   << comment.front() << std::endl;
+                comment.erase(comment.begin());
+            }
+            for (auto& c : comment) {
                 os << std::setw(LabelWidth + OpcodeWidth + OperandsWidth) << ""
-                   << "; " << comment[i] << std::endl;
+                   << c << std::endl;
             }
         }
 
@@ -332,12 +342,15 @@ void Basic::write_mem_map(std::ostream& os,
 
 void Basic::write_labels(std::ostream& os,
                          const DisasmCode& disasm_code) const {
+    auto& basic_labels = disasm_code.get_basic_labels();
+    auto& asm_labels = disasm_code.get_asm_labels();
+
     std::vector<std::pair<std::string, int>> labels;
 
     // show BASIC labels
     labels.clear();
-    for (const auto& [label, addr] : disasm_code.get_basic_labels()) {
-        labels.emplace_back(label, addr);
+    for (const auto& name : basic_labels.get_names()) {
+        labels.emplace_back(name, basic_labels.get(name));
     }
 
     if (!labels.empty()) {
@@ -356,8 +369,8 @@ void Basic::write_labels(std::ostream& os,
 
     // show ASM labels
     labels.clear();
-    for (const auto& [label, addr] : disasm_code.get_asm_labels()) {
-        labels.emplace_back(label, addr);
+    for (const auto& name : asm_labels.get_names()) {
+        labels.emplace_back(name, asm_labels.get(name));
     }
 
     if (!labels.empty()) {

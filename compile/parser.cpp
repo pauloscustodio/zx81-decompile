@@ -2065,7 +2065,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
     if (match("DE") && match(",") && match("HL") && match("+") && parse_expr(expr1)
             && at_end()) {
         asm_line.bytes.push_back(0xe5); // push hl
-        asm_line.bytes.push_back(0x01 + 16 * 1); // ld de, NN
+        asm_line.bytes.push_back(0x01 + 16 * 1); // ld de, <NN>
         add_word_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x19); // add hl, de
         asm_line.bytes.push_back(0xeb); // ex de, hl
@@ -2078,7 +2078,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
     if (match("DE") && match(",") && match("SP") && match("+") && parse_expr(expr1)
             && at_end()) {
         asm_line.bytes.push_back(0xeb); // ex de, hl
-        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, NN
+        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, <NN>
         add_word_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x39); // add hl, sp
         asm_line.bytes.push_back(0xeb); // ex de, hl
@@ -2089,7 +2089,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
     set_pos(p1);
     if (match("DE") && match(",") && match("SP") && at_end()) {
         asm_line.bytes.push_back(0xeb); // ex de, hl
-        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, NN
+        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, <NN>
         asm_line.bytes.push_back(0x00); // low byte
         asm_line.bytes.push_back(0x00); // high byte
         asm_line.bytes.push_back(0x39); // add hl, sp
@@ -2101,7 +2101,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
     set_pos(p1);
     if (match("HL") && match(",") && match("SP") && match("+") && parse_expr(expr1)
             && at_end()) {
-        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, NN
+        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, <NN>
         add_word_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x39); // add hl, sp
         return true;
@@ -2111,7 +2111,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
     set_pos(p1);
     if (match("HL") && match(",") && match("SP") && match("-") && parse_expr(expr1)
             && at_end()) {
-        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, NN
+        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, <NN>
         add_word_patch(asm_line, expr1.negate());
         asm_line.bytes.push_back(0x39); // add hl, sp
         return true;
@@ -2120,14 +2120,14 @@ bool Parser::parse_ld(AsmLine& asm_line) {
     // ld hl, sp
     set_pos(p1);
     if (match("HL") && match(",") && match("SP") && at_end()) {
-        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, NN
+        asm_line.bytes.push_back(0x01 + 16 * 2); // ld hl, <NN>
         asm_line.bytes.push_back(0x00); // low byte
         asm_line.bytes.push_back(0x00); // high byte
         asm_line.bytes.push_back(0x39); // add hl, sp
         return true;
     }
 
-    // ld (de+), N
+    // ld (de+), <N>
     set_pos(p1);
     if (match("(") && match("DE") && match("+") && match(")") && match(",")
             && parse_expr(expr1)
@@ -2140,7 +2140,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (de-), N
+    // ld (de-), <N>
     set_pos(p1);
     if (match("(") && match("DE") && match("-") && match(")") && match(",")
             && parse_expr(expr1)
@@ -2153,7 +2153,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (de), N
+    // ld (de), <N>
     set_pos(p1);
     if (match("(") && match("DE") && match(")") && match(",") && parse_expr(expr1)
             && at_end()) {
@@ -2164,7 +2164,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (hl+), N
+    // ld (hl+), <N>
     set_pos(p1);
     if (match("(") && match("HL") && match("+") && match(")") && match(",")
             && parse_expr(expr1)
@@ -2175,7 +2175,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (hl-), N
+    // ld (hl-), <N>
     set_pos(p1);
     if (match("(") && match("HL") && match("-") && match(")") && match(",")
             && parse_expr(expr1)
@@ -2186,7 +2186,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (hl), N
+    // ld (hl), <N>
     set_pos(p1);
     if (match("(") && match("HL") && match(")") && match(",") && parse_expr(expr1)
             && at_end()) {
@@ -2195,7 +2195,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (x+d), N
+    // ld (x+d), <N>
     set_pos(p1);
     if (parse_x_plus_ind(pfx1, expr1) && match(",") && parse_expr(expr2)
             && at_end()) {
@@ -2206,7 +2206,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld dd, (NN)
+    // ld dd, (<NN>)
     set_pos(p1);
     if (parse_dd_sp(r1) && match(",") && match("(") && parse_expr(expr1)
             && match(")") && at_end()) {
@@ -2225,7 +2225,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld dd, NN
+    // ld dd, <NN>
     set_pos(p1);
     if (parse_dd_sp(r1) && match(",") && parse_expr(expr1) && at_end()) {
         if ((r1 & 0xff00) != 0) {
@@ -2236,7 +2236,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld a, (NN)
+    // ld a, (<NN>)
     set_pos(p1);
     if (match("A") && match(",") && match("(") && parse_expr(expr1) && match(")")
             && at_end()) {
@@ -2245,7 +2245,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld ixl|ixh|iyl|iyh, N
+    // ld ixl|ixh|iyl|iyh, <N>
     set_pos(p1);
     if (parse_x8(pfx1, r1) && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(pfx1);
@@ -2254,7 +2254,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld r1, N
+    // ld r1, <N>
     set_pos(p1);
     if (parse_r1(r1) && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0x06 + 8 * r1);
@@ -2262,7 +2262,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (NN), dd
+    // ld (<NN>), dd
     set_pos(p1);
     if (match("(") && parse_expr(expr1) && match(")") && match(",")
             && parse_dd_sp(r1) && at_end()) {
@@ -2281,7 +2281,7 @@ bool Parser::parse_ld(AsmLine& asm_line) {
         return true;
     }
 
-    // ld (NN), a
+    // ld (<NN>), a
     set_pos(p1);
     if (match("(") && parse_expr(expr1) && match(")") && match(",") && match("A")
             && at_end()) {
@@ -2335,11 +2335,11 @@ bool Parser::parse_alu(AsmLine& asm_line) {
         return true;
     }
 
-    // add bc, NN
+    // add bc, <NN>
     set_pos(p1);
     if (op == 0 && match("BC") && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0xe5); // push hl
-        asm_line.bytes.push_back(0x21); // ld hl, NN
+        asm_line.bytes.push_back(0x21); // ld hl, <NN>
         add_word_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x09); // add hl, bc
         asm_line.bytes.push_back(0x44); // ld b, h
@@ -2348,11 +2348,11 @@ bool Parser::parse_alu(AsmLine& asm_line) {
         return true;
     }
 
-    // add de, NN
+    // add de, <NN>
     set_pos(p1);
     if (op == 0 && match("DE") && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0xe5); // push hl
-        asm_line.bytes.push_back(0x21); // ld hl, NN
+        asm_line.bytes.push_back(0x21); // ld hl, <NN>
         add_word_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x19); // add hl, de
         asm_line.bytes.push_back(0x54); // ld d, h
@@ -2361,11 +2361,11 @@ bool Parser::parse_alu(AsmLine& asm_line) {
         return true;
     }
 
-    // add hl, NN
+    // add hl, <NN>
     set_pos(p1);
     if (op == 0 && match("HL") && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0xd5); // push de
-        asm_line.bytes.push_back(0x11); // ld de, NN
+        asm_line.bytes.push_back(0x11); // ld de, <NN>
         add_word_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x19); // add hl, de
         asm_line.bytes.push_back(0xd1); // pop de
@@ -2608,7 +2608,7 @@ bool Parser::parse_alu(AsmLine& asm_line) {
         return true;
     }
 
-    // {alu} a, (x+DIS)
+    // {alu} a, (x+<DIS>)
     set_pos(p1);
     if (match("A") && match(",") && parse_x_plus_ind(pfx, expr1) && at_end()) {
         asm_line.bytes.push_back(pfx);
@@ -2617,7 +2617,7 @@ bool Parser::parse_alu(AsmLine& asm_line) {
         return true;
     }
 
-    // {alu} (x+DIS)
+    // {alu} (x+<DIS>)
     set_pos(p1);
     if (parse_x_plus_ind(pfx, expr1) && at_end()) {
         asm_line.bytes.push_back(pfx);
@@ -2626,7 +2626,7 @@ bool Parser::parse_alu(AsmLine& asm_line) {
         return true;
     }
 
-    // {alu} a, N
+    // {alu} a, <N>
     set_pos(p1);
     if (match("A") && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0xc6 + 8 * op);
@@ -2634,7 +2634,7 @@ bool Parser::parse_alu(AsmLine& asm_line) {
         return true;
     }
 
-    // {alu} N
+    // {alu} <N>
     set_pos(p1);
     if (parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0xc6 + 8 * op);
@@ -2751,7 +2751,7 @@ bool Parser::parse_bit(AsmLine& asm_line) {
 
     p1 = pos();
 
-    // {bit} N, r
+    // {bit} <N>, r
     set_pos(p1);
     if (parse_expr(bit_num) && match(",") && parse_r1(r1) && at_end()) {
         int bit = eval_const_expr(bit_num);
@@ -2764,7 +2764,7 @@ bool Parser::parse_bit(AsmLine& asm_line) {
         return true;
     }
 
-    // {bit} N, (hl)
+    // {bit} <N>, (hl)
     set_pos(p1);
     if (parse_expr(bit_num) && match(",") && match("(") && match("HL")
             && match(")") && at_end()) {
@@ -2778,7 +2778,7 @@ bool Parser::parse_bit(AsmLine& asm_line) {
         return true;
     }
 
-    // {bit} N, (x+DIS)
+    // {bit} <N>, (x+<DIS>)
     set_pos(p1);
     if (parse_expr(bit_num) && match(",") && parse_x_plus_ind(pfx, expr1)
             && at_end()) {
@@ -2836,7 +2836,7 @@ bool Parser::parse_jp_call(AsmLine& asm_line) {
         return true;
     }
 
-    // jp|call gtu, NN
+    // jp|call gtu, <NN>
     set_pos(p1);
     if (match("GTU") && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(JR_Z); // jr z, +3
@@ -2847,7 +2847,7 @@ bool Parser::parse_jp_call(AsmLine& asm_line) {
         return true;
     }
 
-    // call leu, NN
+    // call leu, <NN>
     set_pos(p1);
     if (op == 1 && match("LEU") && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(JR_Z); // jr z, +2
@@ -2856,23 +2856,23 @@ bool Parser::parse_jp_call(AsmLine& asm_line) {
         asm_line.bytes.push_back(JR_NC); // jr nc, +3
         asm_line.bytes.push_back(3);
 
-        asm_line.bytes.push_back(0xcd); // call NN
+        asm_line.bytes.push_back(0xcd); // call <NN>
         add_word_patch(asm_line, expr1);
         return true;
     }
 
-    // jp leu, NN
+    // jp leu, <NN>
     set_pos(p1);
     if (op == 0 && match("LEU") && match(",") && parse_expr(expr1) && at_end()) {
-        asm_line.bytes.push_back(0xc2 + 2 * op + 8 * FLAG_Z); // jp z, NN
+        asm_line.bytes.push_back(0xc2 + 2 * op + 8 * FLAG_Z); // jp z, <NN>
         add_word_patch(asm_line, expr1);
 
-        asm_line.bytes.push_back(0xc2 + 2 * op + 8 * FLAG_C); // jp c, NN
+        asm_line.bytes.push_back(0xc2 + 2 * op + 8 * FLAG_C); // jp c, <NN>
         add_word_patch(asm_line, expr1);
         return true;
     }
 
-    // jp|call flag, NN
+    // jp|call flag, <NN>
     set_pos(p1);
     if (parse_flags_jp(f1) && match(",") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0xc2 + 2 * op + 8 * f1);
@@ -2880,7 +2880,7 @@ bool Parser::parse_jp_call(AsmLine& asm_line) {
         return true;
     }
 
-    // jp|call NN
+    // jp|call <NN>
     set_pos(p1);
     if (parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0xc3 + 10 * op);
@@ -2957,7 +2957,7 @@ bool Parser::parse_jr(AsmLine& asm_line) {
     skip_spaces();
     const char* p0 = pos();
 
-    // djnz NN
+    // djnz <NN>
     set_pos(p0);
     if (match("DJNZ") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0x10);
@@ -2965,7 +2965,7 @@ bool Parser::parse_jr(AsmLine& asm_line) {
         return true;
     }
 
-    // jr gtu, NN
+    // jr gtu, <NN>
     set_pos(p0);
     if (match("JR") && match("GTU") && match(",") && parse_expr(expr1)
             && at_end()) {
@@ -2977,19 +2977,19 @@ bool Parser::parse_jr(AsmLine& asm_line) {
         return true;
     }
 
-    // jr leu, NN
+    // jr leu, <NN>
     set_pos(p0);
     if (match("JR") && match("LEU") && match(",") && parse_expr(expr1)
             && at_end()) {
-        asm_line.bytes.push_back(0x20 + 8 * FLAG_Z); // jr z, NN
-        add_jr_patch(asm_line, expr1.plus_n(2));    // +2 for the jr c, NN instruction
+        asm_line.bytes.push_back(0x20 + 8 * FLAG_Z); // jr z, <NN>
+        add_jr_patch(asm_line, expr1.plus_n(2));    // +2 for the jr c, <NN> instruction
 
-        asm_line.bytes.push_back(0x20 + 8 * FLAG_C); // jr c, NN
+        asm_line.bytes.push_back(0x20 + 8 * FLAG_C); // jr c, <NN>
         add_jr_patch(asm_line, expr1);
         return true;
     }
 
-    // jr f, NN
+    // jr f, <NN>
     set_pos(p0);
     if (match("JR") && parse_flags_jr(f1) && match(",") && parse_expr(expr1)
             && at_end()) {
@@ -2998,7 +2998,7 @@ bool Parser::parse_jr(AsmLine& asm_line) {
         return true;
     }
 
-    // jr NN
+    // jr <NN>
     set_pos(p0);
     if (match("JR") && parse_expr(expr1) && at_end()) {
         asm_line.bytes.push_back(0x18);
@@ -3077,7 +3077,7 @@ bool Parser::parse_inc_dec(AsmLine& asm_line) {
         return true;
     }
 
-    // inc|dec (x+DIS)
+    // inc|dec (x+<DIS>)
     set_pos(p1);
     if (parse_x_plus_ind(pfx, expr1) && at_end()) {
         asm_line.bytes.push_back(pfx);
@@ -3321,7 +3321,7 @@ bool Parser::parse_rotate(AsmLine& asm_line) {
         return true;
     }
 
-    // {rot} (x+DIS)
+    // {rot} (x+<DIS>)
     set_pos(p1);
     if (parse_x_plus_ind(pfx, expr1) && at_end()) {
         asm_line.bytes.push_back(pfx);
@@ -3359,7 +3359,7 @@ bool Parser::parse_bool(AsmLine& asm_line) {
         if (pfx != 0) {
             asm_line.bytes.push_back(pfx);
         }
-        asm_line.bytes.push_back(0x21); // ld h/ix, NN
+        asm_line.bytes.push_back(0x21); // ld h/ix, <NN>
         asm_line.bytes.push_back(1);
         asm_line.bytes.push_back(0);
 
@@ -3440,7 +3440,7 @@ bool Parser::parse_clr(AsmLine& asm_line) {
         return true;
     }
 
-    // clr (x+DIS)
+    // clr (x+<DIS>)
     set_pos(p1);
     if (parse_x_plus_ind(pfx, expr1) && at_end()) {
         asm_line.bytes.push_back(pfx);
@@ -3608,22 +3608,22 @@ bool Parser::parse_ldi(AsmLine& asm_line) {
         return true;
     }
 
-    // ldi (hl), N
+    // ldi (hl), <N>
     set_pos(p1);
     if (match("(") && match("HL") && match(")") && match(",") && parse_expr(expr1)
             && at_end()) {
-        asm_line.bytes.push_back(0x36); // ld (hl), N
+        asm_line.bytes.push_back(0x36); // ld (hl), <N>
         add_byte_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x23); // inc hl
         return true;
     }
 
-    // ldi (de), N
+    // ldi (de), <N>
     set_pos(p1);
     if (match("(") && match("DE") && match(")") && match(",") && parse_expr(expr1)
             && at_end()) {
         asm_line.bytes.push_back(0xeb); // ex de, hl
-        asm_line.bytes.push_back(0x36); // ld (hl), N
+        asm_line.bytes.push_back(0x36); // ld (hl), <N>
         add_byte_patch(asm_line, expr1);
         asm_line.bytes.push_back(0xeb); // ex de, hl
         asm_line.bytes.push_back(0x13); // inc de
@@ -3715,22 +3715,22 @@ bool Parser::parse_ldd(AsmLine& asm_line) {
         return true;
     }
 
-    // ldd (hl), N
+    // ldd (hl), <N>
     set_pos(p1);
     if (match("(") && match("HL") && match(")") && match(",") && parse_expr(expr1)
             && at_end()) {
-        asm_line.bytes.push_back(0x36); // ld (hl), N
+        asm_line.bytes.push_back(0x36); // ld (hl), <N>
         add_byte_patch(asm_line, expr1);
         asm_line.bytes.push_back(0x2b); // dec hl
         return true;
     }
 
-    // ldd (de), N
+    // ldd (de), <N>
     set_pos(p1);
     if (match("(") && match("DE") && match(")") && match(",") && parse_expr(expr1)
             && at_end()) {
         asm_line.bytes.push_back(0xeb); // ex de, hl
-        asm_line.bytes.push_back(0x36); // ld (hl), N
+        asm_line.bytes.push_back(0x36); // ld (hl), <N>
         add_byte_patch(asm_line, expr1);
         asm_line.bytes.push_back(0xeb); // ex de, hl
         asm_line.bytes.push_back(0x1b); // dec de
