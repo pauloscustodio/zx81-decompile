@@ -73,23 +73,26 @@ struct Basic {
     std::vector<SourceLine> source_lines;
     std::vector<std::string> dfile_lines;
     std::vector<BasicVar> basic_vars;
-    DisasmCode disasm_code;
     bool dfile_collapsed = false;
     bool autostart = false;
     int autostart_line = 0;
     int increment = 10;
     bool rem_invert = false;
     bool fast = false;
+    bool has_asm_code = false;
 
-    void write_bas_file(const std::string& filename) const;
+    void write_bas_file(const std::string& filename,
+                        const DisasmCode& disasm_code) const;
 
 private:
     void write_sysvars(std::ostream& os) const;
     void write_dfile(std::ostream& os) const;
     void write_vars(std::ostream& os) const;
-    void write_source_lines(std::ostream& os) const;
-    void write_asm_lines(std::ostream& os, int addr, const Bytes& bytes) const;
-    bool has_asm_code() const;
-    void write_mem_map(std::ostream& os) const;
-    void write_labels(std::ostream& os) const;
+    void write_source_lines(std::ostream& os, const DisasmCode& disasm_code) const;
+    void write_asm_lines(std::ostream& os, int addr, const Bytes& bytes,
+                         const DisasmCode& disasm_code) const;
+    void write_header(std::ostream& os, int addr,
+                      const DisasmCode& disasm_code) const;
+    void write_mem_map(std::ostream& os, const DisasmCode& disasm_code) const;
+    void write_labels(std::ostream& os, const DisasmCode& disasm_code) const;
 };

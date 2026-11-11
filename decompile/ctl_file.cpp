@@ -35,11 +35,54 @@ void CtlFile::load_ctl_file(const std::string& filename) {
             continue;
         }
 
+        // get count
+        int count = 1;
+        if (scan.parse_integer(count)) {
+            ; // count is optional
+        }
+
         // get type character
+        std::string text;
         scan.skip_spaces();
         CtlElement::Type type = CtlElement::Type::None;
-        if (scan.match("C")) {
-            type = CtlElement::Type::Code;
+        if (scan.match("L")) {
+            type = CtlElement::Type::BasicCode;
+            if (count != 1) {
+                error(loc, "invalid count for code element");
+                continue;
+            }
+        }
+        else if (scan.match("C")) {
+            type = CtlElement::Type::AsmCode;
+            if (count != 1) {
+                error(loc, "invalid count for code element");
+                continue;
+            }
+        }
+        else if (scan.match("B")) {
+            type = CtlElement::Type::Byte;
+        }
+        else if (scan.match("W")) {
+            type = CtlElement::Type::Word;
+        }
+        else if (scan.match("T")) {
+            type = CtlElement::Type::Text;
+        }
+        else if (scan.match("#")) {
+            type = CtlElement::Type::Header;
+            if (count != 1) {
+                error(loc, "invalid count for header element");
+                continue;
+            }
+            text = scan.get_rest_of_line();
+        }
+        else if (scan.match(";")) {
+            type = CtlElement::Type::Comment;
+            if (count != 1) {
+                error(loc, "invalid count for comment element");
+                continue;
+            }
+            text = scan.get_rest_of_line();
         }
         else {
             error(loc, "invalid type character");
@@ -47,11 +90,14 @@ void CtlFile::load_ctl_file(const std::string& filename) {
         }
 
         // get optional label
+        // comment and header have already eaten the rest of the line
         std::string label;
         if (scan.parse_ident(label)) {
             // label is optional
         }
 
-        elems.push_back({ loc, type, addr, label });
+        // ignore rest of line
+
+        elems.push_back({ loc, type, addr, count, label, text });
     }
 }

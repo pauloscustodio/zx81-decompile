@@ -325,7 +325,7 @@ bool Decompiler::decompile_rem_code(SourceLine& line) {
             line.tokens.push_back(bytes);
 
             // mark rem code in memory map
-            basic->disasm_code.set_mem_type_no_overlap_check(addr + 1, MemType::Unknown,
+            disasm_code->set_mem_type_no_overlap_check(addr + 1, MemType::Unknown,
                     INT(bytes.bytes.size()));
 
             addr = end - 1;
@@ -493,16 +493,16 @@ void Decompiler::init_ctl_mem() {
     int e_line = mem->dpeek(E_LINE);
 
     for (int addr = ERR_NO; addr < PROG; addr++) {
-        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Sysvars);
+        disasm_code->set_mem_type_no_overlap_check(addr, MemType::Sysvars);
     }
     for (int addr = PROG; addr < d_file; addr++) {
-        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Basic);
+        disasm_code->set_mem_type_no_overlap_check(addr, MemType::Basic);
     }
     for (int addr = d_file; addr < vars; addr++) {
-        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Dfile);
+        disasm_code->set_mem_type_no_overlap_check(addr, MemType::Dfile);
     }
     for (int addr = vars; addr < e_line; addr++) {
-        basic->disasm_code.set_mem_type_no_overlap_check(addr, MemType::Vars);
+        disasm_code->set_mem_type_no_overlap_check(addr, MemType::Vars);
     }
 }
 
@@ -517,51 +517,75 @@ void Decompiler::map_source_lines() {
 }
 
 void Decompiler::analyse_ctl_file() {
-    for (auto& elem : ctl_file->elems) {
-        if (elem.type == CtlElement::Type::Code) {
-            if (elem.addr < RAM_ADDR) {
-                // Basic line number
-                auto  it = source_lines.find(elem.addr);
-                if (it == source_lines.end()) {
-                    error(elem.loc, "undefined line number: " + std::to_string(elem.addr));
-                }
-                else {
-                    if (!elem.label.empty()) {
-                        // create new label
-                        basic->disasm_code.add_label(elem.label, elem.addr);
-                    }
+    auto& basic_labels = disasm_code->get_basic_labels();
+    auto& asm_labels = disasm_code->get_asm_labels();
 
-                    // get created label or automatically generated label
-                    std::string label = basic->disasm_code.get_line_num_label(elem.addr);
-                    SourceLine* target_line = it->second;
-                    target_line->label = label;
-                }
+    for (auto& elem : ctl_file->elems) {
+        if (elem.type == CtlElement::Type::BasicCode) {
+            // Basic line number
+            if (!elem.label.empty()) {
+                // create new label
+                basic_labels.add(elem.label, elem.addr);
+            }
+
+            auto it = source_lines.find(elem.addr);
+            if (it == source_lines.end()) {
+                error(elem.loc, "undefined line number: " + std::to_string(elem.addr));
             }
             else {
-                // Asm code
-                if (elem.addr < SAVE_ADDR || elem.addr >= mem->dpeek(E_LINE)) {
-                    error(elem.loc, "invalid Asm code address: " + fmt_hex(elem.addr, 4));
-                }
-                else if (basic->disasm_code.get_mem_type(elem.addr) != MemType::Asm &&
-                         basic->disasm_code.get_mem_type(elem.addr) != MemType::Unknown) {
-                    error(elem.loc, "invalid Asm code address: " + fmt_hex(elem.addr, 4));
-                }
-                else {
-                    if (!elem.label.empty()) {
-                        // create new label
-                        basic->disasm_code.add_label(elem.label, elem.addr);
-                    }
-                    basic->disasm_code.set_code(elem.addr);
-                }
+                // get created label or automatically generated label
+                std::string label = basic_labels.add_or_get_from_value(elem.addr);
+                SourceLine* target_line = it->second;
+                target_line->label = label;
             }
-            continue;
         }
+        else if (elem.type == CtlElement::Type::AsmCode) {
+            // Asm code
+            basic->has_asm_code = true;
 
-        error(elem.loc, "invalid element type");
+            if (!elem.label.empty()) {
+                // create new label
+                asm_labels.add(elem.label, elem.addr);
+            }
+
+            if (elem.addr < SAVE_ADDR || elem.addr >= mem->dpeek(E_LINE)) {
+                error(elem.loc, "invalid Asm code address: " + fmt_hex(elem.addr, 4));
+            }
+            else if (disasm_code->get_mem_type(elem.addr) != MemType::Asm &&
+                     disasm_code->get_mem_type(elem.addr) != MemType::Unknown) {
+                error(elem.loc, "invalid Asm code address: " + fmt_hex(elem.addr, 4));
+            }
+            else {
+                disasm_code->set_code(elem.addr);
+            }
+        }
+        else if (elem.type == CtlElement::Type::Byte) {
+            basic->has_asm_code = true;
+            disasm_code->set_byte(elem.addr, elem.count);
+        }
+        else if (elem.type == CtlElement::Type::Word) {
+            basic->has_asm_code = true;
+            disasm_code->set_word(elem.addr, elem.count);
+        }
+        else if (elem.type == CtlElement::Type::Text) {
+            basic->has_asm_code = true;
+            disasm_code->set_text(elem.addr, elem.count);
+        }
+        else if (elem.type == CtlElement::Type::Header) {
+            disasm_code->add_header(elem.addr, elem.text);
+        }
+        else if (elem.type == CtlElement::Type::Comment) {
+            disasm_code->add_comment(elem.addr, elem.text);
+        }
+        else {
+            error(elem.loc, "invalid element type");
+        }
     }
 }
 
 void Decompiler::analyse_goto() {
+    auto& basic_labels = disasm_code->get_basic_labels();
+
     // search for GOTO, GOSUB, RUN and line number references
     for (auto& line : basic->source_lines) {
         if (line.type == SourceLine::Type::Basic) {
@@ -579,7 +603,7 @@ void Decompiler::analyse_goto() {
                             }
                             else {
                                 // create new label/use existing one
-                                std::string label = basic->disasm_code.get_line_num_label(target_line_num);
+                                std::string label = basic_labels.add_or_get_from_value(target_line_num);
                                 SourceLine* target_line = it->second;
                                 target_line->label = label;
 
@@ -596,6 +620,8 @@ void Decompiler::analyse_goto() {
 }
 
 void Decompiler::analyse_usr() {
+    auto& asm_labels = disasm_code->get_asm_labels();
+
     // search for USR and routine addresses
     for (auto& line : basic->source_lines) {
         if (line.type == SourceLine::Type::Basic) {
@@ -612,14 +638,15 @@ void Decompiler::analyse_usr() {
                             }
                             else {
                                 // create new label/use existing one
-                                std::string label = basic->disasm_code.get_asm_label(target_addr);
+                                std::string label = asm_labels.add_or_get_from_value(target_addr);
 
                                 // replace token with label
                                 next_token.code = T_line_addr_ref;
                                 next_token.ident = label;
 
                                 // mark address as Asm code
-                                basic->disasm_code.set_code(target_addr);
+                                basic->has_asm_code = true;
+                                disasm_code->set_code(target_addr);
                             }
                         }
                     }

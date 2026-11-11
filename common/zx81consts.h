@@ -20,3 +20,7 @@ static inline const int NumCols = 32;
 static inline const int MaxLineNum = 0x3fff;
 static inline const int FlagSlow = 0x40;
 static inline const int FlagFast = 0x00;
+static inline const int LabelWidth = 8;
+static inline const int OpcodeWidth = 8;
+static inline const int OperandsWidth = 24;
+static inline const int SymbolWidth = 24;

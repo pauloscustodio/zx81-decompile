@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------------
 
 #include "basic.h"
+#include "disasm.h"
 #include "errors.h"
 #include "release_assert.h"
 #include "types.h"
@@ -17,8 +18,10 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <sstream>
 
-void Basic::write_bas_file(const std::string& filename) const {
+void Basic::write_bas_file(const std::string& filename,
+                           const DisasmCode& disasm_code) const {
     // open file
     std::ofstream file(filename, std::ios::binary);
     if (!file) {
@@ -29,9 +32,9 @@ void Basic::write_bas_file(const std::string& filename) const {
     write_sysvars(file);
     write_dfile(file);
     write_vars(file);
-    write_source_lines(file);
-    write_mem_map(file);
-    write_labels(file);
+    write_source_lines(file, disasm_code);
+    write_labels(file, disasm_code);
+    write_mem_map(file, disasm_code);
 }
 
 void Basic::write_sysvars(std::ostream& os) const {
@@ -170,13 +173,19 @@ void Basic::write_vars(std::ostream& os) const {
     }
 }
 
-void Basic::write_source_lines(std::ostream& os) const {
+void Basic::write_source_lines(std::ostream& os,
+                               const DisasmCode& disasm_code) const {
     for (auto& line : source_lines) {
         if (line.type == SourceLine::Type::Basic) {
+            // output header for basic line
+            write_header(os, line.line_num, disasm_code);
+
+            // output label
             if (!line.label.empty()) {
                 os << std::endl << "@" << line.label << ":" << std::endl;
             }
 
+            // output basic line
             os << fmt_line_number(line.line_num) << " ";
 
             bool is_rem = !line.tokens.empty() && line.tokens[0].code == C_REM;
@@ -194,7 +203,8 @@ void Basic::write_source_lines(std::ostream& os) const {
                     os << token.ident;
                     break;
                 case T_rem_code:
-                    write_asm_lines(os, line.addr + 5, token.bytes);
+                    os << std::endl;
+                    write_asm_lines(os, line.addr + 5, token.bytes, disasm_code);
                     break;
                 case T_line_addr_ref:
                     os << "&" << token.ident;
@@ -227,22 +237,30 @@ void Basic::write_source_lines(std::ostream& os) const {
 }
 
 void Basic::write_asm_lines(std::ostream& os, int addr,
-                            const Bytes& bytes) const {
-    os << std::endl << "#ASM [" << fmt_hex(addr, 4) << "]" << std::endl;
+                            const Bytes& bytes,
+                            const DisasmCode& disasm_code) const {
+    const auto& labels = disasm_code.get_asm_labels();
+
+    os  << "#ASM [" << fmt_hex(addr, 4) << "]" << std::endl;
     for (int i = 0; i < INT(bytes.size()); i++) {
         int addr1 = addr + i;
 
+        // output header for asm line
+        write_header(os, addr1, disasm_code);
+
         // output label
         std::string label;
-        if (disasm_code.find_label(addr1, label)) {
+        if (labels.find(addr1, label)) {
             os << std::endl << label << ":" << std::endl;
         }
 
         // output string of unknown bytes
         if (disasm_code.get_mem_type(addr1) == MemType::Unknown) {
-            os << std::string(16, ' ') << "defb    " << fmt_hex(bytes[i], 2);
+            os << std::setw(LabelWidth) << ""
+               << std::setw(OpcodeWidth) << std::left << "defb"
+               << fmt_hex(bytes[i], 2);
             while (i + 1 < INT(bytes.size()) &&
-                    !disasm_code.find_label(addr + i + 1, label) &&
+                    !labels.find(addr + i + 1, label) &&
                     disasm_code.get_mem_type(addr + i + 1) == MemType::Unknown) {
                 i++;
                 os << "," << fmt_hex(bytes[i], 2);
@@ -251,40 +269,47 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
             continue;
         }
 
-        // fall back to output single byte
-        os << std::string(16, ' ') << "defb    " << fmt_hex(bytes[i], 2) << " ; "
-           << static_cast<char>(disasm_code.get_mem_type(addr1)) << std::endl;
+        // output opcode
+        const Opcode* opcode = disasm_code.get_opcode(addr1);
+        release_assert(opcode);
+
+        // output comments
+        std::vector<std::string> comment = disasm_code.get_comment(addr1);
+        if (comment.empty()) {
+            os << std::setw(LabelWidth) << ""
+               << opcode->to_string(labels) << std::endl;
+        }
+        else {
+            os << std::setw(LabelWidth) << ""
+               << std::setw(OpcodeWidth + OperandsWidth) << std::left
+               << opcode->to_string(labels)
+               << "; " << comment.front() << std::endl;
+            for (size_t i = 1; i < comment.size(); i++) {
+                os << std::setw(LabelWidth + OpcodeWidth + OperandsWidth) << ""
+                   << "; " << comment[i] << std::endl;
+            }
+        }
+
+        i += opcode->size - 1;
     }
     os << "#ENDASM [" << fmt_hex(addr + INT(bytes.size()), 4) << "]" << std::endl;
 }
 
-bool Basic::has_asm_code() const {
-    for (int addr = RAM_ADDR; addr < MEM_SIZE; addr ++) {
-        switch (disasm_code.get_mem_type(addr)) {
-        case MemType::Undefined:
-            return false;   // reached end of loaded memory
-
-        case MemType::Sysvars:
-        case MemType::Dfile:
-        case MemType::Vars:
-        case MemType::Basic:
-            break;
-
-        case MemType::Asm:
-        case MemType::Byte:
-        case MemType::Word:
-        case MemType::Unknown:
-            return true;    // has asm code
-
-        default:
-            release_assert(0);
+void Basic::write_header(std::ostream& os, int addr,
+                         const DisasmCode& disasm_code) const {
+    std::vector<std::string> header = disasm_code.get_header(addr);
+    if (!header.empty()) {
+        os << std::endl;
+        for (const auto& h : header) {
+            os << h << std::endl;
         }
+        os << std::endl;
     }
-    return false;   // no asm code found
 }
 
-void Basic::write_mem_map(std::ostream& os) const {
-    if (!has_asm_code()) {
+void Basic::write_mem_map(std::ostream& os,
+                          const DisasmCode& disasm_code) const {
+    if (!has_asm_code) {
         return;
     }
 
@@ -305,9 +330,13 @@ void Basic::write_mem_map(std::ostream& os) const {
     os << std::endl;
 }
 
-void Basic::write_labels(std::ostream& os) const {
+void Basic::write_labels(std::ostream& os,
+                         const DisasmCode& disasm_code) const {
     std::vector<std::pair<std::string, int>> labels;
-    for (const auto& [label, addr] : disasm_code.get_labels()) {
+
+    // show BASIC labels
+    labels.clear();
+    for (const auto& [label, addr] : disasm_code.get_basic_labels()) {
         labels.emplace_back(label, addr);
     }
 
@@ -318,7 +347,27 @@ void Basic::write_labels(std::ostream& os) const {
         });
 
         for (auto& [label, addr] : labels) {
-            os << "#: " << std::setw(16) << std::left << label
+            os << "#: " << std::setw(SymbolWidth) << std::left << label
+               << " = " << std::setw(6) << std::right << addr << std::endl;
+        }
+
+        os << std::endl;
+    }
+
+    // show ASM labels
+    labels.clear();
+    for (const auto& [label, addr] : disasm_code.get_asm_labels()) {
+        labels.emplace_back(label, addr);
+    }
+
+    if (!labels.empty()) {
+        std::sort(labels.begin(), labels.end(),
+        [](const auto & a, const auto & b) {
+            return a.second < b.second;
+        });
+
+        for (auto& [label, addr] : labels) {
+            os << "#: " << std::setw(SymbolWidth) << std::left << label
                << " = " << fmt_hex(addr, 4)
                << " = " << std::setw(5) << std::right  << addr << std::endl;
         }

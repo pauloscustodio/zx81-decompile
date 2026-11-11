@@ -1,6 +1,6 @@
 #AUTOSTART=1
 #AUTOSTART_LINE=3100
-#SYSVARS=0,0xB8,0x0B,0xE1,0x58,0xE2,0x58,0xFA,0x5B,0xFA,0x5B,0x37,0x5C,0xD2,0x58,0,0xC0,0x37,0x5C,0x37,0x5C,0x0B,0x5D,0x40,0,2,0x39,8,0xFF,0xFF,0xFF,0x1F,0xD3,0x58,0xB8,0x0B,0,0x71,0xE2,0x8D,0x0C,0,0,0x17,0x9F,0,0,0xBC,0x21,0x18,0x40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0x76,0,0,0,0,0,0x82,0x40,0,0,0,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x85,0x92,0x92,0x93,0x90
+#SYSVARS=0,$B8,$0B,$E1,$58,$E2,$58,$FA,$5B,$FA,$5B,$37,$5C,$D2,$58,0,$C0,$37,$5C,$37,$5C,$0B,$5D,$40,0,2,$39,8,$FF,$FF,$FF,$1F,$D3,$58,$B8,$0B,0,$71,$E2,$8D,$0C,0,0,$17,$9F,0,0,$BC,$21,$18,$40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,$76,0,0,0,0,0,$82,$40,0,0,0,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$85,$92,$92,$93,$90
 
 #VARS L=0
 #VARS V=5
@@ -12,207 +12,1142 @@
 #VARS R=200
 
     1  REM 
-#ASM [0x4082]
-                defb    0x00,0x00,0x80,0x80,0x00,0x80,0x80,0x80,0x00,0x00,0x80,0x80,0x00,0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x80,0x00,0x80,0x80,0x80,0x80,0x80,0x00,0x80,0x80,0x00,0x80,0x00,0x80,0x80,0x80,0x80,0x00,0x00,0x00,0x00,0x80,0x80,0x80,0x80,0x00,0x80,0x80,0x00,0x80,0x80,0x00,0x00,0x80,0x80,0x00,0x00,0x80,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x00,0x00,0x08,0x08,0x08,0x08,0x00,0x08,0x00,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x00,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x00,0x08,0x08,0x00,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0x80,0xEE,0x40,0x17,0x41,0x13,0x02,0x10,0x05,0x29,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x4126]
+#ASM [$4082]
+        defb    $00,$00,$80,$80,$00,$80,$80,$80,$00,$00,$80,$80,$00,$80,$00,$00,$00,$00,$00,$00,$80,$00,$80,$80,$80,$80,$80,$00,$80,$80,$00,$80,$00,$80,$80,$80,$80,$00,$00,$00,$00,$80,$80,$80,$80,$00,$80,$80,$00,$80,$80,$00,$00,$80,$80,$00,$00,$80,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$00,$00,$08,$08,$08,$08,$00,$08,$00,$08,$08,$08,$08,$08,$08,$08,$08,$00,$08,$08,$08,$08,$08,$08,$08,$08,$08,$00,$08,$08,$00,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$80,$EE,$40,$17,$41,$13,$02,$10,$05,$29,$00,$00,$00,$00,$00 ; -
+#ENDASM [$4126]
 
     2  REM 
-#ASM [0x412C]
+#ASM [$412C]
 
 L412C:
-                defb    0x21 ; C
-                defb    0xBB,0x40,0x22,0x1A,0x41,0x21,0x82,0x40,0x22,0x18,0x41,0x3E,0x14,0x32,0x1E,0x41,0x3E,0x09,0x32,0x1F,0x41,0x3E,0x39,0x32,0x20,0x41,0xCD,0x91,0x41,0xCD,0x5B,0x41,0xCD,0x5B,0x41,0x05,0x05,0x0D,0x0D,0xED,0x43,0x1C,0x41,0xC3,0x8A,0x41,0x04,0x0C,0xED,0x43,0x1C,0x41,0xED,0x53,0x18,0x41,0x3A,0x20,0x41,0xD6,0x08,0x32,0x20,0x41,0x26,0x00,0x6F,0x19,0x22,0x1A,0x41,0x3A,0x1E,0x41,0xD6,0x02,0x32,0x1E,0x41,0x3A,0x1F,0x41,0xD6,0x02,0x32,0x1F,0x41,0x00,0x00,0x00,0xCD,0x91,0x41,0xC9 ; -
-#ENDASM [0x418B]
+        ld      hl, $40BB
+        ld      ($411A), hl
+        ld      hl, $4082
+        ld      ($4118), hl
+        ld      a, $14
+        ld      ($411E), a
+        ld      a, $09
+        ld      ($411F), a
+        ld      a, $39
+        ld      ($4120), a
+        call    L4191
+        call    L415B
+        call    L415B
+        dec     b
+        dec     b
+        dec     c
+        dec     c
+        ld      ($411C), bc
+        jp      L418A
+
+L415B:
+        inc     b
+        inc     c
+        ld      ($411C), bc
+        ld      ($4118), de
+        ld      a, ($4120)
+        sub     $08
+        ld      ($4120), a
+        ld      h, $00
+        ld      l, a
+        add     hl, de
+        ld      ($411A), hl
+        ld      a, ($411E)
+        sub     $02
+        ld      ($411E), a
+        ld      a, ($411F)
+        sub     $02
+        ld      ($411F), a
+        nop
+        nop
+        nop
+        call    L4191
+
+L418A:
+        ret
+#ENDASM [$418B]
 
     3  REM 
-#ASM [0x4191]
-                defb    0xED,0x5B,0x1A,0x41,0x1A,0x2A,0x1A,0x41,0x2B,0x06,0x00,0xF5,0x3A,0x20,0x41,0x4F,0xF1,0xED,0xB8,0x2A,0x18,0x41,0x77,0xE5,0xED,0x4B,0x1C,0x41,0xCD,0x12,0x42,0xEB,0xE1,0xC5,0x3A,0x1E,0x41,0x01,0x20,0x00,0xED,0xA0,0x03,0x3D,0xFE,0x00,0x28,0x05,0xEB,0x09,0xEB,0x18,0xF3,0xED,0x4B,0x1F,0x41,0x06,0x00,0xED,0xB0,0x3A,0x1E,0x41,0x01,0x22,0x00,0xED,0xA0,0x03,0x3D,0xFE,0x00,0x28,0x07,0xEB,0xA7,0xED,0x42,0xEB,0x18,0xF1,0x3A,0x1F,0x41,0x1B,0x1B,0xED,0xA0,0x3D,0xFE,0x00,0x20,0xF7,0xC1,0xEB,0xC9,0x3E,0xF7,0xBC,0x28,0x0D,0x3E,0xEF,0xBC,0x28,0x08,0x3E,0xDF,0xBC,0x28,0x03,0xC3,0xF5,0x43,0xAF,0xB9,0xCA,0xF5,0x43,0xC3,0xEA,0x43 ; -
-#ENDASM [0x420C]
+#ASM [$4191]
+
+L4191:
+        ld      de, ($411A)
+        ld      a, (de)
+        ld      hl, ($411A)
+        dec     hl
+        ld      b, $00
+        push    af
+        ld      a, ($4120)
+        ld      c, a
+        pop     af
+        lddr
+        ld      hl, ($4118)
+        ld      (hl), a
+        push    hl
+        ld      bc, ($411C)
+        call    L4212
+        ex      de, hl
+        pop     hl
+        push    bc
+        ld      a, ($411E)
+        ld      bc, $0020
+
+L41B9:
+        ldi
+        inc     bc
+        dec     a
+        cp      $00
+        jr      z, L41C6
+        ex      de, hl
+        add     hl, bc
+        ex      de, hl
+        jr      L41B9
+
+L41C6:
+        ld      bc, ($411F)
+        ld      b, $00
+        ldir
+        ld      a, ($411E)
+        ld      bc, $0022
+
+L41D4:
+        ldi
+        inc     bc
+        dec     a
+        cp      $00
+        jr      z, L41E3
+        ex      de, hl
+        and     a
+        sbc     hl, bc
+        ex      de, hl
+        jr      L41D4
+
+L41E3:
+        ld      a, ($411F)
+
+L41E6:
+        dec     de
+        dec     de
+        ldi
+        dec     a
+        cp      $00
+        jr      nz, L41E6
+        pop     bc
+        ex      de, hl
+        ret
+        defb    $3E,$F7,$BC,$28,$0D,$3E,$EF,$BC,$28,$08,$3E,$DF,$BC,$28,$03,$C3,$F5,$43,$AF,$B9,$CA,$F5,$43,$C3,$EA,$43 ; -
+#ENDASM [$420C]
 
     4  REM 
-#ASM [0x4212]
-                defb    0xD5,0xF5,0x2A,0x0C,0x40,0x23,0xAF,0x11,0x21,0x00,0xB8,0x28,0x04,0x19,0x3C,0x18,0xF9,0x79,0x1E,0x00,0xBB,0x28,0x04,0x1C,0x23,0x18,0xF9,0xF1,0xD1,0xC9,0x00,0x00 ; -
-#ENDASM [0x4232]
+#ASM [$4212]
+
+L4212:
+        push    de
+        push    af
+        ld      hl, (D_FILE)
+        inc     hl
+        xor     a
+        ld      de, $0021
+
+L421C:
+        cp      b
+        jr      z, L4223
+        add     hl, de
+        inc     a
+        jr      L421C
+
+L4223:
+        ld      a, c
+        ld      e, $00
+
+L4226:
+        cp      e
+        jr      z, L422D
+        inc     e
+        inc     hl
+        jr      L4226
+
+L422D:
+        pop     af
+        pop     de
+        ret
+        defb    $00,$00 ; -
+#ENDASM [$4232]
 
     5  REM 
-#ASM [0x4238]
-                defb    0x21,0x82,0x40,0xED,0x5B,0x1C,0x41,0xD5,0x78,0x92,0x16,0x00,0x5F,0x19,0xD1,0x79,0x93,0xFE,0x01,0x28,0x05,0x30,0x0D,0x36,0x00,0xC9,0x16,0x00,0x3E,0x39,0x00,0x5F,0x19,0x36,0x00,0xC9,0x16,0x00,0x3E,0x39,0x00,0x87,0xD6,0x08,0x5F,0x19,0x36,0x00,0xC9,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x426E]
+#ASM [$4238]
+
+L4238:
+        ld      hl, $4082
+        ld      de, ($411C)
+        push    de
+        ld      a, b
+        sub     d
+        ld      d, $00
+        ld      e, a
+        add     hl, de
+        pop     de
+        ld      a, c
+        sub     e
+        cp      $01
+        jr      z, L4252
+        jr      nc, L425C
+        ld      (hl), $00
+        ret
+
+L4252:
+        ld      d, $00
+        ld      a, $39
+        nop
+        ld      e, a
+        add     hl, de
+        ld      (hl), $00
+        ret
+
+L425C:
+        ld      d, $00
+        ld      a, $39
+        nop
+        add     a, a
+        sub     $08
+        ld      e, a
+        add     hl, de
+        ld      (hl), $00
+        ret
+        defb    $00,$00,$00,$00,$00 ; -
+#ENDASM [$426E]
 
     6  REM 
-#ASM [0x4274]
-                defb    0x16,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x87,0x07,0x80,0x84,0x04,0x00,0x84,0x03,0x07,0x00,0x00,0x02,0x80,0x01,0x00,0x00,0x07,0x80,0x84,0x00,0x00,0x87,0x80,0x04,0x00,0x00,0x81,0x00,0x82,0x00,0x00,0x00,0x00,0x00,0x00 ; -
+#ASM [$4274]
+        defb    $16,$08,$00,$00,$00,$00,$00,$00,$87,$07,$80,$84,$04,$00,$84,$03,$07,$00,$00,$02,$80,$01,$00,$00,$07,$80,$84,$00,$00,$87,$80,$04,$00,$00,$81,$00,$82,$00,$00,$00,$00,$00,$00 ; -
 
 L429F:
-                defb    0x2A ; C
-                defb    0x1C,0x41,0x7D,0xC6,0x03,0x32,0x74,0x42,0xED,0x4B,0x74,0x42,0xC5,0x3A,0xEF,0x42,0xFE,0x00,0x28,0x0E,0x05,0xCD,0xD1,0x42,0xC1,0x78,0xFE,0x06,0xC0,0xAF,0x32,0xEF,0x42,0xC9,0x04,0xCD,0xD1,0x42,0xC1,0x78,0xFE,0x0A,0xC0,0x3E,0x01,0x18,0xEF,0x00,0x00,0xED,0x43,0x74,0x42,0xCD,0x12,0x42,0xEB,0x21,0x77,0x42,0x3E,0x08,0x01,0x05,0x00,0xED,0xB0,0x3D,0xFE,0x00,0xC8,0xEB,0x01,0x1C,0x00,0x09,0xEB,0x18,0xEF,0x01,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x42F4]
+        ld      hl, ($411C)
+        ld      a, l
+        add     a, $03
+        ld      ($4274), a
+        ld      bc, ($4274)
+        push    bc
+        ld      a, ($42EF)
+        cp      $00
+        jr      z, L42C2
+        dec     b
+        call    L42D1
+        pop     bc
+        ld      a, b
+        cp      $06
+        ret     nz
+        xor     a
+
+L42BE:
+        ld      ($42EF), a
+        ret
+
+L42C2:
+        inc     b
+        call    L42D1
+        pop     bc
+        ld      a, b
+        cp      $0A
+        ret     nz
+        ld      a, $01
+        jr      L42BE
+        defb    $00,$00 ; -
+
+L42D1:
+        ld      ($4274), bc
+        call    L4212
+        ex      de, hl
+        ld      hl, $4277
+        ld      a, $08
+
+L42DE:
+        ld      bc, $0005
+        ldir
+        dec     a
+        cp      $00
+        ret     z
+        ex      de, hl
+        ld      bc, $001C
+        add     hl, bc
+        ex      de, hl
+        jr      L42DE
+        defb    $01,$00,$00,$00,$00 ; -
+#ENDASM [$42F4]
 
     7  REM 
-#ASM [0x42FA]
-                defb    0x81,0x80,0x80,0x80,0x82,0x82,0x82,0x81,0x83,0x80,0x00,0x80,0x80,0x80,0x00,0x07,0x07,0x84,0x03,0x80,0x84,0x80,0x80,0x80,0x07,0x81,0x80,0x80,0x80,0x82,0x82,0x81,0x83,0x82,0x81,0x00,0x80,0x80,0x80,0x00,0x07,0x84,0x03,0x07,0x84,0x84,0x80,0x80,0x80,0x07,0x81,0x80,0x80,0x80,0x82,0x80,0x83,0x82,0x81,0x81,0x00,0x80,0x80,0x80,0x00,0x80,0x03,0x07,0x84,0x84,0x84,0x80,0x80,0x80,0x07,0x03,0x00,0x09 ; -
+#ASM [$42FA]
+        defb    $81,$80,$80,$80,$82,$82,$82,$81,$83,$80,$00,$80,$80,$80,$00,$07,$07,$84,$03,$80,$84,$80,$80,$80,$07,$81,$80,$80,$80,$82,$82,$81,$83,$82,$81,$00,$80,$80,$80,$00,$07,$84,$03,$07,$84,$84,$80,$80,$80,$07,$81,$80,$80,$80,$82,$80,$83,$82,$81,$81,$00,$80,$80,$80,$00,$80,$03,$07,$84,$84,$84,$80,$80,$80,$07,$03,$00,$09 ; -
 
 L4348:
-                defb    0xED ; C
-                defb    0x4B,0x46,0x43,0xCD,0x12,0x42,0xEB,0x21,0x45,0x43,0x3E,0x01,0xBE,0x20,0x09,0x3C,0x32,0x45,0x43,0x21,0xFA,0x42,0x18,0x16,0x3E,0x02,0xBE,0x20,0x09,0x3C,0x32,0x45,0x43,0x21,0x13,0x43,0x18,0x08,0x3E,0x01,0x32,0x45,0x43,0x21,0x2C,0x43,0x3E,0x05,0x01,0x05,0x00,0xED,0xB0,0x3D,0xFE,0x00,0xC8,0xEB,0x01,0x1C,0x00,0x09,0xEB,0x18,0xEF,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x438F]
+        ld      bc, ($4346)
+
+L434C:
+        call    L4212
+        ex      de, hl
+        ld      hl, $4345
+        ld      a, $01
+        cp      (hl)
+        jr      nz, L4361
+        inc     a
+        ld      ($4345), a
+        ld      hl, $42FA
+        jr      L4377
+
+L4361:
+        ld      a, $02
+        cp      (hl)
+        jr      nz, L436F
+        inc     a
+        ld      ($4345), a
+        ld      hl, $4313
+        jr      L4377
+
+L436F:
+        ld      a, $01
+        ld      ($4345), a
+        ld      hl, $432C
+
+L4377:
+        ld      a, $05
+
+L4379:
+        ld      bc, $0005
+        ldir
+        dec     a
+        cp      $00
+        ret     z
+        ex      de, hl
+        ld      bc, $001C
+        add     hl, bc
+        ex      de, hl
+        jr      L4379
+        defb    $00,$00,$00,$00,$00 ; -
+#ENDASM [$438F]
 
     8  REM 
-#ASM [0x4395]
-                defb    0xCD,0xBB,0x02,0xED,0x4B,0x46,0x43,0x3E,0xFF,0xBD,0x28,0x54,0x3D,0xBD,0x28,0x2B,0x3D,0xBD,0x28,0x27,0x3D,0x3D,0xBD,0x28,0x2D,0x3E,0xF7,0xBD,0x28,0x28,0x3E,0xEF,0xBD,0x28,0x38,0x3E,0xDF,0xBD,0x28,0x33,0x3E,0xF7,0x94,0x30,0x24,0x3A,0x1C,0x41,0xD6,0x08,0xB9,0x28,0x2B,0xCD,0x05,0x44,0x0C,0x18,0x25,0x3E,0x10,0xB8,0x28,0x20,0xCD,0x05,0x44,0x04,0x18,0x1A,0x3E,0x03,0xB8,0x28,0x15,0xCD,0x05,0x44,0x05,0x18,0x0F,0xAF,0xB9,0x28,0x0B,0xCD,0x05,0x44,0x0D,0x18,0x05,0xC5,0xCD,0x31,0x44,0xC1,0xED,0x43,0x46,0x43,0xCD,0x48,0x43,0xC9,0x00,0x00 ; -
-#ENDASM [0x43FF]
+#ASM [$4395]
+        defb    $CD,$BB,$02,$ED,$4B,$46,$43,$3E,$FF,$BD,$28,$54,$3D,$BD,$28,$2B,$3D,$BD,$28,$27,$3D,$3D,$BD,$28,$2D,$3E,$F7,$BD,$28,$28,$3E,$EF,$BD,$28,$38,$3E,$DF,$BD,$28,$33,$3E,$F7,$94,$30,$24 ; -
+
+L43C2:
+        ld      a, ($411C)
+        sub     $08
+        cp      c
+        jr      z, L43F5
+        call    L4405
+        inc     c
+        jr      L43F5
+
+L43D0:
+        ld      a, $10
+        cp      b
+        jr      z, L43F5
+        call    L4405
+        inc     b
+        jr      L43F5
+
+L43DB:
+        ld      a, $03
+        cp      b
+        jr      z, L43F5
+        call    L4405
+        dec     b
+        jr      L43F5
+
+L43E6:
+        xor     a
+        cp      c
+        jr      z, L43F5
+        call    L4405
+        dec     c
+        jr      L43F5
+        defb    $C5,$CD,$31,$44,$C1 ; -
+
+L43F5:
+        ld      ($4346), bc
+        call    L4348
+        ret
+        defb    $00,$00 ; -
+#ENDASM [$43FF]
 
     9  REM 
-#ASM [0x4405]
+#ASM [$4405]
 
 L4405:
-                defb    0xC5 ; C
-                defb    0xED,0x4B,0x46,0x43,0xCD,0x12,0x42,0x3E,0x05,0x11,0x1C,0x00,0x06,0x05,0x36,0x00,0x23,0x10,0xFB,0x19,0x3D,0xFE,0x00,0x20,0xF3,0xC1,0xC9,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x4426]
+        push    bc
+        ld      bc, ($4346)
+        call    L4212
+        ld      a, $05
+        ld      de, $001C
+
+L4412:
+        ld      b, $05
+
+L4414:
+        ld      (hl), $00
+        inc     hl
+        djnz    L4414
+        add     hl, de
+        dec     a
+        cp      $00
+        jr      nz, L4412
+        pop     bc
+        ret
+        defb    $00,$00,$00,$00,$00 ; -
+#ENDASM [$4426]
 
    10  REM 
-#ASM [0x442C]
-                defb    0x00,0x11,0x12,0x0A,0x12,0x3A,0x2C,0x44,0xFE,0x01,0xC8,0x2A,0x46,0x43,0x24,0x24,0x2C,0x2C,0x2C,0x2C,0x22,0x2D,0x44,0x22,0x2F,0x44,0x44,0x4D,0xCD,0x12,0x42,0x36,0x34,0x3E,0x01,0x32,0x2C,0x44,0xC9,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x4458]
+#ASM [$442C]
+        defb    $00,$11,$12,$0A,$12 ; -
+
+L4431:
+        ld      a, ($442C)
+        cp      $01
+        ret     z
+        ld      hl, ($4346)
+        inc     h
+        inc     h
+        inc     l
+        inc     l
+        inc     l
+        inc     l
+        ld      ($442D), hl
+        ld      ($442F), hl
+        ld      b, h
+        ld      c, l
+        call    L4212
+        ld      (hl), $34
+        ld      a, $01
+        ld      ($442C), a
+        ret
+        defb    $00,$00,$00,$00,$00 ; -
+#ENDASM [$4458]
 
    11  REM 
-#ASM [0x445E]
-                defb    0x00,0x00,0xAF,0x32,0x5E,0x44,0x32,0x5F,0x44,0x3A,0x2C,0x44,0xFE,0x00,0xC8,0xED,0x4B,0x2D,0x44,0xCD,0x12,0x42,0x3E,0x34,0xBE,0x20,0x02,0x36,0x00,0xED,0x5B,0x1C,0x41,0x7B,0x3D,0x91,0x28,0x0B,0x38,0x09,0x23,0x36,0x34,0x0C,0xED,0x43,0x2D,0x44,0xC9,0x23,0x7B,0xC6,0x04,0x91,0x28,0x20,0xAF,0xBE,0x28,0xED,0x3E,0x80,0xBE,0x28,0x0C,0x3E,0x08,0xBE,0x28,0x07,0x3E,0x01,0x32,0x5F,0x44,0x18,0x0B,0x0C,0x36,0x00,0xCD,0x38,0x42,0x3E,0x01,0x32,0x5E,0x44,0xAF,0x32,0x2C,0x44,0xC9,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x44C4]
+#ASM [$445E]
+        defb    $00,$00 ; -
+
+L4460:
+        xor     a
+        ld      ($445E), a
+        ld      ($445F), a
+        ld      a, ($442C)
+        cp      $00
+        ret     z
+        ld      bc, ($442D)
+        call    L4212
+        ld      a, $34
+        cp      (hl)
+        jr      nz, L447B
+        ld      (hl), $00
+
+L447B:
+        ld      de, ($411C)
+        ld      a, e
+        dec     a
+        sub     c
+        jr      z, L448F
+        jr      c, L448F
+        inc     hl
+
+L4487:
+        ld      (hl), $34
+        inc     c
+        ld      ($442D), bc
+        ret
+
+L448F:
+        inc     hl
+        ld      a, e
+        add     a, $04
+        sub     c
+        jr      z, L44B6
+        xor     a
+        cp      (hl)
+        jr      z, L4487
+        ld      a, $80
+        cp      (hl)
+        jr      z, L44AB
+        ld      a, $08
+        cp      (hl)
+        jr      z, L44AB
+        ld      a, $01
+        ld      ($445F), a
+        jr      L44B6
+
+L44AB:
+        inc     c
+        ld      (hl), $00
+        call    L4238
+        ld      a, $01
+        ld      ($445E), a
+
+L44B6:
+        xor     a
+        ld      ($442C), a
+        ret
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+#ENDASM [$44C4]
 
    12  REM 
-#ASM [0x44CA]
-                defb    0x00,0x80,0x80,0x80,0x00,0x00,0x00 ; -
+#ASM [$44CA]
+        defb    $00,$80,$80,$80,$00,$00,$00 ; -
 
 L44D1:
-                defb    0x01 ; C
-                defb    0x01,0x03,0xCD,0x12,0x42,0xEB,0x06,0x0B,0x21,0xCA,0x44,0xED,0xA0,0xED,0xA0,0xED,0xA0,0x10,0xF5,0x3E,0x05,0x06,0x03,0x21,0xCA,0x44,0xC5,0x01,0x20,0x00,0xEB,0x09,0xC1,0xEB,0xED,0xA0,0x10,0xF4,0x3D,0xFE,0x00,0x20,0xEA,0x01,0x20,0x00,0xEB,0x09,0xEB,0x06,0x0A,0x21,0xCA,0x44,0x7E,0x12,0x23,0x1B,0x7E,0x12,0x23,0x1B,0x7E,0x12,0x00,0x1B,0x10,0xEF,0x01,0x20,0x00,0xEB,0xA7,0xED,0x42,0xEB,0x3E,0x05,0x06,0x03,0x21,0xCA,0x44,0xF5,0x7E,0x12,0xF1,0xC5,0x01,0x21,0x00,0xEB,0xA7,0xED,0x42,0xC1,0xEB,0x23,0x10,0xEF,0x3D,0xFE,0x00,0x20,0xE5,0x3A,0xCA,0x44,0x32,0xCD,0x44,0x3A,0xCB,0x44,0x32,0xCA,0x44,0x3A,0xCC,0x44,0x32,0xCB,0x44,0x3A,0xCD,0x44,0x32,0xCC,0x44,0x01,0x0D,0x0B,0xC3,0x4C,0x43 ; -
-#ENDASM [0x4559]
+        ld      bc, $0301
+        call    L4212
+        ex      de, hl
+        ld      b, $0B
+
+L44DA:
+        ld      hl, $44CA
+        ldi
+        ldi
+        ldi
+        djnz    L44DA
+        ld      a, $05
+
+L44E7:
+        ld      b, $03
+        ld      hl, $44CA
+
+L44EC:
+        push    bc
+        ld      bc, $0020
+        ex      de, hl
+        add     hl, bc
+        pop     bc
+        ex      de, hl
+        ldi
+        djnz    L44EC
+        dec     a
+        cp      $00
+        jr      nz, L44E7
+        ld      bc, $0020
+        ex      de, hl
+        add     hl, bc
+        ex      de, hl
+        ld      b, $0A
+
+L4505:
+        ld      hl, $44CA
+        ld      a, (hl)
+        ld      (de), a
+        inc     hl
+        dec     de
+        ld      a, (hl)
+        ld      (de), a
+        inc     hl
+        dec     de
+        ld      a, (hl)
+        ld      (de), a
+        nop
+        dec     de
+        djnz    L4505
+        ld      bc, $0020
+        ex      de, hl
+        and     a
+        sbc     hl, bc
+        ex      de, hl
+        ld      a, $05
+
+L4520:
+        ld      b, $03
+        ld      hl, $44CA
+
+L4525:
+        push    af
+        ld      a, (hl)
+        ld      (de), a
+        pop     af
+        push    bc
+        ld      bc, $0021
+        ex      de, hl
+        and     a
+        sbc     hl, bc
+        pop     bc
+        ex      de, hl
+        inc     hl
+        djnz    L4525
+        dec     a
+        cp      $00
+        jr      nz, L4520
+        ld      a, ($44CA)
+        ld      ($44CD), a
+        ld      a, ($44CB)
+        ld      ($44CA), a
+        ld      a, ($44CC)
+        ld      ($44CB), a
+        ld      a, ($44CD)
+        ld      ($44CC), a
+        ld      bc, $0B0D
+        jp      L434C
+#ENDASM [$4559]
 
    13  REM 
-#ASM [0x455F]
-                defb    0x00,0x81,0x84,0x07,0x00,0x81,0x86,0x07,0x82,0x81,0x82,0x07,0x00,0x81,0x84,0x07,0x84,0x81,0x86,0x07,0x00,0x81,0x82,0x07,0x00,0x81,0x80,0x00,0x07,0x82,0x80,0x81,0x80,0x07,0x80,0x80,0x81,0x00,0x07,0x80,0x80,0x81,0x80,0x07,0x80,0x84,0x81,0x00,0x80,0x07,0x00,0x84,0x07,0x82,0x00,0x82,0x81,0x84,0x06,0x82,0x07,0x82,0x00,0x84,0x81,0x84,0x06,0x82,0x07,0x84,0x00,0x84,0x81,0x82,0x00,0x81,0x80,0x80,0x80,0x82,0x82,0x82,0x82,0x82,0x80,0x00,0x80,0x00,0x80,0x00,0x80,0x84,0x84,0x84,0x84,0x84,0x80,0x80,0x80,0x07,0x04 ; -
+#ASM [$455F]
+        defb    $00,$81,$84,$07,$00,$81,$86,$07,$82,$81,$82,$07,$00,$81,$84,$07,$84,$81,$86,$07,$00,$81,$82,$07,$00,$81,$80,$00,$07,$82,$80,$81,$80,$07,$80,$80,$81,$00,$07,$80,$80,$81,$80,$07,$80,$84,$81,$00,$80,$07,$00,$84,$07,$82,$00,$82,$81,$84,$06,$82,$07,$82,$00,$84,$81,$84,$06,$82,$07,$84,$00,$84,$81,$82,$00,$81,$80,$80,$80,$82,$82,$82,$82,$82,$80,$00,$80,$00,$80,$00,$80,$84,$84,$84,$84,$84,$80,$80,$80,$07,$04 ; -
 
 L45C4:
-                defb    0x11 ; C
-                defb    0x19,0x00,0x3A,0xC3,0x45,0x3C,0xFE,0x05,0x20,0x02,0x3E,0x01,0x32,0xC3,0x45,0x21,0x46,0x45,0x47,0x19,0x10,0xFD,0xE5,0xED,0x4B,0x46,0x43,0xCD,0x12,0x42,0xEB,0xE1,0xC3,0x77,0x43,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x45ED]
+        ld      de, $0019
+        ld      a, ($45C3)
+        inc     a
+        cp      $05
+        jr      nz, L45D1
+        ld      a, $01
+
+L45D1:
+        ld      ($45C3), a
+        ld      hl, $4546
+        ld      b, a
+
+L45D8:
+        add     hl, de
+        djnz    L45D8
+        push    hl
+        ld      bc, ($4346)
+        call    L4212
+        ex      de, hl
+        pop     hl
+        jp      L4377
+        defb    $00,$00,$00,$00,$00 ; -
+#ENDASM [$45ED]
 
    14  REM 
-#ASM [0x45F3]
-                defb    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x34,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xFA,0x45 ; -
+#ASM [$45F3]
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$34,$00,$00,$00,$00,$00,$00,$00,$00,$FA,$45 ; -
 
 L4606:
-                defb    0x2A ; C
-                defb    0x04,0x46,0x2B,0x01,0xF3,0x45,0xA7,0xED,0x42,0x30,0x05,0x21,0xFB,0x45,0x18,0x01,0x09,0xE5,0x22,0x04,0x46,0x01,0x12,0x0D,0xCD,0x12,0x42,0xD1,0xEB,0x01,0x08,0x00,0xED,0xB0,0xC9 ; -
-#ENDASM [0x462A]
+        ld      hl, ($4604)
+        dec     hl
+        ld      bc, $45F3
+        and     a
+        sbc     hl, bc
+        jr      nc, L4617
+        ld      hl, $45FB
+        jr      L4618
+
+L4617:
+        add     hl, bc
+
+L4618:
+        push    hl
+        ld      ($4604), hl
+        ld      bc, $0D12
+        call    L4212
+        pop     de
+        ex      de, hl
+        ld      bc, $0008
+        ldir
+        ret
+#ENDASM [$462A]
 
    15  REM 
-#ASM [0x4630]
+#ASM [$4630]
 
 L4630:
-                defb    0x3A ; C
-                defb    0x1C,0x41,0xD6,0x02,0x4F,0x06,0x05,0xCD,0x47,0x46,0x00,0xCD,0x47,0x46,0xCD,0x47,0x46,0x00,0xCD,0x47,0x46,0xC9,0xCD,0x12,0x42,0x36,0x81,0x11,0x21,0x00,0x19,0x36,0x02,0x04,0x04,0x04,0x04,0xC9,0x00,0x00,0x00 ; -
-#ENDASM [0x465A]
+        ld      a, ($411C)
+        sub     $02
+        ld      c, a
+        ld      b, $05
+        call    L4647
+        nop
+        call    L4647
+        call    L4647
+        nop
+        call    L4647
+        ret
+
+L4647:
+        call    L4212
+        ld      (hl), $81
+        ld      de, $0021
+        add     hl, de
+        ld      (hl), $02
+        inc     b
+        inc     b
+        inc     b
+        inc     b
+        ret
+        defb    $00,$00,$00 ; -
+#ENDASM [$465A]
 
    16  REM 
-#ASM [0x4660]
-                defb    0x00,0x11,0x00,0x3A,0x62,0x46,0xFE,0x01,0xC8,0x3A,0x1C,0x41,0xD6,0x03,0x6F,0x3A,0x47,0x43,0x67,0x3E,0x05,0x94,0x38,0x04,0x26,0x05,0x18,0x14,0x3E,0x09,0x94,0x38,0x04,0x26,0x09,0x18,0x0B,0x3E,0x0D,0x94,0x38,0x04,0x26,0x0D,0x18,0x02,0x26,0x11,0x22,0x60,0x46,0x3E,0x01,0x32,0x62,0x46,0xC9 ; -
-#ENDASM [0x4699]
+#ASM [$4660]
+        defb    $00,$11,$00 ; -
+
+L4663:
+        ld      a, ($4662)
+        cp      $01
+        ret     z
+        ld      a, ($411C)
+        sub     $03
+        ld      l, a
+        ld      a, ($4347)
+        ld      h, a
+        ld      a, $05
+        sub     h
+        jr      c, L467C
+        ld      h, $05
+        jr      L4690
+
+L467C:
+        ld      a, $09
+        sub     h
+        jr      c, L4685
+        ld      h, $09
+        jr      L4690
+
+L4685:
+        ld      a, $0D
+        sub     h
+        jr      c, L468E
+        ld      h, $0D
+        jr      L4690
+
+L468E:
+        ld      h, $11
+
+L4690:
+        ld      ($4660), hl
+        ld      a, $01
+        ld      ($4662), a
+        ret
+#ENDASM [$4699]
 
    17  REM 
-#ASM [0x469F]
-                defb    0x00,0xAF,0x32,0x9F,0x46,0xED,0x4B,0x60,0x46,0xCD,0x12,0x42,0x36,0x00,0xAF,0xB9,0x20,0x04,0x32,0x62,0x46,0xC9,0x0D,0x2B,0xBE,0x28,0x05,0x3E,0x34,0xBE,0x20,0x07,0x36,0x04,0xED,0x43,0x60,0x46,0xC9,0x34,0x32,0xC6,0x46,0x3E,0x01,0x32,0x9F,0x46,0xC9,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x46D5]
+#ASM [$469F]
+        defb    $00 ; -
+
+L46A0:
+        xor     a
+        ld      ($469F), a
+        ld      bc, ($4660)
+        call    L4212
+        ld      (hl), $00
+        xor     a
+        cp      c
+        jr      nz, L46B5
+        ld      ($4662), a
+        ret
+
+L46B5:
+        dec     c
+        dec     hl
+        cp      (hl)
+        jr      z, L46BF
+        ld      a, $34
+        cp      (hl)
+        jr      nz, L46C6
+
+L46BF:
+        ld      (hl), $04
+        ld      ($4660), bc
+        ret
+
+L46C6:
+        inc     (hl)
+        ld      (L46C6), a
+        ld      a, $01
+        ld      ($469F), a
+        ret
+        defb    $00,$00,$00,$00,$00 ; -
+#ENDASM [$46D5]
 
    18  REM 
-#ASM [0x46DB]
-                defb    0x61,0x00,0x2A,0xDB,0x46,0x23,0x11,0xC8,0x00,0xA7,0xED,0x52,0x28,0x05,0x19,0x22,0xDB,0x46,0xC9,0x21,0x00,0x00,0x22,0xDB,0x46,0xCD,0xE1,0x47,0xED,0x4B,0x1C,0x41,0x0D,0xED,0x43,0x1C,0x41,0x0D,0x0D,0xCD,0x12,0x42,0x3E,0x14,0x01,0x0D,0x00,0x54,0x5D,0x23,0xED,0xB0,0x2B,0x36,0x00,0x01,0x14,0x00,0x09,0x3D,0xFE,0x00,0x20,0xEC,0xC9 ; -
-#ENDASM [0x471C]
+#ASM [$46DB]
+        defb    $61,$00 ; -
+
+L46DD:
+        ld      hl, ($46DB)
+        inc     hl
+        ld      de, $00C8
+        and     a
+        sbc     hl, de
+        jr      z, L46EE
+        add     hl, de
+        ld      ($46DB), hl
+        ret
+
+L46EE:
+        ld      hl, $0000
+        ld      ($46DB), hl
+        call    L47E1
+        ld      bc, ($411C)
+        dec     c
+        ld      ($411C), bc
+        dec     c
+        dec     c
+        call    L4212
+        ld      a, $14
+
+L4707:
+        ld      bc, $000D
+        ld      d, h
+        ld      e, l
+        inc     hl
+        ldir
+        dec     hl
+        ld      (hl), $00
+        ld      bc, $0014
+        add     hl, bc
+        dec     a
+        cp      $00
+        jr      nz, L4707
+        ret
+#ENDASM [$471C]
 
    19  REM 
-#ASM [0x4722]
-                defb    0x38,0x04,0x00,0x1D,0x1C,0x24,0x1C,0x10,0x27,0xE8,0x03,0x64,0x00,0x0A,0x00,0x01,0x00,0x00,0x00,0x01,0xAF,0x32,0x35,0x47,0x2A,0x22,0x47,0x22,0x33,0x47,0x01,0x24,0x47,0x21,0x29,0x47,0xE5,0xAF,0xE1,0x5E,0x23,0x56,0x2B,0xE5,0x2A,0x33,0x47,0xA7,0xED,0x52,0x22,0x33,0x47,0x38,0x03,0x3C,0x18,0xF2,0x19,0xFE,0x00,0x20,0x09,0x3A,0x35,0x47,0xFE,0x00,0x3E,0x00,0x28,0x09,0xC6,0x1C,0xF5,0x3E,0x01,0x32,0x35,0x47,0xF1,0x22,0x33,0x47,0x02,0x03,0xE1,0x23,0x23,0xE5,0x7B,0xFE,0x01,0x20,0xC6,0xE1,0xC9,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x478D]
+#ASM [$4722]
+        defb    $38,$04,$00,$1D,$1C,$24,$1C,$10,$27,$E8,$03,$64,$00,$0A,$00,$01,$00,$00,$00,$01 ; -
+
+L4736:
+        xor     a
+        ld      ($4735), a
+        ld      hl, ($4722)
+        ld      ($4733), hl
+        ld      bc, $4724
+        ld      hl, $4729
+        push    hl
+
+L4747:
+        xor     a
+        pop     hl
+        ld      e, (hl)
+        inc     hl
+        ld      d, (hl)
+        dec     hl
+        push    hl
+
+L474E:
+        ld      hl, ($4733)
+        and     a
+        sbc     hl, de
+        ld      ($4733), hl
+        jr      c, L475C
+        inc     a
+        jr      L474E
+
+L475C:
+        add     hl, de
+        cp      $00
+        jr      nz, L476A
+        ld      a, ($4735)
+        cp      $00
+        ld      a, $00
+        jr      z, L4773
+
+L476A:
+        add     a, $1C
+        push    af
+        ld      a, $01
+        ld      ($4735), a
+        pop     af
+
+L4773:
+        ld      ($4733), hl
+        ld      (bc), a
+        inc     bc
+        pop     hl
+        inc     hl
+        inc     hl
+        push    hl
+        ld      a, e
+        cp      $01
+        jr      nz, L4747
+        pop     hl
+        ret
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+#ENDASM [$478D]
 
    20  REM 
-#ASM [0x4793]
-                defb    0x3A,0x5F,0x44,0xFE,0x01,0xC8,0x3A,0x5E,0x44,0xFE,0x00,0xC8,0xAF,0x32,0x5E,0x44,0x11,0x03,0x00,0x2A,0x2F,0x44,0x26,0x00,0xA7,0xED,0x52,0xEB,0x2A,0x22,0x47,0x19,0x19,0x19,0x19,0x19,0x22,0x22,0x47,0xCD,0x36,0x47,0x2A,0x0C,0x40,0x11,0x12,0x00,0x19,0xEB,0x21,0x24,0x47,0x06,0x05,0x7E,0xFE,0x00,0x28,0x06,0xED,0xA0,0x03,0x10,0xF6,0xC9,0x23,0x10,0xF2,0xC9,0x00,0x00 ; -
-#ENDASM [0x47DB]
+#ASM [$4793]
+
+L4793:
+        ld      a, ($445F)
+        cp      $01
+        ret     z
+        ld      a, ($445E)
+        cp      $00
+        ret     z
+        xor     a
+        ld      ($445E), a
+        ld      de, $0003
+        ld      hl, ($442F)
+        ld      h, $00
+        and     a
+        sbc     hl, de
+        ex      de, hl
+        ld      hl, ($4722)
+        add     hl, de
+        add     hl, de
+        add     hl, de
+        add     hl, de
+        add     hl, de
+        ld      ($4722), hl
+        call    L4736
+        ld      hl, (D_FILE)
+        ld      de, $0012
+        add     hl, de
+        ex      de, hl
+        ld      hl, $4724
+        ld      b, $05
+
+L47CA:
+        ld      a, (hl)
+        cp      $00
+        jr      z, L47D5
+        ldi
+        inc     bc
+        djnz    L47CA
+        ret
+
+L47D5:
+        inc     hl
+        djnz    L47CA
+        ret
+        defb    $00,$00 ; -
+#ENDASM [$47DB]
 
    21  REM 
-#ASM [0x47E1]
+#ASM [$47E1]
 
 L47E1:
-                defb    0xED ; C
-                defb    0x4B,0x2D,0x44,0xCD,0x12,0x42,0x3E,0x34,0xBE,0xC0,0x36,0x00,0xC9 ; -
+        ld      bc, ($442D)
+        call    L4212
+        ld      a, $34
+        cp      (hl)
+        ret     nz
+        ld      (hl), $00
+        ret
 
 L47EF:
-                defb    0xED ; C
-                defb    0xA0,0x60,0x46,0xCD,0x12,0x42,0x36,0x00,0xC9 ; -
-#ENDASM [0x47F9]
+        ldi
+        ld      h, b
+        ld      b, (hl)
+        call    L4212
+        ld      (hl), $00
+        ret
+#ENDASM [$47F9]
 
    22  REM 
-#ASM [0x47FF]
+#ASM [$47FF]
 
 L47FF:
-                defb    0x06 ; C
-                defb    0x3A,0x21,0x82,0x40,0x36,0x80,0x23,0x10,0xFB,0x06,0x32,0x36,0x08,0x23,0x10,0xFB,0x06,0x2A,0x36,0x80,0x23,0x10,0xFB,0x21,0x15,0x02,0x22,0x1C,0x41,0x21,0x00,0x00,0x22,0xDB,0x46,0x22,0x5E,0x44,0x21,0x00,0x09,0x22,0x46,0x43,0x21,0x00,0x01,0x22,0x60,0x46,0xAF,0x32,0x2C,0x44,0x32,0x62,0x46,0x32,0x9F,0x46,0xC9,0x00,0x00 ; -
-#ENDASM [0x483F]
+        ld      b, $3A
+        ld      hl, $4082
+
+L4804:
+        ld      (hl), $80
+        inc     hl
+        djnz    L4804
+        ld      b, $32
+
+L480B:
+        ld      (hl), $08
+        inc     hl
+        djnz    L480B
+        ld      b, $2A
+
+L4812:
+        ld      (hl), $80
+        inc     hl
+        djnz    L4812
+        ld      hl, $0215
+        ld      ($411C), hl
+        ld      hl, $0000
+        ld      ($46DB), hl
+        ld      ($445E), hl
+        ld      hl, $0900
+        ld      ($4346), hl
+        ld      hl, $0100
+        ld      ($4660), hl
+        xor     a
+        ld      ($442C), a
+        ld      ($4662), a
+        ld      ($469F), a
+        ret
+        defb    $00,$00 ; -
+#ENDASM [$483F]
 
    23  REM 
-#ASM [0x4845]
-                defb    0x2D,0x2E,0x39,0x00,0x26,0x33,0x3E,0x00,0x31,0x2A,0x39,0x39,0x2A,0x37,0x00,0x3C,0x2D,0x2A,0x33,0x00,0x37,0x2A,0x26,0x29,0x3E ; -
+#ASM [$4845]
+        defb    $2D,$2E,$39,$00,$26,$33,$3E,$00,$31,$2A,$39,$39,$2A,$37,$00,$3C,$2D,$2A,$33,$00,$37,$2A,$26,$29,$3E ; -
 
 L485E:
-                defb    0x01 ; C
-                defb    0x03,0x17,0xCD,0x12,0x42,0xEB,0x21,0x45,0x48,0x01,0x19,0x00,0xED,0xB0,0xC9,0x00,0x00,0x00 ; -
+        ld      bc, $1703
+        call    L4212
+        ex      de, hl
+        ld      hl, $4845
+        ld      bc, $0019
+        ldir
+        ret
+        defb    $00,$00,$00 ; -
 
 L4871:
-                defb    0x01 ; C
-                defb    0x03,0x17,0xCD,0x12,0x42,0x06,0x19,0x36,0x00,0x23,0x10,0xFB,0xC9,0x00,0x00,0x00 ; -
-#ENDASM [0x4882]
+        ld      bc, $1703
+        call    L4212
+        ld      b, $19
+
+L4879:
+        ld      (hl), $00
+        inc     hl
+        djnz    L4879
+        ret
+        defb    $00,$00,$00 ; -
+#ENDASM [$4882]
 
    24  REM 
-#ASM [0x4888]
-                defb    0x00,0x85,0x01,0x85,0x00,0x00,0x02,0x80,0x03,0x00,0x00,0x87,0x80,0x04,0x00,0x00,0x81,0x00,0x82,0x00,0x00,0x00,0x00,0x00,0x00,0x87,0x07,0x80,0x84,0x04,0x00,0x84,0x03,0x07,0x00,0x00,0x02,0x80,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x01 ; -
+#ASM [$4888]
+        defb    $00,$85,$01,$85,$00,$00,$02,$80,$03,$00,$00,$87,$80,$04,$00,$00,$81,$00,$82,$00,$00,$00,$00,$00,$00,$87,$07,$80,$84,$04,$00,$84,$03,$07,$00,$00,$02,$80,$01,$00,$00,$00,$00,$00,$00,$01 ; -
 
 L48B6:
-                defb    0xED ; C
-                defb    0x4B,0x1C,0x41,0x0C,0x0C,0x0C,0x06,0x05,0xCD,0x12,0x42,0x11,0x1C,0x00,0x3E,0x0E,0xF5,0x06,0x05,0x7E,0xEE,0x80,0x77,0x23,0x10,0xF9,0x19,0xF1,0x3D,0xFE,0x00,0x20,0xEF,0xC9,0xEB,0x21,0x9C,0x48,0xC3,0x77,0x43,0x3E,0x02,0xBE,0x20,0x1F,0x3C,0x32,0xB5,0x48,0xEB,0x23,0x36,0x05,0x23,0x36,0x02,0x23,0x36,0x05,0x11,0x1F,0x00,0x19,0x36,0x03,0x23,0x23,0x36,0x01,0x11,0xA3,0x00,0x19,0x36,0x80,0xC9,0x3E,0x01,0x32,0xB5,0x48,0xEB,0x23,0x23,0x36,0x00,0x23,0x36,0x85,0x11,0x21,0x00,0x19,0x36,0x03,0x11,0xA5,0x00,0x19,0x36,0x80,0xC9,0x00,0x00,0x00 ; -
-#ENDASM [0x4921]
+        ld      bc, ($411C)
+        inc     c
+        inc     c
+        inc     c
+        ld      b, $05
+        call    L4212
+        ld      de, $001C
+        ld      a, $0E
+
+L48C7:
+        push    af
+        ld      b, $05
+
+L48CA:
+        ld      a, (hl)
+        xor     $80
+        ld      (hl), a
+        inc     hl
+        djnz    L48CA
+        add     hl, de
+        pop     af
+        dec     a
+        cp      $00
+        jr      nz, L48C7
+        ret
+        defb    $EB,$21,$9C,$48,$C3,$77,$43,$3E,$02,$BE,$20,$1F,$3C,$32,$B5,$48,$EB,$23,$36,$05,$23,$36,$02,$23,$36,$05,$11,$1F,$00,$19,$36,$03,$23,$23,$36,$01,$11,$A3,$00,$19,$36,$80,$C9,$3E,$01,$32,$B5,$48,$EB,$23,$23,$36,$00,$23,$36,$85,$11,$21,$00,$19,$36,$03,$11,$A5,$00,$19,$36,$80,$C9,$00,$00,$00 ; -
+#ENDASM [$4921]
 
    25  REM 
-#ASM [0x4927]
-                defb    0xED,0x4B,0x1C,0x41,0x0C,0x0C,0x0C,0x06,0x05,0xED,0x43,0x46,0x43,0xCD,0x05,0x44,0x06,0x0E,0xED,0x43,0x46,0x43,0xCD,0x05,0x44,0xC9,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x4949]
+#ASM [$4927]
+        defb    $ED,$4B,$1C,$41,$0C,$0C,$0C,$06,$05,$ED,$43,$46,$43,$CD,$05,$44,$06,$0E,$ED,$43,$46,$43,$CD,$05,$44,$C9,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+#ENDASM [$4949]
 
    26  REM 
-#ASM [0x494F]
-                defb    0x01,0x00 ; -
+#ASM [$494F]
+        defb    $01,$00 ; -
 
 L4951:
-                defb    0xCD ; C
-                defb    0xDD,0x46,0xCD,0xD1,0x49,0xCD,0x9F,0x42,0xCD,0x2C,0x41,0xCD,0x60,0x44,0xCD,0x93,0x47,0x3A,0x5F,0x44,0xFE,0x01,0xC8,0xCD,0x30,0x46,0xCD,0xA0,0x46,0x3A,0x9F,0x46,0xFE,0x01,0xC8,0xCD,0x63,0x46,0x2A,0x4F,0x49,0x11,0x00,0x00,0x13,0xA7,0xED,0x52,0xCA,0x51,0x49,0x19,0x18,0xF6,0x00,0x00,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x498F]
+        call    L46DD
+        call    L49D1
+        call    L429F
+        call    L412C
+        call    L4460
+        call    L4793
+        ld      a, ($445F)
+        cp      $01
+        ret     z
+        call    L4630
+        call    L46A0
+        ld      a, ($469F)
+        cp      $01
+        ret     z
+        call    L4663
+        ld      hl, ($494F)
+        ld      de, $0000
+
+L497E:
+        inc     de
+        and     a
+        sbc     hl, de
+        jp      z, L4951
+        add     hl, de
+        jr      L497E
+        defb    $00,$00,$00,$00,$00,$00,$00 ; -
+#ENDASM [$498F]
 
    27  REM 
-#ASM [0x4995]
-                defb    0x3E,0xBF,0xBD,0x28,0x06,0x3E,0x7F,0xBD,0xC2,0xF0,0x43,0x3A,0x1C,0x41,0xC3,0xC5,0x43,0x00,0x00,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x49AD]
+#ASM [$4995]
+        defb    $3E,$BF,$BD,$28,$06,$3E,$7F,$BD,$C2,$F0,$43,$3A,$1C,$41,$C3,$C5,$43,$00,$00,$00,$00,$00,$00,$00 ; -
+#ENDASM [$49AD]
 
    28  REM 
-#ASM [0x49B3]
+#ASM [$49B3]
 
 L49B3:
-                defb    0x01 ; C
-                defb    0x00,0x02,0xCD,0x12,0x42,0x3E,0x14,0x06,0x20,0x36,0x00,0x23,0x10,0xFB,0x23,0x3D,0xFE,0x00,0x20,0xF3,0xC9 ; -
-#ENDASM [0x49C9]
+        ld      bc, $0200
+        call    L4212
+        ld      a, $14
+
+L49BB:
+        ld      b, $20
+
+L49BD:
+        ld      (hl), $00
+        inc     hl
+        djnz    L49BD
+        inc     hl
+        dec     a
+        cp      $00
+        jr      nz, L49BB
+        ret
+#ENDASM [$49C9]
 
    29  REM 
-#ASM [0x49CF]
-                defb    0xDF,0xFB,0xCD,0xBB,0x02,0xED,0x4B,0x46,0x43,0x22,0xCF,0x49,0x11,0xFF,0xFF,0xA7,0xED,0x52,0xC8,0x2A,0xCF,0x49,0xCB,0x65,0xCC,0x31,0x44,0x2A,0xCF,0x49,0xED,0x4B,0x46,0x43,0xCB,0x6D,0xCC,0x31,0x44,0x2A,0xCF,0x49,0xED,0x4B,0x46,0x43,0xCB,0x5D,0xCA,0xDB,0x43,0xCB,0x55,0xCA,0xDB,0x43,0xCB,0x45,0xCA,0xD0,0x43,0xCB,0x4D,0xCA,0xD0,0x43,0xCB,0x75,0x28,0x03,0xCB,0x7D,0xC0,0x00,0x00,0x00,0x00,0x00,0xCB,0x6C,0xCA,0xE6,0x43,0xCB,0x64,0xCA,0xE6,0x43,0xCB,0x5C,0xCA,0xE6,0x43,0xCB,0x54,0xCA,0xC2,0x43,0xCB,0x4C,0xCA,0xC2,0x43,0xC9,0x00,0x00,0x00,0x00,0x00,0x00 ; -
-#ENDASM [0x4A3D]
+#ASM [$49CF]
+        defb    $DF,$FB ; -
+
+L49D1:
+        call    KEYBOARD
+        ld      bc, ($4346)
+        ld      ($49CF), hl
+        ld      de, $FFFF
+        and     a
+        sbc     hl, de
+        ret     z
+        ld      hl, ($49CF)
+        bit     4, l
+        call    z, L4431
+        ld      hl, ($49CF)
+        ld      bc, ($4346)
+        bit     5, l
+        call    z, L4431
+        ld      hl, ($49CF)
+        ld      bc, ($4346)
+        bit     3, l
+        jp      z, L43DB
+        bit     2, l
+        jp      z, L43DB
+        bit     0, l
+        jp      z, L43D0
+        bit     1, l
+        jp      z, L43D0
+        bit     6, l
+        jr      z, L4A18
+        bit     7, l
+        ret     nz
+
+L4A18:
+        nop
+        nop
+        nop
+        nop
+        nop
+        bit     5, h
+        jp      z, L43E6
+        bit     4, h
+        jp      z, L43E6
+        bit     3, h
+        jp      z, L43E6
+        bit     2, h
+        jp      z, L43C2
+        bit     1, h
+        jp      z, L43C2
+        ret
+        defb    $00,$00,$00,$00,$00,$00 ; -
+#ENDASM [$4A3D]
 
 
 @Line___30:
@@ -235,7 +1170,7 @@ L49B3:
   155  IF  INKEY$ ="" THEN  GOTO @Line__140
   160  IF  INKEY$ ="N" THEN  GOTO @Line__190
   170  IF  INKEY$ <>"Y" THEN  GOTO @Line__140
-  180  GOSUB @Line_Instructions
+  180  GOSUB @Line_1000
 
 @Line__190:
   190  GOSUB @Line_2000
@@ -313,7 +1248,7 @@ L49B3:
   730  IF  INKEY$ ="Y" THEN  GOTO @Line__190
   740  GOTO @Line__720
 
-@Line_Instructions:
+@Line_1000:
  1000  CLS 
  1010  PRINT  AT 0,10;"YOUR GOAL:"
  1020  PRINT  AT 2,0;"TO SCORE AS MANY POINTS AS YOU   CAN BY DESTROYING THE ALIEN AND BLOCKS OF HIS FORTRESS."
@@ -361,191 +1296,274 @@ L49B3:
  3000  SAVE "ATTAC%K"
  3100  GOTO @Line___30
 
-#: [0x4000] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-#: [0x4040] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb
-#: [0x4080] bb--------------------------------------------------------------
-#: [0x40C0] ----------------------------------------------------------------
-#: [0x4100] --------------------------------------bbbbbbC-------------------
-#: [0x4140] ----------------------------------------------------------------
-#: [0x4180] -----------bbbbbb-----------------------------------------------
-#: [0x41C0] ----------------------------------------------------------------
-#: [0x4200] ------------bbbbbb--------------------------------bbbbbb--------
-#: [0x4240] ----------------------------------------------bbbbbb------------
-#: [0x4280] -------------------------------C--------------------------------
-#: [0x42C0] ----------------------------------------------------bbbbbb------
-#: [0x4300] ----------------------------------------------------------------
-#: [0x4340] --------C-------------------------------------------------------
-#: [0x4380] ---------------bbbbbb-------------------------------------------
-#: [0x43C0] ---------------------------------------------------------------b
-#: [0x4400] bbbbbC--------------------------------bbbbbb--------------------
-#: [0x4440] ------------------------bbbbbb----------------------------------
-#: [0x4480] ----------------------------------------------------------------
-#: [0x44C0] ----bbbbbb-------C----------------------------------------------
-#: [0x4500] ----------------------------------------------------------------
-#: [0x4540] -------------------------bbbbbb---------------------------------
-#: [0x4580] ----------------------------------------------------------------
-#: [0x45C0] ----C----------------------------------------bbbbbb-------------
-#: [0x4600] ------C-----------------------------------bbbbbbC---------------
-#: [0x4640] --------------------------bbbbbb--------------------------------
-#: [0x4680] -------------------------bbbbbb---------------------------------
-#: [0x46C0] ---------------------bbbbbb-------------------------------------
-#: [0x4700] ----------------------------bbbbbb------------------------------
-#: [0x4740] ----------------------------------------------------------------
-#: [0x4780] -------------bbbbbb---------------------------------------------
-#: [0x47C0] ---------------------------bbbbbbC-------------C---------bbbbbbC
-#: [0x4800] ---------------------------------------------------------------b
-#: [0x4840] bbbbb-------------------------C------------------C--------------
-#: [0x4880] --bbbbbb----------------------------------------------C---------
-#: [0x48C0] ----------------------------------------------------------------
-#: [0x4900] ---------------------------------bbbbbb-------------------------
-#: [0x4940] ---------bbbbbb--C----------------------------------------------
-#: [0x4980] ---------------bbbbbb------------------------bbbbbbC------------
-#: [0x49C0] ---------bbbbbb-------------------------------------------------
-#: [0x4A00] -------------------------------------------------------------bbb
-#: [0x4A40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4A80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4AC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4B00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4B40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4B80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4BC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4C00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4C40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4C80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4CC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4D00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4D40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4D80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4DC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4E00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4E40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4E80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4EC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4F00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4F40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4F80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x4FC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5000] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5040] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5080] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x50C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5100] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5140] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5180] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x51C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5200] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5240] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5280] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x52C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5300] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5340] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5380] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x53C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5400] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5440] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5480] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x54C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5500] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5540] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5580] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x55C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5600] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5640] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5680] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x56C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5700] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5740] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5780] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x57C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5800] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5840] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x5880] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-#: [0x58C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb###############################
-#: [0x5900] ################################################################
-#: [0x5940] ################################################################
-#: [0x5980] ################################################################
-#: [0x59C0] ################################################################
-#: [0x5A00] ################################################################
-#: [0x5A40] ################################################################
-#: [0x5A80] ################################################################
-#: [0x5AC0] ################################################################
-#: [0x5B00] ################################################################
-#: [0x5B40] ################################################################
-#: [0x5B80] ################################################################
-#: [0x5BC0] ##########################################################vvvvvv
-#: [0x5C00] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+#: Line___30                =     30
+#: Line__140                =    140
+#: Line__190                =    190
+#: Line__260                =    260
+#: Line__310                =    310
+#: Line__340                =    340
+#: Line__520                =    520
+#: Line__640                =    640
+#: Line__720                =    720
+#: Line_1000                =   1000
+#: Line_1070                =   1070
+#: Line_1130                =   1130
+#: Line_2000                =   2000
+#: Line_2080                =   2080
 
-#: Line___30        = 0x001E =    30
-#: Line__140        = 0x008C =   140
-#: Line__190        = 0x00BE =   190
-#: Line__260        = 0x0104 =   260
-#: Line__310        = 0x0136 =   310
-#: Line__340        = 0x0154 =   340
-#: Line__520        = 0x0208 =   520
-#: Line__640        = 0x0280 =   640
-#: KEYBOARD         = 0x02BB =   699
-#: Line__720        = 0x02D0 =   720
-#: Line_Instructions = 0x03E8 =  1000
-#: Line_1070        = 0x042E =  1070
-#: Line_1130        = 0x046A =  1130
-#: Line_2000        = 0x07D0 =  2000
-#: Line_2080        = 0x0820 =  2080
-#: ERR_NO           = 0x4000 = 16384
-#: FLAGS            = 0x4001 = 16385
-#: ERR_SP           = 0x4002 = 16386
-#: RAMTOP           = 0x4004 = 16388
-#: MODE             = 0x4006 = 16390
-#: PPC              = 0x4007 = 16391
-#: VERSN            = 0x4009 = 16393
-#: E_PPC            = 0x400A = 16394
-#: D_FILE           = 0x400C = 16396
-#: DF_CC            = 0x400E = 16398
-#: VARS             = 0x4010 = 16400
-#: DEST             = 0x4012 = 16402
-#: E_LINE           = 0x4014 = 16404
-#: CH_ADD           = 0x4016 = 16406
-#: X_PTR            = 0x4018 = 16408
-#: STKBOT           = 0x401A = 16410
-#: STKEND           = 0x401C = 16412
-#: BREG             = 0x401E = 16414
-#: MEM              = 0x401F = 16415
-#: FREE1            = 0x4021 = 16417
-#: DF_SZ            = 0x4022 = 16418
-#: S_TOP            = 0x4023 = 16419
-#: LAST_K           = 0x4025 = 16421
-#: DEBOUNCE         = 0x4027 = 16423
-#: MARGIN           = 0x4028 = 16424
-#: NXTLIN           = 0x4029 = 16425
-#: OLDPPC           = 0x402B = 16427
-#: FLAGX            = 0x402D = 16429
-#: STRLEN           = 0x402E = 16430
-#: T_ADDR           = 0x4030 = 16432
-#: SEED             = 0x4032 = 16434
-#: FRAMES           = 0x4034 = 16436
-#: COORDS_X         = 0x4036 = 16438
-#: COORDS_Y         = 0x4037 = 16439
-#: PR_CC            = 0x4038 = 16440
-#: S_POSN_COL       = 0x4039 = 16441
-#: S_POSN_ROW       = 0x403A = 16442
-#: CDFLAG           = 0x403B = 16443
-#: PRBUFF           = 0x403C = 16444
-#: MEMBOT           = 0x405D = 16477
-#: FREE2            = 0x407B = 16507
-#: PROG             = 0x407D = 16509
-#: L412C            = 0x412C = 16684
-#: L429F            = 0x429F = 17055
-#: L4348            = 0x4348 = 17224
-#: L4405            = 0x4405 = 17413
-#: L44D1            = 0x44D1 = 17617
-#: L45C4            = 0x45C4 = 17860
-#: L4606            = 0x4606 = 17926
-#: L4630            = 0x4630 = 17968
-#: L47E1            = 0x47E1 = 18401
-#: L47EF            = 0x47EF = 18415
-#: L47FF            = 0x47FF = 18431
-#: L485E            = 0x485E = 18526
-#: L4871            = 0x4871 = 18545
-#: L48B6            = 0x48B6 = 18614
-#: L4951            = 0x4951 = 18769
-#: L49B3            = 0x49B3 = 18867
+#: KEYBOARD                 = $02BB =   699
+#: ERR_NO                   = $4000 = 16384
+#: FLAGS                    = $4001 = 16385
+#: ERR_SP                   = $4002 = 16386
+#: RAMTOP                   = $4004 = 16388
+#: MODE                     = $4006 = 16390
+#: PPC                      = $4007 = 16391
+#: VERSN                    = $4009 = 16393
+#: E_PPC                    = $400A = 16394
+#: D_FILE                   = $400C = 16396
+#: DF_CC                    = $400E = 16398
+#: VARS                     = $4010 = 16400
+#: DEST                     = $4012 = 16402
+#: E_LINE                   = $4014 = 16404
+#: CH_ADD                   = $4016 = 16406
+#: X_PTR                    = $4018 = 16408
+#: STKBOT                   = $401A = 16410
+#: STKEND                   = $401C = 16412
+#: BREG                     = $401E = 16414
+#: MEM                      = $401F = 16415
+#: FREE1                    = $4021 = 16417
+#: DF_SZ                    = $4022 = 16418
+#: S_TOP                    = $4023 = 16419
+#: LAST_K                   = $4025 = 16421
+#: DEBOUNCE                 = $4027 = 16423
+#: MARGIN                   = $4028 = 16424
+#: NXTLIN                   = $4029 = 16425
+#: OLDPPC                   = $402B = 16427
+#: FLAGX                    = $402D = 16429
+#: STRLEN                   = $402E = 16430
+#: T_ADDR                   = $4030 = 16432
+#: SEED                     = $4032 = 16434
+#: FRAMES                   = $4034 = 16436
+#: COORDS_X                 = $4036 = 16438
+#: COORDS_Y                 = $4037 = 16439
+#: PR_CC                    = $4038 = 16440
+#: S_POSN_COL               = $4039 = 16441
+#: S_POSN_ROW               = $403A = 16442
+#: CDFLAG                   = $403B = 16443
+#: PRBUFF                   = $403C = 16444
+#: MEMBOT                   = $405D = 16477
+#: FREE2                    = $407B = 16507
+#: PROG                     = $407D = 16509
+#: L412C                    = $412C = 16684
+#: L415B                    = $415B = 16731
+#: L418A                    = $418A = 16778
+#: L4191                    = $4191 = 16785
+#: L41B9                    = $41B9 = 16825
+#: L41C6                    = $41C6 = 16838
+#: L41D4                    = $41D4 = 16852
+#: L41E3                    = $41E3 = 16867
+#: L41E6                    = $41E6 = 16870
+#: L4212                    = $4212 = 16914
+#: L421C                    = $421C = 16924
+#: L4223                    = $4223 = 16931
+#: L4226                    = $4226 = 16934
+#: L422D                    = $422D = 16941
+#: L4238                    = $4238 = 16952
+#: L4252                    = $4252 = 16978
+#: L425C                    = $425C = 16988
+#: L429F                    = $429F = 17055
+#: L42BE                    = $42BE = 17086
+#: L42C2                    = $42C2 = 17090
+#: L42D1                    = $42D1 = 17105
+#: L42DE                    = $42DE = 17118
+#: L4348                    = $4348 = 17224
+#: L434C                    = $434C = 17228
+#: L4361                    = $4361 = 17249
+#: L436F                    = $436F = 17263
+#: L4377                    = $4377 = 17271
+#: L4379                    = $4379 = 17273
+#: L43C2                    = $43C2 = 17346
+#: L43D0                    = $43D0 = 17360
+#: L43DB                    = $43DB = 17371
+#: L43E6                    = $43E6 = 17382
+#: L43F5                    = $43F5 = 17397
+#: L4405                    = $4405 = 17413
+#: L4412                    = $4412 = 17426
+#: L4414                    = $4414 = 17428
+#: L4431                    = $4431 = 17457
+#: L4460                    = $4460 = 17504
+#: L447B                    = $447B = 17531
+#: L4487                    = $4487 = 17543
+#: L448F                    = $448F = 17551
+#: L44AB                    = $44AB = 17579
+#: L44B6                    = $44B6 = 17590
+#: L44D1                    = $44D1 = 17617
+#: L44DA                    = $44DA = 17626
+#: L44E7                    = $44E7 = 17639
+#: L44EC                    = $44EC = 17644
+#: L4505                    = $4505 = 17669
+#: L4520                    = $4520 = 17696
+#: L4525                    = $4525 = 17701
+#: L45C4                    = $45C4 = 17860
+#: L45D1                    = $45D1 = 17873
+#: L45D8                    = $45D8 = 17880
+#: L4606                    = $4606 = 17926
+#: L4617                    = $4617 = 17943
+#: L4618                    = $4618 = 17944
+#: L4630                    = $4630 = 17968
+#: L4647                    = $4647 = 17991
+#: L4663                    = $4663 = 18019
+#: L467C                    = $467C = 18044
+#: L4685                    = $4685 = 18053
+#: L468E                    = $468E = 18062
+#: L4690                    = $4690 = 18064
+#: L46A0                    = $46A0 = 18080
+#: L46B5                    = $46B5 = 18101
+#: L46BF                    = $46BF = 18111
+#: L46C6                    = $46C6 = 18118
+#: L46DD                    = $46DD = 18141
+#: L46EE                    = $46EE = 18158
+#: L4707                    = $4707 = 18183
+#: L4736                    = $4736 = 18230
+#: L4747                    = $4747 = 18247
+#: L474E                    = $474E = 18254
+#: L475C                    = $475C = 18268
+#: L476A                    = $476A = 18282
+#: L4773                    = $4773 = 18291
+#: L4793                    = $4793 = 18323
+#: L47CA                    = $47CA = 18378
+#: L47D5                    = $47D5 = 18389
+#: L47E1                    = $47E1 = 18401
+#: L47EF                    = $47EF = 18415
+#: L47FF                    = $47FF = 18431
+#: L4804                    = $4804 = 18436
+#: L480B                    = $480B = 18443
+#: L4812                    = $4812 = 18450
+#: L485E                    = $485E = 18526
+#: L4871                    = $4871 = 18545
+#: L4879                    = $4879 = 18553
+#: L48B6                    = $48B6 = 18614
+#: L48C7                    = $48C7 = 18631
+#: L48CA                    = $48CA = 18634
+#: L4951                    = $4951 = 18769
+#: L497E                    = $497E = 18814
+#: L49B3                    = $49B3 = 18867
+#: L49BB                    = $49BB = 18875
+#: L49BD                    = $49BD = 18877
+#: L49D1                    = $49D1 = 18897
+#: L4A18                    = $4A18 = 18968
+
+#: [$4000] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+#: [$4040] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb
+#: [$4080] bb--------------------------------------------------------------
+#: [$40C0] ----------------------------------------------------------------
+#: [$4100] --------------------------------------bbbbbbCCCCCCCCCCCCCCCCCCCC
+#: [$4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4180] CCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$41C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------------
+#: [$4200] ------------bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--bbbbbbCCCCCCCC
+#: [$4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb------------
+#: [$4280] -------------------------------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$42C0] CCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb------
+#: [$4300] ----------------------------------------------------------------
+#: [$4340] --------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4380] CCCCCCCCCC-----bbbbbb-------------------------------------------
+#: [$43C0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCC--b
+#: [$4400] bbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb-----CCCCCCCCCCCCCCC
+#: [$4440] CCCCCCCCCCCCCCCCCCC-----bbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----
+#: [$44C0] ----bbbbbb-------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4500] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4540] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbb---------------------------------
+#: [$4580] ----------------------------------------------------------------
+#: [$45C0] ----CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbb-------------
+#: [$4600] ------CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCC
+#: [$4640] CCCCCCCCCCCCCCCCCCCCCCC---bbbbbb---CCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4680] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbb-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$46C0] CCCCCCCCCCCCCCCC-----bbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbb--------------------CCCCCCCCCC
+#: [$4740] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4780] CCC----------bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$47C0] CCCCCCCCCCCCCCCCCCCCCCCCC--bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbC
+#: [$4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--b
+#: [$4840] bbbbb-------------------------CCCCCCCCCCCCCCCC---CCCCCCCCCCCCCC-
+#: [$4880] --bbbbbb----------------------------------------------CCCCCCCCCC
+#: [$48C0] CCCCCCCCCCCCCCCCCCCCCCCCC---------------------------------------
+#: [$4900] ---------------------------------bbbbbb-------------------------
+#: [$4940] ---------bbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4980] CCCCCCCC-------bbbbbb------------------------bbbbbbCCCCCCCCCCCCC
+#: [$49C0] CCCCCCCCCbbbbbb--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4A00] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC------bbb
+#: [$4A40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4A80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4AC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4B00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4B40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4B80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4BC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4C00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4C40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4C80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4CC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4D00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4D40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4D80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4DC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4E00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4E40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4E80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4EC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4F00] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4F40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4F80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$4FC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5000] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5040] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5080] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$50C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5100] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5140] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5180] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$51C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5200] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5240] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5280] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$52C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5300] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5340] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5380] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$53C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5400] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5440] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5480] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$54C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5500] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5540] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5580] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$55C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5600] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5640] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5680] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$56C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5700] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5740] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5780] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$57C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5800] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5840] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$5880] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+#: [$58C0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb###############################
+#: [$5900] ################################################################
+#: [$5940] ################################################################
+#: [$5980] ################################################################
+#: [$59C0] ################################################################
+#: [$5A00] ################################################################
+#: [$5A40] ################################################################
+#: [$5A80] ################################################################
+#: [$5AC0] ################################################################
+#: [$5B00] ################################################################
+#: [$5B40] ################################################################
+#: [$5B80] ################################################################
+#: [$5BC0] ##########################################################vvvvvv
+#: [$5C00] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 

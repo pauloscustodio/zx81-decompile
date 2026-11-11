@@ -27,6 +27,7 @@ public:
     bool match(const std::string& compare);
     int match_one_of(int not_found_result,
                      const std::vector<std::pair<std::string, int>>& compare_list);
+    std::string get_rest_of_line();
 
 private:
     Type type = Type::Basic;

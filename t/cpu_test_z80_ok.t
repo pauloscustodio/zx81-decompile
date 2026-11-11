@@ -71,7 +71,9 @@ open( my $fh, '>', $input_bas_file ) or die "Cannot open output file: $!";
 say $fh "#ASM";
 for my $entry (@asm_entries) {
     my ( $address, $bytes, $asm ) = @$entry;
-    say $fh "    $asm";
+    printf $fh "    %-24s; %04x %s\n",
+        $asm, 0x4082 + $address,
+        join( ' ', map { sprintf "%02x", $_ } @$bytes );
 }
 say $fh "#ENDASM";
 close($fh);
@@ -90,6 +92,19 @@ make_p( "$test.bas", $input_p_file );
 
 # build .p file from .bas file
 run_ok("zx81_compile -o $test.p $input_bas_file");
+compare_p( $input_p_file, "$test.p" );
+
+# round-trip
+# make control file to force disassembly
+open( $fh, '>', "$test.ctl" ) or die "Cannot open output file: $!";
+for my $entry (@asm_entries) {
+    my ( $address, $bytes, $asm ) = @$entry;
+    printf $fh "0x%04X C\n", 0x4082 + $address;
+}
+close($fh);
+
+run_ok("zx81_decompile -c $test.ctl -o $test.bas $input_p_file");
+run_ok("zx81_compile -o $test.p $test.bas");
 compare_p( $input_p_file, "$test.p" );
 
 unlink_testfiles;

@@ -214,3 +214,8 @@ int Scanner::match_one_of(int not_found_result,
     return not_found_result;
 }
 
+std::string Scanner::get_rest_of_line() {
+    std::string out(p);
+    p = text.c_str() + text.size();
+    return out;
+}

@@ -92,7 +92,7 @@ void Compiler::write_map_file(const std::string& filename) {
     });
 
     for (auto symbol : symbols) {
-        ofs << std::setw(16) << std::left << symbol->name
+        ofs << std::setw(SymbolWidth) << std::left << symbol->name
             << " = " << fmt_hex(symbol->value, 4)
             << " = " << std::setw(5) << std::right << symbol->value
             << std::endl;

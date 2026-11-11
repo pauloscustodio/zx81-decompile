@@ -9,7 +9,7 @@
 #include <string>
 
 std::string fmt_hex(int value, int digits = 2,
-                    const std::string& prefix = "0x");
+                    const std::string& prefix = "$");
 std::string fmt_line_number(int value, int digits = 5);
 std::string str_chomp(std::string str);
 std::string str_trim(std::string str);

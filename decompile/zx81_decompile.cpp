@@ -59,17 +59,19 @@ int main(int argc, char* argv[]) {
         ctl_file->load_ctl_file(ctl_filename);
     }
 
+    DisasmCode* disasm_code = new DisasmCode(mem);
     Basic* basic = new Basic();
-    Decompiler* decompiler = new Decompiler(mem, ctl_file, basic);
+    Decompiler* decompiler = new Decompiler(mem, ctl_file, basic, disasm_code);
     decompiler->decompile();
     if (get_error_count()) {
         exit_status();
     }
 
-    basic->write_bas_file(out_filename);
+    basic->write_bas_file(out_filename, *disasm_code);
 
     delete decompiler;
     delete basic;
+    delete disasm_code;
     delete ctl_file;
     delete mem;
     exit_status();

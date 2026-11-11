@@ -1170,27 +1170,67 @@ bool Parser::parse_defs(AsmLine& asm_line) {
 }
 
 bool Parser::parse_z80_opcode(AsmLine& asm_line) {
-    if (at_end() ||
-            parse_single_opcode(asm_line) ||
-            parse_ld(asm_line) ||
-            parse_alu(asm_line) ||
-            parse_ex(asm_line) ||
-            parse_bit(asm_line) ||
-            parse_jp_call(asm_line) ||
-            parse_rst(asm_line) ||
-            parse_ret(asm_line) ||
-            parse_jr(asm_line) ||
-            parse_inc_dec(asm_line) ||
-            parse_in(asm_line) ||
-            parse_out(asm_line) ||
-            parse_im(asm_line) ||
-            parse_push_pop(asm_line) ||
-            parse_rotate(asm_line) ||
-            parse_bool(asm_line) ||
-            parse_clr(asm_line) ||
-            parse_ldi(asm_line) ||
-            parse_ldd(asm_line) ||
-            parse_neg(asm_line)) {
+    if (at_end()) {
+        return true;
+    }
+    if (parse_single_opcode(asm_line)) {
+        return true;
+    }
+    if (parse_ld(asm_line)) {
+        return true;
+    }
+    if (parse_alu(asm_line)) {
+        return true;
+    }
+    if (parse_ex(asm_line)) {
+        return true;
+    }
+    if (parse_bit(asm_line)) {
+        return true;
+    }
+    if (parse_jp_call(asm_line)) {
+        return true;
+    }
+    if (parse_rst(asm_line)) {
+        return true;
+    }
+    if (parse_ret(asm_line)) {
+        return true;
+    }
+    if (parse_jr(asm_line)) {
+        return true;
+    }
+    if (parse_inc_dec(asm_line)) {
+        return true;
+    }
+    if (parse_in(asm_line)) {
+        return true;
+    }
+    if (parse_out(asm_line)) {
+        return true;
+    }
+    if (parse_im(asm_line)) {
+        return true;
+    }
+    if (parse_push_pop(asm_line)) {
+        return true;
+    }
+    if (parse_rotate(asm_line)) {
+        return true;
+    }
+    if (parse_bool(asm_line)) {
+        return true;
+    }
+    if (parse_clr(asm_line)) {
+        return true;
+    }
+    if (parse_ldi(asm_line)) {
+        return true;
+    }
+    if (parse_ldd(asm_line)) {
+        return true;
+    }
+    if (parse_neg(asm_line)) {
         return true;
     }
 

@@ -1882,3 +1882,4 @@
  xor iyh                        ; FD AC
  xor iyl                        ; FD AD
  xor l                          ; AD
+ ret                            ; C9

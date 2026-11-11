@@ -1947,4 +1947,5 @@ t/input/cpu_test_z80_ok.asm:
   1882  1624  fdac               xor iyh                        ; FD AC
   1883  1626  fdad               xor iyl                        ; FD AD
   1884  1628  ad                 xor l                          ; AD
-  1885                          
+  1885  1629  c9                 ret                            ; C9
+  1886                          

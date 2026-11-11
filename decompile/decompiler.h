@@ -8,13 +8,15 @@
 
 #include "basic.h"
 #include "ctl_file.h"
+#include "disasm.h"
 #include "memory.h"
 #include <unordered_map>
 
 class Decompiler {
 public:
-    explicit Decompiler(Memory* mem_, CtlFile* ctl_file_, Basic* basic_)
-        : mem(mem_), ctl_file(ctl_file_), basic(basic_) {};
+    explicit Decompiler(Memory* mem_, CtlFile* ctl_file_, Basic* basic_,
+                        DisasmCode* disasm_code_)
+        : mem(mem_), ctl_file(ctl_file_), basic(basic_), disasm_code(disasm_code_) {};
     virtual ~Decompiler() = default;
 
     void decompile();
@@ -23,6 +25,7 @@ private:
     Memory* mem = nullptr;
     CtlFile* ctl_file = nullptr;
     Basic* basic = nullptr;
+    DisasmCode* disasm_code = nullptr;
     std::unordered_map<int, SourceLine*> source_lines;
     int addr = 0;
     int end = 0;

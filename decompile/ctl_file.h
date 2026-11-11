@@ -11,11 +11,13 @@
 #include <vector>
 
 struct CtlElement {
-    enum class Type { None, Code };
+    enum class Type { None, BasicCode, AsmCode, Byte, Word, Text, Header, Comment };
     SourceLoc loc;
     Type type = Type::None;
     int addr = -1;
+    int count = 1;
     std::string label;
+    std::string text;		// for Header and Comment
 };
 
 struct CtlFile {
