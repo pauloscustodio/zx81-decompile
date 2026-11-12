@@ -300,9 +300,14 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
             }
         }
 
+        if (opcode->ends_flow) {
+            os << std::endl;
+        }
+
         i += opcode->size - 1;
     }
-    os << "#ENDASM [" << fmt_hex(addr + INT(bytes.size()), 4) << "]" << std::endl;
+    os << std::endl
+       << "#ENDASM [" << fmt_hex(addr + INT(bytes.size()), 4) << "]" << std::endl;
 }
 
 void Basic::write_header(std::ostream& os, int addr,

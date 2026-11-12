@@ -32,6 +32,7 @@ void Decompiler::decompile() {
     analyse_ctl_file();
     analyse_goto();
     analyse_usr();
+    analyse_poke_peek();
 }
 
 void Decompiler::decompile_sysvars() {
@@ -668,6 +669,40 @@ void Decompiler::analyse_usr() {
                                 // mark address as Asm code
                                 basic->has_asm_code = true;
                                 disasm_code->set_code(target_addr);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Decompiler::analyse_poke_peek() {
+    auto& asm_labels = disasm_code->get_asm_labels();
+
+    // search for POKE and data addresses
+    for (auto& line : basic->source_lines) {
+        if (line.type == SourceLine::Type::Basic) {
+            for (auto& token : line.tokens) {
+                if (token.code == C_POKE || token.code == C_PEEK) {
+                    size_t index = &token - &line.tokens[0];
+                    if (index + 1 < line.tokens.size()) {
+                        auto& next_token = line.tokens[index + 1];
+                        if (next_token.code == T_float) {
+                            int target_addr = static_cast<int>(next_token.fvalue);
+                            if (target_addr >= mem->dpeek(E_LINE)) {
+                                std::cerr << "invalid address: "
+                                          << fmt_hex(target_addr, 4) << std::endl;
+                            }
+                            else {
+                                // check if a label exists
+                                std::string label;
+                                if (asm_labels.find(target_addr, label)) {
+                                    // replace token with label
+                                    next_token.code = T_line_addr_ref;
+                                    next_token.ident = label;
+                                }
                             }
                         }
                     }

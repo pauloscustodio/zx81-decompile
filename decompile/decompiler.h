@@ -45,4 +45,5 @@ private:
     void analyse_ctl_file();
     void analyse_goto();
     void analyse_usr();
+    void analyse_poke_peek();
 };

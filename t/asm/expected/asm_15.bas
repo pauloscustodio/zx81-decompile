@@ -14,6 +14,8 @@ L4085:
         rst     $10
         inc     hl
         jr      L4085
+
+
 #ENDASM [$408D]
 
    20  RAND  USR &L4082
@@ -21,6 +23,7 @@ L4085:
 #ASM [$40A5]
 
         defb    $2D,$2A,$31,$31,$34,$FF ; -
+
 
 #ENDASM [$40AB]
 

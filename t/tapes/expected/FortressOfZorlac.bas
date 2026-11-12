@@ -20,21 +20,13 @@
 
 
 FORTRESS1:
-        defm    "  \::\:: \::\::\::  \::\:: \::  "
-        defm    "    \:: \::\::\::\::\:: \::\:: \::"
-        defm    " \::\::\::\::    \::\::\::\:: \::\::"
-        defm    " \::\::  \::\::  "
+        defm    "  \::\:: \::\::\::  \::\:: \::      \:: \::\::\::\::\:: \::\:: \:: \::\::\::\::    \::\::\::\:: \::\:: \::\::  \::\::  "
 
 SAVE_FORTRESS1:
         defm    "\::"
 
 FORTRESS2:
-        defm    "\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##"
-        defm    "\##\##\##  \##\##\##\## \## \##\##\##\##"
-        defm    "\##\##\##\## \##\##\##\##\##\##\##\##\## \##"
-        defm    "\## \::\::\::\::\::\::\::\::\::\::\::\::\::\::"
-        defm    "\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::"
-        defm    "\::\::\::\::\::\::\::\::\::\::\::\::"
+        defm    "\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##\##  \##\##\##\## \## \##\##\##\##\##\##\##\## \##\##\##\##\##\##\##\##\## \##\## \::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::\::"
 
 addr_fortress:
         defw    $40EE
@@ -57,7 +49,8 @@ fortress_cols:
 fortress_blocks:
         defb    $29
 
-        defb    $00,$00,$00,$00,$00 ; -
+DEAD01:
+        defb    $00, $00, $00, $00, $00
 
 #ENDASM [$4126]
 
@@ -90,6 +83,7 @@ DRAW_FORTRESS:
         ld      (fortress_col), bc
         jp      return
 
+
 rotate_inner_layer:
         inc     b
         inc     c
@@ -115,6 +109,8 @@ rotate_inner_layer:
 
 return:
         ret
+
+
 #ENDASM [$418B]
 
     3  REM 
@@ -153,6 +149,7 @@ rot_blocks_left_column:
         ex      de, hl
         jr      rot_blocks_left_column
 
+
 rot_block_next1:
         ld      bc, (fortress_cols)
         ld      b, $00                  ; BC = number of cols
@@ -172,6 +169,7 @@ rot_blocks_right_column:
         ex      de, hl
         jr      rot_blocks_right_column
 
+
 rot_block_next2:
         ld      a, (fortress_cols)      ; A = number of columns
 
@@ -186,7 +184,9 @@ rot_blocks_top_row:
         ex      de, hl                  ; DE=blocks, HL=screen
         ret
 
-        defb    $3E,$F7,$BC,$28,$0D,$3E,$EF,$BC,$28,$08,$3E,$DF,$BC,$28,$03,$C3,$F5,$43,$AF,$B9,$CA,$F5,$43,$C3,$EA,$43 ; -
+
+DEAD02:
+        defb    $3E, $F7, $BC, $28, $0D, $3E, $EF, $BC, $28, $08, $3E, $DF, $BC, $28, $03, $C3, $F5, $43, $AF, $B9, $CA, $F5, $43, $C3, $EA, $43
 
 #ENDASM [$420C]
 
@@ -214,6 +214,7 @@ SCR_POS_next_row:
         inc     a
         jr      SCR_POS_next_row
 
+
 SCR_POS_row_found:
         ld      a, c
         ld      e, $00
@@ -225,12 +226,15 @@ SCR_POS_next_col:
         inc     hl
         jr      SCR_POS_next_col
 
+
 SCR_POS_col_found:
         pop     af
         pop     de
         ret
 
-        defb    $00,$00 ; -
+
+DEAD03:
+        defb    $00, $00
 
 #ENDASM [$4232]
 
@@ -255,6 +259,7 @@ erase_hit_block_from_fortress:
         ld      (hl), $00
         ret
 
+
 L4252:
         ld      d, $00
         ld      a, $39
@@ -263,6 +268,7 @@ L4252:
         add     hl, de
         ld      (hl), $00
         ret
+
 
 L425C:
         ld      d, $00
@@ -275,7 +281,9 @@ L425C:
         ld      (hl), $00
         ret
 
-        defb    $00,$00,$00,$00,$00 ; -
+
+DEAD04:
+        defb    $00, $00, $00, $00, $00
 
 #ENDASM [$426E]
 
@@ -288,8 +296,8 @@ alien_col:
 alien_row:
         defb    $08
 
-        defb    $00 ; -
-
+DEAD05:
+        defb    $00
 
 ALIEN:
         defm    "     "
@@ -328,6 +336,7 @@ store_alien_pos:
         ld      (alien_direction), a
         ret
 
+
 alien_downwards:
         inc     b
         call    draw_alien_at_BC
@@ -338,8 +347,9 @@ alien_downwards:
         ld      a, $01
         jr      store_alien_pos
 
-        defb    $00,$00 ; -
 
+DEAD06:
+        defb    $00, $00
 
 draw_alien_at_BC:
         ld      (alien_col), bc
@@ -360,10 +370,12 @@ alien_each_row:
         ex      de, hl
         jr      alien_each_row
 
+
 alien_direction:
         defb    $01
 
-        defb    $00,$00,$00,$00 ; -
+DEAD07:
+        defb    $00, $00, $00, $00
 
 #ENDASM [$42F4]
 
@@ -373,21 +385,33 @@ alien_direction:
 SHIP1:
         defm    "\.:\::\::\::\:."
         defm    "\:.\:.\.:\..\::"
-        defm    " \::\::\:: "
+        defm    " \::"
+
+SHIP1_nr:
+        defm    "\::"
+        defm    "\:: "
         defm    "\:'\:'\':\''\::"
         defm    "\':\::\::\::\:'"
 
 SHIP2:
         defm    "\.:\::\::\::\:."
         defm    "\:.\.:\..\:.\.:"
-        defm    " \::\::\:: "
+        defm    " \::"
+
+SHIP2_nr:
+        defm    "\::"
+        defm    "\:: "
         defm    "\:'\':\''\:'\':"
         defm    "\':\::\::\::\:'"
 
 SHIP3:
         defm    "\.:\::\::\::\:."
         defm    "\::\..\:.\.:\.:"
-        defm    " \::\::\:: "
+        defm    " \::"
+
+SHIP3_nr:
+        defm    "\::"
+        defm    "\:: "
         defm    "\::\''\:'\':\':"
         defm    "\':\::\::\::\:'"
 
@@ -425,6 +449,7 @@ DRAW_SHIP_BC:
         ld      hl, SHIP1
         jr      draw_ship_hl
 
+
 not_ship1:
         ld      a, $02
         cp      (hl)
@@ -433,6 +458,7 @@ not_ship1:
         ld      (which_ship), a
         ld      hl, SHIP2
         jr      draw_ship_hl
+
 
 not_ship2:
         ld      a, $01
@@ -457,15 +483,17 @@ draw_ship_row:
         ex      de, hl
         jr      draw_ship_row
 
-        defb    $00,$00,$00,$00,$00 ; -
+
+DEAD08:
+        defb    $00, $00, $00, $00, $00
 
 #ENDASM [$438F]
 
     8  REM 
 #ASM [$4395]
 
-        defb    $CD,$BB,$02,$ED,$4B,$46,$43,$3E,$FF,$BD,$28,$54,$3D,$BD,$28,$2B,$3D,$BD,$28,$27,$3D,$3D,$BD,$28,$2D,$3E,$F7,$BD,$28,$28,$3E,$EF,$BD,$28,$38,$3E,$DF,$BD,$28,$33,$3E,$F7,$94,$30,$24 ; -
-
+DEAD09:
+        defb    $CD, $BB, $02, $ED, $4B, $46, $43, $3E, $FF, $BD, $28, $54, $3D, $BD, $28, $2B, $3D, $BD, $28, $27, $3D, $3D, $BD, $28, $2D, $3E, $F7, $BD, $28, $28, $3E, $EF, $BD, $28, $38, $3E, $DF, $BD, $28, $33, $3E, $F7, $94, $30, $24
 
 ; --------------------------------------------------------------------------------
 ; Called in response to key, BC has ship coords
@@ -481,6 +509,7 @@ MOVE_SHIP_RIGHT:
         inc     c                       ; move right
         jr      save_ship_pos
 
+
 ; --------------------------------------------------------------------------------
 ; Called in response to key, BC has ship coords
 ; --------------------------------------------------------------------------------
@@ -493,6 +522,7 @@ MOVE_SHIP_DOWN:
         call    DELETE_SHIP
         inc     b                       ; move down
         jr      save_ship_pos
+
 
 ; --------------------------------------------------------------------------------
 ; Called in response to key, BC has ship coords
@@ -507,6 +537,7 @@ MOVE_SHIP_UP:
         dec     b                       ; move up
         jr      save_ship_pos
 
+
 ; --------------------------------------------------------------------------------
 ; Called in response to key, BC has ship coords
 ; --------------------------------------------------------------------------------
@@ -520,15 +551,18 @@ MOVE_SHIP_LEFT:
         dec     c                       ; move right
         jr      save_ship_pos
 
-        defb    $C5,$CD,$31,$44,$C1 ; -
 
+DEAD10:
+        defb    $C5, $CD, $31, $44, $C1
 
 save_ship_pos:
         ld      (ship_col), bc
         call    DRAW_SHIP
         ret
 
-        defb    $00,$00 ; -
+
+DEAD11:
+        defb    $00, $00
 
 #ENDASM [$43FF]
 
@@ -561,7 +595,9 @@ delete_col:
         pop     bc                      ; restore coords
         ret
 
-        defb    $00,$00,$00,$00,$00 ; -
+
+DEAD12:
+        defb    $00, $00, $00, $00, $00
 
 #ENDASM [$4426]
 
@@ -606,7 +642,9 @@ FIRE_TORPEDO:
         ld      (torpedo_running), a    ; signal torpedo on the way
         ret
 
-        defb    $00,$00,$00,$00,$00 ; -
+
+DEAD13:
+        defb    $00, $00, $00, $00, $00
 
 #ENDASM [$4458]
 
@@ -653,6 +691,7 @@ draw_torpedo_store_pos:
         ld      (torpedo_col), bc       ; store new coords
         ret
 
+
 torpedo_hit:
         inc     hl
         ld      a, e
@@ -672,6 +711,7 @@ torpedo_hit:
         ld      (ALIEN_HIT), a
         jr      stop_torpedo
 
+
 hit_fortress:
         inc     c
         ld      (hl), $00               ; erase block
@@ -684,7 +724,9 @@ stop_torpedo:
         ld      (torpedo_running), a
         ret
 
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+
+DEAD14:
+        defb    $00, $00, $00, $00, $00, $00, $00, $00, $00
 
 #ENDASM [$44C4]
 
@@ -697,15 +739,15 @@ BLOCK1:
 save_block1:
         defm    "\::"
 
-        defb    $00,$00,$00 ; -
-
+DEAD20:
+        defb    $00, $00, $00
 
 ; --------------------------------------------------------------------------------
 ; Draw rotating border and ship
 ; --------------------------------------------------------------------------------
 
 
-INTRO_SCR:
+INTRO_SCREEN:
         ld      bc, $0301               ; row 3, col 1
         call    SCR_POS                 ; HL=screen address
         ex      de, hl                  ; DE=screen address
@@ -797,6 +839,8 @@ each_left_bar_block:
         ld      (BLOCK1+2), a
         ld      bc, $0B0D               ; line 11, column 13
         jp      DRAW_SHIP_BC
+
+
 #ENDASM [$4559]
 
    13  REM 
@@ -856,7 +900,9 @@ add_25:
         pop     hl                      ; HL = source of rotated ship
         jp      draw_ship_hl
 
-        defb    $00,$00,$00,$00,$00 ; -
+
+DEAD15:
+        defb    $00, $00, $00, $00, $00
 
 #ENDASM [$45ED]
 
@@ -866,8 +912,11 @@ add_25:
 torpedo_path:
         defm    "        O        "
 
-intro_torpedo_pos:
-        defw    $45FA
+intro_torpedo_pos_lo:
+        defb    $FA
+
+intro_torpedo_pos_hi:
+        defb    $45
 
 ; --------------------------------------------------------------------------------
 ; Fire intro torpedo
@@ -875,7 +924,7 @@ intro_torpedo_pos:
 
 
 INTRO_FIRE_TORPEDO:
-        ld      hl, (intro_torpedo_pos)
+        ld      hl, (intro_torpedo_pos_lo)
         dec     hl                      ; move back one pos
         ld      bc, torpedo_path
         and     a
@@ -884,12 +933,13 @@ INTRO_FIRE_TORPEDO:
         ld      hl, $45FB               ; reached start, go back to end
         jr      draw_torpedo_path
 
+
 restore_torpedo_pos:
         add     hl, bc
 
 draw_torpedo_path:
         push    hl
-        ld      (intro_torpedo_pos), hl
+        ld      (intro_torpedo_pos_lo), hl
         ld      bc, $0D12               ; row 13, col 18
         call    SCR_POS                 ; screen pos in HL
         pop     de
@@ -897,6 +947,8 @@ draw_torpedo_path:
         ld      bc, $0008               ; 1 torpedo and 7 blanks
         ldir                            ; draw
         ret
+
+
 #ENDASM [$462A]
 
    15  REM 
@@ -920,6 +972,7 @@ DRAW_CANONS:
         call    draw_cannon
         ret
 
+
 draw_cannon:
         call    SCR_POS                 ; draw cannon at roc-col BC
         ld      (hl), $81               ; top part of cannon
@@ -932,7 +985,9 @@ draw_cannon:
         inc     b
         ret
 
-        defb    $00,$00,$00 ; -
+
+DEAD16:
+        defb    $00, $00, $00
 
 #ENDASM [$465A]
 
@@ -968,6 +1023,7 @@ FIRE_BOMB:
         ld      h, $05                  ; fire from row 5
         jr      do_fire_bomb
 
+
 not_cannon1:
         ld      a, $09
         sub     h
@@ -975,12 +1031,14 @@ not_cannon1:
         ld      h, $09                  ; fire from row 9
         jr      do_fire_bomb
 
+
 not_cannon2:
         ld      a, $0D
         sub     h
         jr      c, not_cannon3
         ld      h, $0D                  ; fire from row 13
         jr      do_fire_bomb
+
 
 not_cannon3:
         ld      h, $11                  ; fire from row 17
@@ -990,6 +1048,8 @@ do_fire_bomb:
         ld      a, $01
         ld      (bomb_running), a
         ret
+
+
 #ENDASM [$4699]
 
    17  REM 
@@ -1010,6 +1070,7 @@ DRAW_BOMB:
         ld      (bomb_running), a       ; at col zero, clear bomb-running
         ret
 
+
 move_bomb:
         dec     c                       ; move bomb left in column
         dec     hl                      ; and screen address
@@ -1024,6 +1085,7 @@ bomb_no_hit:
         ld      (bomb_col), bc
         ret
 
+
 bomb_hit_ship:
         inc     (hl)                    ; show rubish on hit-point
         ld      (bomb_hit_ship), a      ; NOTE: should not be here
@@ -1032,7 +1094,9 @@ bomb_hit_ship:
         ld      (SHIP_HIT), a
         ret
 
-        defb    $00,$00,$00,$00,$00 ; -
+
+DEAD17:
+        defb    $00, $00, $00, $00, $00
 
 #ENDASM [$46D5]
 
@@ -1052,13 +1116,14 @@ CHECK_FORTRESS_MOVE:
         inc     hl
 
 FORTRESS_MOVE_COUNT:
-        ld      de, $00C8
+        ld      de, $00C8               ; value is POKEd from BASIC
         and     a
         sbc     hl, de
         jr      z, do_fortress_move
         add     hl, de
         ld      (timer_fortress_move), hl
         ret                             ; not time yet to move
+
 
 do_fortress_move:
         ld      hl, $0000
@@ -1087,19 +1152,21 @@ move_next_row:
         cp      $00
         jr      nz, move_next_row       ; next row
         ret
+
+
 #ENDASM [$471C]
 
    19  REM 
 #ASM [$4722]
 
-SCORE:
-        defw    $0438
+SCORE_lo:
+        defb    $38
+
+SCORE_hi:
+        defb    $04
 
 NUM_BUFFER:
-        defb    $00
-
-        defb    $1D,$1C,$24,$1C ; -
-
+        defm    " 1080"
 
 N10000:
         defw    $2710
@@ -1128,7 +1195,7 @@ HAVE_DIGITS:
 SCORE_I2A:
         xor     a
         ld      (HAVE_DIGITS), a
-        ld      hl, (SCORE)             ; get SCORE
+        ld      hl, (SCORE_lo)          ; get SCORE
         ld      (PRINT_ACC), hl         ; put in number to print
         ld      bc, NUM_BUFFER          ; output buffer
         ld      hl, N10000              ; table of divisors
@@ -1152,6 +1219,7 @@ subtract_divisor:
                                         ; jump forward if overflowed
         inc     a                       ; count one more
         jr      subtract_divisor
+
 
 subtraction_overflowed:
         add     hl, de                  ; restore accumulator
@@ -1183,7 +1251,9 @@ output_digit:
         pop     hl
         ret
 
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+
+DEAD18:
+        defb    $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 
 #ENDASM [$478D]
 
@@ -1205,7 +1275,11 @@ INCR_SCORE:
         and     a
         sbc     hl, de
         ex      de, hl
-        ld      hl, (SCORE)
+        ld      hl, (SCORE_lo)
+
+; these 5 instructions are POKEd in BASIC to either 
+; NOP or ADD HL,DE depending on the selected skill level
+
 
 score_multiply:
         add     hl, de
@@ -1213,7 +1287,7 @@ score_multiply:
         add     hl, de
         add     hl, de
         add     hl, de
-        ld      (SCORE), hl             ; save score
+        ld      (SCORE_lo), hl          ; save score
         call    SCORE_I2A               ; convert to digit sequence
         ld      hl, (D_FILE)            ; display
         ld      de, $0012               ; add position of score
@@ -1231,12 +1305,15 @@ out_digit:
         djnz    out_digit               ; next digit
         ret
 
+
 skip_blanks:
         inc     hl
         djnz    out_digit               ; next digit
         ret
 
-        defb    $00,$00 ; -
+
+DEAD19:
+        defb    $00, $00
 
 #ENDASM [$47DB]
 
@@ -1252,6 +1329,7 @@ DELETE_TORPEDO:
         ld      (hl), $00               ; delete torpedo
         ret
 
+
 DELETE_BOMB:
         ldi
         ld      h, b
@@ -1259,6 +1337,8 @@ DELETE_BOMB:
         call    SCR_POS
         ld      (hl), $00               ; delete bomb
         ret
+
+
 #ENDASM [$47F9]
 
    22  REM 
@@ -1304,7 +1384,9 @@ fortress_fill_inner_black:
         ld      (SHIP_HIT), a
         ret
 
-        defb    $00,$00 ; -
+
+DEAD21:
+        defb    $00, $00
 
 #ENDASM [$483F]
 
@@ -1328,8 +1410,9 @@ PRESS_ANY_KEY:
         ldir
         ret
 
-        defb    $00,$00,$00 ; -
 
+DEAD22:
+        defb    $00, $00, $00
 
 DELETE_PRESS_ANY_KEY:
         ld      bc, $1703               ; row 23, col 3
@@ -1342,15 +1425,17 @@ put_space:
         djnz    put_space
         ret
 
-        defb    $00,$00,$00 ; -
+
+DEAD23:
+        defb    $00, $00, $00
 
 #ENDASM [$4882]
 
    24  REM 
 #ASM [$4888]
 
-        defb    $00,$85,$01,$85,$00,$00,$02,$80,$03,$00,$00,$87,$80,$04,$00,$00,$81,$00,$82,$00,$00,$00,$00,$00,$00,$87,$07,$80,$84,$04,$00,$84,$03,$07,$00,$00,$02,$80,$01,$00,$00,$00,$00,$00,$00,$01 ; -
-
+DEAD24:
+        defb    $00, $85, $01, $85, $00, $00, $02, $80, $03, $00, $00, $87, $80, $04, $00, $00, $81, $00, $82, $00, $00, $00, $00, $00, $00, $87, $07, $80, $84, $04, $00, $84, $03, $07, $00, $00, $02, $80, $01, $00, $00, $00, $00, $00, $00, $01
 
 FLASH_ALIEN:
         ld      bc, (fortress_col)
@@ -1379,22 +1464,28 @@ flash_next_col:
         jr      nz, flash_next_line     ; loop for next row
         ret
 
-        defb    $EB,$21,$9C,$48,$C3,$77,$43,$3E,$02,$BE,$20,$1F,$3C,$32,$B5,$48,$EB,$23,$36,$05,$23,$36,$02,$23,$36,$05,$11,$1F,$00,$19,$36,$03,$23,$23,$36,$01,$11,$A3,$00,$19,$36,$80,$C9,$3E,$01,$32,$B5,$48,$EB,$23,$23,$36,$00,$23,$36,$85,$11,$21,$00,$19,$36,$03,$11,$A5,$00,$19,$36,$80,$C9,$00,$00,$00 ; -
+
+DEAD25:
+        defb    $EB, $21, $9C, $48, $C3, $77, $43, $3E, $02, $BE, $20, $1F, $3C, $32, $B5, $48, $EB, $23, $36, $05, $23, $36, $02, $23, $36, $05, $11, $1F, $00, $19, $36, $03, $23, $23, $36, $01, $11, $A3, $00, $19, $36, $80, $C9, $3E, $01, $32, $B5, $48, $EB, $23, $23, $36, $00, $23, $36, $85, $11, $21, $00, $19, $36, $03, $11, $A5, $00, $19, $36, $80, $C9, $00, $00, $00
 
 #ENDASM [$4921]
 
    25  REM 
 #ASM [$4927]
 
-        defb    $ED,$4B,$1C,$41,$0C,$0C,$0C,$06,$05,$ED,$43,$46,$43,$CD,$05,$44,$06,$0E,$ED,$43,$46,$43,$CD,$05,$44,$C9,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+DEAD26:
+        defb    $ED, $4B, $1C, $41, $0C, $0C, $0C, $06, $05, $ED, $43, $46, $43, $CD, $05, $44, $06, $0E, $ED, $43, $46, $43, $CD, $05, $44, $C9, $00, $00, $00, $00, $00, $00, $00, $00
 
 #ENDASM [$4949]
 
    26  REM 
 #ASM [$494F]
 
-LEVEL_DELAY:
-        defw    $0001
+LEVEL_DELAY_lo:
+        defb    $01
+
+LEVEL_DELAY_hi:
+        defb    $00
 
 ; --------------------------------------------------------------------------------
 ; Game loop
@@ -1417,7 +1508,7 @@ GAME:
         cp      $01
         ret     z
         call    FIRE_BOMB
-        ld      hl, (LEVEL_DELAY)
+        ld      hl, (LEVEL_DELAY_lo)
         ld      de, $0000
 
 game_delay:
@@ -1428,14 +1519,17 @@ game_delay:
         add     hl, de
         jr      game_delay
 
-        defb    $00,$00,$00,$00,$00,$00,$00 ; -
+
+DEAD27:
+        defb    $00, $00, $00, $00, $00, $00, $00
 
 #ENDASM [$498F]
 
    27  REM 
 #ASM [$4995]
 
-        defb    $3E,$BF,$BD,$28,$06,$3E,$7F,$BD,$C2,$F0,$43,$3A,$1C,$41,$C3,$C5,$43,$00,$00,$00,$00,$00,$00,$00 ; -
+DEAD28:
+        defb    $3E, $BF, $BD, $28, $06, $3E, $7F, $BD, $C2, $F0, $43, $3A, $1C, $41, $C3, $C5, $43, $00, $00, $00, $00, $00, $00, $00
 
 #ENDASM [$49AD]
 
@@ -1459,6 +1553,8 @@ L49BD:
         cp      $00
         jr      nz, clear_next_row      ; loop for rows
         ret
+
+
 #ENDASM [$49C9]
 
    29  REM 
@@ -1522,101 +1618,165 @@ check_left_right:
         jp      z, MOVE_SHIP_RIGHT
         ret
 
-        defb    $00,$00,$00,$00,$00,$00 ; -
+
+DEAD29:
+        defb    $00, $00, $00, $00, $00, $00
 
 #ENDASM [$4A3D]
 
 
 #: --------------------------------------------------------------------------------
-#: Start of Game
+#: Start of introdution
 #: --------------------------------------------------------------------------------
 
 
-@Line_Start:
+@Line_StartIntro:
    30  CLS 
-   34  POKE 17924,252
-   35  POKE 17925,69
+
+#: init torpedo position
+
+   34  POKE &intro_torpedo_pos_lo,252
+   35  POKE &intro_torpedo_pos_hi,69
+
+#: show welcome
+
    40  PRINT  AT 5,11;"WELCOME TO";
    50  PRINT  AT 7,5;"\.'\''\'. \''\:'\' \ '\':\'' \.'\''\'. \.'\''\'. \: \ .\' ";
    60  PRINT  AT 8,5;"\:.\..\.:  \:   \ :  \:.\..\.: \:    \:'\'.";
    70  PRINT  AT 9,5;"\:  \ :  \:   \ :  \:  \ : \'.\..\.' \:  \'.";\00
    80  PRINT  AT 17,3;"COPR., PAUL CARLSON, 1982";
    90  PRINT  AT 21,0;"DO YOU WANT INSTRUCTIONS? (Y/N)";
-  100  POKE 17158,128
-  110  POKE 17183,128
-  120  POKE 17208,128
 
-@Line__140:
-  140  LET L= USR &INTRO_SCR
+#: clear ship numbers
+
+  100  POKE &SHIP1_nr,128
+  110  POKE &SHIP2_nr,128
+  120  POKE &SHIP3_nr,128
+
+#: --------------------------------------------------------------------------------
+#: Intro wait key
+#: --------------------------------------------------------------------------------
+
+
+@Line_IntroWaitKey:
+  140  LET L= USR &INTRO_SCREEN
   150  LET L= USR &INTRO_FIRE_TORPEDO
-  155  IF  INKEY$ ="" THEN  GOTO @Line__140
-  160  IF  INKEY$ ="N" THEN  GOTO @Line__190
-  170  IF  INKEY$ <>"Y" THEN  GOTO @Line__140
+  155  IF  INKEY$ ="" THEN  GOTO @Line_IntroWaitKey
+  160  IF  INKEY$ ="N" THEN  GOTO @Line_StartGame
+  170  IF  INKEY$ <>"Y" THEN  GOTO @Line_IntroWaitKey
   180  GOSUB @Line_Instructions
 
-@Line__190:
-  190  GOSUB @Line_2000
+#: --------------------------------------------------------------------------------
+#: Start of new game
+#: --------------------------------------------------------------------------------
+
+
+@Line_StartGame:
+  190  GOSUB @Line_SelectLevel
+
+#: W is the ship number init to 0, incremented below to start at 1
+
   195  LET W=28
   200  LET S=0
   202  LET R=200
+
+#: 18146 = 18145+1 = argument-lo of LD DE,NN in FORTRESS_MOVE_COUNT
+
   205  POKE 18146,R
-  210  POKE 18210,0
-  220  POKE 18211,0
+  210  POKE &SCORE_lo,0
+  220  POKE &SCORE_hi,0
   230  LET L= USR &INIT_FORTRESS
   250  PRINT  AT 0,10;"SCORE: 0"
 
-@Line__260:
-  260  LET W=W+1
-  270  IF W=34 THEN  GOTO @Line__640
-  280  POKE 17158,W
-  290  POKE 17183,W
-  300  POKE 17208,W
+#: --------------------------------------------------------------------------------
+#: Start of new ship
+#: --------------------------------------------------------------------------------
 
-@Line__310:
+
+@Line_StartNewShip:
+  260  LET W=W+1
+
+#: if incremented ship is >5, exit
+
+  270  IF W=34 THEN  GOTO @Line_GameOver
+
+#: write ship number in the three ship drawings
+
+  280  POKE &SHIP1_nr,W
+  290  POKE &SHIP2_nr,W
+  300  POKE &SHIP3_nr,W
+
+@Line_StartLevelWaitKey:
   310  LET L= USR &DRAW_CANONS
   320  LET L= USR &PRESS_ANY_KEY
 
-@Line__340:
+@Line_LevelWaitKey:
   340  LET L= USR &DRAW_FORTRESS
   350  LET L= USR &DRAW_ALIEN
   360  LET L= USR &DRAW_SHIP
-  370  IF  INKEY$ ="" THEN  GOTO @Line__340
+  370  IF  INKEY$ ="" THEN  GOTO @Line_LevelWaitKey
   380  LET L= USR &DELETE_PRESS_ANY_KEY
+
+#: --------------------------------------------------------------------------------
+#: Run the game
+#: --------------------------------------------------------------------------------
+
   390  LET L= USR &GAME
   400  LET L= USR &DELETE_TORPEDO
   410  LET L= USR &DELETE_BOMB
-  420  IF  PEEK 17503=1 THEN  GOTO @Line__520
+  420  IF  PEEK &ALIEN_HIT=1 THEN  GOTO @Line_AlienHit
+
+#: --------------------------------------------------------------------------------
+#: Ship was hit
+#: --------------------------------------------------------------------------------
+
   430  FOR N=1 TO 32
   440  LET L= USR &ROTATE_SHIP
   450  LET L=L+N
   460  NEXT N
   470  LET L= USR &DELETE_SHIP
-  475  POKE 18016,0
-  480  POKE 17452,0
-  485  POKE 18018,0
-  490  POKE 17222,0
-  500  POKE 17223,9
-  505  POKE 18079,0
-  510  GOTO @Line__260
 
-@Line__520:
+#: init next ship
+
+  475  POKE &bomb_col,0
+  480  POKE &torpedo_running,0
+  485  POKE &bomb_running,0
+  490  POKE &ship_col,0
+  500  POKE &ship_row,9
+  505  POKE &SHIP_HIT,0
+  510  GOTO @Line_StartNewShip
+
+#: --------------------------------------------------------------------------------
+#: Alien was hit
+#: --------------------------------------------------------------------------------
+
+
+@Line_AlienHit:
   520  FOR N=1 TO 50
   540  LET L= USR &FLASH_ALIEN
   545  LET L=L+0
   547  LET L=L+0
   550  NEXT N
-  560  LET S= PEEK 18210+256* PEEK 18211
-  570  LET S=S+F*(( PEEK 17455)-3)
+  560  LET S= PEEK &SCORE_lo+256* PEEK &SCORE_hi
+  570  LET S=S+F*(( PEEK &topedo_pos0)-3)
   575  PRINT  AT 0,17;S
-  580  POKE 18211, INT (S/256)
-  590  POKE 18210,(S-256* PEEK 18211)
+  580  POKE &SCORE_hi, INT (S/256)
+  590  POKE &SCORE_lo,(S-256* PEEK &SCORE_hi)
   592  IF R>20 THEN  LET R=R-20
+
+#: 18146 = 18145+1 = argument-lo of LD DE,NN in FORTRESS_MOVE_COUNT
+
   595  POKE 18146,R
   600  LET L= USR &CLEAR_GAME_AREA
   620  LET L= USR &INIT_FORTRESS
-  630  GOTO @Line__310
+  630  GOTO @Line_StartLevelWaitKey
 
-@Line__640:
+#: --------------------------------------------------------------------------------
+#: Game Over
+#: --------------------------------------------------------------------------------
+
+
+@Line_GameOver:
   640  LET L= USR &CLEAR_GAME_AREA
   650  PRINT  AT 0,4;"FINAL";
   660  PRINT  AT 10,13;"\:'\''\''\''\''\':"
@@ -1627,8 +1787,13 @@ check_left_right:
 
 @Line__720:
   720  IF  INKEY$ ="N" THEN  STOP 
-  730  IF  INKEY$ ="Y" THEN  GOTO @Line__190
+  730  IF  INKEY$ ="Y" THEN  GOTO @Line_StartGame
   740  GOTO @Line__720
+
+#: --------------------------------------------------------------------------------
+#: Show intructions
+#: --------------------------------------------------------------------------------
+
 
 @Line_Instructions:
  1000  CLS 
@@ -1639,19 +1804,24 @@ check_left_right:
  1050  PRINT  AT 16,0;"DESTROYING THE ALIEN IS WORTH    FIFTY TIMES THE POINTS AWARDED  FOR DESTROYING A BLOCK OF HIS   FORTRESS."
  1060  PRINT  AT 21,1;"HIT ANY LETTER TO CONTINUE..."
 
-@Line_1070:
- 1070  IF  INKEY$ ="" THEN  GOTO @Line_1070
+@Line_IntructionsWaitKey1:
+ 1070  IF  INKEY$ ="" THEN  GOTO @Line_IntructionsWaitKey1
  1080  CLS 
  1090  PRINT  AT 0,3;"YOUR SHIPS CONTROL PANEL:"
  1100  PRINT  AT 3,2;"\:'\''\''\''\''\''\''\''\''\''\''\':    \:'\''\''\''\''\''\''\''\''\''\''\':    \: 1 2 3 4 5 \ :    \: 6 7 8 9 0 \ :    \:  Q W E R T\ :    \:  Y U I O P\ :    \:.\..\..\..\..\..\..\..\..\..\..\.:    \:.\..\..\..\..\..\..\..\..\..\..\.:    MOVE SHIP UP    FIRE TORPEDO"\00
  1110  PRINT  AT 11,0;"\:'\''\''\''\''\''\''\''\''\''\':  \:'\''\''\''\''\''\''\': \:'\''\''\''\''\''\''\''\''\':\: A S D F G\ :  \:  H J K\ : \:  L ENTER\ :\:  Z X C V \ :  \: B N M \ : \: . SPACE \ :\:.\..\..\..\..\..\..\..\..\..\.:  \:.\..\..\..\..\..\..\.: \:.\..\..\..\..\..\..\..\..\.: MOVE SHIP     MOVE      MOVE      DOWN        SHIP      SHIP                  LEFT      RIGHT"
  1120  PRINT  AT 21,1;"HIT ANY LETTER TO CONTINUE..."
 
-@Line_1130:
- 1130  IF  INKEY$ ="" THEN  GOTO @Line_1130
+@Line_IntructionsWaitKey2:
+ 1130  IF  INKEY$ ="" THEN  GOTO @Line_IntructionsWaitKey2
  1140  RETURN 
 
-@Line_2000:
+#: --------------------------------------------------------------------------------
+#: Select skill level
+#: --------------------------------------------------------------------------------
+
+
+@Line_SelectLevel:
  2000  CLS 
  2010  PRINT  AT 2,1;"SKILL LEVELS:"
  2020  PRINT  AT 4,15;"1 = SLOW"
@@ -1661,14 +1831,22 @@ check_left_right:
  2060  PRINT  AT 12,15;"5 = SUICIDAL"
  2070  PRINT  AT 16,6;"PRESS SKILL LEVEL..."
 
-@Line_2080:
- 2080  IF  INKEY$ ="" THEN  GOTO @Line_2080
+@Line_WaitSkillSelection:
+ 2080  IF  INKEY$ ="" THEN  GOTO @Line_WaitSkillSelection
  2090  LET V= CODE  INKEY$ -28
- 2100  IF V<1 OR V>5 THEN  GOTO @Line_2080
+ 2100  IF V<1 OR V>5 THEN  GOTO @Line_WaitSkillSelection
+
+#: selected skill is in V
+
  2105  CLS 
- 2110  POKE 18767,1
- 2120  POKE 18768,5-V
+ 2110  POKE &LEVEL_DELAY_lo,1
+ 2120  POKE &LEVEL_DELAY_hi,5-V
  2130  LET F=50*V
+
+#: 5 instructions in score_multiply (18353+1..28353+5) are replaced by 
+#: NOP (0) or ADD HL,DE (25=$19) depending on the selected level 
+#: 1 ADDs for level 1, 5 ADDs for level 5
+
  2150  FOR N=1 TO 5
  2160  LET A=18353+N
  2170  POKE A,0
@@ -1681,22 +1859,22 @@ check_left_right:
 #: --------------------------------------------------------------------------------
 
  3000  SAVE "ATTAC%K"
- 3100  GOTO @Line_Start
+ 3100  GOTO @Line_StartIntro
 
-#: Line_Start               =     30
-#: Line__140                =    140
-#: Line__190                =    190
-#: Line__260                =    260
-#: Line__310                =    310
-#: Line__340                =    340
-#: Line__520                =    520
-#: Line__640                =    640
+#: Line_StartIntro          =     30
+#: Line_IntroWaitKey        =    140
+#: Line_StartGame           =    190
+#: Line_StartNewShip        =    260
+#: Line_StartLevelWaitKey   =    310
+#: Line_LevelWaitKey        =    340
+#: Line_AlienHit            =    520
+#: Line_GameOver            =    640
 #: Line__720                =    720
 #: Line_Instructions        =   1000
-#: Line_1070                =   1070
-#: Line_1130                =   1130
-#: Line_2000                =   2000
-#: Line_2080                =   2080
+#: Line_IntructionsWaitKey1 =   1070
+#: Line_IntructionsWaitKey2 =   1130
+#: Line_SelectLevel         =   2000
+#: Line_WaitSkillSelection  =   2080
 
 #: KEYBOARD                 = $02BB =   699
 #: ERR_NO                   = $4000 = 16384
@@ -1751,6 +1929,7 @@ check_left_right:
 #: fortress_rows            = $411E = 16670
 #: fortress_cols            = $411F = 16671
 #: fortress_blocks          = $4120 = 16672
+#: DEAD01                   = $4121 = 16673
 #: DRAW_FORTRESS            = $412C = 16684
 #: rotate_inner_layer       = $415B = 16731
 #: return                   = $418A = 16778
@@ -1760,26 +1939,35 @@ check_left_right:
 #: rot_blocks_right_column  = $41D4 = 16852
 #: rot_block_next2          = $41E3 = 16867
 #: rot_blocks_top_row       = $41E6 = 16870
+#: DEAD02                   = $41F2 = 16882
 #: SCR_POS                  = $4212 = 16914
 #: SCR_POS_next_row         = $421C = 16924
 #: SCR_POS_row_found        = $4223 = 16931
 #: SCR_POS_next_col         = $4226 = 16934
 #: SCR_POS_col_found        = $422D = 16941
+#: DEAD03                   = $4230 = 16944
 #: erase_hit_block_from_fortress = $4238 = 16952
 #: L4252                    = $4252 = 16978
 #: L425C                    = $425C = 16988
+#: DEAD04                   = $4269 = 17001
 #: alien_col                = $4274 = 17012
 #: alien_row                = $4275 = 17013
+#: DEAD05                   = $4276 = 17014
 #: ALIEN                    = $4277 = 17015
 #: DRAW_ALIEN               = $429F = 17055
 #: store_alien_pos          = $42BE = 17086
 #: alien_downwards          = $42C2 = 17090
+#: DEAD06                   = $42CF = 17103
 #: draw_alien_at_BC         = $42D1 = 17105
 #: alien_each_row           = $42DE = 17118
 #: alien_direction          = $42EF = 17135
+#: DEAD07                   = $42F0 = 17136
 #: SHIP1                    = $42FA = 17146
+#: SHIP1_nr                 = $4306 = 17158
 #: SHIP2                    = $4313 = 17171
+#: SHIP2_nr                 = $431F = 17183
 #: SHIP3                    = $432C = 17196
+#: SHIP3_nr                 = $4338 = 17208
 #: which_ship               = $4345 = 17221
 #: ship_col                 = $4346 = 17222
 #: ship_row                 = $4347 = 17223
@@ -1789,19 +1977,25 @@ check_left_right:
 #: not_ship2                = $436F = 17263
 #: draw_ship_hl             = $4377 = 17271
 #: draw_ship_row            = $4379 = 17273
+#: DEAD08                   = $438A = 17290
+#: DEAD09                   = $4395 = 17301
 #: MOVE_SHIP_RIGHT          = $43C2 = 17346
 #: MOVE_SHIP_DOWN           = $43D0 = 17360
 #: MOVE_SHIP_UP             = $43DB = 17371
 #: MOVE_SHIP_LEFT           = $43E6 = 17382
+#: DEAD10                   = $43F0 = 17392
 #: save_ship_pos            = $43F5 = 17397
+#: DEAD11                   = $43FD = 17405
 #: DELETE_SHIP              = $4405 = 17413
 #: delete_row               = $4412 = 17426
 #: delete_col               = $4414 = 17428
+#: DEAD12                   = $4421 = 17441
 #: torpedo_running          = $442C = 17452
 #: torpedo_col              = $442D = 17453
 #: torpedo_row              = $442E = 17454
 #: topedo_pos0              = $442F = 17455
 #: FIRE_TORPEDO             = $4431 = 17457
+#: DEAD13                   = $4453 = 17491
 #: WALL_HIT                 = $445E = 17502
 #: ALIEN_HIT                = $445F = 17503
 #: MOVE_TORPEDO             = $4460 = 17504
@@ -1810,9 +2004,11 @@ check_left_right:
 #: torpedo_hit              = $448F = 17551
 #: hit_fortress             = $44AB = 17579
 #: stop_torpedo             = $44B6 = 17590
+#: DEAD14                   = $44BB = 17595
 #: BLOCK1                   = $44CA = 17610
 #: save_block1              = $44CD = 17613
-#: INTRO_SCR                = $44D1 = 17617
+#: DEAD20                   = $44CE = 17614
+#: INTRO_SCREEN             = $44D1 = 17617
 #: draw_top_bar             = $44DA = 17626
 #: draw_right_bar           = $44E7 = 17639
 #: each_right_bar_block     = $44EC = 17644
@@ -1827,13 +2023,16 @@ check_left_right:
 #: ROTATE_SHIP              = $45C4 = 17860
 #: store_count              = $45D1 = 17873
 #: add_25                   = $45D8 = 17880
+#: DEAD15                   = $45E8 = 17896
 #: torpedo_path             = $45F3 = 17907
-#: intro_torpedo_pos        = $4604 = 17924
+#: intro_torpedo_pos_lo     = $4604 = 17924
+#: intro_torpedo_pos_hi     = $4605 = 17925
 #: INTRO_FIRE_TORPEDO       = $4606 = 17926
 #: restore_torpedo_pos      = $4617 = 17943
 #: draw_torpedo_path        = $4618 = 17944
 #: DRAW_CANONS              = $4630 = 17968
 #: draw_cannon              = $4647 = 17991
+#: DEAD16                   = $4657 = 18007
 #: bomb_col                 = $4660 = 18016
 #: bomb_row                 = $4661 = 18017
 #: bomb_running             = $4662 = 18018
@@ -1847,12 +2046,14 @@ check_left_right:
 #: move_bomb                = $46B5 = 18101
 #: bomb_no_hit              = $46BF = 18111
 #: bomb_hit_ship            = $46C6 = 18118
+#: DEAD17                   = $46D0 = 18128
 #: timer_fortress_move      = $46DB = 18139
 #: CHECK_FORTRESS_MOVE      = $46DD = 18141
 #: FORTRESS_MOVE_COUNT      = $46E1 = 18145
 #: do_fortress_move         = $46EE = 18158
 #: move_next_row            = $4707 = 18183
-#: SCORE                    = $4722 = 18210
+#: SCORE_lo                 = $4722 = 18210
+#: SCORE_hi                 = $4723 = 18211
 #: NUM_BUFFER               = $4724 = 18212
 #: N10000                   = $4729 = 18217
 #: N1000                    = $472B = 18219
@@ -1867,26 +2068,37 @@ check_left_right:
 #: subtraction_overflowed   = $475C = 18268
 #: make_digit               = $476A = 18282
 #: output_digit             = $4773 = 18291
+#: DEAD18                   = $4783 = 18307
 #: INCR_SCORE               = $4793 = 18323
 #: score_multiply           = $47B2 = 18354
 #: out_digit                = $47CA = 18378
 #: skip_blanks              = $47D5 = 18389
+#: DEAD19                   = $47D9 = 18393
 #: DELETE_TORPEDO           = $47E1 = 18401
 #: DELETE_BOMB              = $47EF = 18415
 #: INIT_FORTRESS            = $47FF = 18431
 #: fortress_fill_outer_black = $4804 = 18436
 #: fortress_fill_grey       = $480B = 18443
 #: fortress_fill_inner_black = $4812 = 18450
+#: DEAD21                   = $483D = 18493
 #: press_any_key_msg        = $4845 = 18501
 #: PRESS_ANY_KEY            = $485E = 18526
+#: DEAD22                   = $486E = 18542
 #: DELETE_PRESS_ANY_KEY     = $4871 = 18545
 #: put_space                = $4879 = 18553
+#: DEAD23                   = $487F = 18559
+#: DEAD24                   = $4888 = 18568
 #: FLASH_ALIEN              = $48B6 = 18614
 #: flash_next_line          = $48C7 = 18631
 #: flash_next_col           = $48CA = 18634
-#: LEVEL_DELAY              = $494F = 18767
+#: DEAD25                   = $48D9 = 18649
+#: DEAD26                   = $4927 = 18727
+#: LEVEL_DELAY_lo           = $494F = 18767
+#: LEVEL_DELAY_hi           = $4950 = 18768
 #: GAME                     = $4951 = 18769
 #: game_delay               = $497E = 18814
+#: DEAD27                   = $4988 = 18824
+#: DEAD28                   = $4995 = 18837
 #: CLEAR_GAME_AREA          = $49B3 = 18867
 #: clear_next_row           = $49BB = 18875
 #: L49BD                    = $49BD = 18877
@@ -1894,48 +2106,49 @@ check_left_right:
 #: TEST_KEYBOARD            = $49D1 = 18897
 #: L49D4                    = $49D4 = 18900
 #: check_left_right         = $4A18 = 18968
+#: DEAD29                   = $4A37 = 18999
 
 #: [$4000] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 #: [$4040] $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$bbb
 #: [$4080] bbTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 #: [$40C0] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-#: [$4100] TTTTTTTTTTTTTTTTTTTTTTTTWWWWBBBBB-----bbbbbbCCCCCCCCCCCCCCCCCCCC
+#: [$4100] TTTTTTTTTTTTTTTTTTTTTTTTWWWWBBBBBBBBBBbbbbbbCCCCCCCCCCCCCCCCCCCC
 #: [$4140] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4180] CCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$41C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--------------
-#: [$4200] ------------bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--bbbbbbCCCCCCCC
-#: [$4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbbBB-TTTTTTTTT
+#: [$41C0] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBBBBBBBBBBB
+#: [$4200] BBBBBBBBBBBBbbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBbbbbbbCCCCCCCC
+#: [$4240] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBBbbbbbbBBBTTTTTTTTT
 #: [$4280] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$42C0] CCCCCCCCCCCCCCC--CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCB----bbbbbbTTTTTT
+#: [$42C0] CCCCCCCCCCCCCCCBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBBbbbbbbTTTTTT
 #: [$4300] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 #: [$4340] TTTTTBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4380] CCCCCCCCCC-----bbbbbb-------------------------------------------
-#: [$43C0] --CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----CCCCCCCC--b
-#: [$4400] bbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbbBBBWWCCCCCCCCCCCCCCC
-#: [$4440] CCCCCCCCCCCCCCCCCCC-----bbbbbbBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----
-#: [$44C0] ----bbbbbbTTTT---CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4380] CCCCCCCCCCBBBBBbbbbbbBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+#: [$43C0] BBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBBCCCCCCCCBBb
+#: [$4400] bbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBBbbbbbbBBBWWCCCCCCCCCCCCCCC
+#: [$4440] CCCCCCCCCCCCCCCCCCCBBBBBbbbbbbBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4480] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBB
+#: [$44C0] BBBBbbbbbbTTTTBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4500] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4540] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 #: [$4580] TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-#: [$45C0] TTTBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC-----bbbbbbTTTTTTTTTTTTT
-#: [$4600] TTTTWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCC
-#: [$4640] CCCCCCCCCCCCCCCCCCCCCCC---bbbbbbBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$45C0] TTTBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBBbbbbbbTTTTTTTTTTTTT
+#: [$4600] TTTTBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbCCCCCCCCCCCCCCCC
+#: [$4640] CCCCCCCCCCCCCCCCCCCCCCCBBBbbbbbbBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 #: [$4680] CCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$46C0] CCCCCCCCCCCCCCCC-----bbbbbbWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbWWB----WWWWWWWWWWWWBCCCCCCCCCC
+#: [$46C0] CCCCCCCCCCCCCCCCBBBBBbbbbbbWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4700] CCCCCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbBBTTTTTWWWWWWWWWWWWBCCCCCCCCCC
 #: [$4740] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4780] CCC----------bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$47C0] CCCCCCCCCCCCCCCCCCCCCCCCC--bbbbbbCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbC
-#: [$4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC--b
-#: [$4840] bbbbbTTTTTTTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCC---CCCCCCCCCCCCCC-
-#: [$4880] --bbbbbb----------------------------------------------CCCCCCCCCC
-#: [$48C0] CCCCCCCCCCCCCCCCCCCCCCCCC---------------------------------------
-#: [$4900] ---------------------------------bbbbbb-------------------------
-#: [$4940] ---------bbbbbbWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4980] CCCCCCCC-------bbbbbb------------------------bbbbbbCCCCCCCCCCCCC
+#: [$4780] CCCBBBBBBBBBBbbbbbbCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$47C0] CCCCCCCCCCCCCCCCCCCCCCCCCBBbbbbbbCCCCCCCCCCCCCCCCCCCCCCCCbbbbbbC
+#: [$4800] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBb
+#: [$4840] bbbbbTTTTTTTTTTTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCBBBCCCCCCCCCCCCCCB
+#: [$4880] BBbbbbbbBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCCCCCCCC
+#: [$48C0] CCCCCCCCCCCCCCCCCCCCCCCCCBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+#: [$4900] BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBbbbbbbBBBBBBBBBBBBBBBBBBBBBBBBB
+#: [$4940] BBBBBBBBBbbbbbbBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+#: [$4980] CCCCCCCCBBBBBBBbbbbbbBBBBBBBBBBBBBBBBBBBBBBBBbbbbbbCCCCCCCCCCCCC
 #: [$49C0] CCCCCCCCCbbbbbbWWCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-#: [$4A00] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC------bbb
+#: [$4A00] CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBBBBBBbbb
 #: [$4A40] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 #: [$4A80] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 #: [$4AC0] bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb

@@ -18,6 +18,8 @@ L4082:
         ld      (hl), $34
         inc     hl
         ret
+
+
 #ENDASM [$4099]
 
    10  RAND  USR &L4082
