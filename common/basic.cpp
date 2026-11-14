@@ -7,6 +7,7 @@
 #include "basic.h"
 #include "disasm.h"
 #include "errors.h"
+#include "getopt.h"
 #include "release_assert.h"
 #include "types.h"
 #include "utils.h"
@@ -15,10 +16,10 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <sstream>
 
 void Basic::write_bas_file(const std::string& filename,
                            const DisasmCode& disasm_code) const {
@@ -175,7 +176,13 @@ void Basic::write_vars(std::ostream& os) const {
 
 void Basic::write_source_lines(std::ostream& os,
                                const DisasmCode& disasm_code) const {
+    bool debug = (optflags & FLAG_DEBUG) != 0;
+
     for (auto& line : source_lines) {
+        if (debug) {
+            os << "#[" << fmt_hex(line.addr, 4) << "]" << std::endl;
+        }
+
         if (line.type == SourceLine::Type::Basic) {
             // output header for basic line
             write_header(os, line.line_num, disasm_code);
@@ -240,6 +247,7 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
                             const Bytes& bytes,
                             const DisasmCode& disasm_code) const {
     const auto& labels = disasm_code.get_asm_labels();
+    bool debug = (optflags & FLAG_DEBUG) != 0;
 
     os  << "#ASM [" << fmt_hex(addr, 4) << "]" << std::endl;
     for (int i = 0; i < INT(bytes.size()); i++) {
@@ -251,7 +259,16 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
         // output label
         std::string label;
         if (labels.find(addr1, label)) {
-            os << std::endl << label << ":" << std::endl;
+            os << std::endl;
+            if (debug) {
+                os << std::setw(LabelWidth + OpcodeWidth + OperandsWidth) << std::left
+                   << label + ":"
+                   << ";[" << fmt_hex(addr1, 4) << "]"
+                   << std::endl;
+            }
+            else {
+                os << label << ":" << std::endl;
+            }
         }
 
         // output string of unknown bytes
@@ -266,7 +283,11 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
                 i++;
                 os << "," << fmt_hex(bytes[i], 2);
             }
-            os << " ; " << static_cast<char>(disasm_code.get_mem_type(addr1))
+            os << " ;";
+            if (debug) {
+                os << "[" << fmt_hex(addr1, 4) << "]";
+            }
+            os << " " << static_cast<char>(disasm_code.get_mem_type(addr1))
                << std::endl << std::endl;
             continue;
         }
@@ -277,12 +298,29 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
         std::string opcode_str = opcode->to_string(labels);
 
         // output comments
-        std::vector<std::string> comment = disasm_code.get_comment(addr1);
-        if (comment.empty()) {
-            os << std::setw(LabelWidth) << ""
-               << opcode_str << std::endl;
+        std::vector<std::string> comments = disasm_code.get_comment(addr1);
+        if (comments.empty()) {
+            os << std::setw(LabelWidth) << "";
+            if (debug) {
+                if (opcode_str.size() > OpcodeWidth + OperandsWidth) {
+                    os << opcode_str << std::endl
+                       << std::setw(LabelWidth + OpcodeWidth + OperandsWidth) << ""
+                       << ";[" << fmt_hex(addr1, 4) << "]"
+                       << std::endl;
+                }
+                else {
+                    os << std::setw(OpcodeWidth + OperandsWidth) << std::left
+                       << opcode_str
+                       << ";[" << fmt_hex(addr1, 4) << "]"
+                       << std::endl;
+                }
+            }
+            else {
+                os << opcode_str << std::endl;
+            }
         }
         else {
+            comments.front() = ";[" + fmt_hex(addr1, 4) + "]" + comments.front();
             if (opcode_str.size() > OpcodeWidth + OperandsWidth) {
                 os << std::setw(LabelWidth) << ""
                    << opcode_str << std::endl;
@@ -291,10 +329,10 @@ void Basic::write_asm_lines(std::ostream& os, int addr,
                 os << std::setw(LabelWidth) << ""
                    << std::setw(OpcodeWidth + OperandsWidth) << std::left
                    << opcode_str
-                   << comment.front() << std::endl;
-                comment.erase(comment.begin());
+                   << comments.front() << std::endl;
+                comments.erase(comments.begin());
             }
-            for (auto& c : comment) {
+            for (auto& c : comments) {
                 os << std::setw(LabelWidth + OpcodeWidth + OperandsWidth) << ""
                    << c << std::endl;
             }

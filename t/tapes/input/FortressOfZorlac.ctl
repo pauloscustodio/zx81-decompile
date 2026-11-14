@@ -82,7 +82,8 @@ $4082   # ----------------------------------------------------------------------
 
 $4082 57 T FORTRESS1
 $40BB    T SAVE_FORTRESS1
-$40BC 92 T FORTRESS2
+$40BC 91 T FORTRESS2
+$4117	 T SAVE_FORTRESS2
 
 $4118   W addr_fortress
 $411A   W addr_fortress_save
@@ -165,7 +166,10 @@ $41E8   ; copy one block
 $41ED   ; jump back if not finished
 $41F0   ; DE=blocks, HL=screen
 
-$41F2 26 B DEAD02
+#$41F2 26 B DEAD02
+$41F2 	C DEAD02
+$4204 	C DEAD30
+$43EA 	C DEAD31
 
 $4238   C erase_hit_block_from_fortress
 $4274   B alien_col
@@ -251,7 +255,8 @@ $4383   ; DE+=33-5=28
 
 $438A 5 B DEAD08
 
-$4395 45 B DEAD09
+#$4395 45 B DEAD09
+$4395 	C DEAD09
 
 $43C2   # --------------------------------------------------------------------------------
 $43C2   # Called in response to key, BC has ship coords
@@ -280,7 +285,9 @@ $43E6   C MOVE_SHIP_LEFT
 $43E8   ; reached limit
 $43ED   ; move right
 
-$43F0 5 B DEAD10
+#$43F0 5 B DEAD10
+$43F0 	C DEAD10
+
 $43FD 2 B DEAD11
 
 $43F5   C save_ship_pos

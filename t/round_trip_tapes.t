@@ -19,7 +19,8 @@ for my $input_p_file ( path("t/tapes/input")->children(qr/\.p$/) ) {
     unlink "$basename.bas", "$basename.p" if Test::More->builder->is_passing;
 
     # decompile with .ctl file
-    run_ok("zx81_decompile -c $input_ctl_file -o $basename.bas $input_p_file");
+    run_ok(
+        "zx81_decompile -d -c $input_ctl_file -o $basename.bas $input_p_file");
     check_text_file( $exp_bas_file, "$basename.bas" );
 
     # round-trip

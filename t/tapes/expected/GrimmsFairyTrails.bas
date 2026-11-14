@@ -13,10 +13,11 @@
 #VARS B$=" "
 #VARS Y$=""
 
+#[$407D]
    10  REM 
 #ASM [$4082]
 
-        defb    $00,$00,$00,$00,$00,$00 ; -
+        defb    $00,$00,$00,$00,$00,$00 ;[$4082] -
 
 
 ; --------------------------------------------------------------------------------
@@ -25,30 +26,30 @@
 ; --------------------------------------------------------------------------------
 
 
-PUT_CHAR_AT:
-        ld      h, $00
-        ld      l, c
-        sla     l
-        sla     l
-        sla     l
-        sla     l
-        sla     l
-        rl      h
-        ld      e, c
-        ld      d, $00
-        add     hl, de                  ; HL=C*33
-        ld      e, b
-        add     hl, de                  ; HL=C*33+B
-        ld      de, (D_FILE)            ; get display file
-        add     hl, de
-        ld      de, $0001               ; add one
-        add     hl, de
-        ld      d, (hl)                 ; read previous char
-        ld      (hl), a                 ; write char
-        ret
+PUT_CHAR_AT:                            ;[$4088]
+        ld      h, $00                  ;[$4088]
+        ld      l, c                    ;[$408A]
+        sla     l                       ;[$408B]
+        sla     l                       ;[$408D]
+        sla     l                       ;[$408F]
+        sla     l                       ;[$4091]
+        sla     l                       ;[$4093]
+        rl      h                       ;[$4095]
+        ld      e, c                    ;[$4097]
+        ld      d, $00                  ;[$4098]
+        add     hl, de                  ;[$409A]; HL=C*33
+        ld      e, b                    ;[$409B]
+        add     hl, de                  ;[$409C]; HL=C*33+B
+        ld      de, (D_FILE)            ;[$409D]; get display file
+        add     hl, de                  ;[$40A1]
+        ld      de, $0001               ;[$40A2]; add one
+        add     hl, de                  ;[$40A5]
+        ld      d, (hl)                 ;[$40A6]; read previous char
+        ld      (hl), a                 ;[$40A7]; write char
+        ret                             ;[$40A8]
 
 
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$40A9] -
 
 
 ; --------------------------------------------------------------------------------
@@ -56,32 +57,32 @@ PUT_CHAR_AT:
 ; --------------------------------------------------------------------------------
 
 
-FILL_SCR:
-        ld      c, $16                  ; C=22 lines
-        ld      hl, (D_FILE)
-        inc     hl
-        ld      de, $0021               ; size of row
+FILL_SCR:                               ;[$40E0]
+        ld      c, $16                  ;[$40E0]; C=22 lines
+        ld      hl, (D_FILE)            ;[$40E2]
+        inc     hl                      ;[$40E5]
+        ld      de, $0021               ;[$40E6]; size of row
 
-fill_row:
-        ld      b, $20                  ; B=32 chars
-        adc     hl, de                  ; move to next row
-        ld      (fill_line_addr), hl
+fill_row:                               ;[$40E9]
+        ld      b, $20                  ;[$40E9]; B=32 chars
+        adc     hl, de                  ;[$40EB]; move to next row
+        ld      (fill_line_addr), hl    ;[$40ED]
 
-BACKGROUND:
-        ld      (hl), $80
-        inc     hl
-        dec     b
-        jp      nz, BACKGROUND
-        ld      hl, (fill_line_addr)
-        dec     c
-        jp      nz, fill_row
-        ret
+BACKGROUND:                             ;[$40F0]
+        ld      (hl), $80               ;[$40F0]
+        inc     hl                      ;[$40F2]
+        dec     b                       ;[$40F3]
+        jp      nz, BACKGROUND          ;[$40F4]
+        ld      hl, (fill_line_addr)    ;[$40F7]
+        dec     c                       ;[$40FA]
+        jp      nz, fill_row            ;[$40FB]
+        ret                             ;[$40FE]
 
 
-fill_line_addr:
-        defw    $63BD
+fill_line_addr:                         ;[$40FF]
+        defw    $63BD                   ;[$40FF]
 
-        defb    $00 ; -
+        defb    $00 ;[$4101] -
 
 
 ; --------------------------------------------------------------------------------
@@ -89,24 +90,24 @@ fill_line_addr:
 ; --------------------------------------------------------------------------------
 
 
-DRAW_DOTS:
-        ld      b, $1E                  ; B=30 column 30
-        ld      c, $0F                  ; C=15 row 15
+DRAW_DOTS:                              ;[$4102]
+        ld      b, $1E                  ;[$4102]; B=30 column 30
+        ld      c, $0F                  ;[$4104]; C=15 row 15
 
-draw_next_dot:
-        ld      a, $1B                  ; A=dot
-        call    PUT_CHAR_AT             ; put a dot
-        dec     c
-        ld      a, c
-        cp      $01
-        jr      nz, draw_next_dot
-        ld      c, $0F                  ; C=row 15
-        dec     b
-        jr      nz, draw_next_dot
-        ret
+draw_next_dot:                          ;[$4106]
+        ld      a, $1B                  ;[$4106]; A=dot
+        call    PUT_CHAR_AT             ;[$4108]; put a dot
+        dec     c                       ;[$410B]
+        ld      a, c                    ;[$410C]
+        cp      $01                     ;[$410D]
+        jr      nz, draw_next_dot       ;[$410F]
+        ld      c, $0F                  ;[$4111]; C=row 15
+        dec     b                       ;[$4113]
+        jr      nz, draw_next_dot       ;[$4114]
+        ret                             ;[$4116]
 
 
-        defb    $00 ; -
+        defb    $00 ;[$4117] -
 
 
 ; --------------------------------------------------------------------------------
@@ -114,848 +115,849 @@ draw_next_dot:
 ; --------------------------------------------------------------------------------
 
 
-DRAW_WALLS1:
-        ld      c, $0A                  ; C=row 10
-        ld      b, $1D                  ; B=column 29 
-
-wall_next_dot1:
-        ld      a, $80                  ; char=solid block
-        call    PUT_CHAR_AT             ; put a char
-        dec     c
-        ld      a, c
-        cp      $06
-        jr      nz, wall_next_dot1      ; repeat until row 6
-        ld      c, $0A                  ; C=row 10
-        dec     b
-        dec     b                       ; C=column -= 2
-        ld      a, b
-        cp      $0F                     ; repeat until column 15
-        jr      nz, wall_next_dot1
-        ld      c, $0A                  ; C=row 10
-
-wall_next_dot2:
-        ld      b, $0E                  ; B=column 14
-
-wall_next_dot3:
-        ld      a, $80                  ; char=solid block
-        call    PUT_CHAR_AT             ; put a char
-        dec     c
-        ld      a, c
-        cp      $06
-        jr      nz, wall_next_dot3      ; repeat until row 6
-        ld      c, $0A                  ; C=row 10
-        dec     b
-        dec     b
-        ld      a, b
-        cp      $00
-        jr      nz, wall_next_dot3
-        ld      b, $10
-        ld      c, $0A
-
-wall_next_dot4:
-        ld      a, $80
-        call    PUT_CHAR_AT
-        dec     b
-        ld      a, b
-        cp      $0E
-        jr      nz, wall_next_dot4
-        ld      c, $07
-        ld      b, $10
+DRAW_WALLS1:                            ;[$4118]
+        ld      c, $0A                  ;[$4118]; C=row 10
+        ld      b, $1D                  ;[$411A]; B=column 29 
+
+wall_next_dot1:                         ;[$411C]
+        ld      a, $80                  ;[$411C]; char=solid block
+        call    PUT_CHAR_AT             ;[$411E]; put a char
+        dec     c                       ;[$4121]
+        ld      a, c                    ;[$4122]
+        cp      $06                     ;[$4123]
+        jr      nz, wall_next_dot1      ;[$4125]; repeat until row 6
+        ld      c, $0A                  ;[$4127]; C=row 10
+        dec     b                       ;[$4129]
+        dec     b                       ;[$412A]; C=column -= 2
+        ld      a, b                    ;[$412B]
+        cp      $0F                     ;[$412C]; repeat until column 15
+        jr      nz, wall_next_dot1      ;[$412E]
+        ld      c, $0A                  ;[$4130]; C=row 10
+
+wall_next_dot2:                         ;[$4132]
+        ld      b, $0E                  ;[$4132]; B=column 14
+
+wall_next_dot3:                         ;[$4134]
+        ld      a, $80                  ;[$4134]; char=solid block
+        call    PUT_CHAR_AT             ;[$4136]; put a char
+        dec     c                       ;[$4139]
+        ld      a, c                    ;[$413A]
+        cp      $06                     ;[$413B]
+        jr      nz, wall_next_dot3      ;[$413D]; repeat until row 6
+        ld      c, $0A                  ;[$413F]; C=row 10
+        dec     b                       ;[$4141]
+        dec     b                       ;[$4142]
+        ld      a, b                    ;[$4143]
+        cp      $00                     ;[$4144]
+        jr      nz, wall_next_dot3      ;[$4146]
+        ld      b, $10                  ;[$4148]
+        ld      c, $0A                  ;[$414A]
+
+wall_next_dot4:                         ;[$414C]
+        ld      a, $80                  ;[$414C]
+        call    PUT_CHAR_AT             ;[$414E]
+        dec     b                       ;[$4151]
+        ld      a, b                    ;[$4152]
+        cp      $0E                     ;[$4153]
+        jr      nz, wall_next_dot4      ;[$4155]
+        ld      c, $07                  ;[$4157]
+        ld      b, $10                  ;[$4159]
 
-wall_next_dot5:
-        ld      a, $80
-        call    PUT_CHAR_AT
-        dec     b
-        ld      a, b
-        cp      $0E
-        jr      nz, wall_next_dot5
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00 ; -
-
-
-DRAW_WALLS2:
-        ld      b, $1D
-
-code2:
-        ld      c, $0C
-
-wall_next_dot6:
-        ld      a, $80
-        call    PUT_CHAR_AT
-        dec     b
-        call    PUT_CHAR_AT
-        dec     b
-        dec     b
-        ld      a, b
-
-code5:
-        cp      $02
-        jr      nz, wall_next_dot6
-
-code3:
-        ld      b, $1D
-
-code4:
-        ld      c, $03
-
-wall_next_dot7:
-        ld      a, $80
-        call    PUT_CHAR_AT
-        dec     b
-        call    PUT_CHAR_AT
-        dec     b
-        dec     b
-        ld      a, b
-
-code6:
-        cp      $02
-        jr      nz, wall_next_dot7
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$02,$1E ; -
+wall_next_dot5:                         ;[$415B]
+        ld      a, $80                  ;[$415B]
+        call    PUT_CHAR_AT             ;[$415D]
+        dec     b                       ;[$4160]
+        ld      a, b                    ;[$4161]
+        cp      $0E                     ;[$4162]
+        jr      nz, wall_next_dot5      ;[$4164]
+        ret                             ;[$4166]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00 ;[$4167] -
+
+
+DRAW_WALLS2:                            ;[$416E]
+        ld      b, $1D                  ;[$416E]
+
+code2:                                  ;[$4170]
+        ld      c, $0C                  ;[$4170]
+
+wall_next_dot6:                         ;[$4172]
+        ld      a, $80                  ;[$4172]
+        call    PUT_CHAR_AT             ;[$4174]
+        dec     b                       ;[$4177]
+        call    PUT_CHAR_AT             ;[$4178]
+        dec     b                       ;[$417B]
+        dec     b                       ;[$417C]
+        ld      a, b                    ;[$417D]
+
+code5:                                  ;[$417E]
+        cp      $02                     ;[$417E]
+        jr      nz, wall_next_dot6      ;[$4180]
+
+code3:                                  ;[$4182]
+        ld      b, $1D                  ;[$4182]
+
+code4:                                  ;[$4184]
+        ld      c, $03                  ;[$4184]
+
+wall_next_dot7:                         ;[$4186]
+        ld      a, $80                  ;[$4186]
+        call    PUT_CHAR_AT             ;[$4188]
+        dec     b                       ;[$418B]
+        call    PUT_CHAR_AT             ;[$418C]
+        dec     b                       ;[$418F]
+        dec     b                       ;[$4190]
+        ld      a, b                    ;[$4191]
+
+code6:                                  ;[$4192]
+        cp      $02                     ;[$4192]
+        jr      nz, wall_next_dot7      ;[$4194]
+        ret                             ;[$4196]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$02,$1E ;[$4197] -
 
 
-var4:
-        defb    $10
+var4:                                   ;[$41A2]
+        defb    $10                     ;[$41A2]
 
-var5:
-        defb    $09
+var5:                                   ;[$41A3]
+        defb    $09                     ;[$41A3]
 
-        defb    $02,$1E,$00,$00,$09,$18,$20,$62 ; -
+        defb    $02,$1E,$00,$00,$09,$18,$20,$62 ;[$41A4] -
 
 
-var3:
-        defb    $01
-
-        defb    $01 ; -
+var3:                                   ;[$41AC]
+        defb    $01                     ;[$41AC]
+
+        defb    $01 ;[$41AD] -
 
 
-var2:
-        defb    $00
+var2:                                   ;[$41AE]
+        defb    $00                     ;[$41AE]
 
-        defb    $00 ; -
+        defb    $00 ;[$41AF] -
 
 
-var1:
-        defb    $00
+var1:                                   ;[$41B0]
+        defb    $00                     ;[$41B0]
 
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L41D4:
-        ld      hl, $41A1
-        ld      b, (hl)
-        ld      hl, $41A0
-        ld      c, (hl)
-        ld      a, $34
-        call    PUT_CHAR_AT
-        ret
-
-
-        defb    $00,$00,$00,$00 ; -
-
-
-L41E6:
-        call    L41D4
-        inc     hl
-        ld      a, (hl)
-        cp      $80
-        ret     z
-        cp      $1B
-        call    z, L4290
-        ld      de, var1
-        ld      a, (de)
-        cp      $C8
-        ret     z
-        ld      a, $00
-        call    PUT_CHAR_AT
-        inc     b
-        ld      a, $34
-        call    PUT_CHAR_AT
-        ld      a, b
-        ld      ($41A1), a
-        ret
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$41B1] -
+
+
+L41D4:                                  ;[$41D4]
+        ld      hl, $41A1               ;[$41D4]
+        ld      b, (hl)                 ;[$41D7]
+        ld      hl, $41A0               ;[$41D8]
+        ld      c, (hl)                 ;[$41DB]
+        ld      a, $34                  ;[$41DC]
+        call    PUT_CHAR_AT             ;[$41DE]
+        ret                             ;[$41E1]
+
+
+        defb    $00,$00,$00,$00 ;[$41E2] -
+
+
+L41E6:                                  ;[$41E6]
+        call    L41D4                   ;[$41E6]
+        inc     hl                      ;[$41E9]
+        ld      a, (hl)                 ;[$41EA]
+        cp      $80                     ;[$41EB]
+        ret     z                       ;[$41ED]
+        cp      $1B                     ;[$41EE]
+        call    z, L4290                ;[$41F0]
+        ld      de, var1                ;[$41F3]
+        ld      a, (de)                 ;[$41F6]
+        cp      $C8                     ;[$41F7]
+        ret     z                       ;[$41F9]
+        ld      a, $00                  ;[$41FA]
+        call    PUT_CHAR_AT             ;[$41FC]
+        inc     b                       ;[$41FF]
+        ld      a, $34                  ;[$4200]
+        call    PUT_CHAR_AT             ;[$4202]
+        ld      a, b                    ;[$4205]
+        ld      ($41A1), a              ;[$4206]
+        ret                             ;[$4209]
 
-
-        defb    $00,$00,$00,$00 ; -
-
-
-L420E:
-        call    L41D4
-        dec     hl
-        ld      a, (hl)
-        cp      $80
-        ret     z
-        cp      $1B
-        call    z, L4290
-        ld      de, var1
-        ld      a, (de)
-        cp      $C8
-        ret     z
-        ld      a, $00
-        call    PUT_CHAR_AT
-        dec     b
-        ld      a, $34
-        call    PUT_CHAR_AT
-        ld      a, b
-        ld      ($41A1), a
-        ret
-
-
-        defb    $00,$00,$00,$00 ; -
-
-
-L4236:
-        call    L41D4
-        ld      de, $0021
-        sbc     hl, de
-        ld      a, (hl)
-        cp      $80
-        ret     z
-        cp      $1B
-        call    z, L4290
-        ld      de, var1
-        ld      a, (de)
-        cp      $C8
-        ret     z
-        ld      a, $00
-        call    PUT_CHAR_AT
-        dec     c
-        ld      a, $34
-        call    PUT_CHAR_AT
-        ld      a, c
-        ld      ($41A0), a
-        ret
-
-
-        defb    $00,$00,$00,$00,$00 ; -
-
-
-L4263:
-        call    L41D4
-        ld      de, $0021
-        adc     hl, de
-        ld      a, (hl)
-        cp      $80
-        ret     z
-        cp      $1B
-        call    z, L4290
-        ld      de, var1
-        ld      a, (de)
-        cp      $C8
-        ret     z
-        ld      a, $00
-        call    PUT_CHAR_AT
-        inc     c
-        ld      a, $34
-        call    PUT_CHAR_AT
-        ld      a, c
-        ld      ($41A0), a
-        ret
-
-
-        defb    $00,$00,$00,$00,$00 ; -
-
-
-L4290:
-        ld      a, (var1)
-        add     a, $01
-        ld      (var1), a
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$CD,$F9,$43,$CD,$30,$43,$3A,$AE,$41,$FE,$3D,$C8,$C3,$1C,$43,$00,$00,$00,$00,$00 ; -
-
-
-L4330:
-        ld      a, ($41A0)
-        ld      hl, var5+1
-        sub     (hl)
-        jp      m, L4352
-        ld      d, $02
-
-L433C:
-        ld      b, a
-        ld      a, ($41A1)
-        ld      hl, var5+2
-        sub     (hl)
-        jp      m, L4359
-        ld      e, $02
-
-L4349:
-        ld      c, a
-        ld      a, c
-        cp      b
-        jp      m, L4360
-        jp      p, L4369
-
-L4352:
-        ld      d, $01
-        neg
-        jp      L433C
-
-
-L4359:
-        ld      e, $01
-        neg
-        jp      L4349
-
-
-L4360:
-        ld      a, d
-        cp      $01
-        jp      z, L4388
-        jp      nz, L4372
-
-L4369:
-        ld      a, e
-        cp      $01
-        jp      z, L439E
-        jp      nz, L43B4
-
-L4372:
-        call    L4477
-        cp      $80
-        ret     nz
-        call    L44C0
-        cp      $80
-        ret     nz
-        call    L44E8
-        cp      $80
-        ret     nz
-        call    L449A
-        ret
-
-
-L4388:
-        call    L449A
-        cp      $80
-        ret     nz
-        call    L44C0
-        cp      $80
-        ret     nz
-        call    L44E8
-        cp      $80
-        ret     nz
-        call    L4477
-        ret
-
-
-L439E:
-        call    L44E8
-        cp      $80
-        ret     nz
-        call    L449A
-        cp      $80
-        ret     nz
-        call    L4477
-        cp      $80
-        ret     nz
-        call    L44C0
-        ret
-
-
-L43B4:
-        call    L44C0
-        cp      $80
-        ret     nz
-        call    L4477
-        cp      $80
-        ret     nz
-        call    L449A
-        cp      $80
-        ret     nz
-        call    L44E8
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$23 ; -
-
-
-L43F9:
-        ld      a, (LAST_K)
-        nop
-        ld      a, (LAST_K+1)
-        ld      b, a
-        ld      a, (LAST_K)
-        cp      c
-        jp      nz, L440D
-        ld      a, (LAST_K+1)
-        cp      b
-        ret     z
-
-L440D:
-        ld      a, (LAST_K+1)
-        ld      b, a
-        ld      a, (LAST_K)
-        ld      c, a
-        cp      $FF
-        ret     z
-        ld      e, $FF
-        ld      d, $00
-        ld      a, b
-        rrca
-        ld      b, a
-        ld      a, e
-        sbc     a, a
-        or      $26
-        ld      l, $05
-        sub     l
-
-L4426:
-        add     a, l
-        scf
-        ld      e, a
-        ld      a, c
-        rra
-        ld      c, a
-        ld      a, e
-        jr      c, L4426
-        ld      c, b
-        dec     l
-        ld      l, $01
-        jr      nz, L4426
-        ld      hl, $007D
-        ld      e, a
-        add     hl, de
-        ld      a, (hl)
-        ld      ($43F8), a
-        cp      $21
-        call    z, L420E
-        cp      $22
-        call    z, L4263
-        cp      $23
-        call    z, L4236
-        cp      $24
-        call    z, L41E6
-        ret
-
-
-        defb    $F9,$43,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L445C:
-        ld      hl, var5+2
-        ld      b, (hl)
-        ld      hl, var5+1
-        ld      c, (hl)
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ret
-
-
-        defb    $7A,$44,$C9,$A2,$44,$C9,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L4477:
-        call    L445C
-        ld      de, $0021
-        adc     hl, de
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        inc     c
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, c
-        ld      (var5+1), a
-        ret
-
-
-        defb    $00 ; -
-
-
-L449A:
-        call    L445C
-        ld      de, $0021
-        sbc     hl, de
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        dec     c
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, c
-        ld      (var5+1), a
-        ret
-
-
-        defb    $41,$C9,$9F,$44 ; -
-
-
-L44C0:
-        call    L445C
-        inc     hl
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        inc     b
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, b
-        ld      (var5+2), a
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L44E8:
-        call    L445C
-        dec     hl
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        dec     b
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, b
-        ld      (var5+2), a
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L4524:
-        ld      hl, $41A9
-        ld      b, (hl)
-        ld      hl, $41A8
-        ld      c, (hl)
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ret
-
-
-        defb    $88 ; -
-
-
-L4533:
-        call    L4524
-        ld      de, $0021
-        adc     hl, de
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        inc     c
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, c
-        ld      ($41A8), a
-        ret
-
-
-        defb    $CD ; -
-
-
-L4556:
-        call    L4524
-        ld      de, $0021
-        sbc     hl, de
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        dec     c
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, c
-        ld      ($41A8), a
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L4588:
-        ld      a, (var3)
-        cp      $02
-        jp      z, L4596
-        ld      a, $3D
-        ld      (var2), a
-        ret
-
-
-L4596:
-        call    L477C
-        ret
-
-
-        defb    $00,$00 ; -
-
-
-L459C:
-        call    L4524
-        inc     hl
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        inc     b
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, b
-        ld      ($41A9), a
-        ret
-
-
-L45BA:
-        call    L4524
-        dec     hl
-        ld      a, (hl)
-        bit     7, a
-        ret     nz
-        cp      $34
-        call    z, L4588
-        cp      $08
-        ret     z
-        call    PUT_CHAR_AT
-        dec     b
-        ld      a, $08
-        call    PUT_CHAR_AT
-        ld      a, b
-        ld      ($41A9), a
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L4650:
-        call    L43F9
-        ld      a, (var3+1)
-        cp      $02
-        jp      nz, L466F
-        ld      a, $01
-        ld      (var3+1), a
-        call    L4330
-        call    L46B4
-        ld      a, (var2)
-        cp      $3D
-        ret     z
-        jp      LEVEL_DELAY
-
-
-L466F:
-        add     a, $01
-        ld      (var3+1), a
-
-LEVEL_DELAY:
-        ld      c, $05                  ; POKEd from basic 5 for fastest, 30 for slowest
-
-L4676:
-        ld      b, $FA
-
-L4678:
-        ld      a, $01
-        dec     b
-        jr      nz, L4678
-        dec     c
-        jr      nz, L4676
-        ld      a, (var1)
-        cp      $FA
-        ret     z
-        ld      hl, ($41AA)
-        ld      b, (hl)
-        ld      a, b
-        cp      $34
-        call    z, L474A
-        jp      L4650
-
-
-        defb    $50,$46,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L46B4:
-        ld      a, ($41A0)
-        ld      hl, $41A8
-        sub     (hl)
-        jp      m, L46D6
-        ld      d, $02
-
-L46C0:
-        ld      b, a
-        ld      a, ($41A1)
-        ld      hl, $41A9
-        sub     (hl)
-        jp      m, L46DD
-        ld      e, $02
-
-L46CD:
-        ld      c, a
-        ld      a, c
-        cp      b
-        jp      m, L46E4
-        jp      p, L46ED
-
-L46D6:
-        ld      d, $01
-        neg
-        jp      L46C0
-
-
-L46DD:
-        ld      e, $01
-        neg
-        jp      L46CD
-
-
-L46E4:
-        ld      a, d
-        cp      $01
-        jp      z, L470C
-        jp      nz, L46F6
-
-L46ED:
-        ld      a, e
-        cp      $01
-        jp      z, L4715
-        jp      nz, L471E
-
-L46F6:
-        call    L4533
-        cp      $80
-        ret     nz
-        call    L45BA
-        cp      $80
-        ret     nz
-        call    L459C
-        cp      $80
-        ret     nz
-        call    L4556
-        ret
-
-
-L470C:
-        call    L4556
-        cp      $80
-        ret     nz
-        nop
-        nop
-        nop
-
-L4715:
-        call    L45BA
-        cp      $80
-        ret     nz
-        jp      L46F6
-
-
-L471E:
-        call    L459C
-        cp      $80
-        ret     nz
-        jp      L46F6
-
-
-        defb    $00,$00,$00,$00,$00 ; -
-
-
-L472C:
-        ld      hl, var4
-        ld      b, (hl)
-        ld      hl, var5
-        ld      c, (hl)
-        ld      a, $97
-        call    PUT_CHAR_AT
-        ld      ($41AA), hl
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L474A:
-        ld      a, (var3)
-        add     a, $01
-        ld      (var3), a
-        ld      b, $10
-        ld      c, $09
-        ld      a, $00
-        call    PUT_CHAR_AT
-        ld      a, $10
-        ld      ($41A1), a
-        ld      a, $0F
-        ld      ($41A0), a
-        ld      a, $34
-        call    L41D4
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-L477C:
-        dec     a
-        ld      (var3), a
-        ld      a, $10
-        ld      ($41A1), a
-        ld      a, $0F
-        ld      ($41A0), a
-        ld      a, $34
-        push    bc
-        push    de
-        push    hl
-        call    L41D4
-        pop     hl
-        pop     de
-        pop     bc
-        ld      a, $00
-        ret
-
-
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
-
-
-BANNER_CHAR:
-        defb    $00
-
-BANNER_COL:
-        defb    $07
-
-        defb    $00,$00,$00 ; -
-
-
-banner_bits_lu:
+
+        defb    $00,$00,$00,$00 ;[$420A] -
+
+
+L420E:                                  ;[$420E]
+        call    L41D4                   ;[$420E]
+        dec     hl                      ;[$4211]
+        ld      a, (hl)                 ;[$4212]
+        cp      $80                     ;[$4213]
+        ret     z                       ;[$4215]
+        cp      $1B                     ;[$4216]
+        call    z, L4290                ;[$4218]
+        ld      de, var1                ;[$421B]
+        ld      a, (de)                 ;[$421E]
+        cp      $C8                     ;[$421F]
+        ret     z                       ;[$4221]
+        ld      a, $00                  ;[$4222]
+        call    PUT_CHAR_AT             ;[$4224]
+        dec     b                       ;[$4227]
+        ld      a, $34                  ;[$4228]
+        call    PUT_CHAR_AT             ;[$422A]
+        ld      a, b                    ;[$422D]
+        ld      ($41A1), a              ;[$422E]
+        ret                             ;[$4231]
+
+
+        defb    $00,$00,$00,$00 ;[$4232] -
+
+
+L4236:                                  ;[$4236]
+        call    L41D4                   ;[$4236]
+        ld      de, $0021               ;[$4239]
+        sbc     hl, de                  ;[$423C]
+        ld      a, (hl)                 ;[$423E]
+        cp      $80                     ;[$423F]
+        ret     z                       ;[$4241]
+        cp      $1B                     ;[$4242]
+        call    z, L4290                ;[$4244]
+        ld      de, var1                ;[$4247]
+        ld      a, (de)                 ;[$424A]
+        cp      $C8                     ;[$424B]
+        ret     z                       ;[$424D]
+        ld      a, $00                  ;[$424E]
+        call    PUT_CHAR_AT             ;[$4250]
+        dec     c                       ;[$4253]
+        ld      a, $34                  ;[$4254]
+        call    PUT_CHAR_AT             ;[$4256]
+        ld      a, c                    ;[$4259]
+        ld      ($41A0), a              ;[$425A]
+        ret                             ;[$425D]
+
+
+        defb    $00,$00,$00,$00,$00 ;[$425E] -
+
+
+L4263:                                  ;[$4263]
+        call    L41D4                   ;[$4263]
+        ld      de, $0021               ;[$4266]
+        adc     hl, de                  ;[$4269]
+        ld      a, (hl)                 ;[$426B]
+        cp      $80                     ;[$426C]
+        ret     z                       ;[$426E]
+        cp      $1B                     ;[$426F]
+        call    z, L4290                ;[$4271]
+        ld      de, var1                ;[$4274]
+        ld      a, (de)                 ;[$4277]
+        cp      $C8                     ;[$4278]
+        ret     z                       ;[$427A]
+        ld      a, $00                  ;[$427B]
+        call    PUT_CHAR_AT             ;[$427D]
+        inc     c                       ;[$4280]
+        ld      a, $34                  ;[$4281]
+        call    PUT_CHAR_AT             ;[$4283]
+        ld      a, c                    ;[$4286]
+        ld      ($41A0), a              ;[$4287]
+        ret                             ;[$428A]
+
+
+        defb    $00,$00,$00,$00,$00 ;[$428B] -
+
+
+L4290:                                  ;[$4290]
+        ld      a, (var1)               ;[$4290]
+        add     a, $01                  ;[$4293]
+        ld      (var1), a               ;[$4295]
+        ret                             ;[$4298]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$CD,$F9,$43,$CD,$30,$43,$3A,$AE,$41,$FE,$3D,$C8,$C3,$1C,$43,$00,$00,$00,$00,$00 ;[$4299] -
+
+
+L4330:                                  ;[$4330]
+        ld      a, ($41A0)              ;[$4330]
+        ld      hl, var5+1              ;[$4333]
+        sub     (hl)                    ;[$4336]
+        jp      m, L4352                ;[$4337]
+        ld      d, $02                  ;[$433A]
+
+L433C:                                  ;[$433C]
+        ld      b, a                    ;[$433C]
+        ld      a, ($41A1)              ;[$433D]
+        ld      hl, var5+2              ;[$4340]
+        sub     (hl)                    ;[$4343]
+        jp      m, L4359                ;[$4344]
+        ld      e, $02                  ;[$4347]
+
+L4349:                                  ;[$4349]
+        ld      c, a                    ;[$4349]
+        ld      a, c                    ;[$434A]
+        cp      b                       ;[$434B]
+        jp      m, L4360                ;[$434C]
+        jp      p, L4369                ;[$434F]
+
+L4352:                                  ;[$4352]
+        ld      d, $01                  ;[$4352]
+        neg                             ;[$4354]
+        jp      L433C                   ;[$4356]
+
+
+L4359:                                  ;[$4359]
+        ld      e, $01                  ;[$4359]
+        neg                             ;[$435B]
+        jp      L4349                   ;[$435D]
+
+
+L4360:                                  ;[$4360]
+        ld      a, d                    ;[$4360]
+        cp      $01                     ;[$4361]
+        jp      z, L4388                ;[$4363]
+        jp      nz, L4372               ;[$4366]
+
+L4369:                                  ;[$4369]
+        ld      a, e                    ;[$4369]
+        cp      $01                     ;[$436A]
+        jp      z, L439E                ;[$436C]
+        jp      nz, L43B4               ;[$436F]
+
+L4372:                                  ;[$4372]
+        call    L4477                   ;[$4372]
+        cp      $80                     ;[$4375]
+        ret     nz                      ;[$4377]
+        call    L44C0                   ;[$4378]
+        cp      $80                     ;[$437B]
+        ret     nz                      ;[$437D]
+        call    L44E8                   ;[$437E]
+        cp      $80                     ;[$4381]
+        ret     nz                      ;[$4383]
+        call    L449A                   ;[$4384]
+        ret                             ;[$4387]
+
+
+L4388:                                  ;[$4388]
+        call    L449A                   ;[$4388]
+        cp      $80                     ;[$438B]
+        ret     nz                      ;[$438D]
+        call    L44C0                   ;[$438E]
+        cp      $80                     ;[$4391]
+        ret     nz                      ;[$4393]
+        call    L44E8                   ;[$4394]
+        cp      $80                     ;[$4397]
+        ret     nz                      ;[$4399]
+        call    L4477                   ;[$439A]
+        ret                             ;[$439D]
+
+
+L439E:                                  ;[$439E]
+        call    L44E8                   ;[$439E]
+        cp      $80                     ;[$43A1]
+        ret     nz                      ;[$43A3]
+        call    L449A                   ;[$43A4]
+        cp      $80                     ;[$43A7]
+        ret     nz                      ;[$43A9]
+        call    L4477                   ;[$43AA]
+        cp      $80                     ;[$43AD]
+        ret     nz                      ;[$43AF]
+        call    L44C0                   ;[$43B0]
+        ret                             ;[$43B3]
+
+
+L43B4:                                  ;[$43B4]
+        call    L44C0                   ;[$43B4]
+        cp      $80                     ;[$43B7]
+        ret     nz                      ;[$43B9]
+        call    L4477                   ;[$43BA]
+        cp      $80                     ;[$43BD]
+        ret     nz                      ;[$43BF]
+        call    L449A                   ;[$43C0]
+        cp      $80                     ;[$43C3]
+        ret     nz                      ;[$43C5]
+        call    L44E8                   ;[$43C6]
+        ret                             ;[$43C9]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$23 ;[$43CA] -
+
+
+L43F9:                                  ;[$43F9]
+        ld      a, (LAST_K)             ;[$43F9]
+        nop                             ;[$43FC]
+        ld      a, (LAST_K+1)           ;[$43FD]
+        ld      b, a                    ;[$4400]
+        ld      a, (LAST_K)             ;[$4401]
+        cp      c                       ;[$4404]
+        jp      nz, L440D               ;[$4405]
+        ld      a, (LAST_K+1)           ;[$4408]
+        cp      b                       ;[$440B]
+        ret     z                       ;[$440C]
+
+L440D:                                  ;[$440D]
+        ld      a, (LAST_K+1)           ;[$440D]
+        ld      b, a                    ;[$4410]
+        ld      a, (LAST_K)             ;[$4411]
+        ld      c, a                    ;[$4414]
+        cp      $FF                     ;[$4415]
+        ret     z                       ;[$4417]
+        ld      e, $FF                  ;[$4418]
+        ld      d, $00                  ;[$441A]
+        ld      a, b                    ;[$441C]
+        rrca                            ;[$441D]
+        ld      b, a                    ;[$441E]
+        ld      a, e                    ;[$441F]
+        sbc     a, a                    ;[$4420]
+        or      $26                     ;[$4421]
+        ld      l, $05                  ;[$4423]
+        sub     l                       ;[$4425]
+
+L4426:                                  ;[$4426]
+        add     a, l                    ;[$4426]
+        scf                             ;[$4427]
+        ld      e, a                    ;[$4428]
+        ld      a, c                    ;[$4429]
+        rra                             ;[$442A]
+        ld      c, a                    ;[$442B]
+        ld      a, e                    ;[$442C]
+        jr      c, L4426                ;[$442D]
+        ld      c, b                    ;[$442F]
+        dec     l                       ;[$4430]
+        ld      l, $01                  ;[$4431]
+        jr      nz, L4426               ;[$4433]
+        ld      hl, $007D               ;[$4435]
+        ld      e, a                    ;[$4438]
+        add     hl, de                  ;[$4439]
+        ld      a, (hl)                 ;[$443A]
+        ld      ($43F8), a              ;[$443B]
+        cp      $21                     ;[$443E]
+        call    z, L420E                ;[$4440]
+        cp      $22                     ;[$4443]
+        call    z, L4263                ;[$4445]
+        cp      $23                     ;[$4448]
+        call    z, L4236                ;[$444A]
+        cp      $24                     ;[$444D]
+        call    z, L41E6                ;[$444F]
+        ret                             ;[$4452]
+
+
+        defb    $F9,$43,$00,$00,$00,$00,$00,$00,$00 ;[$4453] -
+
+
+L445C:                                  ;[$445C]
+        ld      hl, var5+2              ;[$445C]
+        ld      b, (hl)                 ;[$445F]
+        ld      hl, var5+1              ;[$4460]
+        ld      c, (hl)                 ;[$4463]
+        ld      a, $08                  ;[$4464]
+        call    PUT_CHAR_AT             ;[$4466]
+        ret                             ;[$4469]
+
+
+        defb    $7A,$44,$C9,$A2,$44,$C9,$00,$00,$00,$00,$00,$00,$00 ;[$446A] -
+
+
+L4477:                                  ;[$4477]
+        call    L445C                   ;[$4477]
+        ld      de, $0021               ;[$447A]
+        adc     hl, de                  ;[$447D]
+        ld      a, (hl)                 ;[$447F]
+        bit     7, a                    ;[$4480]
+        ret     nz                      ;[$4482]
+        cp      $34                     ;[$4483]
+        call    z, L4588                ;[$4485]
+        cp      $08                     ;[$4488]
+        ret     z                       ;[$448A]
+        call    PUT_CHAR_AT             ;[$448B]
+        inc     c                       ;[$448E]
+        ld      a, $08                  ;[$448F]
+        call    PUT_CHAR_AT             ;[$4491]
+        ld      a, c                    ;[$4494]
+        ld      (var5+1), a             ;[$4495]
+        ret                             ;[$4498]
+
+
+        defb    $00 ;[$4499] -
+
+
+L449A:                                  ;[$449A]
+        call    L445C                   ;[$449A]
+        ld      de, $0021               ;[$449D]
+        sbc     hl, de                  ;[$44A0]
+        ld      a, (hl)                 ;[$44A2]
+        bit     7, a                    ;[$44A3]
+        ret     nz                      ;[$44A5]
+        cp      $34                     ;[$44A6]
+        call    z, L4588                ;[$44A8]
+        cp      $08                     ;[$44AB]
+        ret     z                       ;[$44AD]
+        call    PUT_CHAR_AT             ;[$44AE]
+        dec     c                       ;[$44B1]
+        ld      a, $08                  ;[$44B2]
+        call    PUT_CHAR_AT             ;[$44B4]
+        ld      a, c                    ;[$44B7]
+        ld      (var5+1), a             ;[$44B8]
+        ret                             ;[$44BB]
+
+
+        defb    $41,$C9,$9F,$44 ;[$44BC] -
+
+
+L44C0:                                  ;[$44C0]
+        call    L445C                   ;[$44C0]
+        inc     hl                      ;[$44C3]
+        ld      a, (hl)                 ;[$44C4]
+        bit     7, a                    ;[$44C5]
+        ret     nz                      ;[$44C7]
+        cp      $34                     ;[$44C8]
+        call    z, L4588                ;[$44CA]
+        cp      $08                     ;[$44CD]
+        ret     z                       ;[$44CF]
+        call    PUT_CHAR_AT             ;[$44D0]
+        inc     b                       ;[$44D3]
+        ld      a, $08                  ;[$44D4]
+        call    PUT_CHAR_AT             ;[$44D6]
+        ld      a, b                    ;[$44D9]
+        ld      (var5+2), a             ;[$44DA]
+        ret                             ;[$44DD]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$44DE] -
+
+
+L44E8:                                  ;[$44E8]
+        call    L445C                   ;[$44E8]
+        dec     hl                      ;[$44EB]
+        ld      a, (hl)                 ;[$44EC]
+        bit     7, a                    ;[$44ED]
+        ret     nz                      ;[$44EF]
+        cp      $34                     ;[$44F0]
+        call    z, L4588                ;[$44F2]
+        cp      $08                     ;[$44F5]
+        ret     z                       ;[$44F7]
+        call    PUT_CHAR_AT             ;[$44F8]
+        dec     b                       ;[$44FB]
+        ld      a, $08                  ;[$44FC]
+        call    PUT_CHAR_AT             ;[$44FE]
+        ld      a, b                    ;[$4501]
+        ld      (var5+2), a             ;[$4502]
+        ret                             ;[$4505]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$4506] -
+
+
+L4524:                                  ;[$4524]
+        ld      hl, $41A9               ;[$4524]
+        ld      b, (hl)                 ;[$4527]
+        ld      hl, $41A8               ;[$4528]
+        ld      c, (hl)                 ;[$452B]
+        ld      a, $08                  ;[$452C]
+        call    PUT_CHAR_AT             ;[$452E]
+        ret                             ;[$4531]
+
+
+        defb    $88 ;[$4532] -
+
+
+L4533:                                  ;[$4533]
+        call    L4524                   ;[$4533]
+        ld      de, $0021               ;[$4536]
+        adc     hl, de                  ;[$4539]
+        ld      a, (hl)                 ;[$453B]
+        bit     7, a                    ;[$453C]
+        ret     nz                      ;[$453E]
+        cp      $34                     ;[$453F]
+        call    z, L4588                ;[$4541]
+        cp      $08                     ;[$4544]
+        ret     z                       ;[$4546]
+        call    PUT_CHAR_AT             ;[$4547]
+        inc     c                       ;[$454A]
+        ld      a, $08                  ;[$454B]
+        call    PUT_CHAR_AT             ;[$454D]
+        ld      a, c                    ;[$4550]
+        ld      ($41A8), a              ;[$4551]
+        ret                             ;[$4554]
+
+
+        defb    $CD ;[$4555] -
+
+
+L4556:                                  ;[$4556]
+        call    L4524                   ;[$4556]
+        ld      de, $0021               ;[$4559]
+        sbc     hl, de                  ;[$455C]
+        ld      a, (hl)                 ;[$455E]
+        bit     7, a                    ;[$455F]
+        ret     nz                      ;[$4561]
+        cp      $34                     ;[$4562]
+        call    z, L4588                ;[$4564]
+        cp      $08                     ;[$4567]
+        ret     z                       ;[$4569]
+        call    PUT_CHAR_AT             ;[$456A]
+        dec     c                       ;[$456D]
+        ld      a, $08                  ;[$456E]
+        call    PUT_CHAR_AT             ;[$4570]
+        ld      a, c                    ;[$4573]
+        ld      ($41A8), a              ;[$4574]
+        ret                             ;[$4577]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$4578] -
+
+
+L4588:                                  ;[$4588]
+        ld      a, (var3)               ;[$4588]
+        cp      $02                     ;[$458B]
+        jp      z, L4596                ;[$458D]
+        ld      a, $3D                  ;[$4590]
+        ld      (var2), a               ;[$4592]
+        ret                             ;[$4595]
+
+
+L4596:                                  ;[$4596]
+        call    L477C                   ;[$4596]
+        ret                             ;[$4599]
+
+
+        defb    $00,$00 ;[$459A] -
+
+
+L459C:                                  ;[$459C]
+        call    L4524                   ;[$459C]
+        inc     hl                      ;[$459F]
+        ld      a, (hl)                 ;[$45A0]
+        bit     7, a                    ;[$45A1]
+        ret     nz                      ;[$45A3]
+        cp      $34                     ;[$45A4]
+        call    z, L4588                ;[$45A6]
+        cp      $08                     ;[$45A9]
+        ret     z                       ;[$45AB]
+        call    PUT_CHAR_AT             ;[$45AC]
+        inc     b                       ;[$45AF]
+        ld      a, $08                  ;[$45B0]
+        call    PUT_CHAR_AT             ;[$45B2]
+        ld      a, b                    ;[$45B5]
+        ld      ($41A9), a              ;[$45B6]
+        ret                             ;[$45B9]
+
+
+L45BA:                                  ;[$45BA]
+        call    L4524                   ;[$45BA]
+        dec     hl                      ;[$45BD]
+        ld      a, (hl)                 ;[$45BE]
+        bit     7, a                    ;[$45BF]
+        ret     nz                      ;[$45C1]
+        cp      $34                     ;[$45C2]
+        call    z, L4588                ;[$45C4]
+        cp      $08                     ;[$45C7]
+        ret     z                       ;[$45C9]
+        call    PUT_CHAR_AT             ;[$45CA]
+        dec     b                       ;[$45CD]
+        ld      a, $08                  ;[$45CE]
+        call    PUT_CHAR_AT             ;[$45D0]
+        ld      a, b                    ;[$45D3]
+        ld      ($41A9), a              ;[$45D4]
+        ret                             ;[$45D7]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$45D8] -
+
+
+L4650:                                  ;[$4650]
+        call    L43F9                   ;[$4650]
+        ld      a, (var3+1)             ;[$4653]
+        cp      $02                     ;[$4656]
+        jp      nz, L466F               ;[$4658]
+        ld      a, $01                  ;[$465B]
+        ld      (var3+1), a             ;[$465D]
+        call    L4330                   ;[$4660]
+        call    L46B4                   ;[$4663]
+        ld      a, (var2)               ;[$4666]
+        cp      $3D                     ;[$4669]
+        ret     z                       ;[$466B]
+        jp      LEVEL_DELAY             ;[$466C]
+
+
+L466F:                                  ;[$466F]
+        add     a, $01                  ;[$466F]
+        ld      (var3+1), a             ;[$4671]
+
+LEVEL_DELAY:                            ;[$4674]
+        ld      c, $05                  ;[$4674]; POKEd from basic 5 for fastest, 30 for slowest
+
+L4676:                                  ;[$4676]
+        ld      b, $FA                  ;[$4676]
+
+L4678:                                  ;[$4678]
+        ld      a, $01                  ;[$4678]
+        dec     b                       ;[$467A]
+        jr      nz, L4678               ;[$467B]
+        dec     c                       ;[$467D]
+        jr      nz, L4676               ;[$467E]
+        ld      a, (var1)               ;[$4680]
+        cp      $FA                     ;[$4683]
+        ret     z                       ;[$4685]
+        ld      hl, ($41AA)             ;[$4686]
+        ld      b, (hl)                 ;[$4689]
+        ld      a, b                    ;[$468A]
+        cp      $34                     ;[$468B]
+        call    z, L474A                ;[$468D]
+        jp      L4650                   ;[$4690]
+
+
+        defb    $50,$46,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$4693] -
+
+
+L46B4:                                  ;[$46B4]
+        ld      a, ($41A0)              ;[$46B4]
+        ld      hl, $41A8               ;[$46B7]
+        sub     (hl)                    ;[$46BA]
+        jp      m, L46D6                ;[$46BB]
+        ld      d, $02                  ;[$46BE]
+
+L46C0:                                  ;[$46C0]
+        ld      b, a                    ;[$46C0]
+        ld      a, ($41A1)              ;[$46C1]
+        ld      hl, $41A9               ;[$46C4]
+        sub     (hl)                    ;[$46C7]
+        jp      m, L46DD                ;[$46C8]
+        ld      e, $02                  ;[$46CB]
+
+L46CD:                                  ;[$46CD]
+        ld      c, a                    ;[$46CD]
+        ld      a, c                    ;[$46CE]
+        cp      b                       ;[$46CF]
+        jp      m, L46E4                ;[$46D0]
+        jp      p, L46ED                ;[$46D3]
+
+L46D6:                                  ;[$46D6]
+        ld      d, $01                  ;[$46D6]
+        neg                             ;[$46D8]
+        jp      L46C0                   ;[$46DA]
+
+
+L46DD:                                  ;[$46DD]
+        ld      e, $01                  ;[$46DD]
+        neg                             ;[$46DF]
+        jp      L46CD                   ;[$46E1]
+
+
+L46E4:                                  ;[$46E4]
+        ld      a, d                    ;[$46E4]
+        cp      $01                     ;[$46E5]
+        jp      z, L470C                ;[$46E7]
+        jp      nz, L46F6               ;[$46EA]
+
+L46ED:                                  ;[$46ED]
+        ld      a, e                    ;[$46ED]
+        cp      $01                     ;[$46EE]
+        jp      z, L4715                ;[$46F0]
+        jp      nz, L471E               ;[$46F3]
+
+L46F6:                                  ;[$46F6]
+        call    L4533                   ;[$46F6]
+        cp      $80                     ;[$46F9]
+        ret     nz                      ;[$46FB]
+        call    L45BA                   ;[$46FC]
+        cp      $80                     ;[$46FF]
+        ret     nz                      ;[$4701]
+        call    L459C                   ;[$4702]
+        cp      $80                     ;[$4705]
+        ret     nz                      ;[$4707]
+        call    L4556                   ;[$4708]
+        ret                             ;[$470B]
+
+
+L470C:                                  ;[$470C]
+        call    L4556                   ;[$470C]
+        cp      $80                     ;[$470F]
+        ret     nz                      ;[$4711]
+        nop                             ;[$4712]
+        nop                             ;[$4713]
+        nop                             ;[$4714]
+
+L4715:                                  ;[$4715]
+        call    L45BA                   ;[$4715]
+        cp      $80                     ;[$4718]
+        ret     nz                      ;[$471A]
+        jp      L46F6                   ;[$471B]
+
+
+L471E:                                  ;[$471E]
+        call    L459C                   ;[$471E]
+        cp      $80                     ;[$4721]
+        ret     nz                      ;[$4723]
+        jp      L46F6                   ;[$4724]
+
+
+        defb    $00,$00,$00,$00,$00 ;[$4727] -
+
+
+L472C:                                  ;[$472C]
+        ld      hl, var4                ;[$472C]
+        ld      b, (hl)                 ;[$472F]
+        ld      hl, var5                ;[$4730]
+        ld      c, (hl)                 ;[$4733]
+        ld      a, $97                  ;[$4734]
+        call    PUT_CHAR_AT             ;[$4736]
+        ld      ($41AA), hl             ;[$4739]
+        ret                             ;[$473C]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$473D] -
+
+
+L474A:                                  ;[$474A]
+        ld      a, (var3)               ;[$474A]
+        add     a, $01                  ;[$474D]
+        ld      (var3), a               ;[$474F]
+        ld      b, $10                  ;[$4752]
+        ld      c, $09                  ;[$4754]
+        ld      a, $00                  ;[$4756]
+        call    PUT_CHAR_AT             ;[$4758]
+        ld      a, $10                  ;[$475B]
+        ld      ($41A1), a              ;[$475D]
+        ld      a, $0F                  ;[$4760]
+        ld      ($41A0), a              ;[$4762]
+        ld      a, $34                  ;[$4765]
+        call    L41D4                   ;[$4767]
+        ret                             ;[$476A]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$476B] -
+
+
+L477C:                                  ;[$477C]
+        dec     a                       ;[$477C]
+        ld      (var3), a               ;[$477D]
+        ld      a, $10                  ;[$4780]
+        ld      ($41A1), a              ;[$4782]
+        ld      a, $0F                  ;[$4785]
+        ld      ($41A0), a              ;[$4787]
+        ld      a, $34                  ;[$478A]
+        push    bc                      ;[$478C]
+        push    de                      ;[$478D]
+        push    hl                      ;[$478E]
+        call    L41D4                   ;[$478F]
+        pop     hl                      ;[$4792]
+        pop     de                      ;[$4793]
+        pop     bc                      ;[$4794]
+        ld      a, $00                  ;[$4795]
+        ret                             ;[$4797]
+
+
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$4798] -
+
+
+BANNER_CHAR:                            ;[$47A9]
+        defb    $00                     ;[$47A9]
+
+BANNER_COL:                             ;[$47AA]
+        defb    $07                     ;[$47AA]
+
+        defb    $00,$00,$00 ;[$47AB] -
+
+
+banner_bits_lu:                         ;[$47AE]
         defb    $00, $87, $04, $83, $02, $85, $06, $81, $01, $86, $05, $82, $03, $84, $07, $80
+                                        ;[$47AE]
 
-        defb    $00,$00,$00,$00 ; -
+        defb    $00,$00,$00,$00 ;[$47BE] -
 
 
 ; --------------------------------------------------------------------------------
@@ -963,281 +965,446 @@ banner_bits_lu:
 ; --------------------------------------------------------------------------------
 
 
-DISPLAY_BANNER:
-        ld      hl, (D_FILE)            ; address of screen
-        inc     hl
+DISPLAY_BANNER:                         ;[$47C2]
+        ld      hl, (D_FILE)            ;[$47C2]; address of screen
+        inc     hl                      ;[$47C5]
 
-SCR_OFFSET:
-        ld      bc, $01F1               ; input offset POKEd from BASIC
-        ld      a, (BANNER_COL)
-        cp      $01
-        jp      nz, skip_setting_df_cc  ; skip if column not 1
-        adc     hl, bc                  ; for column 1 add input offset
-        ld      (DF_CC), hl
+SCR_OFFSET:                             ;[$47C6]
+        ld      bc, $01F1               ;[$47C6]; input offset POKEd from BASIC
+        ld      a, (BANNER_COL)         ;[$47C9]
+        cp      $01                     ;[$47CC]
+        jp      nz, skip_setting_df_cc  ;[$47CE]; skip if column not 1
+        adc     hl, bc                  ;[$47D1]; for column 1 add input offset
+        ld      (DF_CC), hl             ;[$47D3]
 
-skip_setting_df_cc:
-        ld      hl, BANNER_CHAR         ; HL points at char to print
-        ld      a, (hl)                 ; A has char to print
-        and     a
-        rla
-        rla                             ; multiply by 4
-        ret     c                       ; exit if bit 6 was 1
-        rla                             ; multiply by 8
-        ld      d, $00
-        rl      d                       ; carry into D
-        ld      e, a                    ; DE=char*8
-        ld      hl, $1E00               ; base of CHARS table
-        add     hl, de                  ; HL=address of char bitmap
-        ld      c, $04                  ; 4 rows
+skip_setting_df_cc:                     ;[$47D6]
+        ld      hl, BANNER_CHAR         ;[$47D6]; HL points at char to print
+        ld      a, (hl)                 ;[$47D9]; A has char to print
+        and     a                       ;[$47DA]
+        rla                             ;[$47DB]
+        rla                             ;[$47DC]; multiply by 4
+        ret     c                       ;[$47DD]; exit if bit 6 was 1
+        rla                             ;[$47DE]; multiply by 8
+        ld      d, $00                  ;[$47DF]
+        rl      d                       ;[$47E1]; carry into D
+        ld      e, a                    ;[$47E3]; DE=char*8
+        ld      hl, $1E00               ;[$47E4]; base of CHARS table
+        add     hl, de                  ;[$47E7]; HL=address of char bitmap
+        ld      c, $04                  ;[$47E8]; 4 rows
 
-banner_row:
-        ld      b, $04                  ; 4 columns
-        ld      d, (hl)                 ; get bitmap of two rows into DE
-        inc     hl
-        ld      e, (hl)
-        inc     hl
-        push    hl                      ; save char table pointer
+banner_row:                             ;[$47EA]
+        ld      b, $04                  ;[$47EA]; 4 columns
+        ld      d, (hl)                 ;[$47EC]; get bitmap of two rows into DE
+        inc     hl                      ;[$47ED]
+        ld      e, (hl)                 ;[$47EE]
+        inc     hl                      ;[$47EF]
+        push    hl                      ;[$47F0]; save char table pointer
 
-banner_col:
-        xor     a                       ; do some magic
-        rl      d
-        rla
-        rl      d
-        rla
-        rl      e
-        rla
-        rl      e
-        rla
-        ld      hl, banner_bits_lu      ; lookup table of bitmaps
-        add     a, l
-        ld      l, a                    ; HL points to correct bitmap
-        ld      a, (hl)                 ; A has the bitmap
-        ld      hl, (DF_CC)             ; HL has the print position
-        ld      (hl), a                 ; print the character
-        inc     hl                      ; advance print position
-        ld      (DF_CC), hl             ; and store it
-        djnz    banner_col              ; next column
-        push    de                      ; save bitmap
-        ld      de, $001D               ; offset to next row
-        add     hl, de                  ; add to DF_CC
-        ld      (DF_CC), hl             ; and store
-        pop     de                      ; restore bitmap
-        pop     hl                      ; restore chars pointer
-        dec     c
-        jr      nz, banner_row          ; next row
-        ld      de, $FF80               ; offset to next character
-        ld      hl, (DF_CC)             ; add to DF_CC
-        add     hl, de
-        ld      (DF_CC), hl             ; and store it
-        ld      a, (hl)                 ; read screen char; Note: not needed
-        ret
+banner_col:                             ;[$47F1]
+        xor     a                       ;[$47F1]; do some magic
+        rl      d                       ;[$47F2]
+        rla                             ;[$47F4]
+        rl      d                       ;[$47F5]
+        rla                             ;[$47F7]
+        rl      e                       ;[$47F8]
+        rla                             ;[$47FA]
+        rl      e                       ;[$47FB]
+        rla                             ;[$47FD]
+        ld      hl, banner_bits_lu      ;[$47FE]; lookup table of bitmaps
+        add     a, l                    ;[$4801]
+        ld      l, a                    ;[$4802]; HL points to correct bitmap
+        ld      a, (hl)                 ;[$4803]; A has the bitmap
+        ld      hl, (DF_CC)             ;[$4804]; HL has the print position
+        ld      (hl), a                 ;[$4807]; print the character
+        inc     hl                      ;[$4808]; advance print position
+        ld      (DF_CC), hl             ;[$4809]; and store it
+        djnz    banner_col              ;[$480C]; next column
+        push    de                      ;[$480E]; save bitmap
+        ld      de, $001D               ;[$480F]; offset to next row
+        add     hl, de                  ;[$4812]; add to DF_CC
+        ld      (DF_CC), hl             ;[$4813]; and store
+        pop     de                      ;[$4816]; restore bitmap
+        pop     hl                      ;[$4817]; restore chars pointer
+        dec     c                       ;[$4818]
+        jr      nz, banner_row          ;[$4819]; next row
+        ld      de, $FF80               ;[$481B]; offset to next character
+        ld      hl, (DF_CC)             ;[$481E]; add to DF_CC
+        add     hl, de                  ;[$4821]
+        ld      (DF_CC), hl             ;[$4822]; and store it
+        ld      a, (hl)                 ;[$4825]; read screen char; Note: not needed
+        ret                             ;[$4826]
 
 
-        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ; -
+        defb    $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00 ;[$4827] -
 
 
 #ENDASM [$50D1]
 
+#[$50D2]
   990  SLOW 
+#[$50D8]
   995  POKE 16625,8
+#[$50F1]
  1000  LET C1= USR &FILL_SCR
+#[$5106]
  1002  POKE &var1,0
+#[$511F]
  1004  POKE &var2,0
+#[$5138]
  1006  GOSUB @Line_4000
+#[$5148]
 
 @Line_1010:
  1010  LET C1= USR &DRAW_DOTS
+#[$515D]
  1011  PRINT  AT 15,1;"                              "
+#[$5195]
  1012  PRINT  AT 8,15;" "
+#[$51B0]
  1014  PRINT  AT 8,16;" "
+#[$51CB]
  1016  PRINT  AT 9,16;" "
+#[$51E6]
  1018  PRINT  AT 9,15;" "
+#[$5201]
  1020  LET C1= USR &DRAW_WALLS1
+#[$5216]
  1022  POKE 16751,30
+#[$5230]
  1024  POKE 16753,14
+#[$524A]
  1026  POKE 16771,30
+#[$5264]
  1028  POKE 16773,5
+#[$527D]
  1030  POKE 16767,0
+#[$5296]
  1032  POKE 16787,0
+#[$52AF]
  1034  LET C1= USR &DRAW_WALLS2
+#[$52C4]
  1036  POKE 16751,29
+#[$52DE]
  1038  POKE 16753,12
+#[$52F8]
  1040  POKE 16771,29
+#[$5312]
  1041  POKE &var3,1
+#[$532B]
  1042  POKE 16773,3
+#[$5344]
  1044  POKE 16767,2
+#[$535D]
  1046  POKE 16787,2
+#[$5376]
  1048  LET C1= USR &DRAW_WALLS2
+#[$538B]
  1049  PRINT  AT 8,14;"."
+#[$53A6]
  1050  PRINT  AT 3,1;".\::"
+#[$53C1]
  1051  PRINT  AT 14,30;"."
+#[$53DD]
  1052  PRINT  AT 12,1;".\::"
+#[$53F9]
  1053  PRINT  AT 5,30;"."
+#[$5414]
  1056  PRINT  AT 18,5;"%S%C%O%R%E"
+#[$5433]
  1057  POKE &var4,16
+#[$544D]
  1058  POKE &var5,9
+#[$5466]
  1059  LET C1= USR &L472C
+#[$547B]
  1060  POKE 16801,16
+#[$5495]
  1062  POKE 16800,15
+#[$54AF]
  1064  PRINT  AT 15,16;"O"
+#[$54CB]
  2020  PRINT  AT 6,16;"\@@"
+#[$54E6]
  2022  PRINT  AT 6,15;"\@@"
+#[$5501]
  2024  POKE 16804,6
+#[$551A]
  2028  POKE 16805,16
+#[$5534]
  2030  POKE 16808,6
+#[$554D]
  2032  POKE 16809,15
+#[$5567]
  2035  POKE 16813,1
+#[$5580]
  2055  LET C1= USR &L4650
+#[$5595]
  2070  PRINT  AT 18,11; PEEK &var1
+#[$55BA]
 
 @Line_3000:
  3000  PRINT  AT 20,3;"GO-AGAIN - PRINCE ? Y/N"
+#[$55EB]
  3010  IF  INKEY$ ="Y" THEN  GOTO @Line_3050
+#[$5602]
  3015  IF  INKEY$ ="N" THEN  GOTO 1
+#[$5616]
  3020  IF  INKEY$ ="" THEN  GOTO @Line_3000
+#[$562C]
  3025  GOTO @Line_3000
+#[$563C]
  3030  STOP 
+#[$5642]
 
 @Line_3050:
  3050  LET C1= USR &FILL_SCR
+#[$5657]
  3060  POKE &var2,0
+#[$5670]
  3062  POKE &var1,0
+#[$5689]
  3064  GOTO @Line_1010
+#[$5699]
 
 @Line_4000:
  4000  REM 
+#[$569F]
  4005  GOSUB @Line_5000
+#[$56AF]
  4007  GOSUB @Line_6200
+#[$56BF]
  4010  PRINT  AT 2,1;"USING THE ROYAL ARROW KEYS"
+#[$56F2]
  4012  PRINT  AT 3,1;"YOU MUST GUIDE PRINCE BILLY"
+#[$5726]
  4014  PRINT  AT 4,1;"THROUGH THE MAZE AND GET"
+#[$5757]
  4016  PRINT  AT 5,1;"ALL THE B-LERS"
+#[$577E]
  4017  PRINT  AT 7,1;"GOOD LUCK"
+#[$57A0]
 
 @Line_4019:
  4019  PRINT  AT 12,2;"WHAT LEVEL OF PLAY?"
+#[$57CD]
  4020  PRINT  AT 14,2;"1=SUPER PRINCE"
+#[$57F5]
  4030  PRINT  AT 15,2;"2=SKILLED HUNTER"
+#[$581F]
  4032  PRINT  AT 16,2;"3=SCHOOL DAZE"
+#[$5846]
  4034  PRINT  AT 17,2;"4=FIRST TIME"
+#[$586C]
  4036  PRINT  AT 18,2;"5=LEAD FEET"
+#[$5891]
 
 @Line_4038:
  4038  PRINT  AT 19,2;"6=POISON APPLE"
+#[$58B9]
  4040  IF  INKEY$ ="" THEN  GOTO @Line_4038
+#[$58CF]
  4080  LET Y= VAL  INKEY$ 
+#[$58D9]
  4082  IF Y=1 THEN  POKE 18037,5
+#[$58FD]
  4083  IF Y=2 THEN  POKE 18037,10
+#[$5922]
  4084  IF Y=3 THEN  POKE 18037,15
+#[$5947]
  4085  IF Y=4 THEN  POKE 18037,20
+#[$596C]
  4086  IF Y=5 THEN  POKE 18037,25
+#[$5991]
  4087  IF Y=6 THEN  POKE 18037,30
+#[$59B6]
  4088  IF Y<1 OR Y>6 THEN  GOTO @Line_4019
+#[$59DB]
  4090  LET C1= USR &FILL_SCR
+#[$59F0]
  4099  RETURN 
+#[$59F6]
 
 @Line_5000:
  5000  REM 
+#[$59FC]
  5002  DIM A$(6,7)
+#[$5A15]
  5004  LET A$(1)=" TIMEX "
+#[$5A30]
  5006  LET A$(2)="*******"
+#[$5A4B]
  5008  LET A$(3)=" TIMEX "
+#[$5A66]
  5010  LET A$(4)="GRIMM S"
+#[$5A81]
  5012  LET A$(5)=" FAIRY "
+#[$5A9C]
  5014  LET A$(6)="TRAILS "
+#[$5AB7]
  5016  FOR J=1 TO 6
+#[$5ACE]
  5018  GOSUB @Line_6000
+#[$5ADE]
  5020  FOR N=1 TO 7
+#[$5AF5]
  5022  LET B$=A$(J,N TO N)
+#[$5B07]
  5024  POKE &BANNER_CHAR, CODE B$
+#[$5B1C]
  5026  POKE &BANNER_COL,N
+#[$5B2F]
  5028  LET C1= USR &DISPLAY_BANNER
+#[$5B44]
  5030  NEXT N
+#[$5B4B]
  5032  FOR L=1 TO 3
+#[$5B62]
  5034  NEXT L
+#[$5B69]
  5036  IF J=3 THEN  LET C1= USR &FILL_SCR
+#[$5B89]
  5037  IF J=4 THEN  PRINT  AT 5,24;"\.'"
+#[$5BAF]
  5038  NEXT J
+#[$5BB6]
  5040  REM 
 #ASM [$5BBB]
 
-        defb    $F5,$C1,$1E,$1C,$1A,$1D,$19,$0B,$35,$37,$2A,$38,$38,$00,$2A,$33,$39,$2A,$37,$00,$3C,$2D,$2A,$33,$00,$37,$2A,$26,$29,$3E,$0B ; -
+        defb    $F5,$C1,$1E,$1C,$1A,$1D,$19,$0B,$35,$37,$2A,$38,$38,$00,$2A,$33,$39,$2A,$37,$00,$3C,$2D,$2A,$33,$00,$37,$2A,$26,$29,$3E,$0B ;[$5BBB] -
 
 
 #ENDASM [$5BDA]
 
+#[$5BDB]
  5042  REM 
 #ASM [$5BE0]
 
-        defb    $EE,$3E,$0D ; -
+        defb    $EE,$3E,$0D ;[$5BE0] -
 
 
 #ENDASM [$5BE3]
 
+#[$5BE4]
  5990  POKE 16625,0
+#[$5BFD]
  5995  LET C1= USR &FILL_SCR
+#[$5C12]
  5999  RETURN 
+#[$5C18]
 
 @Line_6000:
  6000  REM 
+#[$5C1E]
  6002  IF J=1 OR J=4 THEN  POKE 18375,167
+#[$5C4E]
  6004  IF J=1 OR J=4 THEN  POKE 18376,0
+#[$5C7C]
  6006  IF J=2 OR J=5 THEN  POKE 18375,76
+#[$5CAB]
  6008  IF J=2 OR J=5 THEN  POKE 18376,1
+#[$5CD9]
  6010  IF J=3 OR J=6 THEN  POKE 18375,241
+#[$5D09]
  6020  IF J=3 OR J=6 THEN  POKE 18376,1
+#[$5D37]
  6199  RETURN 
+#[$5D3D]
 
 @Line_6200:
  6200  REM 
+#[$5D43]
  6202  PRINT  AT 1,0;"ONCE UPON A TIME, IN A FAR"
+#[$5D76]
  6204  PRINT "AND DISTANT LAND THERE LIVED"
+#[$5D9A]
  6206  PRINT "THE FOLLOWING PEOPLE:"
+#[$5DB7]
  6208  PRINT 
+#[$5DBD]
  6210  PRINT "O  =  PRINCE BILLY"
+#[$5DD7]
  6212  PRINT "\@@  =  MAZE DWELLER MURPH"
+#[$5DF7]
  6213  PRINT 
+#[$5DFD]
  6214  PRINT "\@@  =  MAZE DWELLER DRAGO"
+#[$5E1D]
  6216  PRINT \00\00
+#[$5E25]
  6218  PRINT "THE MAZE DWELLERS WOULD CHASE "
+#[$5E4B]
  6220  PRINT "PRINCE BILLY DAY AND NIGHT"
+#[$5E6D]
  6222  PRINT 
+#[$5E73]
  6224  PRINT "HIS ONLY HOPE WAS TO GATHER 250"
+#[$5E9A]
  6226  PRINT "B-LERS (...), HIS LIFE CRYSTALS."
+#[$5EC2]
  6228  PRINT 
+#[$5EC8]
  6230  PRINT "IF PRINCE BILLY COULD TOUCH"
+#[$5EEB]
  6232  PRINT "THE SACRED STONE OF ROSS  %*   "
+#[$5F11]
  6234  PRINT "IN THE CENTER OF THE MAZE HE"
+#[$5F35]
  6236  PRINT "CAN ESCAPE CAPTURE--ONLY ONCE"
+#[$5F5A]
  6385  PRINT  AT 21,1;"%P%R%E%S%S\::%E%N%T%E%R\::%W%H%E%N\::%R%E%A%D%Y"
+#[$5F8A]
  6387  INPUT Y$
+#[$5F92]
  6390  POKE 16625,128
+#[$5FAD]
  6392  LET C1= USR &FILL_SCR
+#[$5FC2]
  6399  RETURN 
+#[$5FC8]
  9000  STOP 
+#[$5FCE]
  9010  INPUT A
+#[$5FD5]
 
 @Line_9020:
  9020  INPUT B
+#[$5FDC]
  9030  PRINT B
+#[$5FE3]
  9040  POKE A,B
+#[$5FEC]
  9050  LET A=A+1
+#[$5FFD]
  9060  GOTO @Line_9020
+#[$600D]
  9070  INPUT X
+#[$6014]
  9080  LET A$=""
+#[$601F]
 
 @Line_9090:
  9090  IF A$="" THEN  INPUT A$
+#[$602E]
  9100  IF A$="S" THEN  STOP 
+#[$603C]
  9110  POKE X,16* CODE A$+ CODE A$(2)-476
+#[$6067]
  9120  PRINT X;" ";A$
+#[$6075]
  9130  LET X=X+1
+#[$6086]
  9140  LET A$=A$(3 TO )
+#[$609B]
  9150  GOTO @Line_9090
+#[$60AB]
  9200  PRINT "SET TAPE"
+#[$60BB]
  9205  INPUT Y$
+#[$60C3]
  9210  SAVE "GFTRAIL%S"
+#[$60D3]
  9212  CLS 
+#[$60D9]
  9220  GOTO 1
 
 #: Line_1010                =   1010

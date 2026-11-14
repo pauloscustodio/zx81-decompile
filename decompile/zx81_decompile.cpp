@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     std::string ctl_filename;
 
     while (true) {
-        int c = getopt(argc, argv, const_cast<char*>("o:c:"));
+        int c = getopt(argc, argv, const_cast<char*>("o:c:d"));
         if (c == -1) {
             break;
         }
@@ -36,6 +36,9 @@ int main(int argc, char* argv[]) {
             break;
         case 'o':
             out_filename = optarg;
+            break;
+        case 'd':
+            optflags |= FLAG_DEBUG;
             break;
         default:
             exit_usage();
